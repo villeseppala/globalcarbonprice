@@ -1,6 +1,6 @@
 # Ville Seppälä (www.villeseppala.fi)
 
-
+# nww
 # read in data files from data folder (data files must be created with datacreation.r if they do not exist)
 pop2<-read.csv(file="data/population.csv", header=T,  sep=",", stringsAsFactors = F )
 ppaa<-read.csv(file="data/globalemissions.csv", header=T,  sep=",", stringsAsFactors = F )
