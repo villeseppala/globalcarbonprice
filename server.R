@@ -102,6 +102,8 @@ server <- function(input,output, session) {
   rv <- reactiveValues(pgrowth = NULL)
   rv <- reactiveValues(valu = NULL)
   rv <- reactiveValues(ale = 0)
+  rv <- reactiveValues(alert4 = NULL)
+  
   rv <- reactiveValues(yearc = NULL)
   rv <- reactiveValues(lastyear = NULL)
   
@@ -175,6 +177,7 @@ server <- function(input,output, session) {
   })
   
   
+  # initially select carbon budget from left menu
   o <- observe({
     # observeEvent(input[[paste0(i)]], {
     updateNavlistPanel(session, id = "nok", selected = "1. Carbon budget")
@@ -195,6 +198,15 @@ server <- function(input,output, session) {
     })
   })
   
+  observeEvent(input$nok,{
+    if (input$nok =="EXTRA: Country profiles"){
+     rv$alert4 =TRUE
+    o$destroy()
+    }
+    })
+
+
+  
   
   
   observeEvent(input$vuo,{
@@ -210,6 +222,21 @@ server <- function(input,output, session) {
     
   }    )
   
+  observeEvent(input$con, {
+    updateSliderInput(
+    inputId = "conb",
+    value = input$con
+    )
+  })
+
+  observeEvent(input$conb, {
+    updateSliderInput(
+      inputId = "con",
+      value = input$conb
+    )
+  })
+  
+    
   observeEvent(input$indi1,{
     rv$indi1 = input$indi1
     
@@ -260,7 +287,7 @@ server <- function(input,output, session) {
   lapply(
     X = c("showprice" , "showavgcost",
           "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop", "showavgfossil",
-          "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop" ),
+          "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "alert4" ),
     FUN = function(i){
       rv[[paste0(i)]] = FALSE
     } )
@@ -409,16 +436,33 @@ server <- function(input,output, session) {
       rv$showavgfossil =TRUE
     }
     
-    else if (input$nok =="Extra: Country profiles") {
+    else if (input$nok =="EXTRA: Country profiles") {
       rv$showcountrycost =TRUE
       rv$showcountryfossil=TRUE
       rv$showcountrynetcost =TRUE
-      rv$showcountrypop =TRUE
+      rv$showcountrypop =FALSE
       
     }
     
     
   })
+  
+  # 
+  # observeEvent(input$countr, {
+  #   if (input$countr %in% c(ll2)) {
+  #     rv$showcountryfossil = TRUE
+  #     rv$showcountrycost = TRUE
+  #     rv$showcountrynetcost = TRUE
+  #   }
+  # })
+  # 
+  
+  # rv <- reactiveValues(showcountryfossil = FALSE)
+  # rv <- reactiveValues(showcountrycost = FALSE)
+  # rv <- reactiveValues(showcountrynetcost = FALSE)
+  # rv <- reactiveValues(showcountrypop = FALSE)
+  # 
+  
   
   
   lapply(
@@ -513,19 +557,121 @@ server <- function(input,output, session) {
   # observeEvent(input$yearc,{
   #   rv$yearc = input$yearc
   # })
-  lapply(
-    X = c("vuo",  "yearc"),
+  # lapply(
+  #   X = c("vuo",  "yearc"),
+  #   
+  #   FUN = function(i){
+  #     observeEvent(input$bud, {
+  #       # freezeReactiveValue(input, i)
+  #       updateSliderInput(
+  #         session = session,
+  #         inputId =i,
+  #         value = skenbbs()[sken==input$bud & nams==i, vals]
+  #       )
+  #     })
+  #   } )
+  # 
+  # 
+  # lapply(
+  #   X = c("muo", "pri"),
+  #   
+  #   FUN = function(i){
+  #     
+  #     observeEvent(input$bud, {
+  #       # freezeReactiveValue(input, i)
+  #       
+  #       updateRadioButtons(
+  #         session = session,
+  #         inputId =i,
+  #         selected = skenbbs()[sken==input$bud & nams==i, vals]
+  #       )
+  #       
+  #     })
+  #   } )
+  # 
+  
+  
+  # lapply(
+  #   X = c("paa",  "eprice"),
+  #   
+  #   FUN = function(i){
+  #     
+  #     observeEvent(input$bud, {
+  #       # freezeReactiveValue(input, i)
+  #       updateNumericInput(
+  #         session = session,
+  #         inputId =i,
+  #         value = skenbbs()[sken==input$bud & nams==i, vals]
+  #       )
+  #       
+  #     })
+  #   } )
+  # 
+  
+  
+  # lapply(
+  #   X = c("paa",  "eprice"),
+  #   
+  #   FUN = function(i){
+  observeEvent(input$bud,{
+    rv$budd = input$bud
+    priority = 9
     
-    FUN = function(i){
+  }    ) 
+  
+  
+  
       observeEvent(input$bud, {
-        freezeReactiveValue(input, i)
+         # freezeReactiveValue(input, "paa")
+        
         updateSliderInput(
+          
           session = session,
-          inputId =i,
-          value = skenbs[sken==input$bud & nams==i, vals]
+          inputId ="vuo",
+          value = skenbbs()[sken==input$bud & nams=="vuo", vals]
         )
+        
+        # updateSliderInput(
+        #   session = session,
+        #   inputId ="yearc",
+        #   value = skenbbs()[sken==input$bud & nams=="yearc", vals]
+        # )
+        # 
+        updateNumericInput(
+          session = session,
+          inputId ="paa",
+          value = skenbbs()[sken==input$bud & nams=="paa", vals]
+        )
+        
+        updateNumericInput(
+          session = session,
+          inputId ="eprice",
+          value = skenbbs()[sken==input$bud & nams=="eprice", vals]
+        )
+        
+        
+
+        updateRadioButtons(
+          session = session,
+          inputId ="muo",
+          selected = skenbbs()[sken==input$bud & nams=="muo", vals]
+        )
+        updateRadioButtons(
+          session = session,
+          inputId ="pri",
+          selected = skenbbs()[sken==input$bud & nams=="pri", vals]
+        )
+        priority = 10
+        
       })
-    } )
+    # } )
+    # 
+  
+  
+  
+
+  
+  
   
   observeEvent(input$vuo, {
     updateSliderInput(
@@ -536,41 +682,6 @@ server <- function(input,output, session) {
   })
   
   
-  lapply(
-    X = c("paa",  "eprice"),
-    
-    FUN = function(i){
-      
-      observeEvent(input$bud, {
-        freezeReactiveValue(input, i)
-        updateNumericInput(
-          session = session,
-          inputId =i,
-          value = skenbs[sken==input$bud & nams==i, vals]
-        )
-        
-      })
-    } )
-  
-  
-  
-  lapply(
-    X = c("muo", "pri"),
-    
-    FUN = function(i){
-      
-      observeEvent(input$bud, {
-        freezeReactiveValue(input, i)
-        
-        updateRadioButtons(
-          session = session,
-          inputId =i,
-          selected = skenbs[sken==input$bud & nams==i, vals]
-        )
-        
-      })
-    } )
-  
   observeEvent(input$yearc,{
     if(input$yearc > input$vuo[2]){
       updateSliderInput(session, "yearc", value = input$vuo[2])}
@@ -580,7 +691,10 @@ server <- function(input,output, session) {
       updateSliderInput(session, "yearc", value =input$vuo[1])}
   })
   
-  
+  skenbbs = reactive({
+    
+    skenbs
+  })
   
   
   
@@ -594,9 +708,20 @@ server <- function(input,output, session) {
   })
   
   dats = reactive({
-    print(rv$showfossil)
-    print(rv$showprice)
-    print(rv$showpop)
+    # req(input$bud, cancelOutput = TRUE)
+    # req(input$vuo, cancelOutput = TRUE)
+    # req(input$muo, cancelOutput = TRUE)
+    # req(input$pri, cancelOutput = TRUE)
+    # req(input$paa, cancelOutput = TRUE)
+    # req(input$eprice, cancelOutput = TRUE)
+    # req(input$yearc, cancelOutput = TRUE)
+    # 
+    # print(rv$showfossil)
+    # print(rv$showprice)
+    # print(rv$showpop)
+    
+     # freezeReactiveValue(input, "bud")
+    # req(input$vuo)
     
     start=ppaa[year ==lastyear & sec =="fossil", yy]
     
@@ -989,7 +1114,7 @@ server <- function(input,output, session) {
   
   
   datss = reactive({
-    
+    budd = rv$budd
     # ppaaa = ppaaa()
     ppaa = as.data.table(ppaa)
     dats = as.data.table(dats())
@@ -1367,6 +1492,7 @@ server <- function(input,output, session) {
   
   
   datsss= reactive ({
+
     
     req(input$indi1, cancelOutput = TRUE)
     req(input$indi2, cancelOutput = TRUE)
@@ -1571,11 +1697,15 @@ server <- function(input,output, session) {
   
   
   style <- reactive({
-    if (is.null(input$countr)) { 
-      "#tablu2 {visibility: collapse}"
+     # if (is.null(input$countr)) { 
+       if (rv$alert4 ==TRUE) {
+      # if (input$nok =="EXTRA: Country profiles") { 
+         "#tablu2 {visibility: visible}"
+         
     }
-    else {
-      "#tablu2 {visibility: visible}"
+    else if (rv$alert4 ==FALSE) {
+      "#tablu2 {visibility: collapse}"
+      
     }
     
   }
@@ -1703,6 +1833,7 @@ server <- function(input,output, session) {
     points=1.1
     segalfa=.7
     lee = 0
+    fam = "saira"
     
     
     plot1=   ggplot(datsf())+
@@ -1730,7 +1861,7 @@ server <- function(input,output, session) {
       
       
       
-      geom_line(data=datsss(), aes(y=tyy, x=year, group=interaction(sec, country), color=col), size=si(lines), alpha=.1) + 
+       geom_line(data=datsss(), aes(y=tyy, x=year, group=interaction(sec, country), color=col), size=si(lines), alpha=.1) + 
       # geom_line(data=datss()[(sec =="avgcost"),], aes(y=-tyy, x=year, group=sec, color=col, alpha=ala), size=si(lines)) + 
       
       geom_point(data=datsss(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=si(points), alpha=.1) + 
@@ -1740,25 +1871,22 @@ server <- function(input,output, session) {
       
       geom_point(data=da,aes(x=2140,  y=100), color="white", alpha=0, size=si(2))+
       
-      geom_text(data=datsc(), aes(x=year+2, y=max(tyy)+12, label=paste0("Year ",year, " values:")), color="white", hjust=0, size=si(2.5), fontface="bold") +
+      geom_text(data=datsc(), aes(x=year+2, y=max(tyy)+12, label=paste0("Year ",year, " values:")), 
+                color="white", hjust=0, size=si(2.5), fontface="bold",  family = fam) +
       
       
       geom_text_repel(data=datsf(),
                       aes(x=year-1.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark), color=col, group =sec), 
                       size=si(2.7), fontface="bold", hjust=1,
-                      # family = "lato",
+                       family = fam,segment.size =NA,
                       direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=0, seed=3
       ) +
       
-      
-      
-      
-      geom_text_repel(data=datsc(),
-                      aes(x=year+2, y=tyy, label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, "    ", label), color=col),
-                      hjust=0, size=si(2.7), fontface="bold", 
-                      # family = "lato",
-                      direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=.1 , seed=3) +
-      
+ geom_text_repel(data=datsc(),
+           aes(x=year+2, y=tyy, label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, "    ", label), color=col),
+            hjust=0, size=si(2.7), fontface="bold", 
+           family = fam,segment.size =NA,
+          direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=.1 , seed=3) +
       
       geom_segment(data=da,aes(x=1970, xend=2100, y=100, yend=100), color="white", linetype ="dashed",size=si(seg), alpha=segalfa) +
       geom_segment(data=da,aes(x=1970, xend=2100, y=50, yend=50), color="white", linetype ="dashed",size=si(seg), alpha=segalfa) +
@@ -1781,7 +1909,7 @@ server <- function(input,output, session) {
       geom_text(data=da,aes(x=rv$lyear, y=118), label =paste0("Neutrality: ", rv$lyear),
                 color="white", hjust=.5, size=si(2.5), fontface="bold") +
       
-      geom_text(data=da,aes(x=1970, y=103), label = paste0("Scales"),
+      geom_text(data=da,aes(x=1970, y=103), label = paste0("Scale max"),
                 col="white", fontface="bold" ,  size =si(2.5), hjust =0, vjust=0, angle=c(0)) +
       
       
@@ -1812,46 +1940,60 @@ server <- function(input,output, session) {
         #plot.margin = unit(c(mar,mar,mar,mar), "cm")
       )
     
-    
-    
-    
-    if (input$showusercost==TRUE | input$shownetcost==TRUE  | input$showavgcost==TRUE | input$showdividend==TRUE |  input$showavgnetcost==TRUE) {
+    if (input$showfossil==TRUE | input$showland==TRUE  | input$shownet==TRUE) {
       
       plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
-                  aes(x=1970, y=81, label=paste0(round(max(valuso, na.rm=TRUE), 0), " €"), color=col), size=si(2.5), hjust=0) +
-        geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
-                  aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " €"), color=col), size=si(2.5), hjust=0) 
+        geom_text(data=datsss()[sec %in% c("fossil", "land", "net"), ],
+                  aes(x=1970, y=96, label=paste0(round(max(yy, na.rm=TRUE), 1), " Gt"), color=col), size=si(2.2), hjust=0) 
+      # geom_text(data=datsss()[sec %in% c("fossil", "land", "net"), ],
+      #           aes(x=1970, y=96/2-1, label=paste0(round(max(yy, na.rm=TRUE)/2, 1), " Gt"), color=col), size=si(2.5), hjust=0)
+      
+    }    
+    if (input$showpop==TRUE) {
+      
+      plot1 = plot1+
+        geom_text(data=datsss()[sec %in% c("pop"), ],
+                  aes(x=1970, y=91, label=paste0(round(max(yy, na.rm=TRUE), 2), " B"), color=col), size=si(2.2), hjust=0) 
+      # geom_text(data=datsss()[sec %in% c("price"), ],
+      #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
+      
+    }    
+
+    if (input$showavgfossil==TRUE | input$showuserfossil==TRUE ) {
+      
+      plot1 = plot1+
+        geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), ],
+                  aes(x=1970, y=86, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), " t"), color=col), size=si(2.2), hjust=0) 
+      # geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), ],
+      #           aes(x=1970, y=91/2-3, label=paste0(format(round(max(yy, na.rm=TRUE)/2, 2), nsmall=2), " t"), color=col), size=si(2.5), hjust=0) 
     }
     
     if (input$showprice==TRUE) {
       
       plot1 = plot1+
         geom_text(data=datsss()[sec %in% c("price"), ],
-                  aes(x=1970, y=86, label=paste0(round(max(yy, na.rm=TRUE), 0), " €/t"), color=col), size=si(2.5), hjust=0) +
-        geom_text(data=datsss()[sec %in% c("price"), ],
-                  aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
+                  aes(x=1970, y=81, label=paste0(round(max(yy, na.rm=TRUE), 0), " €/t"), color=col), size=si(2.2), hjust=0) 
+      # geom_text(data=datsss()[sec %in% c("price"), ],
+      #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
       
     }
     
-    if (input$showavgfossil==TRUE | input$showuserfossil==TRUE ) {
+    if (input$showusercost==TRUE | input$shownetcost==TRUE  | input$showavgcost==TRUE | input$showdividend==TRUE |  input$showavgnetcost==TRUE) {
       
       plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), ],
-                  aes(x=1970, y=91, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), " t"), color=col), size=si(2.5), hjust=0) +
-        geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), ],
-                  aes(x=1970, y=91/2-3, label=paste0(format(round(max(yy, na.rm=TRUE)/2, 2), nsmall=2), " t"), color=col), size=si(2.5), hjust=0) 
+        geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
+                  aes(x=1970, y=76, label=paste0(round(max(valuso, na.rm=TRUE), 0), " €"), color=col), size=si(2.2), hjust=0) 
+        # geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
+        #           aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " €"), color=col), size=si(2.5), hjust=0) 
     }
+
     
-    if (input$showfossil==TRUE | input$showland==TRUE  | input$shownet==TRUE) {
-      
-      plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("fossil", "land", "net"), ],
-                  aes(x=1970, y=96, label=paste0(round(max(yy, na.rm=TRUE), 1), " Gt"), color=col), size=si(2.5), hjust=0) +
-        geom_text(data=datsss()[sec %in% c("fossil", "land", "net"), ],
-                  aes(x=1970, y=96/2-1, label=paste0(round(max(yy, na.rm=TRUE)/2, 1), " Gt"), color=col), size=si(2.5), hjust=0)
-      
-    }
+
+
+    
+
+    
+
     
     
     #  if (is.null(input$countr)) {

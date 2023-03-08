@@ -1,4 +1,6 @@
 
+
+
 ui <- dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,
                     
                     dashboardHeader(title = "Global carbon taxation simulator"),
@@ -73,6 +75,7 @@ tags$style(type = "text/css",
 // tarpeeton
 
 
+
   #tablu .bs4Table {
        border-collapse: collapse;
 }
@@ -100,6 +103,20 @@ border-color: white !important;
 
 // tarpeellinen {}
 
+.dark-mode .card {
+background-color: rgb(45, 36, 36);
+
+}
+
+.dark-mode .content-wrapper {
+background-color: rgb(45, 36, 36);
+color: #fff;
+}
+//
+.content-wrapper>.content {
+padding: .3rem !important;
+}
+
 // yläreunan valikko {}
 p {
 margin-bottom: .1vw;
@@ -107,10 +124,9 @@ margin-bottom: .1vw;
 
  .card-body {
                padding: .2vw;
-    background-color:#454d55 !important;
+    background-color:rgb(45, 36, 36) !important;
 
  }
-
 
 
 
@@ -153,7 +169,6 @@ line-height: 1.1;
 margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
 border-collapse: collapse;
 overflow: auto;
-width: 60%;
 }
 
 
@@ -208,10 +223,10 @@ padding: .3vw !important;
 }
  
 #bor3 {
- border-color: hsl(320,46%,77%);
+ border-color: rgb(92, 61, 46);
 border-bottom-color: none;
             border-width: .5vw;
- border-style: inset;
+ border-style: solid;
   border-radius: 5px;
 padding: .3vw !important;
 
@@ -221,10 +236,10 @@ padding: .3vw !important;
 
 
 #bor4 {
- border-color: hsl(145,46%,77%);
+ border-color: rgb(184, 92, 56);
 border-bottom-color: none;
             border-width: .5vw;
- border-style: outset;
+ border-style: solid;
   border-radius: 5px;
 padding: .3vw !important;
 
@@ -232,10 +247,10 @@ padding: .3vw !important;
 }
 
 #bor5 {
- border-color: hsl(220,46%,77%);
+ border-color: rgb(224, 192, 151);
 border-bottom-color: none;
             border-width: .5vw;
- border-style: outset;
+ border-style: solid; 
   border-radius: 5px;
 padding: .0vw !important;
 
@@ -292,7 +307,7 @@ padding: .0vw;
 margin: .0vw;
 
 display: inline;
-    background-color:#367e87 !important;
+    background-color: rgb(184, 92, 56) !important;
     display:block !important;
     } 
 
@@ -326,10 +341,14 @@ line-height: 1.2rem;}
   }
 
 
+
+
+
 // left panel active
   box-shadow: 5px 5px 15px rgba(0, 0, 0, .2);
 {}
 
+//
 .content-wrapper .nav li .active {
     border-top: 2px solid red;
     border-bottom: 2px solid red;
@@ -337,13 +356,12 @@ line-height: 1.2rem;}
 
 // right panel active {}
 .tab-pane.active{
-    background-color:#367e87;
+    background-color: rgb(184, 92, 56);
                margin-left: -0.1vw;
 padding: .5vw;
 font-size: .85rem;
 
-    border-top: 2px solid red;
-    border-bottom: 2px solid red;
+
 
 }
 
@@ -429,10 +447,15 @@ fluidRow(
                   accordionItem(
                     # <i class="material-icons">visibility</i>
                     
-                    title = HTML("<font size='5'>","<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")), "  VIEW   ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
+                    title = HTML("<font size='5'>",
+                                 as.character(icon("far fa-eye")), 
+                                 # "</font>",
+                                 
+                                 # "<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")),
+                                 "  VIEW   ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
                     collapsed =FALSE,
-                    fluidRow(
-                      column(5,        id = "bor",
+                     fluidRow(
+                      column(2,        id = "bor",
                              
                              radioButtons("view", label = "Graph view",
                                           c("Single graph for all scales" = 1,
@@ -443,18 +466,20 @@ fluidRow(
                                           
                                           
                              )),
-                      column(5,   
+                      column(10,   
                              id = "bor",
                              
                              
                              p("Indicator visibility (Manual selection below)"),
-                             awesomeCheckbox("visib", label="Automatic, based on VALUES phase", value=TRUE),
+                            
+                             div(style="display:inline-block",awesomeCheckbox("visib", label="Automatic, based on VALUES phase", value=TRUE)),
                              
-                             actionBttn(inputId ="showall", label = "Select all", size="sm", style = "jelly"),
-                             actionBttn(inputId ="shownone", label = "Deselect all", size="xs", style = "gradient"),
+                                 div(style="display:inline-block",actionBttn(inputId ="showall", label = "Select all", size="xs", style = "fill")),
+                                     div(style="display:inline-block",actionBttn(inputId ="shownone", label = "Deselect all", size="xs", style = "fill")
+                             ),
                              
-                      )
-                    ) , 
+                      # )
+                   
                     
                     div(
                       id="tablu",
@@ -476,13 +501,7 @@ fluidRow(
                             chk(net, "Net emissions", "infonet"),
                             chk(pop, "Population", "infopop"),
                             chk(fpop, "Mean emissions", "infoavgfossil"),
-                            chk(tax, "Carbon tax", "infoprice"),
-                            chk(avgcost, "Mean carbon costs", "infoavgcost"),
-                            chk(dividend, "Carbon dividend", "infodividend"),
-                            chk(avgnetcost, "Mean net costs", "infoavgnetcost"),
-                            chk(cpop, "User emissions", "infouserfossil"),
-                            chk(taxfosindi, "User carbon costs", "infousercost"),
-                            chk(netcost, "User net costs", "infonetcost")
+                            chk(tax, "Carbon tax", "infoprice")
                             
                             
                           )
@@ -497,7 +516,40 @@ fluidRow(
                             awesomeCheckbox("showpop", label=NULL, value=FALSE),
                             
                             awesomeCheckbox("showavgfossil", label=NULL, value=TRUE),
-                            awesomeCheckbox("showprice", label=NULL, value=FALSE),
+                            awesomeCheckbox("showprice", label=NULL, value=FALSE)
+                            
+                          ) ),
+                        
+                      ), 
+                      
+                      bs4Dash::bs4Table(
+                        # "nerf",
+                        
+                        cardWrap = TRUE,
+                        bordered = TRUE,
+                        striped = TRUE, 
+                        
+                        list(
+                          
+                          headTitles = list(
+                            p("Variable:"),
+                            
+
+                            chk(avgcost, "Mean carbon costs", "infoavgcost"),
+                            chk(dividend, "Carbon dividend", "infodividend"),
+                            chk(avgnetcost, "Mean net costs", "infoavgnetcost"),
+                            chk(cpop, "User emissions", "infouserfossil"),
+                            chk(taxfosindi, "User carbon costs", "infousercost"),
+                            chk(netcost, "User net costs", "infonetcost")
+                            
+                            
+                          )
+                          ,
+                          #         
+                          # 
+                          list(
+                            p("Visibility:"),
+                            
                             awesomeCheckbox("showavgcost", label=NULL, value=FALSE),
                             awesomeCheckbox("showdividend", label=NULL, value=FALSE),
                             awesomeCheckbox("showavgnetcost", label=NULL, value=FALSE),
@@ -510,10 +562,11 @@ fluidRow(
                       ), 
                       
                       
+                      
                       div(
                         id="tablu2",
                         class="noku",
-                        width ="50%",
+                        # width ="50%",
                         
                         bs4Dash::bs4Table(
                           cardWrap = TRUE,
@@ -535,7 +588,7 @@ fluidRow(
                               awesomeCheckbox("showcountrynetcost", label=NULL, value=FALSE)
                               
                             )   ))
-                      ))
+                      )) ) )
                   ))),
          
          box(
@@ -669,7 +722,7 @@ fluidRow(
                                         ),
                                         hr(style = "border-top: 1px solid #62696E; margin-bottom:0px; margin-top:0px;"),
                                         
-                                        sliderInput("con", label ="Convergence of countries' emissions", min = .01, max = 1, value = .5, step=.01),
+                                        sliderInput("conb", label ="Convergence of countries' emissions", min = .01, max = 1, value = .5, step=.01),
                                ),
                   ),
                   uiOutput("cou"),

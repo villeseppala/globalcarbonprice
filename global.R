@@ -1,6 +1,8 @@
 # Ville Seppälä (www.villeseppala.fi)
 
 # nww
+# install showtext on server for R
+# error from percentual increase in carbon price
 # read in data files from data folder (data files must be created with datacreation.r if they do not exist)
 pop2<-read.csv(file="data/population.csv", header=T,  sep=",", stringsAsFactors = F )
 ppaa<-read.csv(file="data/globalemissions.csv", header=T,  sep=",", stringsAsFactors = F )
@@ -29,8 +31,25 @@ library(bs4Dash)
 # library(ggfx)
 library(sass)
 library(shinyjs)
-# library(showtext)
 
+
+ library(showtext)
+
+# 
+# font_add_google("Lato", "lato")
+# font_add_google("Gochi Hand", "gochi")
+ font_add_google("Saira Extra Condensed", "saira")
+# # font_add_google("Roboto Condensed", "roboto")
+#  font_add_google("Asap", "asap")
+
+# dir.create('~/.fonts')
+# file.copy("www/IndieFlower-Regular.ttf", "~/.fonts")
+# system('fc-cache -f ~/.fonts')
+
+ showtext_auto()
+
+ fam = "saira"
+# showtext_auto()
 
 css_content <- "
 #tablu2 {
@@ -73,8 +92,10 @@ sliderInput2 <- function(inputId, label, min, max, value, step, from_min, from_m
 llist =c("paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "indi","popc","con")
 # lllist =c("paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "indi","popc","con")
 
-bgc = hsv(	0.59,0.05,0.25)
+# bgc = hsv(	0.59,0.05,0.25)
 
+bgc = rgb(45, 36, 36, maxColorValue = 255)
+bgc
 fos = hsv(0.09,0.6,0.99)
 lul = hsv(0.06,0.9,0.92)
 net = hsv(0.09,0.99,0.99)
