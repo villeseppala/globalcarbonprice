@@ -1,9 +1,10 @@
 # Ville Seppälä (www.villeseppala.fi)
 
-# nww
-# install showtext on server for R
-# error from percentual increase in carbon price
+
 # read in data files from data folder (data files must be created with datacreation.r if they do not exist)
+
+
+
 pop2<-read.csv(file="data/population.csv", header=T,  sep=",", stringsAsFactors = F )
 ppaa<-read.csv(file="data/globalemissions.csv", header=T,  sep=",", stringsAsFactors = F )
 paac<-read.csv(file="data/countryemissions.csv", header=T,  sep=",", stringsAsFactors = F )
@@ -35,10 +36,48 @@ library(shinyjs)
 
  library(showtext)
 
-# 
+
+
+bgc = "black"
+    
+  bgc = "darkgrey"
+    bgc = rgb(45, 16, 36, maxColorValue = 255)
+    bgc = rgb(45, 66, 86, maxColorValue = 255)
+    
+hh = .76
+vv = .9
+
+fos = hsv(0.06,hh,vv)
+lul = hsv(0.12,hh,vv)
+net = hsv(0.09,hh,vv)
+
+pop = hsv(0.18,hh,vv)
+
+
+tax = hsv(0.25,hh,vv)
+
+
+fosindi = hsv(.96,hh,vv)
+fpop = fosindi
+cpop = fosindi
+countryfossil = fosindi 
+
+
+avgcost = hsv(0.47,hh,vv)
+dividend = hsv(0.6,hh,vv)
+avgnetcost = hsv(0.54,hh,vv)
+taxfosindi = avgcost
+netcost = avgnetcost
+
+
+countrycost = avgcost
+countrynetcost = avgnetcost
+
+countrypop = pop
+
 # font_add_google("Lato", "lato")
 # font_add_google("Gochi Hand", "gochi")
- font_add_google("Saira Extra Condensed", "saira")
+  font_add_google("Saira Extra Condensed", "saira")
 # # font_add_google("Roboto Condensed", "roboto")
 #  font_add_google("Asap", "asap")
 
@@ -94,37 +133,8 @@ llist =c("paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "
 
 # bgc = hsv(	0.59,0.05,0.25)
 
-bgc = rgb(45, 36, 36, maxColorValue = 255)
-bgc
-fos = hsv(0.09,0.6,0.99)
-lul = hsv(0.06,0.9,0.92)
-net = hsv(0.09,0.99,0.99)
-
-pop = hsv(0.17,0.99,0.85)
 
 
-tax = hsv(0.27,0.9,0.72)
-
-
-fosindi = hsv(.96,.8,.99)
-fpop = fosindi
-cpop = fosindi
-countryfossil = fosindi 
-
-
-avgcost = hsv(0.48,0.6,0.99)
-dividend = hsv(0.56,0.99,0.90)
-avgnetcost = hsv(0.53,0.99,0.99)
-
-
-taxfosindi = avgcost
-netcost = avgnetcost
-
-
-countrycost = avgcost
-countrynetcost = avgnetcost
-
-countrypop = pop
 
 
 
@@ -211,6 +221,27 @@ lu[sec == "countrycost", label:="costs"]
 lu[sec == "countrynetcost", label:="net costs"]
 lu[sec == "countryfossil", label:="mean emissions"]
 lu[sec == "countrypop", label:="population"]
+
+
+lu[sec == "fossil", label:="Total CO2 emissions"]
+lu[sec == "land", label:="Land-based CO2"]
+lu[sec == "net", label:="Net CO2 emissions"]
+lu[sec == "price", label:="Carbon price"]
+lu[sec == "avgcost", label:="Average carbon costs"]
+lu[sec == "avgfossil", label:="Mean CO2 emissions"]
+lu[sec == "userfossil", label:="User CO2 emissions"]
+lu[sec == "netcost", label:="User net costs"]
+lu[sec == "usercost", label:="User carbon costs"]
+lu[sec == "pop", label:="World population"]
+lu[sec == "dividend",label:="Carbon dividend"]
+lu[sec == "avgnetcost", label:="Mean net costs"]
+lu[sec == "countrycost", label:="costs"]
+lu[sec == "countrynetcost", label:="net costs"]
+lu[sec == "countryfossil", label:="mean emissions"]
+lu[sec == "countrypop", label:="population"]
+
+
+
 
 # colors
 lu$col =fos
@@ -434,10 +465,40 @@ paaa = 5
 
 chk = function(col, label, info) {
   p(style=paste0("color:",col,";"),
-    HTML(label, "<font size='2'>", 
-         as.character(actionLink(inputId = info, 
-                                 label = "  ", 
+    HTML(label, "<font size='2'>",
+         as.character(actionLink(inputId = info,
+                                 label = "  ",
                                  icon = icon("info"))), "</font>")
-    
+
   )
-}     
+}
+
+
+# chk = function(col, label) {
+#   p(style=paste0("color:",col,";"),
+#     HTML(label)
+#   )
+# } 
+
+inf = function(info) {
+  
+HTML( "<font size='2'>", 
+      as.character(actionLink(inputId = info, 
+                              label = "  ", 
+                              icon = icon("info"))), "</font>")  
+}
+cuk = function(col, label, info, show, lab, value) {
+  div(div(style="display:inline-block",   p(style=paste0("color:",col,";"),
+                                            HTML(label)
+  )), 
+      div(style="display:inline-block",HTML( "<font size='2'>", 
+                                             as.character(actionLink(inputId = info, 
+                                                                     label = "  ", 
+                                                                     icon = icon("info"))), "</font>") ),
+      div(style="display:inline-block",awesomeCheckbox(show, label=lab,  value=FALSE)))  
+  
+}
+
+# div(div(style="display:inline-block", chk(fos, "Total emissions")), 
+#     div(style="display:inline-block",inf("infofossil")),
+#     div(style="display:inline-block",awesomeCheckbox( "showfossil", label=NULL,  value=TRUE))),

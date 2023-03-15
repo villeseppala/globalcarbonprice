@@ -263,9 +263,26 @@ server <- function(input,output, session) {
     }
   })
   
+  # observeEvent(input$yearc, {
+  #   
+  #   if (input$yearc >= input$vuo[1] & input$yearc <= input$vuo[2]) {
+  #     rv$yearc = input$yearc
+  #   }
+  #   
+  #   else if  (input$yearc > input$vuo[2]){
+  #     rv$yearc=input$vuo[2]
+  #   }
+  #   
+  #   else if  (input$yearc < input$vuo[1]){
+  #     rv$yearc=input$vuo[1]
+  #   }
+  # })
+  # 
+  
+  
   observeEvent(input$yearc, {
     
-    if (input$yearc >= input$vuo[1] & input$yearc <= input$vuo[2]) {
+    if ( input$yearc <= input$vuo[2]) {
       rv$yearc = input$yearc
     }
     
@@ -273,9 +290,9 @@ server <- function(input,output, session) {
       rv$yearc=input$vuo[2]
     }
     
-    else if  (input$yearc < input$vuo[1]){
-      rv$yearc=input$vuo[1]
-    }
+    # else if  (input$yearc < input$vuo[1]){
+    #   rv$yearc=input$vuo[1]
+    # }
   })
   
   
@@ -686,10 +703,10 @@ server <- function(input,output, session) {
     if(input$yearc > input$vuo[2]){
       updateSliderInput(session, "yearc", value = input$vuo[2])}
   })
-  observeEvent(input$yearc,{
-    if(input$yearc < input$vuo[1]){
-      updateSliderInput(session, "yearc", value =input$vuo[1])}
-  })
+  # observeEvent(input$yearc,{
+  #   if(input$yearc < input$vuo[1]){
+  #     updateSliderInput(session, "yearc", value =input$vuo[1])}
+  # })
   
   skenbbs = reactive({
     
@@ -1597,7 +1614,16 @@ server <- function(input,output, session) {
     vihr = 1
     pink = 1
     
+    #make dummy data that has zero visibility to not make graph error when nothing is selected
+    dummy = dats[sec =="fossil",]
+    dummy[, visi:=1]
+    dummy[, yy:=0.0001]
+    dummy[, sec:="dummy"]
+    dummy[, ala:=0]
     
+    
+    
+    dats = rbind(dats, dummy)
     
     
     valus =as.numeric(unique(dats[sec %in% c("avgcost", "usercost", "netcost", "avgnetcost", "dividend",  "countrycost", "countrynetcost"),max(yy, na.rm=TRUE)]))
@@ -1617,7 +1643,7 @@ server <- function(input,output, session) {
     dats[sec %in% c("pop", "countrypop"), tyy:= yy/(valus/100)]
     
     valus = as.numeric(unique(dats[sec %in% c("fossil", "land", "net"),max(yy, na.rm=TRUE)]))
-    dats[sec %in% c("fossil", "land", "net"), tyy:= yy/(valus/100)]
+    dats[sec %in% c("fossil", "land", "net", "dummy"), tyy:= yy/(valus/100)]
     
     dats[sec =="countryfossil", visi:=1]
     
@@ -1724,7 +1750,6 @@ server <- function(input,output, session) {
   
   output$c1 <- renderUI({
     
-    tagList(3)
     
   })
   
@@ -1813,7 +1838,7 @@ server <- function(input,output, session) {
   
   sec = reactive({ 
     
-    mi = min(min((datsss()[,tyy]), na.rm=T)*1.2,-55)
+    mi = min(min((datsss()[,tyy]), na.rm=T)*1.2,-50)
     ma = 115
     mix = 1972
     max = 2130
@@ -1876,14 +1901,16 @@ server <- function(input,output, session) {
       
       
       geom_text_repel(data=datsf(),
-                      aes(x=year-1.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark), color=col, group =sec), 
+                      aes(x=year-1.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark), 
+                          color=col, group =sec, alpha=ala), 
                       size=si(2.7), fontface="bold", hjust=1,
                        family = fam,segment.size =NA,
                       direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=0, seed=3
       ) +
       
  geom_text_repel(data=datsc(),
-           aes(x=year+2, y=tyy, label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, "    ", label), color=col),
+           aes(x=year+2, y=tyy, label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, "    ", label),
+               color=col, alpha=ala),
             hjust=0, size=si(2.7), fontface="bold", 
            family = fam,segment.size =NA,
           direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=.1 , seed=3) +
@@ -1958,8 +1985,8 @@ server <- function(input,output, session) {
       #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
       
     }    
-
-    if (input$showavgfossil==TRUE | input$showuserfossil==TRUE ) {
+    # | input$showcountryfossil==T
+    if (input$showavgfossil==TRUE | input$showuserfossil==TRUE) {
       
       plot1 = plot1+
         geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), ],
