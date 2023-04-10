@@ -1,4 +1,4 @@
-# Ville Seppälä (www.villeseppala.fi)
+# Created by Ville Seppälä (www.villeseppala.fi)
 
 
 # read in data files from data folder (data files must be created with datacreation.r if they do not exist)
@@ -42,10 +42,12 @@ bgc = "black"
     
   bgc = "darkgrey"
     bgc = rgb(45, 16, 36, maxColorValue = 255)
+    bgc = rgb(45, 60, 90, maxColorValue = 255)
     bgc = rgb(45, 66, 86, maxColorValue = 255)
     
-hh = .76
-vv = .9
+    
+hh = .81
+vv = .8
 
 fos = hsv(0.06,hh,vv)
 lul = hsv(0.12,hh,vv)
@@ -57,14 +59,14 @@ pop = hsv(0.18,hh,vv)
 tax = hsv(0.25,hh,vv)
 
 
-fosindi = hsv(.96,hh,vv)
+fosindi = hsv(.96,.65,vv)
 fpop = fosindi
 cpop = fosindi
 countryfossil = fosindi 
 
 
 avgcost = hsv(0.47,hh,vv)
-dividend = hsv(0.6,hh,vv)
+dividend = hsv(0.65,.3,vv)
 avgnetcost = hsv(0.54,hh,vv)
 taxfosindi = avgcost
 netcost = avgnetcost
@@ -495,7 +497,7 @@ cuk = function(col, label, info, show, lab, value) {
                                              as.character(actionLink(inputId = info, 
                                                                      label = "  ", 
                                                                      icon = icon("info"))), "</font>") ),
-      div(style="display:inline-block",awesomeCheckbox(show, label=lab,  value=FALSE)))  
+      div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))  
   
 }
 

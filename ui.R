@@ -103,7 +103,7 @@ border-color: white !important;
 
 // tarpeellinen {}
 
-hr {border-top: 1px solid white; margin-bottom:5px; margin-top:0px;}
+hr {border-top: 2px solid white; margin-bottom:3px; margin-top:3px;}
 
 .dark-mode .card {
 background-color: rgb(45, 36, 36);
@@ -117,6 +117,36 @@ color: #fff;
 //
 .content-wrapper>.content {
 padding: .3rem !important;
+}
+
+
+.custom-control-input { 
+visibility: hidden !important;
+
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: #007bff;
+    background-color: #007bff;
+    box-shadow: none;
+}
+.dark-mode .custom-control-label::before, .dark-mode .custom-file-label, .dark-mode .custom-file-label::after, .dark-mode .custom-select, .dark-mode .form-control, .dark-mode .input-group-text {
+    background-color: #343a40;
+    color: #fff;
+}
+.custom-switch .custom-control-label::before {
+visibility: hidden !important;
+
+}
+
+.custom-switch .custom-control-label::after { 
+visibility: hidden !important;
+
+}
+.custom-switch {
+visibility: hidden !important;
+
 }
 
 // yläreunan valikko {}
@@ -161,25 +191,48 @@ line-height: 1;
 
 #tablu {
 color: blue;
-font-family: mypolice1;
-font-size: .87rem;
+font-family: Roboto !important;
+font-size: calc(.7vw + .4rem) !important;
+
 line-height: 1.1;
 margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
 border-collapse: collapse;
 overflow: auto;
 }
 
+#tablu p {
+color: blue;
+font-family: Roboto !important;
+font-size: calc(.7vw + .4rem) !important;
+text-decoration: none !important;
+margin-bottom: .2rem !important;
+margin-top: .1rem !important;
 
+line-height: 1.1;
+}
 
 #tablu2 {
 color: blue;
-font-family: mypolice1;
-font-size: .87rem;
+font-family: 'Saira' !important;
+font-size: calc(.7vw + .4rem) !important;
+
 line-height: 1.1;
 margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
 border-collapse: collapse;
 overflow: auto;
 }
+
+#tablu2 p {
+color: blue;
+font-family: Roboto !important;
+font-size: calc(.7vw + .4rem) !important;
+text-decoration: none !important;
+margin-bottom: .2rem !important;
+margin-top: .1rem !important;
+
+line-height: 1.1;
+}
+
 
 
           .table {
@@ -190,6 +243,7 @@ overflow: scroll;
                .table td {
                padding: .1vw;
               margin-bottom: .1vw;
+    background-color:rgb(45, 66, 86) !important;
 
                }
 
@@ -199,6 +253,15 @@ overflow: scroll;
 display: inline-block;
 
                }
+
+
+ input[type='awesome-checkbox']{ /* style for checkboxes */
+        width: 60px !important; /*Desired width*/
+        height: 30px; /*Desired height*/
+        line-height: 30px; 
+      }
+
+
 
 .form-group {
 margin-bottom: .3rem;
@@ -218,6 +281,8 @@ margin: .0vw !important;
 box-sizing: border-box;
 border-width: 0px;
 }
+
+
 
 
 #bor2 {
@@ -267,6 +332,40 @@ padding: .0vw !important;
 
 }
 
+
+
+#bor5a {
+    background-color: rgba(224, 192, 151,.1) !important;
+
+  border-color:rgb(224, 192, 151) !important;
+padding: .5vw !important;
+margin: .0vw !important;
+box-sizing: border-box;
+ border-style: solid; 
+  border-radius: 5px;
+            border-width: .2vw;
+
+}
+
+
+#bor5a .control-label {
+color: rgba(224, 192, 151,.99);
+font-size: calc(.6vw + .7rem);
+text-align: center !important;
+text-decoration: none;
+margin-bottom: .7rem;
+}
+
+#bor5a p {
+color: rgba(224, 192, 151,.99);
+font-size: calc(.7vw + .7rem);
+text-align: left !important;
+text-decoration: none;
+margin-bottom: .5rem;
+margin-top: -.3rem;
+}
+
+
    .col-sm-12 {
 padding: .0vw;
    } 
@@ -293,13 +392,14 @@ box-sizing: border-box;
     } 
 
 
-// left panel texts {}
+// left panel texts    border-color:rgb(45, 36, 36) !important;
+ {}
 
     a {
 color: #f2ede6;
 padding-left: .0vw;
 margin-left: .0vw;
-font-size: .8rem;
+font-size: calc(.3vw + .5rem);
 line-height: 1.0rem;
 font-weight: 1000 !important;
 
@@ -384,7 +484,7 @@ margin-top: .3;
 
 
   input[type=\"number\"] {
-    width: 52px;
+    width: max(6vw, 52px);
 padding: 0.1rem 0.1rem;
 font-size: .9rem;
 height: calc(.75rem+2px);
@@ -402,8 +502,30 @@ font-weight: 100 !important;
 
 }
 
-#sla label{ display: table-cell; text-align: left; vertical-align: middle; } 
-#sla .form-group { display: table-row;}
+#sla label{ display: table-cell; text-align: left; vertical-align: middle; 
+ width: 40px !important;} 
+#sla .form-group { display: table-row; horizontal-align: right;
+ width: 40px !important;
+max-width: 40px;
+
+}
+#sla shiny-input-container:not(.shiny-input-container-inline){
+ width: 2rem !important;
+max-width: 2rem;
+}
+#sla .div{
+ width: 2rem !important;
+}
+@media all and (min-device-width: 480px) {
+
+#sla p {width: 8.1vw !important; }
+}
+@media all and (max-device-width: 480px) {
+ #sla p {
+   width: 38.1vw !important;
+  }
+}
+
 
 .form-check-label {
 font-weight: 100 !important;
@@ -461,6 +583,18 @@ flex-wrap: wrap;
 }
 
 
+
+.irs-max {
+height: 0px !important;
+visibility: hidden !important;
+}
+
+.irs-min {
+height: 0px !important;
+visibility: hidden !important;
+}
+
+
                ")
 )
 
@@ -502,35 +636,38 @@ fluidRow(
                                  # "</font>",
                                  
                                  # "<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")),
-                                 "  VIEW   ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
+                                 "  VIEWING SETTINGS  ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
                     collapsed =TRUE,
                      fluidRow(
-                      column(2,        id = "bor",
+                      column(2,        id = "bor5a",
                              
                              radioButtons("view", label = "Graph view",
                                           c("Single graph for all scales" = 1,
                                             "Separate graphs for each scale (in progress...)" = 2
                                             
-                                          ),selected=1, inline=TRUE
-                                          
-                                          
-                                          
-                             )),
+                                          ),selected=1, inline=TRUE)
+                             # ,
+                             # 
+                             # sliderInput("fonts", label ="Font size", min = 1, max = 10, value = c(5), dragRange=FALSE, ticks = FALSE),
+                             # hr(),
+                             
+                             
+                             ),
                       column(10,   
-                             id = "bor",
+                             id = "bor5a",
                              
                              
-                             p(style='font-weight:1000;', "Indicator visibility (Manual selection below)"),
-                            
+                             p(style='font-weight:1000;', "Indicator visibility"),
+                             div(style="display:inline-block",actionBttn(inputId ="showall", label = "Select all", size="xs", style = "fill", color="primary")),
+                             div(style="display:inline-block",actionBttn(inputId ="shownone", label = "Deselect all", size="xs", style = "fill", color="primary")
+                             ),
                              div(style="display:inline-block; font-weight:100;",
                                  awesomeCheckbox("visib", label="Automatic, based on VALUES phase", value=TRUE)
                                 # prettySwitch
                                 # checkboxGroupButtons()
                                  ),
                              
-                                 div(style="display:inline-block",actionBttn(inputId ="showall", label = "Select all", size="xs", style = "fill")),
-                                     div(style="display:inline-block",actionBttn(inputId ="shownone", label = "Deselect all", size="xs", style = "fill")
-                             ),
+ 
                              
                        # ),
                    
@@ -713,13 +850,20 @@ fluidRow(
                 div(
                   HTML(
                     "<body style='background-color:aquamarine;'>", 
-                    "<font size='5'>", as.character(icon("far fa-hand-paper")), "  VALUES   ","</font>",
+                    "<font size='5'>", 
+                     "<b>" ,
+                    as.character(icon("far fa-hand-paper")), "  VALUES   ", 
+                     "</b>",
+                    "</font>",
                     "</body>"),
                   
                   # h5("Set values:"),
                   navlistPanel(id="nok", 
                                
-                               tabPanel( "1. Carbon budget", 
+                               tabPanel( "1. Carbon budget",
+                                         
+                                         
+                                         
                                          radioButtons("bud", "Carbon budget for net CO2 emissions since start of 2020",
                                                       c("400Gt (67% likelihood to stay below 1,5C)" = 400,
                                                         "500Gt (50% likelihood to stay below 1,5C)" = 500,
@@ -731,19 +875,66 @@ fluidRow(
                                          ),
                                          hr(),
                                          
-                                         sliderInput("vuo", label ="Pricing start year and carbon neutrality year", min = 2020, max = 2100, value = c(2024, 2080), dragRange=FALSE),
-                                         hr(),
+                                         sliderInput("vuo", label ="Pricing start year and carbon neutrality year", min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE),
+                                                                           hr(),
                                          
-                                         tags$div(id="sla",numericInput("paa", label="Emissions/sink at the carbon neutrality year",min = 0.1, max = 30,step=.1,value=c(5))),
+                                         tags$div(id="sla",numericInput("paa", label=p("Emissions / sink at the carbon neutrality year"),min = 0.1, max = 30,step=.1,value=c(5))),
                                          
                                          hr(),
                                          
                                          radioButtons("muo", "Shape of the emission curve",
-                                                      c("Linear drop" = "linear","Percentual drop" = "percentual"
-                                                      ))
+                                                      c(
+                                                        "Linear drop" = "linear",
+                                                        "Percentual drop" = "percentual"
+                                                        # ,
+                                                        # "Logarithmic drop" = "logarithmic"
+                                                      )), 
+                                         
+                                         hr(),
+                                         
+                                         checkboxInput("advance", "Advanced options for start year emissions"), 
+                                         
+                                         conditionalPanel(
+                                           
+                                           condition="input.advance == 1",
+                                           # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
+                                           # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
+                                           
+                                           
+                                           #                           # uiOutput("splot", width="auto"
+                                           #                           # )
+                                           #          # ,
+                                           hr(),
+                                           tags$div(id="sla",numericInput("fstart", label=p("Total emissions at year before start year"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                           
+                                           hr(),
+                                           tags$div(id="sla",numericInput("lstart", label=p("Land use emissions at year before start year"),min = -5, max = 10,step=.1,value=c(3.9)))
+                                           
+                                         ),
+                                         hr(),
+                                         
+                                         actionBttn(
+                                           inputId = "next1",
+                                           label = "   NEXT >",
+                                           size="xs",
+                                           style = "material-flat", 
+                                           color = "primary"
+                                         )
+                                         
+                                         
+                                         
                                ),
                                
                                tabPanel("2. Population projection",
+                                        actionBttn(
+                                          inputId = "prev1",
+                                          label = "< PREVIOUS",
+                                          size="xs",
+                                          style = "material-flat", 
+                                          color = "primary"
+                                        ),
+                                        hr(),
+                                        
                                         radioButtons("popc", "Choose UN population projection",
                                                      c(
                                                        "95% range upper limit (95" = 5,
@@ -752,23 +943,41 @@ fluidRow(
                                                        "80% range lower limit" = 2,
                                                        "95% range lower limit" = 1
                                                      ),selected=3
+                                        ),
+                                        hr(),
+                                        
+                                        actionBttn(
+                                          inputId = "next2",
+                                          label = "NEXT >",
+                                          size="xs",
+                                          style = "material-flat", 
+                                          color = "primary"
                                         )
                                ),
                                
                                
                                
                                tabPanel("3. Carbon tax",
-                                        tags$div(id="sla", numericInput("sprice", label=HTML("Set start year carbon price  ", "<font size='3'>",
+                                        actionBttn(
+                                          inputId = "prev2",
+                                          label = "< PREVIOUS",
+                                          size="xs",
+                                          style = "material-flat", 
+                                          color = "primary"
+                                        ),
+                                        hr(),
+                                        
+                                        tags$div(id="sla", numericInput("sprice", label=p(HTML("Set start year carbon price  ", "<font size='3'>",
                                                                           as.character(actionLink(inputId = "info3", 
                                                                                                   label = "  ", 
-                                                                                                  icon = icon("info"))), "</font>"),
+                                                                                                  icon = icon("info"))), "</font>")),
                                                      min = 1, max = 1000000,step=1,value=c(40))),
                                         hr(),
                                         
-                                        tags$div(id="sla",numericInput("eprice", label=HTML("Set neutrality year carbon price", "<font size='2'>", as.character(actionLink(inputId = "info4", 
+                                        tags$div(id="sla",numericInput("eprice", label=p(HTML("Set neutrality year carbon price", "<font size='2'>", as.character(actionLink(inputId = "info4", 
                                                                                                                                                          label = "  ", 
                                                                                                                                                          icon = icon("info"))), "</font>"
-                                        ),min = 1, max = 1000000,step=1,value=c(400))),
+                                        )),min = 1, max = 1000000,step=1,value=c(400))),
                                         
                                         
                                         hr(),
@@ -782,14 +991,31 @@ fluidRow(
                                                        "Percentual increase" = "percentual",
                                                        "Logarithmic increase" = "logarithmic"
                                                        
-                                                     ))
-                               ),
-                               tabPanel("4. User emissions", 
-                                        
-                                        tags$div(id="sla",numericInput("indi1", label="Start year emissions",min = .01, max = 40,step=.01,value=c(7.77))),
+                                                     )),
                                         hr(),
                                         
-                                        tags$div(id="sla",numericInput("indi2", label="Neutrality year emissions",min = .01, max = 40,step=.01,value=c(0.77))),
+                                        actionBttn(
+                                          inputId = "next3",
+                                          label = "NEXT >",
+                                          size="xs",
+                                          style = "material-flat", 
+                                          color = "primary"
+                                        )
+                               ),
+                               tabPanel("4. User emissions", 
+                                        actionBttn(
+                                          inputId = "prev3",
+                                          label = "< PREVIOUS",
+                                          size="xs",
+                                          style = "material-flat", 
+                                          color = "primary"
+                                        ),
+                                        hr(),
+                                        
+                                        tags$div(id="sla",numericInput("indi1", label=p("Start year emissions"),min = .01, max = 40,step=.01,value=c(7.77))),
+                                        hr(),
+                                        
+                                        tags$div(id="sla",numericInput("indi2", label=p("Neutrality year emissions"),min = .01, max = 40,step=.01,value=c(0.77))),
                                         
                                         hr(),
                                         
@@ -815,10 +1041,30 @@ fluidRow(
                                #                           # )
                                #          # ,
                                          sliderInput("con", label ="Convergence of countries' emissions", min = .01, max = 1, value = .5, step=.01)
+                               ),
+                               
+                               hr(),
+                               
+                               actionBttn(
+                                 inputId = "next4",
+                                 label = "EXTRA",
+                                 size="xs",
+                                 style = "material-flat", 
+                                 color = "primary"
                                )
+                               
 
                                ),
                                tabPanel("EXTRA: Country profiles",
+                                        actionBttn(
+                                          inputId = "prev4",
+                                          label = "< PREVIOUS",
+                                          size="xs",
+                                          style = "material-flat", 
+                                          color = "primary"
+                                        ),
+                                        hr(),
+                                        
                                         pickerInput(
                                           inputId = "countr",
                                           label = "Show countries (this will slower the page considerably):",
@@ -856,6 +1102,7 @@ fluidRow(
                 
                 
                 uiOutput("yearc")
+                # ,
                 
                 
                 

@@ -263,9 +263,64 @@ server <- function(input,output, session) {
     }
   })
   
+  observeEvent(input$yearc, {
+
+    if (
+       input$yearc >= 1970 & 
+      input$yearc <= input$vuo[2]) {
+      rv$yearc = input$yearc
+    }
+
+    else if  (input$yearc > input$vuo[2]){
+      rv$yearc=input$vuo[2]
+    }
+
+    else if  (input$yearc < 1970){
+      rv$yearc=1970
+    }
+  })
+
+  
+  
+  observeEvent(input$next1, {
+     updateNavlistPanel(session, inputId = "nok", selected = "2. Population projection")
+  })
+  
+  
+  observeEvent(input$next2, {
+    updateNavlistPanel(session, inputId = "nok", selected = "3. Carbon tax")
+  })
+  
+  observeEvent(input$next3, {
+    updateNavlistPanel(session, inputId = "nok", selected = "4. User emissions")
+  })
+
+  observeEvent(input$next4, {
+    updateNavlistPanel(session, inputId = "nok", selected = "EXTRA: Country profiles")
+  })
+  
+  
+
+  observeEvent(input$prev1, {
+    updateNavlistPanel(session, inputId = "nok", selected = "1. Carbon budget")
+  })
+    
+  observeEvent(input$prev2, {
+    updateNavlistPanel(session, inputId = "nok", selected = "2. Population projection")
+  })
+  
+  
+  observeEvent(input$prev3, {
+    updateNavlistPanel(session, inputId = "nok", selected = "3. Carbon tax")
+  })
+  
+  observeEvent(input$prev4, {
+    updateNavlistPanel(session, inputId = "nok", selected = "4. User emissions")
+  })
+  # 
   # observeEvent(input$yearc, {
   #   
-  #   if (input$yearc >= input$vuo[1] & input$yearc <= input$vuo[2]) {
+  #   if ( input$yearc <= input$vuo[2]) {
   #     rv$yearc = input$yearc
   #   }
   #   
@@ -273,28 +328,11 @@ server <- function(input,output, session) {
   #     rv$yearc=input$vuo[2]
   #   }
   #   
-  #   else if  (input$yearc < input$vuo[1]){
-  #     rv$yearc=input$vuo[1]
-  #   }
+  #   # else if  (input$yearc < input$vuo[1]){
+  #   #   rv$yearc=input$vuo[1]
+  #   # }
   # })
   # 
-  
-  
-  observeEvent(input$yearc, {
-    
-    if ( input$yearc <= input$vuo[2]) {
-      rv$yearc = input$yearc
-    }
-    
-    else if  (input$yearc > input$vuo[2]){
-      rv$yearc=input$vuo[2]
-    }
-    
-    # else if  (input$yearc < input$vuo[1]){
-    #   rv$yearc=input$vuo[1]
-    # }
-  })
-  
   
   
   showlista = c("showprice" , "showavgcost",
@@ -703,10 +741,10 @@ server <- function(input,output, session) {
     if(input$yearc > input$vuo[2]){
       updateSliderInput(session, "yearc", value = input$vuo[2])}
   })
-  # observeEvent(input$yearc,{
-  #   if(input$yearc < input$vuo[1]){
-  #     updateSliderInput(session, "yearc", value =input$vuo[1])}
-  # })
+  observeEvent(input$yearc,{
+    if(input$yearc < 1970){
+      updateSliderInput(session, "yearc", value =1970)}
+  })
   
   skenbbs = reactive({
     
@@ -719,11 +757,11 @@ server <- function(input,output, session) {
   
   populaatio = reactive({
     populaatio = copy(pop2)
-    populaatio = populaatio[year %in% rv$fyear:rv$lyear & var ==rv$popc, ]
+    populaatio = populaatio[var ==rv$popc, ]
     populaatio
     
   })
-  
+  # year %in% rv$fyear:rv$lyear & 
   dats = reactive({
     # req(input$bud, cancelOutput = TRUE)
     # req(input$vuo, cancelOutput = TRUE)
@@ -739,22 +777,123 @@ server <- function(input,output, session) {
     
      # freezeReactiveValue(input, "bud")
     # req(input$vuo)
+
     
+    # start=input$fstart
+    # lstart=input$lstart
+    
+# AS of now, budget does not exclude emissions between 2020 and lastyear
     start=ppaa[year ==lastyear & sec =="fossil", yy]
-    
+    #land use emission start
     lstart = ppaa[year ==lastyear & sec =="land", yy]
     
-    yearl = lastyear:(as.numeric(input$vuo[1])-1)
-    ll = as.numeric(length(yearl))
+    # years for calculation
+    yearl = lastyear:(as.numeric(input$vuo[1]))
     
-    fossil = rep(start, ll)
-    land = rep(lstart, ll)
+    # years for data set
+    yearl2 = (lastyear+1):(as.numeric(input$vuo[1])-1)
     
-    inter = data.frame(yearl, fossil, land)
+    ll = max(as.numeric(length(yearl)),0)
+    time = max(as.numeric(length(yearl)),0)
+    
+    fossil = seq(start, as.numeric(input$fstart), length.out= time)
+    # [,-1]
+    land = seq(lstart, as.numeric(input$lstart),length.out = time)
+    # [,-1]
+    fossil = fossil[-1]
+    land = land[-1]
+    
+    fossil = head(fossil,-1)
+    land = head(land,-1)  
+    
+    
+    
+    
+    
+    
+    
+      
+   #   start=ppaa[year ==lastyear & sec =="fossil", yy]
+   #  # 
+   #   lstart = ppaa[year ==lastyear & sec =="land", yy]
+   #  
+   #   yearl = (lastyear+1):(as.numeric(input$vuo[1])-1)
+   #  # ll = as.numeric(length(yearl))
+   #  # yearl = lastyear:(as.numeric(input$))
+   #  # time  = (lyear-lastyear)
+   # # time = as.numeric(length(yearl))
+   # time = max(as.numeric(length(yearl)),0)
+   # 
+   #  
+   #  # fossil = seq(start, as.numeric(input$fstart), length.out= (time+2))
+   #  # land = seq(lstart, as.numeric(input$lstart),length.out = (time+2))
+   #  
+   #  fossil = seq(start, as.numeric(input$fstart), length.out= time)
+   #  # [,-1]
+   #  land = seq(lstart, as.numeric(input$lstart),length.out = time)
+    # fossil = rep(start, ll)
+    # land = rep(lstart, ll)
+    
+    
+    inter = data.frame(yearl2, fossil, land)
     inter$net = inter$fossil + inter$land
     inter=as.data.table(inter)
     
     sumnet = inter[,sum(net)]
+    
+    
+    
+    
+    
+    
+    # lstart = input$lstart
+    # start=ppaa[year ==lastyear & sec =="fossil", yy]
+    # #land use emission start
+    # lstart = ppaa[year ==lastyear & sec =="land", yy]
+    # 
+    # # years for calculation
+    # yearl = lastyear:(as.numeric(input$vuo[1]))
+    # 
+    # # years for data set
+    # yearl2 = (lastyear+1):(as.numeric(input$vuo[1])-1)
+    # 
+    # ll = max(as.numeric(length(yearl)),0)
+    # time = max(as.numeric(length(yearl)),0)
+    # 
+    # fossil = seq(start, as.numeric(input$fstart), length.out= time)
+    # # [,-1]
+    # land = seq(lstart, as.numeric(input$lstart),length.out = time)
+    # # [,-1]
+    # fossil = fossil[-1]
+    # land = land[-1]
+    # 
+    # fossil = head(fossil,-1)
+    # land = head(land,-1)
+    # 
+    # # fossil = rep(start, ll)
+    # # land = rep(lstart, ll)
+    # net = fossil+land
+    # ## must fix so  that population is from population projection and not constant   
+    # ppaax = ppaa[1,]
+    # ppax =do.call("rbind", replicate(ll-2, ppaax, simplify = FALSE))
+    # ppax[sec=="fossil", yy:=fossil]
+    # ppax[sec=="land", yy:=land]
+    # ppax[sec=="net", yy:=net]
+    # ppax$year = yearl2
+    # 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     #first year of simluation
     fyear <- as.numeric(input$vuo[1])
@@ -774,6 +913,208 @@ server <- function(input,output, session) {
     
     #years in simulation
     year = fyear:lyear
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    start = input$fstart
+    lstart = input$lstart
+    # start=ppaa[year ==lastyear & sec =="fossil", yy]
+    # lstart = ppaa[year ==lastyear & sec =="land", yy]
+    
+    end<- as.numeric(input$paa)
+    lend = (-1)*end
+    budget<- as.numeric(input$bud)-sumnet
+    
+    if (input$muo == "percentual")  {
+      f3 = f3 <- function(rate,start,time, end) {
+        end - start * (1-rate/100)^(time+1)
+      }
+      
+    } else if (input$muo=="linear") {
+      f3 <- function(rate,start,time, end) {
+        end - (start - rate*(time+1))
+      }
+    } 
+    else if  (input$muo=="logarithmic") {
+      f3 <- function(rate,start,time, end) {
+        # end - (start - rate*log(time+1))
+        end - (start - rate^(time+1))
+        
+      }}
+    
+    
+    # emission rate solving with given values
+    result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+    u = result[1]
+    
+    rate = u
+    
+    #  yearly emissions function
+    if (input$muo == "percentual")  {
+      g = function(start, rate, time) {
+        c(start*(1-rate/100)^(time+1))
+      }
+    } else if (input$muo=="linear") {
+      g = function(start, rate, time) {
+        c(start - rate*(time+1))
+      }
+    } 
+    else if  (input$muo=="logarithmic") {
+      
+      g = function(start, rate, time) {
+        # c(start-rate*log(time+1))
+        c(start-rate^(time+1))
+        
+      }}
+    
+    #applying yearly emission function to calculate emissions
+    fossil = g(start, rate, 0:time)
+    
+    
+    # function for emissions cumulation over time
+    if (input$muo == "percentual")  {
+      geomsuma = function(start, rate, time) {
+        x = 0
+        for(i in 0:time) x = x + start * (1-rate/100)^(i)
+        return(x)  }
+      
+      
+    } else if (input$muo=="linear") {
+      geomsuma = function(start, rate, time) {
+        x = 0
+        for(i in 0:time) x = x + start - rate*(i)
+        return(x)  }  } 
+    else if (input$muo =="logarithmic") {
+      geomsuma = function(start, rate, time) {
+        x = 0
+        for(i in 0:time) x = x + start - rate*log(i)
+        
+        # for(i in 0:time) x = x + start - rate*(i)
+        # for(i in 1:time) x = x + start - rate*log((i))
+        return(x)  }  
+      
+    }
+    
+    # applying function for emission cumulatin
+    total = geomsuma(start, rate,time)
+    
+    
+    # ## calculating landuse emissions
+    # how much needed to absorb  by land based on cumulative emissions over time
+    lbudget= budget - total
+    
+    n=time
+    #normalize
+    
+    #time halved
+    r=round(.40*n, 0)
+    
+    
+    #   r
+    #  rr = first third of years
+    rr = (0:r)
+    
+    # hh = second third of year
+    hh = (1:(n-r-r))
+    
+    # nn = thrid third of years
+    # nn = (1:(n-r-(n-(1-r))))
+    nn = (1:r)
+    
+    #e = lstart + b*r
+    
+    model <- function(theta){
+      # b = speed of emission reduction, first half
+      b <- theta[1]
+      
+      
+      
+      # g = speed of emission reduction, second half
+      g  <- theta[2]
+      
+      # k = emissions, first half
+      k  <- theta[3]
+      
+      # i emissions, second thrd
+      i = theta[4]
+      
+      #emissions, tihrd third
+      l  <- theta[5]
+      
+      
+      # getting to right point in y axis
+      F1 <- (lstart + r*b) - (-r*g + lend)
+      
+      # emissions from sections according to budget
+      F2 = lbudget - k - l - i
+      
+      # first section budget equals sum from years
+      F3 = k - sum(b*rr + lstart)
+      
+      #third section budget equal sums from years
+      F4 = l - sum(g*nn+ lstart + b*r)
+      
+      #second sectin budget equals sum from years
+      F5 = i - ((lstart+b*r)*length(hh))
+      
+      
+      c(F1=F1,F2=F2, F3=F3, F4=F4, F5=F5)
+    }
+    
+    (ss <- multiroot(f = model, start = c(-12, 5,-30,-200, -30)))
+    
+    
+    fff = unlist(ss, use.names=FALSE)
+    
+    #ffa = speed of emission reduction, first half
+    ffa= fff[1]
+    
+    #fb  = speed of emission reduction, second galf
+    ffb=fff[2]
+    
+    # sa = emissions, first half
+    sa = ffa*rr + lstart
+    
+    # emissions, second third
+    sc = rep((ffa*r+lstart), length(hh))
+    
+    # sb = emissions, thired third
+    sb = ffb*nn+ lstart + ffa*r
+    
+    
+    
+    # vector of all landive emissions
+    land = c( sa,sc,sb)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     
@@ -907,173 +1248,9 @@ server <- function(input,output, session) {
     #applying yearly emission function to calculate emissions
     price = g(pstart, prate, 0:time)
     
+   
     
-    
-    start=ppaa[year ==lastyear & sec =="fossil", yy]
-    lstart = ppaa[year ==lastyear & sec =="land", yy]
-    
-    end<- as.numeric(input$paa)
-    lend = (-1)*end
-    budget<- as.numeric(input$bud)-sumnet
-    
-    if (input$muo == "percentual")  {
-      f3 = f3 <- function(rate,start,time, end) {
-        end - start * (1-rate/100)^(time+1)
-      }
-      
-    } else if (input$muo=="linear") {
-      f3 <- function(rate,start,time, end) {
-        end - (start - rate*(time+1))
-      }
-    } 
-    else if  (input$muo=="logarithmic") {
-      f3 <- function(rate,start,time, end) {
-        end - (start - rate*log(time+1))
-        
-      }}
-    
-    
-    # emission rate solving with given values
-    result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-    u = result[1]
-    
-    rate = u
-    
-    #  yearly emissions function
-    if (input$muo == "percentual")  {
-      g = function(start, rate, time) {
-        c(start*(1-rate/100)^(time+1))
-      }
-    } else if (input$muo=="linear") {
-      g = function(start, rate, time) {
-        c(start - rate*(time+1))
-      }
-    } 
-    else if  (input$muo=="logarithmic") {
-      
-      g = function(start, rate, time) {
-        c(start-rate*log(time+1))
-        
-      }}
-    
-    #applying yearly emission function to calculate emissions
-    fossil = g(start, rate, 0:time)
-    
-    
-    # function for emissions cumulation over time
-    if (input$muo == "percentual")  {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start * (1-rate/100)^(i)
-        return(x)  }
-      
-      
-    } else if (input$muo=="linear") {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start - rate*(i)
-        return(x)  }  } 
-    else if (input$muo =="logarithmic") {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start - rate*(i)
-        for(i in 1:time) x = x + start - rate*log((i))
-        return(x)  }  
-      
-    }
-    
-    # applying function for emission cumulatin
-    total = geomsuma(start, rate,time)
-    
-    
-    # ## calculating landuse emissions
-    # how much needed to absorb  by land based on cumulative emissions over time
-    lbudget= budget - total
-    
-    n=time
-    #normalize
-    
-    #time halved
-    r=round(.40*n, 0)
-    
-    
-    #   r
-    #  rr = first third of years
-    rr = (0:r)
-    
-    # hh = second third of year
-    hh = (1:(n-r-r))
-    
-    # nn = thrid third of years
-    # nn = (1:(n-r-(n-(1-r))))
-    nn = (1:r)
-    
-    #e = lstart + b*r
-    
-    model <- function(theta){
-      # b = speed of emission reduction, first half
-      b <- theta[1]
-      
-      
-      
-      # g = speed of emission reduction, second half
-      g  <- theta[2]
-      
-      # k = emissions, first half
-      k  <- theta[3]
-      
-      # i emissions, second thrd
-      i = theta[4]
-      
-      #emissions, tihrd third
-      l  <- theta[5]
-      
-      
-      # getting to right point in y axis
-      F1 <- (lstart + r*b) - (-r*g + lend)
-      
-      # emissions from sections according to budget
-      F2 = lbudget - k - l - i
-      
-      # first section budget equals sum from years
-      F3 = k - sum(b*rr + lstart)
-      
-      #third section budget equal sums from years
-      F4 = l - sum(g*nn+ lstart + b*r)
-      
-      #second sectin budget equals sum from years
-      F5 = i - ((lstart+b*r)*length(hh))
-      
-      
-      c(F1=F1,F2=F2, F3=F3, F4=F4, F5=F5)
-    }
-    
-    (ss <- multiroot(f = model, start = c(-12, 5,-30,-200, -30)))
-    
-    
-    fff = unlist(ss, use.names=FALSE)
-    
-    #ffa = speed of emission reduction, first half
-    ffa= fff[1]
-    
-    #fb  = speed of emission reduction, second galf
-    ffb=fff[2]
-    
-    # sa = emissions, first half
-    sa = ffa*rr + lstart
-    
-    # emissions, second third
-    sc = rep((ffa*r+lstart), length(hh))
-    
-    # sb = emissions, thired third
-    sb = ffb*nn+ lstart + ffa*r
-    
-    
-    
-    # vector of all landive emissions
-    land = c( sa,sc,sb)
-    
-    pop = populaatio()[,pop]/1000000000
+    pop = populaatio()[year %in% rv$fyear:rv$lyear,pop]/1000000000
     
     total  = rep(total,time+1)
     
@@ -1130,17 +1307,111 @@ server <- function(input,output, session) {
   })
   
   
+  
+  
+  
+  
+  
+  
+  
   datss = reactive({
     budd = rv$budd
     # ppaaa = ppaaa()
     ppaa = as.data.table(ppaa)
     dats = as.data.table(dats())
+    populaatio = as.data.table(populaatio())
     
     dats <- gather(dats, sec, yy, "fossil":"netcost")
     dats = as.data.table(dats)
     
     lux = as.data.table(lux())
     
+
+    
+    # yearl = lastyear:(as.numeric(input$vuo[1])-1)
+    # # ll = as.numeric(length(yearl))
+    # # yearl = lastyear:(as.numeric(input$))
+    # # time  = (lyear-lastyear)
+    # time = as.numeric(length(yearl))
+    # 
+    # 
+    # fossil = seq(start, as.numeric(input$fstart), length.out= time)
+    # land = seq(lstart, as.numeric(input$lstart),length.out = time)
+    # 
+    
+    # 
+    
+    
+    
+    # start = input$fstart
+    # lstart = input$lstart
+    start=ppaa[year ==lastyear & sec =="fossil", yy]
+    #land use emission start
+    lstart = ppaa[year ==lastyear & sec =="land", yy]
+  
+    # years for calculation
+      yearl = lastyear:(as.numeric(input$vuo[1]))
+  
+    # years for data set
+      yearl2 = (lastyear+1):(as.numeric(input$vuo[1])-1)
+    
+    ll = max(as.numeric(length(yearl)),0)
+    time = max(as.numeric(length(yearl)),0)
+    
+    fossil = seq(start, as.numeric(input$fstart), length.out= time)
+    # [,-1]
+    land = seq(lstart, as.numeric(input$lstart),length.out = time)
+    # [,-1]
+    fossil = fossil[-1]
+    land = land[-1]
+    
+    fossil = head(fossil,-1)
+    land = head(land,-1)
+    
+    # fossil = rep(start, ll)
+    # land = rep(lstart, ll)
+    net = fossil+land
+    ## must fix so  that population is from population projection and not constant   
+    # ppaax = ppaa[year ==2000,]
+    
+    
+    
+    
+    # 
+    # ppax =do.call("rbind", replicate(ll-2, ppaax, simplify = FALSE))
+    # ppax[sec=="fossil", yy:=fossil]
+    # ppax[sec=="land", yy:=land]
+    # ppax[sec=="net", yy:=net]
+    # pop = populaatio[year %in% yearl2,pop]
+    
+    pop = populaatio()[year %in% yearl2,pop]/1000000000
+    
+    year = yearl2
+    
+    ppax = data.frame(year, fossil)
+    
+    
+    
+    # ppax$fossil = fossil
+    ppax$land = land
+    ppax$net = net
+    
+    ppax$pop = pop
+    
+    
+    ppax <- gather(ppax, sec, yy, "fossil":"pop")
+    
+    ppax= as.data.table(ppax)
+    # ppax[populaatio[sec=="pop"], yy:=i.pop, on=c("year")]
+    # ppax[sec=="pop", yy:= populaatio[ppax,on=.(year), x.pop]]
+    # pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
+    
+    
+    
+    
+    dats = rbind(ppaa, ppax, dats, fill=TRUE)
+    
+    dats = as.data.table(dats)
     dats = dats[lux, col:=i.col ,on=c("sec")]
     dats = dats[lux, ala:=i.ala ,on=c("sec")]
     dats = dats[lux, pos:=i.pos ,on=c("sec")]
@@ -1150,30 +1421,20 @@ server <- function(input,output, session) {
     
     dats = dats[lux, visi:=i.visi, on=c("sec")]
     
-    start=ppaa[year ==lastyear & sec =="fossil", yy]
-    #land use emission start
-    lstart = ppaa[year ==lastyear & sec =="land", yy]
-    yearl = lastyear:(as.numeric(input$vuo[1])-1)
-    ll = max(as.numeric(length(yearl)),0)
-    fossil = rep(start, ll)
-    land = rep(lstart, ll)
-    net = fossil+land
-    
-    ppaax = ppaa[1,]
-    ppax =do.call("rbind", replicate(ll, ppaax, simplify = FALSE))
-    ppax[sec=="fossil", yy:=fossil]
-    ppax[sec=="land", yy:=land]
-    ppax[sec=="net", yy:=net]
-    ppax$year = yearl
-    
-    
-    dats = rbind(ppaa, ppax, dats, fill=TRUE)
-    
-    dats = as.data.table(dats)
-    
-    
     
   })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
@@ -1198,7 +1459,9 @@ server <- function(input,output, session) {
       
       cstart = paci[year ==lastyear & country =="Finland", bunkers/1000000000]
       
-      start = unique(datso[sec =="fossil" & year == lastyear, yy])
+      start = input$fstart
+      # lstart = input$lstart
+      # start = unique(datso[sec =="fossil" & year == lastyear, yy])
       
       ratio = cstart/start
       cend = ratio*(input$paa)
@@ -1669,7 +1932,8 @@ server <- function(input,output, session) {
     datsl= as.data.table(datsss())
     datsl[,yearu := as.numeric(rv$yearc)]
     
-    datsl = datsl[year <= yearu & year >=rv$fyear,]
+    datsl = datsl[year <= yearu,]
+    # & year >=rv$fyear
     datsl[, ayy:=mean(yy), by=c("sec")]
     
     
@@ -1685,9 +1949,17 @@ server <- function(input,output, session) {
     
     datsc = datsc[year == yearu,]
     # pacuc = pacuc[year == yearu,]
+  
+    datsc[, labu:=  as.character(paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, ", ", label, ", ", year))]  
+    # paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, ", ", label, ", ", year)
     
-    ppaa = ppaa[pop2[var==3,],pop:=i.pop/1000000000, on=c("year")]
+# THIS AWAY:     
     
+     # ppaa = ppaa[pop2[var==3,],pop:=i.pop/1000000000, on=c("year")]
+   
+    
+    
+     
     datsc
     
   })
@@ -1767,12 +2039,14 @@ server <- function(input,output, session) {
   })
   
   output$tablz = renderDataTable(server=FALSE,{
-    datss()},
+    dats()},
     extensions = 'Buttons',
     
     options = list(
-      pageLength = 5, 
+      pageLength = 2000, 
       scrollX=T,
+      scrollY=T,
+      
       paging = TRUE,
       searching = TRUE,
       fixedColumns = TRUE,
@@ -1791,6 +2065,8 @@ server <- function(input,output, session) {
     options = list(
       pageLength = 15, 
       scrollX=T,
+      scrollY=T,
+      
       paging = TRUE,
       searching = TRUE,
       fixedColumns = TRUE,
@@ -1845,7 +2121,7 @@ server <- function(input,output, session) {
     
     si = 
       function(per) {
-        per*session$clientData$output_plot_width/500
+        per*session$clientData$output_plot_width*session$clientData$pixelratio/500
       }
     
     ly = 1991
@@ -1863,7 +2139,17 @@ server <- function(input,output, session) {
     
     plot1=   ggplot(datsf())+
       
+      geom_text(data = datsss()[year %in% c(seq(1970, 2100, 10)) & sec =="dummy",], aes(x=year, y=-35, label=c(year)),
+                color="White", angle=0,size =si(2.4), alpha=.6) +
       
+      geom_segment(data = datsss()[year %in% seq(1970, 2100, 10) & sec =="dummy",],
+                   (aes(x=year, xend = year, y=100, yend=-30)), 
+                   color="white", linetype="dashed", size=si(.6), alpha=.15) +
+      
+      geom_segment(data=da,aes(x=1970, xend=2100, y=0, yend=0), color="white", linetype ="dashed",size=si(seg)*2, alpha=.7) +
+      geom_segment(data=da,aes(x=1960, xend=2100, y=0, yend=0), color="white", linetype ="dashed",size=si(seg), alpha=0) +
+      
+      geom_point(aes(x=2030, y=105), alpha=0) +
       # with_outer_glow(
       #   geom_point(data=datsl()[sec=="price"], 
       #              aes(y=tyy, x=year, group=sec, color=col), size=si(lines)),
@@ -1896,31 +2182,84 @@ server <- function(input,output, session) {
       
       geom_point(data=da,aes(x=2140,  y=100), color="white", alpha=0, size=si(2))+
       
-      geom_text(data=datsc(), aes(x=year+2, y=max(tyy)+12, label=paste0("Year ",year, " values:")), 
+      geom_text(data=datsc()[, .SD[which.max(tyy)]], aes(x=year+2, y=max(tyy)+12, label=paste0("Year ",year, " values:")), 
                 color="white", hjust=0, size=si(2.5), fontface="bold",  family = fam) +
       
       
-      geom_text_repel(data=datsf(),
-                      aes(x=year-1.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark), 
-                          color=col, group =sec, alpha=ala), 
-                      size=si(2.7), fontface="bold", hjust=1,
-                       family = fam,segment.size =NA,
-                      direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=0, seed=3
-      ) +
+        # geom_text_repel(data=datsf(),
+      #                 aes(x=year-10.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark),
+      #                     color=col, group =sec, alpha=ala),
+      #                 size=si(3.1), fontface="bold", hjust=1,
+      #                  family = fam,
+      #                 # segment.size =NA,
+      #                  direction = "y",
+      #                 max.iter=5000, force=.5, force_pull=5,box.padding=0, seed=3
+      # ) +
+
+      # geom_text(data=datsf(),
+      #                 aes(x=year-1.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark), 
+      #                     color=col, group =sec, alpha=ala), 
+      #                 size=si(2.7), fontface="bold", hjust=1,
+      #                 family = fam
+      #           # ,
+      #           # segment.size =NA,
+      #           #       direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=0, seed=3
+      # ) +
+    # geom_text_repel(data=datsc(),
+    #                 aes(x=year+10, y=tyy, label=labu,
+    #                     color=col, alpha=ala),
+    #                 hjust=0, size=si(2.4), fontface="bold", 
+    #                  family = fam,
+    #                  segment.size =NA,
+    #                 direction = "y",
+    #                 # nudge_x=18,
+    #                 xlim=c(1970,2157),
+    #                 
+    #                 max.iter=5000, force=1.01, force_pull=1,box.padding=.1 , seed=6) +
       
- geom_text_repel(data=datsc(),
-           aes(x=year+2, y=tyy, label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, "    ", label),
+      
+ geom_label_repel(data=datsc(),
+           aes(x=year+3, y=tyy,
+               # label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le)," ", mark, ", ", label, ", ", year)),
+               label=paste0(round(yy,le)," ", mark, ", ", label, ", ", year),
+
                color=col, alpha=ala),
-            hjust=0, size=si(2.7), fontface="bold", 
-           family = fam,segment.size =NA,
-          direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=.1 , seed=3) +
+           fill=bgc,
+            hjust=0, size=si(2.3), fontface="bold",
+           family = fam,
+           segment.size =NA,
+          direction = "y",
+        label.padding =0,
+        # box.padding=.1,
+          # nudge_x=18,
+            xlim=c(1970,2177),
+          label.size=0,
+          max.iter=5000,
+           force=.01, force_pull=10,box.padding=.1 ,
+          seed=5) +
+      
+       # geom_text_repel(data=datsc(),
+       #     aes(x=year, y=tyy,
+       #         # label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le)," ", mark, ", ", label, ", ", year)),
+       #         label=paste0(round(yy,le)," ", mark, ", ", label, ", ", year),
+       # 
+       #         color=col, alpha=ala),
+       #     # fill=bgc,
+       #      hjust=0, size=si(2.4), fontface="bold",
+       #     family = fam,
+       #     segment.size =NA,
+       #    direction = "y",
+       #     nudge_x=11,
+       #      xlim=c(1970,2177),
+       # 
+       #    max.iter=5000,
+       #     force=.01, force_pull=10,box.padding=.50 ,
+       #    seed=5) +
       
       geom_segment(data=da,aes(x=1970, xend=2100, y=100, yend=100), color="white", linetype ="dashed",size=si(seg), alpha=segalfa) +
-      geom_segment(data=da,aes(x=1970, xend=2100, y=50, yend=50), color="white", linetype ="dashed",size=si(seg), alpha=segalfa) +
+      # geom_segment(data=da,aes(x=1970, xend=2100, y=50, yend=50), color="white", linetype ="dashed",size=si(seg), alpha=segalfa) +
       
-      geom_segment(data=da,aes(x=1970, xend=2100, y=0, yend=0), color="white", linetype ="dashed",size=si(seg)*2) +
-      geom_segment(data=da,aes(x=1960, xend=2100, y=0, yend=0), color="white", linetype ="dashed",size=si(seg), alpha=0) +
-      
+        
       # geom_hline(aes(yintercept=0), color="white", size=si(seg), linetype ="dashed") +
       geom_segment(data=da,aes(x=2022.5, y=110, xend=2022.5, yend=mi), 
                    color="white",size=si(.4), linetype="dashed", alpha=.5) +
@@ -1936,7 +2275,10 @@ server <- function(input,output, session) {
       geom_text(data=da,aes(x=rv$lyear, y=118), label =paste0("Neutrality: ", rv$lyear),
                 color="white", hjust=.5, size=si(2.5), fontface="bold") +
       
-      geom_text(data=da,aes(x=1970, y=103), label = paste0("Scale max"),
+      geom_text(data=da,aes(x=1970, y=97), label = paste0("Scale max"),
+                col="white", fontface="bold" ,  size =si(2.5), hjust =0, vjust=0.5, angle=c(0)) +
+      
+      geom_text(data=da,aes(x=1970, y=2), label = paste0("0"),
                 col="white", fontface="bold" ,  size =si(2.5), hjust =0, vjust=0, angle=c(0)) +
       
       
@@ -1945,7 +2287,7 @@ server <- function(input,output, session) {
       
       scale_fill_identity() + 
       
-      scale_x_continuous(breaks = c(2022,2040, 2060, 2080, 2100)) +
+      scale_x_continuous(breaks = seq(1970, 2100, 10)) +
       coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
       
       
@@ -1959,6 +2301,8 @@ server <- function(input,output, session) {
         panel.border = element_blank(), 
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
+        # panel.grid.major.x = element_line(),
+        
         axis.title.y=element_blank(),
         axis.text.y=element_blank(),
         plot.background = element_rect(fill =bgc, color=NA), 
@@ -1970,8 +2314,9 @@ server <- function(input,output, session) {
     if (input$showfossil==TRUE | input$showland==TRUE  | input$shownet==TRUE) {
       
       plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("fossil", "land", "net"), ],
-                  aes(x=1970, y=96, label=paste0(round(max(yy, na.rm=TRUE), 1), " Gt"), color=col), size=si(2.2), hjust=0) 
+        geom_text(data=datsss()[sec %in% c("fossil", "land", "net"), .SD[which.max(yy)]],
+                  aes(x=1970, y=103, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
+                  size=si(2.2), hjust=0, fontface="bold") 
       # geom_text(data=datsss()[sec %in% c("fossil", "land", "net"), ],
       #           aes(x=1970, y=96/2-1, label=paste0(round(max(yy, na.rm=TRUE)/2, 1), " Gt"), color=col), size=si(2.5), hjust=0)
       
@@ -1979,8 +2324,9 @@ server <- function(input,output, session) {
     if (input$showpop==TRUE) {
       
       plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("pop"), ],
-                  aes(x=1970, y=91, label=paste0(round(max(yy, na.rm=TRUE), 2), " B"), color=col), size=si(2.2), hjust=0) 
+        geom_text(data=datsss()[sec %in% c("pop"),.SD[which.max(yy)] ],
+                  aes(x=1981, y=103, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
+                  size=si(2.2), hjust=0, fontface="bold") 
       # geom_text(data=datsss()[sec %in% c("price"), ],
       #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
       
@@ -1989,8 +2335,9 @@ server <- function(input,output, session) {
     if (input$showavgfossil==TRUE | input$showuserfossil==TRUE) {
       
       plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), ],
-                  aes(x=1970, y=86, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), " t"), color=col), size=si(2.2), hjust=0) 
+        geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
+                  aes(x=1992, y=103, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), "t"), color=col),
+                  size=si(2.2), hjust=0, fontface="bold") 
       # geom_text(data=datsss()[sec %in% c("userfossil", "avgfossil"), ],
       #           aes(x=1970, y=91/2-3, label=paste0(format(round(max(yy, na.rm=TRUE)/2, 2), nsmall=2), " t"), color=col), size=si(2.5), hjust=0) 
     }
@@ -1998,8 +2345,9 @@ server <- function(input,output, session) {
     if (input$showprice==TRUE) {
       
       plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("price"), ],
-                  aes(x=1970, y=81, label=paste0(round(max(yy, na.rm=TRUE), 0), " €/t"), color=col), size=si(2.2), hjust=0) 
+        geom_text(data=datsss()[sec %in% c("price"), .SD[which.max(yy)]],
+                  aes(x=2000, y=103, label=paste0(round(max(yy, na.rm=TRUE), 0), "€/t"), color=col),
+                  size=si(2.2), hjust=0, fontface="bold") 
       # geom_text(data=datsss()[sec %in% c("price"), ],
       #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
       
@@ -2008,8 +2356,9 @@ server <- function(input,output, session) {
     if (input$showusercost==TRUE | input$shownetcost==TRUE  | input$showavgcost==TRUE | input$showdividend==TRUE |  input$showavgnetcost==TRUE) {
       
       plot1 = plot1+
-        geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
-                  aes(x=1970, y=76, label=paste0(round(max(valuso, na.rm=TRUE), 0), " €"), color=col), size=si(2.2), hjust=0) 
+        geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
+                  aes(x=2011, y=103, label=paste0(round(max(valuso, na.rm=TRUE), 0), "€"), color=col), 
+                  size=si(2.2), hjust=0, fontface="bold") 
         # geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
         #           aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " €"), color=col), size=si(2.5), hjust=0) 
     }
@@ -2630,6 +2979,8 @@ server <- function(input,output, session) {
         # geom_text(data=da,aes(x=1979, y=-3), label = paste0(" Sinks"),
         #           col="white", fontface="bold" ,  size =si(2.5), hjust =1, vjust=1,  angle=c(0)) +
         
+        
+        
         scale_color_identity() + 
           scale_alpha_identity() + 
           scale_fill_identity() + 
@@ -2960,41 +3311,79 @@ server <- function(input,output, session) {
   
   output$yearc = renderUI({
     
+    
+    # args       <- list(inputId="yearc", label="slider :", ticks=c(1945:2130), value=c(2100), step=1)
+    # 
+    # args$min   <- 1970
+    # args$max   <- 2100
+    # args$width = "100%"
+    # # args$step   <- 1
+    # 
+    # if (sessionInfo()$otherPkgs$shiny$Version>="0.11") {
+    #   # this part works with shiny 1.5.0
+    #   ticks <- paste0(args$ticks, collapse=',')
+    #   args$ticks <- T
+    #   html  <- do.call('sliderInput', args)
+    #   vale = paste0(c(1970, 1990, 2010, 2100), collapse = ',')
+    #   html$children[[1]]$attribs[['data-values']] <- vale;
+    # 
+    # } else {
+    #   html  <- do.call('sliderInput', args)
+    # }
+    # # fluidRow(
+    # #   # if (input$view ==1) {
+    # #   style =  "margin-left: 0vw;
+    # #           margin-top: -4.5vw; ",
+    # html
+
+    
+    # sliderTextInput(
+    #   inputId = "yearc",
+    #   label = "Choose a value:", 
+    #   choices = c(1970, 2100),
+    #   grid = TRUE
+      # ,
+      # min = 1965,
+      # max = 2138
+    # )
+    # )
     # sliderInput2 <- function(inputId, label, min, max, value, step=NULL, from_min, from_max){
     #
     # sliderInput2("slider", "Slide:",
     #              min = 0, max = 100, value = 50, step = 5, from_min = 20, from_max = 80
     # )
-    if (input$view ==1) {               
+    if (input$view ==1) {
       fluidRow(
         # if (input$view ==1) {
         style =  "margin-left: 0vw;
               margin-top: -4.5vw; ",
-        
+
         # margin-top: -4.5vw; "
-        
-        sliderInput("yearc", label=NULL,min = 1965, max = 2138,step=1,value=c(2100), 
-                    # from_min = 2023, from_max = 2100, 
+
+        sliderInput("yearc", label=NULL,min = 1965, max = 2137,step=1,value=c(2100),
+                    # from_min = 2023, from_max = 2100,
                     width="100%"
-                    # , animate=TRUE
+                     , animate=TRUE,
+                    sep ="",
+                    ticks=F
         )
-      ) 
+      )
     }  else {
       fluidRow(
-        
+
         style =  "margin-left: 0vw;
               margin-top: -30vw; ",
-        
+
         # margin-top: -4.5vw; "
-        
-        sliderInput("yearc", label=NULL,min = 1993, max = 2155,step=1,value=c(2100), 
-                    # from_min = 2023, from_max = 2100, 
+
+        sliderInput("yearc", label=NULL,min = 1993, max = 2155,step=1,value=c(2100),
+                    # from_min = 2023, from_max = 2100,
                     width="50%"
                     # , animate=TRUE
                     # )
-        ) 
+        )
       )
-      
+
     }
     
     
