@@ -2,7 +2,10 @@
 
 
 # read in data files from data folder (data files must be created with datacreation.r if they do not exist)
-
+#  erikseen yleistaulukko ja maataulukko
+# molemmat datsss ista
+# maataulukon valinta näkyviin jos valittuna country profiles
+# 
 
 
 pop2<-read.csv(file="data/population.csv", header=T,  sep=",", stringsAsFactors = F )
@@ -36,6 +39,7 @@ library(shinyjs)
 
  library(showtext)
 
+setDTthreads(0)
 
 
 bgc = "black"
@@ -161,10 +165,10 @@ lu[sec == "avgnetcost", pos:=9]
 lu[sec == "userfossil", pos:=10]
 lu[sec == "usercost", pos:=11]
 lu[sec == "netcost", pos:=12]
-lu[sec == "countryfossil", pos:=12]
-lu[sec == "countrycost", pos:=12]
-lu[sec == "countrynetcost", pos:=12]
-lu[sec == "countrypop", pos:=12]
+lu[sec == "countryfossil", pos:=13]
+lu[sec == "countrycost", pos:=14]
+lu[sec == "countrynetcost", pos:=15]
+lu[sec == "countrypop", pos:=16]
 
 
 # decimals in numbers
@@ -225,13 +229,13 @@ lu[sec == "countryfossil", label:="mean emissions"]
 lu[sec == "countrypop", label:="population"]
 
 
-lu[sec == "fossil", label:="Total CO2 emissions"]
-lu[sec == "land", label:="Land-based CO2"]
-lu[sec == "net", label:="Net CO2 emissions"]
+lu[sec == "fossil", label:="Fossil emissions"]
+lu[sec == "land", label:="Land emissions / sinks"]
+lu[sec == "net", label:="Net emissions"]
 lu[sec == "price", label:="Carbon price"]
 lu[sec == "avgcost", label:="Average carbon costs"]
-lu[sec == "avgfossil", label:="Mean CO2 emissions"]
-lu[sec == "userfossil", label:="User CO2 emissions"]
+lu[sec == "avgfossil", label:="Average emissions"]
+lu[sec == "userfossil", label:="User emissions"]
 lu[sec == "netcost", label:="User net costs"]
 lu[sec == "usercost", label:="User carbon costs"]
 lu[sec == "pop", label:="World population"]
@@ -243,7 +247,10 @@ lu[sec == "countryfossil", label:="mean emissions"]
 lu[sec == "countrypop", label:="population"]
 
 
-
+lalist = c("Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
+  "Average emissions",  "Carbon price", "Average carbon costs",
+  "Carbon dividend","Mean net costs", "User emissions", "User carbon costs", "User net costs"
+  )
 
 # colors
 lu$col =fos
@@ -308,7 +315,7 @@ arg = function(start, end, convergence, coustart) {
   
   nams = c("vuo", "vuo", "yearc", "paa", "muo", "pri", "eprice")
   
-  vuo = c(2023, 2050)
+  vuo = c(2024, 2050)
   yearc = 2050
   paa = 8
   muo = "percentual"
@@ -320,7 +327,7 @@ arg = function(start, end, convergence, coustart) {
   skenb = data.frame(nams, sken, vals)
   skenb1 = copy(skenb)
   
-  vuo = c(2023, 2055)
+  vuo = c(2024, 2055)
   yearc= 2055
   paa = 7
   muo = "percentual"
@@ -332,7 +339,7 @@ arg = function(start, end, convergence, coustart) {
   skenb = data.frame(nams, sken, vals)
   skenb2 = copy(skenb)
   
-  vuo = c(2023, 2080)
+  vuo = c(2024, 2080)
   yearc = 2080
   paa = 5
   muo = "linear"
@@ -344,7 +351,7 @@ arg = function(start, end, convergence, coustart) {
   skenb = data.frame(nams, sken, vals)
   skenb3 = copy(skenb)
   
-  vuo = c(2023, 2100)
+  vuo = c(2024, 2100)
   yearc = 2100
   paa = 5
   muo = "percentual"

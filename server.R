@@ -298,6 +298,9 @@ server <- function(input,output, session) {
   observeEvent(input$next4, {
     updateNavlistPanel(session, inputId = "nok", selected = "EXTRA: Country profiles")
   })
+  observeEvent(input$next5, {
+    updateNavlistPanel(session, inputId = "nok", selected = "EXTRA: National dividend")
+  })
   
   
 
@@ -316,6 +319,10 @@ server <- function(input,output, session) {
   
   observeEvent(input$prev4, {
     updateNavlistPanel(session, inputId = "nok", selected = "4. User emissions")
+  })
+  
+  observeEvent(input$prev5, {
+    updateNavlistPanel(session, inputId = "nok", selected = "EXTRA: Country profiles")
   })
   # 
   # observeEvent(input$yearc, {
@@ -1440,7 +1447,7 @@ server <- function(input,output, session) {
   
   pacu = reactive ({
     
-    if (input$indi %in% c(ll2) || input$countr %in% c(ll2))  {
+    if (input$indi %in% c(ll2) || input$countr %in% c(ll2) || input$nationalcoun %in% c(ll2))  {
       
       datso = as.data.table(datss())
       
@@ -1743,7 +1750,7 @@ server <- function(input,output, session) {
       ## create correction factor to account for that emissions multiplied by population
       ## don't equal for world emissions needed for budget
       pacu[year %in% c(lastyear+1:rv$lyear) & country %in% ll2,
-           yyy := sum(countryfossil*pop)/1000000000, by=c("year")]
+      yyy := sum(countryfossil*pop)/1000000000, by=c("year")]
       
       pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
       
@@ -1759,7 +1766,10 @@ server <- function(input,output, session) {
       pacu[datso[sec=="dividend"], dividend :=i.yy, on=c("year")]
       pacu[datso[sec=="price"], price :=i.yy, on=c("year")]
       pacu[,countrycost:=fossilcountry*price ]
-      pacu[,countrynetcost:=countrycost-dividend]
+      pacu[, dividend:=(1-input$national/100)*dividend]
+      pacu[, nationaldividend:=input$national/100*countrycost]
+      
+      pacu[,countrynetcost:=countrycost-dividend-nationaldividend]
       
       updateNumericInput(session, "dummy", value = 1)
       
@@ -1797,7 +1807,26 @@ server <- function(input,output, session) {
       cour2  = pacu[country ==input$indi & year %in% rv$fyear:rv$lyear, countrynetcost]
       dats[year %in% rv$fyear:rv$lyear & sec =="usercost", yy:=cour1 ]
       dats[year %in% rv$fyear:rv$lyear & sec =="netcost", yy:=cour2 ]
+
       
+      
+    }
+    
+    
+    if (input$nationalcoun %in% c(ll2)) {
+      req(pacu())
+      pacu = pacu()
+
+      # cour1  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, countrycost]
+      # cour2  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, c(dividend+nationaldividend)]
+      cour2  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, c(dividend+nationaldividend)]
+      usercost =  dats[year %in% rv$fyear:rv$lyear & sec =="usercost",yy]
+        # dats[year %in% rv$fyear:rv$lyear & sec =="usercost", yy:=cour1 ]
+
+
+      dats[year %in% rv$fyear:rv$lyear & sec =="netcost", yy:=usercost-cour2 ]
+
+
     }
     
     
@@ -1926,6 +1955,49 @@ server <- function(input,output, session) {
     
   })
   
+  datssst = reactive({
+    tab = as.data.table(datsss())
+    tab = tab[order(pos)]
+    
+    seclist = c("fossil", "land", "net", "pop", "avgfossil",
+          "price", "avgcost","dividend","avgnetcost","userfossil",
+          "usercost",  "netcost")
+    tab = tab[sec %in% seclist,]
+    
+    
+    # tab[, lyy := paste0(format(round(yy, 1, " ", mark)]
+    tab[, lyy:=  as.character(paste0(sprintf(paste0("%0.", (le+1),"f"),round(yy,le+1))," ", mark))]
+    tab = tab[,c("year","lyy", "label")]
+    
+
+    
+    
+  tab = as.data.frame(tab)
+    tab = spread(tab, key="label",value="lyy")
+    # tab = as.data.table(tab)
+    lalist = c("year","Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
+               "Average emissions",  "Carbon price", "Average carbon costs",
+               "Carbon dividend","Mean net costs", "User emissions", "User carbon costs", "User net costs"
+    )
+    
+    
+    # lst1 <- list(tab, tab)
+    # lst1 <- lapply(lst1, function(x) setcolorder(x, intersect(lalist, names(x))))
+    setcolorder(tab, intersect(lalist, names(tab)))
+    
+    tab = as.data.table(tab)
+    tab = tab[order(year, decreasing = TRUE)]
+    
+    # tab = 
+    # tab = 
+                   # lst1 <- lapply(lst1, function(x) setcolorder(x, intersect(list_name, names(x)))
+                                  
+    # setcolorder(tab,lalist)
+    
+  tab
+    
+  })
+  
   
   datsl = reactive ({
     
@@ -1936,7 +2008,7 @@ server <- function(input,output, session) {
     # & year >=rv$fyear
     datsl[, ayy:=mean(yy), by=c("sec")]
     
-    
+    datsl[year < rv$fyear & !(sec=="dummy"), ala := .1]
     
     datsl
     
@@ -2077,13 +2149,14 @@ server <- function(input,output, session) {
     )
   )
   
-  output$tably = renderDataTable(server=FALSE,{
-    datsss()},
+  output$tably = DT::renderDataTable(server=FALSE,{
+    datssst()},
     extensions = 'Buttons',
     
     options = list(
-      pageLength = 15, 
+      pageLength = 200, 
       scrollX=T,
+      scrollY="400px",
       
       paging = TRUE,
       searching = TRUE,
@@ -2119,10 +2192,29 @@ server <- function(input,output, session) {
     mix = 1972
     max = 2130
     
+    if (input$isMobile=="FALSE") {
+    
     si = 
       function(per) {
         per*session$clientData$output_plot_width*session$clientData$pixelratio/500
       }
+    }
+    if (input$isMobile=="TRUE") {
+      
+      si = 
+        function(per) {
+          per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
+        }
+    }
+    
+    
+    if (input$is_mobile_device=="TRUE") {
+      
+      si = 
+        function(per) {
+          per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
+        }
+    }
     
     ly = 1991
     ala = .3
@@ -2144,10 +2236,14 @@ server <- function(input,output, session) {
       
       geom_segment(data = datsss()[year %in% seq(1970, 2100, 10) & sec =="dummy",],
                    (aes(x=year, xend = year, y=100, yend=-30)), 
-                   color="white", linetype="dashed", size=si(.6), alpha=.15) +
+                   color="white", linetype="dashed", linewidth=si(.6), alpha=.1) +
       
-      geom_segment(data=da,aes(x=1970, xend=2100, y=0, yend=0), color="white", linetype ="dashed",size=si(seg)*2, alpha=.7) +
-      geom_segment(data=da,aes(x=1960, xend=2100, y=0, yend=0), color="white", linetype ="dashed",size=si(seg), alpha=0) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=0, yend=0), color="white", linetype ="dashed",linewidth=si(seg)*2, alpha=.3) +
+      geom_segment(data=da,aes(x=1960, xend=2100, y=0, yend=0), color="white", linetype ="dashed",linewidth=si(seg), alpha=0) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=100, yend=100), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=75, yend=75), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=50, yend=50), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=25, yend=25), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
       
       geom_point(aes(x=2030, y=105), alpha=0) +
       # with_outer_glow(
@@ -2165,20 +2261,20 @@ server <- function(input,output, session) {
     #              aes(y=tyy, x=year, group=sec, color=col), size=si(lines)),
     #   colour = taxfosindi, sigma = 5,  expand = 5 ) +
     geom_area(data=datsl(), aes(y=tyy, x=year, group=sec,  fill=col),
-              size=si(points), alpha=.25/nrow(datsc()), position = 'identity') + 
+              size=si(points), alpha=.35/nrow(datsc()), position = 'identity') + 
       
-      geom_line(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=si(lines)) + 
+      geom_line(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), linewidth=si(lines)) + 
       geom_point(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=si(points)) + 
       
       
       
-       geom_line(data=datsss(), aes(y=tyy, x=year, group=interaction(sec, country), color=col), size=si(lines), alpha=.1) + 
+       geom_line(data=datsss(), aes(y=tyy, x=year, group=interaction(sec, country), color=col), linewidth=si(lines), alpha=.1) + 
       # geom_line(data=datss()[(sec =="avgcost"),], aes(y=-tyy, x=year, group=sec, color=col, alpha=ala), size=si(lines)) + 
       
       geom_point(data=datsss(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=si(points), alpha=.1) + 
       
       # tusercost+5
-      geom_segment(data=da,aes(x=rv$yearc, xend=rv$yearc, y=100, yend = mi), color="white", alpha=.2, size=si(1.4))+
+      geom_segment(data=da,aes(x=rv$yearc, xend=rv$yearc, y=100, yend = mi), color="white", alpha=.2, linewidth=si(1.4))+
       
       geom_point(data=da,aes(x=2140,  y=100), color="white", alpha=0, size=si(2))+
       
@@ -2186,87 +2282,31 @@ server <- function(input,output, session) {
                 color="white", hjust=0, size=si(2.5), fontface="bold",  family = fam) +
       
       
-        # geom_text_repel(data=datsf(),
-      #                 aes(x=year-10.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark),
-      #                     color=col, group =sec, alpha=ala),
-      #                 size=si(3.1), fontface="bold", hjust=1,
-      #                  family = fam,
-      #                 # segment.size =NA,
-      #                  direction = "y",
-      #                 max.iter=5000, force=.5, force_pull=5,box.padding=0, seed=3
-      # ) +
+    geom_label_repel(data=datsc(),
+                     aes(x=year+3, y=tyy,
+                         # label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le)," ", mark, ", ", label, ", ", year)),
+                         label=paste0(round(yy,le)," ", mark, ", ", label),
+                         
+                         color=col, alpha=ala*100),
+                     fill=bgc,
+                     hjust=0, size=si(2.4), fontface="bold",
+                     family = fam,
+                     segment.size =NA,
+                     direction = "y",
+                     label.padding =0,
+                     # box.padding=.1,
+                     # nudge_x=18,
+                     xlim=c(1970,2177),
+                     label.size=0,
+                     max.iter=5000,
+                     force=.01, force_pull=10,box.padding=.1 ,
+                     seed=5) +
+      
 
-      # geom_text(data=datsf(),
-      #                 aes(x=year-1.5, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark), 
-      #                     color=col, group =sec, alpha=ala), 
-      #                 size=si(2.7), fontface="bold", hjust=1,
-      #                 family = fam
-      #           # ,
-      #           # segment.size =NA,
-      #           #       direction = "y", max.iter=5000, force=.5, force_pull=5,box.padding=0, seed=3
-      # ) +
-    # geom_text_repel(data=datsc(),
-    #                 aes(x=year+10, y=tyy, label=labu,
-    #                     color=col, alpha=ala),
-    #                 hjust=0, size=si(2.4), fontface="bold", 
-    #                  family = fam,
-    #                  segment.size =NA,
-    #                 direction = "y",
-    #                 # nudge_x=18,
-    #                 xlim=c(1970,2157),
-    #                 
-    #                 max.iter=5000, force=1.01, force_pull=1,box.padding=.1 , seed=6) +
-      
-      
- geom_label_repel(data=datsc(),
-           aes(x=year+3, y=tyy,
-               # label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le)," ", mark, ", ", label, ", ", year)),
-               label=paste0(round(yy,le)," ", mark, ", ", label, ", ", year),
-
-               color=col, alpha=ala),
-           fill=bgc,
-            hjust=0, size=si(2.3), fontface="bold",
-           family = fam,
-           segment.size =NA,
-          direction = "y",
-        label.padding =0,
-        # box.padding=.1,
-          # nudge_x=18,
-            xlim=c(1970,2177),
-          label.size=0,
-          max.iter=5000,
-           force=.01, force_pull=10,box.padding=.1 ,
-          seed=5) +
-      
-       # geom_text_repel(data=datsc(),
-       #     aes(x=year, y=tyy,
-       #         # label=paste0(sprintf(paste0("%0.",le,"f"),round(yy,le)," ", mark, ", ", label, ", ", year)),
-       #         label=paste0(round(yy,le)," ", mark, ", ", label, ", ", year),
-       # 
-       #         color=col, alpha=ala),
-       #     # fill=bgc,
-       #      hjust=0, size=si(2.4), fontface="bold",
-       #     family = fam,
-       #     segment.size =NA,
-       #    direction = "y",
-       #     nudge_x=11,
-       #      xlim=c(1970,2177),
-       # 
-       #    max.iter=5000,
-       #     force=.01, force_pull=10,box.padding=.50 ,
-       #    seed=5) +
-      
-      geom_segment(data=da,aes(x=1970, xend=2100, y=100, yend=100), color="white", linetype ="dashed",size=si(seg), alpha=segalfa) +
-      # geom_segment(data=da,aes(x=1970, xend=2100, y=50, yend=50), color="white", linetype ="dashed",size=si(seg), alpha=segalfa) +
-      
-        
-      # geom_hline(aes(yintercept=0), color="white", size=si(seg), linetype ="dashed") +
-      geom_segment(data=da,aes(x=2022.5, y=110, xend=2022.5, yend=mi), 
-                   color="white",size=si(.4), linetype="dashed", alpha=.5) +
       geom_segment(data=da, aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                   color="white", size=si(.4), linetype = "dashed", alpha=.5 ) +
+                   color="white", linewidth=si(.4), linetype = "dashed", alpha=.2 ) +
       geom_segment(data=da, aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                   color="white", size=si(.4), linetype = "dashed", alpha=.5 ) +  
+                   color="white", linewidth=si(.4), linetype = "dashed", alpha=.2 ) +  
       
       
       geom_text(data=da,aes(x=rv$fyear, y=118), label =paste0("Start: ", rv$fyear),
@@ -2281,7 +2321,21 @@ server <- function(input,output, session) {
       geom_text(data=da,aes(x=1970, y=2), label = paste0("0"),
                 col="white", fontface="bold" ,  size =si(2.5), hjust =0, vjust=0, angle=c(0)) +
       
+      geom_segment(data=da,aes(x=2021.5, y=110, xend=2021.5, yend=mi), 
+                   color="lightgreen",linewidth=si(.6), linetype="solid", alpha=.3) +
+      geom_text(data=da,aes(x=2020.5, y=-42), label = paste0("< Observed <"),
+                col="lightgreen", fontface="bold" ,  size =si(2.5), hjust =1, vjust=0.5, angle=c(0), alpha=.4) +
       
+      geom_text(data=da,aes(x=2022.5, y=-42), label = paste0("> Simulated >"),
+                col="lightgreen", fontface="bold" ,  size =si(2.5), hjust =0, vjust=0.5, angle=c(0), alpha=.4) +
+      
+      geom_text(data=da,aes(x=1971, y=-14), label = paste0("Funded by the Kone foundation. \nData: UN, IPCC, Friedlingstein et al. 2021, World Bank"),
+                col="white", fontface="bold" ,  size =si(1.3), hjust =0, vjust=0.5, angle=c(0), alpha=.5) +
+      
+       
+      
+      
+     
       scale_color_identity() + 
       scale_alpha_identity() + 
       
@@ -2310,6 +2364,8 @@ server <- function(input,output, session) {
         #,
         #plot.margin = unit(c(mar,mar,mar,mar), "cm")
       )
+    
+  
     
     if (input$showfossil==TRUE | input$showland==TRUE  | input$shownet==TRUE) {
       
@@ -2363,7 +2419,34 @@ server <- function(input,output, session) {
         #           aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " €"), color=col), size=si(2.5), hjust=0) 
     }
 
-    
+    if (input$startvalue ==TRUE & input$yearc > rv$fyear) {
+      
+      plot1 = plot1 +
+        geom_text(data=datsf()[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+12, label=paste0("Year ",year, " values:")), 
+                  color="white", hjust=1, size=si(2.5), fontface="bold",  family = fam) +
+        
+        
+        geom_label_repel(data=datsf(),
+                         aes(x=year-2, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark),
+                             color=col, group =sec, alpha=ala),
+                         size=si(2.4), fontface="bold", hjust=1,
+                         family = fam,
+                         fill=bgc,
+                         # segment.size =NA,
+                         segment.size =NA,
+                         direction = "y",
+                         label.padding =0,
+                         # box.padding=.1,
+                         # nudge_x=18,
+                         xlim=c(1970,2177),
+                         label.size=0,
+                         max.iter=5000,
+                         force=.01, force_pull=10,box.padding=.1 ,
+                         seed=5
+        ) 
+      
+      
+    } 
 
 
     
