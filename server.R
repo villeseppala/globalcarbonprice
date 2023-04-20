@@ -2214,7 +2214,7 @@ server <- function(input,output, session) {
       
       lsi = 
         function(per) {
-          per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
+          per*session$clientData$output_plot_width*session$clientData$pixelratio/1500
         }
     }
     
@@ -2275,7 +2275,7 @@ server <- function(input,output, session) {
               size=si(points), alpha=.35/nrow(datsc()), position = 'identity') + 
       
       geom_line(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), linewidth=lsi(lines)) + 
-      geom_point(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=si(points)) + 
+      geom_point(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=lsi(points)) + 
       
       
       
