@@ -125,6 +125,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(showcountrynetcost = FALSE)
   rv <- reactiveValues(showcountrypop = FALSE)
   
+  
   rv <- reactiveValues(plot2 = NULL)
   rv <- reactiveValues(plot3 = NULL)
   rv <- reactiveValues(plot4 = NULL)
@@ -2105,7 +2106,9 @@ server <- function(input,output, session) {
   
   
   
-  
+  output$mobileuser = renderText({
+    c("If you are mobile user, landscape rotation is recommended")
+  })
   output$info = renderText({
     rv$info
   })
@@ -2192,29 +2195,37 @@ server <- function(input,output, session) {
     mix = 1972
     max = 2130
     
-    if (input$isMobile=="FALSE") {
+    # if (input$isMobile=="FALSE") {
     
     si = 
       function(per) {
         per*session$clientData$output_plot_width*session$clientData$pixelratio/500
       }
+    # }
+    if (input$isMobile=="FALSE") {
+      
+      lsi = 
+        function(per) {
+          per*session$clientData$output_plot_width*session$clientData$pixelratio/500
+        }
     }
+    
     if (input$isMobile=="TRUE") {
       
-      si = 
+      lsi = 
         function(per) {
           per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
         }
     }
     
     
-    if (input$is_mobile_device=="TRUE") {
-      
-      si = 
-        function(per) {
-          per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
-        }
-    }
+    # if (input$is_mobile_device=="TRUE") {
+    #   
+    #   si = 
+    #     function(per) {
+    #       per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
+    #     }
+    # }
     
     ly = 1991
     ala = .3
@@ -2236,14 +2247,14 @@ server <- function(input,output, session) {
       
       geom_segment(data = datsss()[year %in% seq(1970, 2100, 10) & sec =="dummy",],
                    (aes(x=year, xend = year, y=100, yend=-30)), 
-                   color="white", linetype="dashed", linewidth=si(.6), alpha=.1) +
+                   color="white", linetype="dashed", linewidth=lsi(.6), alpha=.1) +
       
-      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=0, yend=0), color="white", linetype ="dashed",linewidth=si(seg)*2, alpha=.3) +
-      geom_segment(data=da,aes(x=1960, xend=2100, y=0, yend=0), color="white", linetype ="dashed",linewidth=si(seg), alpha=0) +
-      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=100, yend=100), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
-      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=75, yend=75), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
-      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=50, yend=50), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
-      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=25, yend=25), color="white", linetype ="dashed",linewidth=si(seg), alpha=.2) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=0, yend=0), color="white", linetype ="dashed",linewidth=lsi(seg)*2, alpha=.3) +
+      geom_segment(data=da,aes(x=1960, xend=2100, y=0, yend=0), color="white", linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=100, yend=100), color="white", linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=75, yend=75), color="white", linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=50, yend=50), color="white", linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      geom_segment(data=datsc()[sec=="dummy",],aes(x=1970, xend=rv$lyear, y=25, yend=25), color="white", linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
       
       geom_point(aes(x=2030, y=105), alpha=0) +
       # with_outer_glow(
@@ -2263,18 +2274,18 @@ server <- function(input,output, session) {
     geom_area(data=datsl(), aes(y=tyy, x=year, group=sec,  fill=col),
               size=si(points), alpha=.35/nrow(datsc()), position = 'identity') + 
       
-      geom_line(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), linewidth=si(lines)) + 
+      geom_line(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), linewidth=lsi(lines)) + 
       geom_point(data=datsl(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=si(points)) + 
       
       
       
-       geom_line(data=datsss(), aes(y=tyy, x=year, group=interaction(sec, country), color=col), linewidth=si(lines), alpha=.1) + 
+       geom_line(data=datsss(), aes(y=tyy, x=year, group=interaction(sec, country), color=col), linewidth=lsi(lines), alpha=.1) + 
       # geom_line(data=datss()[(sec =="avgcost"),], aes(y=-tyy, x=year, group=sec, color=col, alpha=ala), size=si(lines)) + 
       
       geom_point(data=datsss(), aes(y=tyy, x=year, group=sec, color=col, alpha=ala), size=si(points), alpha=.1) + 
       
       # tusercost+5
-      geom_segment(data=da,aes(x=rv$yearc, xend=rv$yearc, y=100, yend = mi), color="white", alpha=.2, linewidth=si(1.4))+
+      geom_segment(data=da,aes(x=rv$yearc, xend=rv$yearc, y=100, yend = mi), color="white", alpha=.2, linewidth=lsi(1.4))+
       
       geom_point(data=da,aes(x=2140,  y=100), color="white", alpha=0, size=si(2))+
       
@@ -2304,9 +2315,9 @@ server <- function(input,output, session) {
       
 
       geom_segment(data=da, aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                   color="white", linewidth=si(.4), linetype = "dashed", alpha=.2 ) +
+                   color="white", linewidth=lsi(.4), linetype = "dashed", alpha=.2 ) +
       geom_segment(data=da, aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                   color="white", linewidth=si(.4), linetype = "dashed", alpha=.2 ) +  
+                   color="white", linewidth=lsi(.4), linetype = "dashed", alpha=.2 ) +  
       
       
       geom_text(data=da,aes(x=rv$fyear, y=118), label =paste0("Start: ", rv$fyear),
@@ -2322,7 +2333,7 @@ server <- function(input,output, session) {
                 col="white", fontface="bold" ,  size =si(2.5), hjust =0, vjust=0, angle=c(0)) +
       
       geom_segment(data=da,aes(x=2021.5, y=110, xend=2021.5, yend=mi), 
-                   color="lightgreen",linewidth=si(.6), linetype="solid", alpha=.3) +
+                   color="lightgreen",linewidth=lsi(.6), linetype="solid", alpha=.3) +
       geom_text(data=da,aes(x=2020.5, y=-42), label = paste0("< Observed <"),
                 col="lightgreen", fontface="bold" ,  size =si(2.5), hjust =1, vjust=0.5, angle=c(0), alpha=.4) +
       

@@ -3,7 +3,7 @@
 
 ui <- dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,
                     
-                    dashboardHeader(title = " Global carbon price and dividend -simulator (UNFINISHED, may contain errors)",
+                    dashboardHeader(title = " Global carbon price and dividend -simulator (UNFINISHED, contains errors)",
                                     # title="ffff",
                                     tagList(a
                                             # (HTML("<font size='4'>", as.character
@@ -701,7 +701,10 @@ tbody {
 vertical-align: left;
 }
 
-
+pre {
+padding: .1px;
+margin: .1px;
+}
 
                ")
 )
@@ -732,8 +735,21 @@ fluidRow(
   
   
   column(12,          id = "bor",
-         
+         conditionalPanel(condition="input.isMobile==1",   {
+           box(
+             id = "mobilebox",
+             width = NULL,
+             title = "If you are using mobile, landscape rotation is recommended",
+             closable = TRUE,
+             closed=FALSE,
+             collapsible = FALSE,
+             # verbatimTextOutput("mobileuser"),
+             ignore.init=TRUE
+             
+           ) }),    
+        
          column(12, id = "bor5",
+
                 
                 accordion(
                   id = "accordion5",
