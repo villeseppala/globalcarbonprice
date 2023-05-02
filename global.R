@@ -2,10 +2,6 @@
 
 
 # read in data files from data folder (data files must be created with datacreation.r if they do not exist)
-#  erikseen yleistaulukko ja maataulukko
-# molemmat datsss ista
-# maataulukon valinta näkyviin jos valittuna country profiles
-# 
 
 
 pop2<-read.csv(file="data/population.csv", header=T,  sep=",", stringsAsFactors = F )
@@ -47,35 +43,63 @@ bgc = "black"
   bgc = "darkgrey"
     bgc = rgb(45, 16, 36, maxColorValue = 255)
     bgc = rgb(45, 60, 90, maxColorValue = 255)
-    bgc = rgb(45, 66, 86, maxColorValue = 255)
+    bgc = rgb(45, 66, 80, maxColorValue = 255)
     
-    
+    blu = rgb(29, 137, 255, maxColorValue = 255)
+    blu ="#428bca"
+
+bgc = hsv(.59,.5,.3)    
+        
 hh = .81
 vv = .8
 
-fos = hsv(0.06,hh,vv)
-lul = hsv(0.12,hh,vv)
-net = hsv(0.09,hh,vv)
+fos = hsv(0.08,hh,vv)
+lul = fos
+net = fos
+# lul = hsv(0.12,hh,vv)
+# net = hsv(0.09,hh,vv)
+# 
+fos = hsv(0.08,.85,vv)
+lul = hsv(0.10,.78,.7)
+net = hsv(0.09,.8,.9)
+# fos = hsl(80,80,80)
+# fos =    rgb(145, 76, 90, maxColorValue = 255)
+# lul = fos
+# net = fos
+# lul =    rgb(145, 66, 180, maxColorValue = 255)
+# net =   rgb(145, 99, 90, maxColorValue = 255)
 
-pop = hsv(0.18,hh,vv)
+pop =hsv(0.57,.75,.95)
 
 
-tax = hsv(0.25,hh,vv)
+tax = hsv(0.35,hh,vv)
 
 
-fosindi = hsv(.96,.65,vv)
+fosindi =hsv(.96,.65,vv)  
 fpop = fosindi
 cpop = fosindi
 countryfossil = fosindi 
 
+avgcost = hsv(0.57,.7,.9)
+avgcost = hsv(0.75,.35,vv)
+dividend = hsv(0.75,.58,vv)
+avgnetcost = hsv(0.75,.5,vv)
 
-avgcost = hsv(0.47,hh,vv)
-dividend = hsv(0.65,.3,vv)
-avgnetcost = hsv(0.54,hh,vv)
+# dividend = avgcost
+# avgnetcost = avgcost
+# taxfosindi = avgcost
+# netcost = avgcost
+
+
+# countrycost = avgcost
+# countrynetcost = avgcost
+
+# 
+
 taxfosindi = avgcost
 netcost = avgnetcost
-
-
+# 
+# 
 countrycost = avgcost
 countrynetcost = avgnetcost
 
@@ -287,6 +311,10 @@ lu[sec == "usercost", ala:=alas]
 lu[sec == "pop", ala:=alas]
 lu[sec == "dividend", ala:=alas]
 lu[sec == "avgnetcost", ala:=alas]
+lu[sec == "countrycost",  ala:=alas]
+lu[sec == "countrynetcost",  ala:=alas]
+lu[sec == "countryfossil",  ala:=alas]
+lu[sec == "countrypop",  ala:=alas]
 
 lu$visi = 1
 lu[sec =="pop", visi :=0]
@@ -298,9 +326,9 @@ lu[sec =="pop", visi :=0]
 
 ## function for calculating country per capita emissions to match world per capita emissions
 # start = world start year emissions
-# avg = world neutrality year emissions
-# con = convergence factor
-# cou = country start year emissions
+# end = world neutrality year emissions
+# convergence = convergence factor
+# coustart= country start year emissions
 # result is country neutrality year emissions
 
 arg = function(start, end, convergence, coustart) {
@@ -313,29 +341,31 @@ arg = function(start, end, convergence, coustart) {
 # carbon budget scenario default values
 {
   
-  nams = c("vuo", "vuo", "yearc", "paa", "muo", "pri", "eprice")
+  nams = c("vuo", "vuo", "yearc", "paa", "muo", "pri", "sprice", "eprice")
   
-  vuo = c(2024, 2050)
-  yearc = 2050
+  vuo = c(2024, 2055)
+  yearc = 2055
   paa = 8
   muo = "percentual"
   pri = "linear"
-  eprice = 1000
+  sprice = 200
+  eprice = 1200
   
-  sken= rep(400,7)
-  vals = c(vuo, yearc, paa, muo, pri, eprice)
+  sken= rep(400,8)
+  vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb1 = copy(skenb)
   
-  vuo = c(2024, 2055)
-  yearc= 2055
+  vuo = c(2024, 2060)
+  yearc= 2060
   paa = 7
   muo = "percentual"
   pri = "linear"
-  eprice = 800
+  sprice = 150
+  eprice = 1000
   
-  sken= rep(500,7)
-  vals = c(vuo, yearc, paa, muo, pri, eprice)
+  sken= rep(500,8)
+  vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb2 = copy(skenb)
   
@@ -344,10 +374,11 @@ arg = function(start, end, convergence, coustart) {
   paa = 5
   muo = "linear"
   pri = "linear"
-  eprice = 400
+  sprice = 50
+  eprice = 500
   
-  sken= rep(1150,7)
-  vals = c(vuo, yearc, paa, muo, pri, eprice)
+  sken= rep(1150,8)
+  vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb3 = copy(skenb)
   
@@ -356,10 +387,11 @@ arg = function(start, end, convergence, coustart) {
   paa = 5
   muo = "percentual"
   pri = "linear"
-  eprice = 300
+  sprice = 40
+  eprice = 400
   
-  sken= rep(1350,7)
-  vals = c(vuo, yearc, paa, muo, pri, eprice)
+  sken= rep(1350,8)
+  vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb4 = copy(skenb)
   
@@ -449,6 +481,8 @@ ppaa <- gather(ppaa, sec, yy, "fossil":"netcost")
 
 ppaa=as.data.table(ppaa)
 lastyear = as.numeric(ppaa[, max(year)])
+
+budgetyear = 2020
 # 
 
 # 
@@ -489,21 +523,37 @@ chk = function(col, label, info) {
 #   )
 # } 
 
-inf = function(info) {
+
+
+# label=p(HTML("Carbon budget for net CO2 emissions since start of 2020" , "<font size='3'>",
+#              as.character(actionLink(inputId = "info3", 
+#                                      label = "  ", 
+#                                      icon = icon("fas fa-info-circle"))), "</font>")),   
+
+
+inf = function(label, id) {
+  label=p(HTML(label, "<font size='3'>",
+               as.character(actionLink(style='color:#ffc107', inputId = id, 
+                                       label = "  ", 
+                                       icon = icon("fas fa-info-circle"))), "</font>"))  
   
-HTML( "<font size='2'>", 
-      as.character(actionLink(inputId = info, 
-                              label = "  ", 
-                              icon = icon("info"))), "</font>")  
 }
+# 
+# inf = function(info) {
+#   
+# HTML( "<font size='2'>", 
+#       as.character(actionLink(inputId = info, 
+#                               label = "  ", 
+#                               icon = icon("info"))), "</font>")  
+# }
 cuk = function(col, label, info, show, lab, value) {
   div(div(style="display:inline-block",   p(style=paste0("color:",col,";"),
                                             HTML(label)
   )), 
       div(style="display:inline-block",HTML( "<font size='2'>", 
-                                             as.character(actionLink(inputId = info, 
+                                             as.character(actionLink(style='color:#ffc107',inputId = info, 
                                                                      label = "  ", 
-                                                                     icon = icon("info"))), "</font>") ),
+                                                                     icon = icon("fas fa-info-circle"))), "</font>") ),
       div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))  
   
 }

@@ -23,6 +23,9 @@ ui <- dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,
                                            # , title=""
                                             # , class="dropdown"
                                             )
+                                    ,
+                                   actionBttn(inputId ="infodata", label = "Data sources", size="xs", style = "fill", color="primary")
+                                    
                                     # tags$li(a(href = 'http://shinyapps.company.com',
                                     #           icon("power-off"),
                                     #           title = "Back to Apps Home"),
@@ -626,7 +629,7 @@ flex-wrap: wrap;
 
 #info .text {
 display: flex;
-flex-wrap: wrap;
+flex-wrap: wrap; 
         flex-direction: row;
 }
 
@@ -653,8 +656,10 @@ border-bottom: 1px solid rgb(92, 61, 46);
 }
 
  .irs--shiny .irs-handle {
-color: black !important;
+color: #428bca !important;
+background-color: #428bca;
  }
+
 
 #yearc .irs-handle {
 color: black !important;
@@ -704,7 +709,37 @@ vertical-align: left;
 pre {
 padding: .1px;
 margin: .1px;
+overflow-y: scroll; 
 }
+
+.irs--shiny .irs-line {
+height: 16px
+
+}
+fas.ca-info-circle {
+color: black;
+
+
+}
+
+.fa a {
+color: black;
+
+}
+
+.btn {
+    font-size: 1.8rem;
+}
+
+#countrr .btn {
+    font-size: .8rem;
+}
+
+#vuo .control-label {
+margin-bottom: 0.2rem !important;
+
+}
+
 
                ")
 )
@@ -771,6 +806,10 @@ fluidRow(
                                             "Separate graphs for each scale (in progress...)" = 2
                                             
                                           ),selected=1, inline=TRUE)
+                             
+                             ,
+                             div(style="display:inline-block; font-weight:100;",
+                                 awesomeCheckbox("startvalue", label="Start year labels", value=TRUE))
                              # ,
                              # 
                              # sliderInput("fonts", label ="Font size", min = 1, max = 10, value = c(5), dragRange=FALSE, ticks = FALSE),
@@ -783,16 +822,14 @@ fluidRow(
                              
                              
                              p(style='font-weight:1000;', "Indicator visibility"),
-                             div(style="display:inline-block",actionBttn(inputId ="showall", label = "Select all", size="xs", style = "fill", color="primary")),
-                             div(style="display:inline-block",actionBttn(inputId ="shownone", label = "Deselect all", size="xs", style = "fill", color="primary")
+                             div(style="display:inline-block",actionBttn(inputId ="showall", label = "Show all", size="xs", style = "fill", color="primary")),
+                             div(style="display:inline-block",actionBttn(inputId ="shownone", label = "Hide  all", size="xs", style = "fill", color="primary")
                              ),
                              div(style="display:inline-block; font-weight:100;",
                                  awesomeCheckbox("visib", label="Automatic, based on VALUES phase", value=TRUE)
                                 # prettySwitch
                                 # checkboxGroupButtons()
-                                 ),
-                             div(style="display:inline-block; font-weight:100;",
-                                 awesomeCheckbox("startvalue", label="Start year labels", value=FALSE)
+                                 # )
                                  # prettySwitch
                                  # checkboxGroupButtons()
                              ),
@@ -880,31 +917,11 @@ fluidRow(
                             cuk(taxfosindi, "User carbon costs", "infousercost", "showusercost", NULL, FALSE),
                             cuk(netcost, "User net costs", "infonetcost", "shownetcost", NULL, FALSE)
                             
-                            # 
-                            # p("Variable:"),
-                            # 
-                            # chk(avgcost, "Mean carbon costs", "infoavgcost"),
-                            # chk(dividend, "Carbon dividend", "infodividend"),
-                            # chk(avgnetcost, "Mean net costs", "infoavgnetcost"),
-                            # chk(cpop, "User emissions", "infouserfossil"),
-                            # chk(taxfosindi, "User carbon costs", "infousercost"),
-                            # chk(netcost, "User net costs", "infonetcost")
+                    
 
 
                           )
-                          # ,
-                          # #
-                          # #
-                          # list(
-                          #   p("Visibility:"),
-                          # 
-                          #   awesomeCheckbox("showavgcost", label=NULL, value=FALSE),
-                          #   awesomeCheckbox("showdividend", label=NULL, value=FALSE),
-                          #   awesomeCheckbox("showavgnetcost", label=NULL, value=FALSE),
-                          #   awesomeCheckbox("showuserfossil", label=NULL, value=FALSE),
-                          #   awesomeCheckbox("showusercost", label=NULL, value=FALSE),
-                          #   awesomeCheckbox("shownetcost", label=NULL, value=FALSE)
-                          # )
+                     
                           )
                           )
 
@@ -928,19 +945,7 @@ fluidRow(
                               cuk(countrycost, "Country per capita cost", "countrycost", "showcountrycost", NULL, FALSE),
                               cuk(countrynetcost, "Country per capita net cost", "countrynetcost", "showcountrynetcost", NULL, FALSE)
                               # 
-                            # p("Variable:"),
-                            # chk(countryfossil, "Country per capita emissions", "infocountryfossil"),
-                            # chk(countrypop, "Country population", "infocountrypop"),
-                            # chk(countrycost, "Country per capita carbon cost", "countrycost"),
-                            # chk(countrynetcost, "Country per capita net cost", "countrynetcost")
-                            # ),
-                            # list(
-                            #   p("Visibility:"),
-                            #   awesomeCheckbox("showcountryfossil", label=NULL, value=FALSE),
-                            #   awesomeCheckbox("showcountrypop", label=NULL, value=FALSE),
-                            #   awesomeCheckbox("showcountrycost", label=NULL, value=FALSE),
-                            #   awesomeCheckbox("showcountrynetcost", label=NULL, value=FALSE)
-                            # 
+                           
                              )
                             
                              )
@@ -951,17 +956,28 @@ fluidRow(
                       ) 
                     )
                   ))),
-         
+         # (div(style="overflow-y: scroll; overflow-x: hidden;",
          box(
+            style = 'overflow-x: hidden',
+            # style = 'overflow-y: scroll',
+            
            id = "infobox",
            width = NULL,
-           title = paste("Info"),
+           title =textOutput("infot"),
            closable = TRUE,
            closed=TRUE,
            collapsible = FALSE,
-           verbatimTextOutput("info"),
+          textOutput("info"),
            ignore.init=TRUE
+         # ))
          ))),
+
+# overflow-x: visible;
+# overflow-x: hidden;
+# overflow-x: clip;
+# overflow-x: scroll;
+# overflow-x: auto;
+
 
 fluidRow(
   
@@ -989,12 +1005,35 @@ fluidRow(
                   
                   # h5("Set values:"),
                   navlistPanel(id="nok", 
+                               selected = "1. Carbon budget",
+                          
+                               # HTML("<font size='5'>",
+                               #      as.character(icon("far fa-eye")), 
+                               #      # "</font>",
+                               #      
+                               #      # "<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")),
+                               #      "  VIEWING SETTINGS  ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
+                               # 
                                
-                               tabPanel( "1. Carbon budget",
+                               tabPanel("1. Carbon budget", 
+                                        
+                                        
+                                        #7b396e                                         
                                          
                                          
-                                         
-                                         radioButtons("bud", "Carbon budget for net CO2 emissions since start of 2020",
+                                         radioButtons("bud", 
+                                                      
+                                                     inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
+                                                      # label, size, id
+                                                      # 
+                                                      # label=p(HTML("Carbon budget for net CO2 emissions since start of 2020" , "<font size='3'>",
+                                                      #              as.character(actionLink(inputId = "info3", 
+                                                      #                                      label = "  ", 
+                                                      #                                      icon = icon("fas fa-info-circle"))), "</font>")),              
+                                                      
+                                                      # "Carbon budget for net CO2 emissions since start of 2020",
+                                                      
+                                                      
                                                       c("400Gt (67% likelihood to stay below 1,5C)" = 400,
                                                         "500Gt (50% likelihood to stay below 1,5C)" = 500,
                                                         "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
@@ -1003,26 +1042,38 @@ fluidRow(
                                                         # "2050Gt (50% likelihood to stay below 2,4C)" = 2050
                                                       ),selected=1350
                                          ),
+                                         # hr(),
+                                         p("Note: Changing the budget will reset some of the values in this stage and stage 3 to their budget specific defaults"),
+                                         hr(),
+                                        div(style='margin-bottom:0.2rem important;', sliderInput("vuo", 
+                                                     inf("Pricing start year and carbon neutrality year", "infopricing"),
+                                                     # label ="Pricing start year and carbon neutrality year", 
+                                                     min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE)),
                                          hr(),
                                          
-                                         sliderInput("vuo", label ="Pricing start year and carbon neutrality year", min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE),
-                                                                           hr(),
-                                         
-                                         tags$div(id="sla",numericInput("paa", label=p("Emissions / sink at the carbon neutrality year"),min = 0.1, max = 30,step=.1,value=c(5))),
+                                         tags$div(id="sla",numericInput("paa", 
+                                                                        inf("Emissions / sink at the carbon neutrality year", "infoemissionsink"), 
+                                                                        
+                                                                        # label=p("Emissions / sink at the carbon neutrality year"),
+                                                                        min = 0.1, max = 30,step=.1,value=c(5))),
                                          
                                          hr(),
                                          
-                                         radioButtons("muo", "Shape of the emission curve",
-                                                      c(
-                                                        "Linear drop" = "linear",
-                                                        "Percentual drop" = "percentual"
+                                         # uiOutput("muor"),
+                                         radioButtons("muo", "Shape of the fossil emission curve",
+                                                    choiceNames=   list(
+                                                        "Linear" ,
+                                                        "Percentual" 
                                                         # ,
                                                         # "Logarithmic drop" = "logarithmic"
-                                                      )), 
+                                                      ), 
+                                                    choiceValues= list("linear", "percentual")
+                                                    
+                                                    ),
                                          
                                          hr(),
                                          
-                                         checkboxInput("advance", "Advanced options for start year emissions"), 
+                                         checkboxInput("advance", "Set emission for year before start year"), 
                                          
                                          conditionalPanel(
                                            
@@ -1037,8 +1088,9 @@ fluidRow(
                                            hr(),
                                            tags$div(id="sla",numericInput("fstart", label=p("Total emissions at year before start year"),min = 0.1, max = 50,step=.1,value=c(37.1))),
                                            
-                                           hr(),
+                                            hr(),
                                            tags$div(id="sla",numericInput("lstart", label=p("Land use emissions at year before start year"),min = -5, max = 10,step=.1,value=c(3.9)))
+                                           ,p("Note: Emissions from last observed year take a linear trajectory to emissions for year before start year"),
                                            
                                          ),
                                          hr(),
@@ -1051,9 +1103,18 @@ fluidRow(
                                            color = "primary"
                                          )
                                          
-                                         
+                                         # actionBttn(
+                                         #   inputId = "next0",
+                                         #   label = "   NEXT >",
+                                         #   size="xs",
+                                         #   style = "material-flat", 
+                                         #   color = "primary"
+                                         # )
                                          
                                ),
+                               
+                               #      
+                              
                                
                                tabPanel("2. Population projection",
                                         actionBttn(
@@ -1065,11 +1126,14 @@ fluidRow(
                                         ),
                                         hr(),
                                         
-                                        radioButtons("popc", "Choose UN population projection",
+                                        radioButtons("popc", 
+                                                     inf("Choose UN population projection", "infopopu"), 
+                                                     
+                                                     # "Choose UN population projection",
                                                      c(
                                                        "95% range upper limit" = 5,
                                                        "80% range upper limit" = 4,
-                                                       "Medium projection" = 3,
+                                                       "Median projection" = 3,
                                                        "80% range lower limit" = 2,
                                                        "95% range lower limit" = 1
                                                      ),selected=3
@@ -1097,31 +1161,34 @@ fluidRow(
                                         ),
                                         hr(),
                                         
-                                        tags$div(id="sla", numericInput("sprice", label=p(HTML("Set start year carbon price  ", "<font size='3'>",
-                                                                          as.character(actionLink(inputId = "info3", 
-                                                                                                  label = "  ", 
-                                                                                                  icon = icon("info"))), "</font>")),
-                                                     min = 1, max = 1000000,step=1,value=c(40))),
+                                        tags$div(id="sla", numericInput("sprice",
+                                                                        inf("Set start year carbon price ", "infostartprice"), 
+                                                                        
+                                                               min = 1, max = 1000000,step=1,value=c(40))),
                                         hr(),
                                         
-                                        tags$div(id="sla",numericInput("eprice", label=p(HTML("Set neutrality year carbon price", "<font size='2'>", as.character(actionLink(inputId = "info4", 
-                                                                                                                                                         label = "  ", 
-                                                                                                                                                         icon = icon("info"))), "</font>"
-                                        )),min = 1, max = 1000000,step=1,value=c(400))),
+                                        tags$div(id="sla",numericInput("eprice", 
+                                                                       inf("Set neutrality year carbon price ", "infoendprice"), 
+                                                                       
+      
+                                        min = 1, max = 1000000,step=1,value=c(400))),
                                         
                                         
                                         hr(),
                                         
                                         
-                                        radioButtons("pri", label ="Shape of the price curve",
+                                        radioButtons("pri", "Shape of the price curve",
+                                                     choiceNames=list(
+                                                       "Linear",
+                                                       "Percentual"
+                                                        ,
+                                                        "Logarithmic"
+                                                        # ,
+                                                        # "Logarithmic drop" = "logarithmic"
+                                                     ), 
+                                                     choiceValues= list("linear", "percentual", "logarithmic")
                                                      
-                                                     c(
-                                                       
-                                                       "Linear increase" = "linear",
-                                                       "Percentual increase" = "percentual",
-                                                       "Logarithmic increase" = "logarithmic"
-                                                       
-                                                     )),
+                                        ),
                                         hr(),
                                         
                                         actionBttn(
@@ -1142,20 +1209,35 @@ fluidRow(
                                         ),
                                         hr(),
                                         
-                                        tags$div(id="sla",numericInput("indi1", label=p("Start year emissions"),min = .01, max = 40,step=.01,value=c(7.77))),
+                                        tags$div(id="sla",numericInput("indi1", label=p("Start year user emissions, t"),min = .01, max = 40,step=.01,value=c(7.77))),
                                         hr(),
                                         
-                                        tags$div(id="sla",numericInput("indi2", label=p("Neutrality year emissions"),min = .01, max = 40,step=.01,value=c(0.77))),
+                                        tags$div(id="sla",numericInput("indi2", label=p("Neutrality year user emissions, t"),min = .01, max = 40,step=.01,value=c(0.77))),
                                         
                                         hr(),
                                         
-                                        radioButtons("muoindi", "Shape of emission curve",
-                                                     c("Linear drop" = "linear","Percentual drop" = "percentual"
-                                                       
-                                                     )),
+                                        radioButtons("muoindi", "Shape of user emission curve",
+                                                     choiceNames=   list(
+                                                       "Linear" ,
+                                                       "Percentual" 
+                                                       # ,
+                                                       # "Logarithmic drop" = "logarithmic"
+                                                     ), 
+                                                     choiceValues= list("linear", "percentual")
+                                                     
+                                        ),
+                                        
+                                        # radioButtons("muoindi", "Shape of emission curve",
+                                        #              c("Linear drop" = "linear","Percentual drop" = "percentual"
+                                        #                
+                                        #              )),
                                         hr(),
                                         
-                                        selectInput("indi", label = "ALTERNATIVE: Use country average emission path (this will slower the app considerably)", choices =c("none", paaco$country), selected="none"),
+                                        selectInput("indi",
+                                                    inf("ALTERNATIVE: Use country average emission path (this will slower the page considerably) ", "infoconvergence"), 
+                                                    
+                                                    # label = "ALTERNATIVE: Use country average emission path (this will slower the app considerably)",
+                                                    choices =c("none", paaco$country), selected="none"),
                                         # hr(style = "border-top: 1px solid white; margin-bottom:0px; margin-top:0px;;"),
                                
                                         
@@ -1170,7 +1252,13 @@ fluidRow(
                                #                           # uiOutput("splot", width="auto"
                                #                           # )
                                #          # ,
-                                         sliderInput("con", label ="Convergence of countries' emissions", min = .01, max = 1, value = .5, step=.01)
+                                         sliderInput("con",
+                                                     
+                                                     inf("Convergence of countries emissions", "infoconvergence1"), 
+                                                     
+                                                     # label ="Convergence of countries' emissions",
+                                                     
+                                                     min = .01, max = 1, value = .5, step=.01)
                                ),
                                
                                hr(),
@@ -1185,7 +1273,7 @@ fluidRow(
                                
 
                                ),
-                               tabPanel("EXTRA: Country profiles",
+                               tabPanel("EXTRA: Countries",
                                         actionBttn(
                                           inputId = "prev4",
                                           label = "< PREVIOUS",
@@ -1194,41 +1282,18 @@ fluidRow(
                                           color = "primary"
                                         ),
                                         hr(),
+                                        tags$div(id ="countrr",
                                         
                                         pickerInput(
                                           inputId = "countr",
-                                          label = "Show countries (this will slower the page considerably):",
+                                          label = "Show country indicators (this will slower the page considerably):",
                                           choices = c(paaco$country),
                                           selected= NULL,
                                           options = list(
                                             `actions-box` = TRUE),
                                           multiple = TRUE
-                                        ),
-                                        hr(),
+                                        )),
                                         
-                                        sliderInput("conb", label ="Convergence of countries' emissions", min = .01, max = 1, value = .5, step=.01)
-                                        ,
-                                        
-                                        hr(),
-                                        
-                                        actionBttn(
-                                          inputId = "next5",
-                                          label = "more EXTRA >",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        )
-                                        
-                                         ),
-                               
-                               tabPanel("EXTRA: National dividend",
-                                        actionBttn(
-                                          inputId = "prev5",
-                                          label = "< PREVIOUS",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        ),
                                         hr(),
                                         
                                         sliderInput(
@@ -1236,14 +1301,70 @@ fluidRow(
                                           label = "Allocate proportion of collected carbon revenue nationally:"
                                           , min = 0, max = 100, value = 0, step=1
                                         ), 
+                                        hr(),
+                                        conditionalPanel(
+                                        condition="input.national != 0",
+                                       
+                                        
+                                        selectInput("nationalcoun", label = "User country of residence for national dividend (Note: selecting this will slower the app considerably)", choices =c("none", paaco$country), selected="none"),
                                         
                                         hr(),
+                               ),
+                                        conditionalPanel(
+                                          
+                                          condition="input.countr != '' | input.nationalcoun != 'none'",
+                                          # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
+                                          # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
+                                          
+                                          
+                                          #                           # uiOutput("splot", width="auto"
+                                          #                           # )
+                                          #          # ,
+                                          sliderInput("conb",
+                                                      inf("Convergence of countries emissions", "infoconvergence2"), 
+                                                      
+                                                      # label ="Convergence of countries' emissions", 
+                                                      min = .01, max = 1, value = .5, step=.01)
+                                          
+                                        ),
                                         
-                                        selectInput("nationalcoun", label = "CONDITIONAL: User country of residence for national dividend", choices =c("none", paaco$country), selected="none"),
                                         
                                         
-                                        )      
+                                        # hr(),
+                                        # 
+                                        # actionBttn(
+                                        #   inputId = "next5",
+                                        #   label = "more EXTRA >",
+                                        #   size="xs",
+                                        #   style = "material-flat", 
+                                        #   color = "primary"
+                                        # )
+                                        
+                                         ),
                                
+                               # tabPanel("EXTRA: National dividend",
+                               #          actionBttn(
+                               #            inputId = "prev5",
+                               #            label = "< PREVIOUS",
+                               #            size="xs",
+                               #            style = "material-flat", 
+                               #            color = "primary"
+                               #          ),
+                               #          # hr(),
+                               #          # 
+                               #          # sliderInput(
+                               #          #   inputId = "national",
+                               #          #   label = "Allocate proportion of collected carbon revenue nationally:"
+                               #          #   , min = 0, max = 100, value = 0, step=1
+                               #          # ), 
+                               #          
+                               #          hr(),
+                               #          
+                               #          selectInput("nationalcoun", label = "User country of residence for national dividend (Note: selecting this will slower the app considerably)", choices =c("none", paaco$country), selected="none"),
+                               #          
+                               #          
+                               #          )      
+                               # 
                   ),
                   uiOutput("cou")
                   # ) )
@@ -1267,12 +1388,12 @@ fluidRow(
                 ),
                 
                 
-                uiOutput("yearc"))
-
+                uiOutput("yearc")),
+          # DT::dataTableOutput("tably", width="auto"),
+         
                   # DT::dataTableOutput("tablz", width="auto"),
                 # 
                 # 
-                #  DT::dataTableOutput("tably", width="100%"),
                 
                 
                 # ,  width =12 )
@@ -1281,7 +1402,7 @@ fluidRow(
          )
   )                 ,
 
-checkboxInput("showtab", "Show results in table"), 
+checkboxInput("showtab", "Show the simulation results also in table below"), 
 
 conditionalPanel(
   
