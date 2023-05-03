@@ -3,7 +3,11 @@
 
 ui <- dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,
                     
-                    dashboardHeader(title = " Global carbon price and dividend -simulator (UNFINISHED, contains errors)",
+                    dashboardHeader(
+                      # div(style="padding-left: 4px;",
+                                    title = " Global carbon price and dividend -simulator (UNFINISHED, contains errors)"
+                                    # )
+                    ,
                                     # title="ffff",
                                     tagList(a
                                             # (HTML("<font size='4'>", as.character
@@ -287,6 +291,27 @@ margin-top: .1rem !important;
 line-height: 1.1;
 }
 
+#tablu3 {
+color: blue;
+font-family: 'Saira' !important;
+font-size: calc(.7vw + .4rem) !important;
+
+line-height: 1.1;
+margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
+border-collapse: collapse;
+overflow: auto;
+}
+
+#tablu3 p {
+color: blue;
+font-family: Roboto !important;
+font-size: calc(.7vw + .4rem) !important;
+text-decoration: none !important;
+margin-bottom: .2rem !important;
+margin-top: .1rem !important;
+line-height: 1.1;
+}
+
 
 
           .table {
@@ -446,6 +471,9 @@ box-sizing: border-box;
 
     a {
 color: #f2ede6;
+padding-top: .2vw;
+padding-bottom: .2vw;
+
 padding-left: .0vw;
 margin-left: .0vw;
 font-size: calc(.5vw + .44rem);
@@ -524,7 +552,7 @@ line-height: 1.2rem;
 .control-label {
  
 font-size: calc(.5vw + .5rem);
-line-height: .8rem;
+line-height: .99rem;
 margin-bottom: 1rem;
 margin-top: .3;
 
@@ -746,6 +774,7 @@ margin-bottom: 0.2rem !important;
 
 ,
 uiOutput("css_style"),
+uiOutput("css_style2"),
 
 # border-color: rgb(92, 61, 46);
 
@@ -791,7 +820,7 @@ fluidRow(
                   accordionItem(
                     # <i class="material-icons">visibility</i>
                     
-                    title = HTML("<font size='5'>",
+                    title = HTML("<font size='4'>",
                                  as.character(icon("far fa-eye")), 
                                  # "</font>",
                                  
@@ -826,7 +855,7 @@ fluidRow(
                              div(style="display:inline-block",actionBttn(inputId ="shownone", label = "Hide  all", size="xs", style = "fill", color="primary")
                              ),
                              div(style="display:inline-block; font-weight:100;",
-                                 awesomeCheckbox("visib", label="Automatic, based on VALUES phase", value=TRUE)
+                                 awesomeCheckbox("visib", label="Automatic, based on SIMULATION SETTINGS phase", value=TRUE)
                                 # prettySwitch
                                 # checkboxGroupButtons()
                                  # )
@@ -853,12 +882,12 @@ fluidRow(
                           
                           headTitles = list(
                             
-                            cuk(fos, "Total emissions", "infofossil", "showfossil", NULL, TRUE),
+                            cuk(fos, "Fossil emissions", "infofossil", "showfossil", NULL, TRUE),
                             cuk(lul, "Land emissions/sinks", "infolul", "showland", NULL, TRUE),
                             cuk(net, "Net emissions", "infonet", "shownet", NULL, TRUE),
                             cuk(pop, "Population", "infopop", "showpop", NULL, FALSE),
-                            cuk(fpop, "Mean emissions", "infoavgfossil", "showavgfossil", NULL, TRUE),
-                            cuk(tax,"Carbon tax", "infoprice", "showprice", NULL, FALSE)
+                            cuk(fpop, "Mean fossil emissions", "infoavgfossil", "showavgfossil", NULL, TRUE),
+                            cuk(tax,"Carbon price", "infoprice", "showprice", NULL, FALSE)
                             # cuk(, "", "", "", NULL, TRUE),
                             
                             
@@ -913,7 +942,7 @@ fluidRow(
                             cuk(avgcost, "Mean carbon costs", "infoavgcost", "showavgcost", NULL, FALSE),
                             cuk(dividend, "Carbon dividend", "infodividend", "showdividend", NULL, FALSE),
                             cuk(avgnetcost, "Mean net costs", "infoavgnetcost", "showavgnetcost", NULL, FALSE),
-                            cuk(cpop, "User emissions", "infouserfossil", "showuserfossil", NULL, FALSE),
+                            cuk(cpop, "User fossil emissions", "infouserfossil", "showuserfossil", NULL, FALSE),
                             cuk(taxfosindi, "User carbon costs", "infousercost", "showusercost", NULL, FALSE),
                             cuk(netcost, "User net costs", "infonetcost", "shownetcost", NULL, FALSE)
                             
@@ -928,6 +957,34 @@ fluidRow(
                       )
                     ,
                       
+                    
+                    div(
+                      #table joka näkyy jos averagedividend tai countrydividend relevantteja
+                      id="tablu3",
+                      class="noku",
+                      # width ="50%",
+                      
+                      bs4Dash::bs4Table(
+                        cardWrap = TRUE,
+                        bordered = TRUE,
+                        striped = TRUE,
+                        list(
+                          headTitles = list(
+                             cuk(averagedividend, "Average national dividend", "infoaveragedividend", "showaveragedividend", NULL, FALSE),
+                            cuk(countrydividend, "Dividend for selected country", "infocountrydividend", "showcountrydividend", NULL, FALSE)
+                            # cuk(countrycost, "Country per capita cost", "countrycost", "showcountrycost", NULL, FALSE),
+                            # cuk(countrynetcost, "Country per capita net cost", "countrynetcost", "showcountrynetcost", NULL, FALSE)
+                            # 
+                            
+                          )
+                          
+                        )
+                        
+                        
+                      )
+                      
+                    ), 
+                    
                   
                       div(
                         id="tablu2",
@@ -940,10 +997,10 @@ fluidRow(
                           striped = TRUE,
                           list(
                               headTitles = list(
-                              cuk(countryfossil, "Country per capita emissions", "infocountryfossil", "showcountryfossil", NULL, FALSE),
+                              cuk(countryfossil, "Country mean emissions", "infocountryfossil", "showcountryfossil", NULL, FALSE),
                               cuk(countrypop, "Country population", "infocountrypop", "showcountrypop", NULL, FALSE),
-                              cuk(countrycost, "Country per capita cost", "countrycost", "showcountrycost", NULL, FALSE),
-                              cuk(countrynetcost, "Country per capita net cost", "countrynetcost", "showcountrynetcost", NULL, FALSE)
+                              cuk(countrycost, "Country per capita cost", "infocountrycost", "showcountrycost", NULL, FALSE),
+                              cuk(countrynetcost, "Country per capita net cost", "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
                               # 
                            
                              )
@@ -996,9 +1053,9 @@ fluidRow(
                 div(
                   HTML(
                     "<body style='background-color:aquamarine;'>", 
-                    "<font size='5'>", 
+                    "<font size='4.5'>", 
                      "<b>" ,
-                    as.character(icon("far fa-hand-paper")), "  VALUES   ", 
+                    as.character(icon("far fa-hand-paper")), "  SIMULATION SETTINGS   ", 
                      "</b>",
                     "</font>",
                     "</body>"),
@@ -1040,7 +1097,7 @@ fluidRow(
                                                         "1350Gt (50% likelihood to stay below 2,0C)" = 1350
                                                         # "1700Gt (67% likelihood to stay below 2,4C)" = 1700,
                                                         # "2050Gt (50% likelihood to stay below 2,4C)" = 2050
-                                                      ),selected=1350
+                                                      ),selected=1150
                                          ),
                                          # hr(),
                                          p("Note: Changing the budget will reset some of the values in this stage and stage 3 to their budget specific defaults"),
@@ -1055,7 +1112,7 @@ fluidRow(
                                                                         inf("Emissions / sink at the carbon neutrality year", "infoemissionsink"), 
                                                                         
                                                                         # label=p("Emissions / sink at the carbon neutrality year"),
-                                                                        min = 0.1, max = 30,step=.1,value=c(5))),
+                                                                        min = 0.1, max = 30,step=.1,value=c(6))),
                                          
                                          hr(),
                                          
@@ -1067,7 +1124,8 @@ fluidRow(
                                                         # ,
                                                         # "Logarithmic drop" = "logarithmic"
                                                       ), 
-                                                    choiceValues= list("linear", "percentual")
+                                                    choiceValues= list("linear", "percentual"),
+                                                    selected = "percentual"
                                                     
                                                     ),
                                          
@@ -1131,11 +1189,11 @@ fluidRow(
                                                      
                                                      # "Choose UN population projection",
                                                      c(
-                                                       "95% range upper limit" = 5,
-                                                       "80% range upper limit" = 4,
-                                                       "Median projection" = 3,
-                                                       "80% range lower limit" = 2,
-                                                       "95% range lower limit" = 1
+                                                       "95% range upper limit (12.41B at 2100)" = 5,
+                                                       "80% range upper limit (11.65B at 2100)" = 4,
+                                                       "Median projection (10.35B at 2100)" = 3,
+                                                       "80% range lower limit (9.32B at 2100)" = 2,
+                                                       "95% range lower limit (8.84B at 2100)" = 1
                                                      ),selected=3
                                         ),
                                         hr(),
@@ -1151,7 +1209,7 @@ fluidRow(
                                
                                
                                
-                               tabPanel("3. Carbon tax",
+                               tabPanel("3. Carbon price",
                                         actionBttn(
                                           inputId = "prev2",
                                           label = "< PREVIOUS",
@@ -1162,13 +1220,13 @@ fluidRow(
                                         hr(),
                                         
                                         tags$div(id="sla", numericInput("sprice",
-                                                                        inf("Set start year carbon price ", "infostartprice"), 
+                                                                        inf("Set start year carbon price, $", "infostartprice"), 
                                                                         
                                                                min = 1, max = 1000000,step=1,value=c(40))),
                                         hr(),
                                         
                                         tags$div(id="sla",numericInput("eprice", 
-                                                                       inf("Set neutrality year carbon price ", "infoendprice"), 
+                                                                       inf("Set neutrality year carbon price, $", "infoendprice"), 
                                                                        
       
                                         min = 1, max = 1000000,step=1,value=c(400))),
@@ -1223,7 +1281,8 @@ fluidRow(
                                                        # ,
                                                        # "Logarithmic drop" = "logarithmic"
                                                      ), 
-                                                     choiceValues= list("linear", "percentual")
+                                                     choiceValues= list("linear", "percentual"),
+                                                     selected = "percentual"
                                                      
                                         ),
                                         
@@ -1281,24 +1340,15 @@ fluidRow(
                                           style = "material-flat", 
                                           color = "primary"
                                         ),
-                                        hr(),
-                                        tags$div(id ="countrr",
                                         
-                                        pickerInput(
-                                          inputId = "countr",
-                                          label = "Show country indicators (this will slower the page considerably):",
-                                          choices = c(paaco$country),
-                                          selected= NULL,
-                                          options = list(
-                                            `actions-box` = TRUE),
-                                          multiple = TRUE
-                                        )),
                                         
                                         hr(),
                                         
                                         sliderInput(
                                           inputId = "national",
-                                          label = "Allocate proportion of collected carbon revenue nationally:"
+                                          inf("Allocate a percentage of collected carbon revenue nationally", "infonationaldiv")
+                                          
+                                          # label = "Allocate proportion of collected carbon revenue nationally:"
                                           , min = 0, max = 100, value = 0, step=1
                                         ), 
                                         hr(),
@@ -1306,11 +1356,11 @@ fluidRow(
                                         condition="input.national != 0",
                                        
                                         
-                                        selectInput("nationalcoun", label = "User country of residence for national dividend (Note: selecting this will slower the app considerably)", choices =c("none", paaco$country), selected="none"),
+                                        selectInput("nationalcoun", label = "User country of residence for national dividend (This will slower the page considerably)", choices =c("none", paaco$country), selected="none"),
                                         
-                                        hr(),
                                ),
                                         conditionalPanel(
+                                          hr(),
                                           
                                           condition="input.countr != '' | input.nationalcoun != 'none'",
                                           # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
@@ -1329,7 +1379,18 @@ fluidRow(
                                         ),
                                         
                                         
+                               hr(),
+                               tags$div(id ="countrr",
                                         
+                                        pickerInput(
+                                          inputId = "countr",
+                                          label = "Show indicators for specific country/countries (This will slower the page considerably)",
+                                          choices = c(paaco$country),
+                                          selected= NULL,
+                                          options = list(
+                                            `actions-box` = TRUE),
+                                          multiple = TRUE
+                                        )),
                                         # hr(),
                                         # 
                                         # actionBttn(
@@ -1389,7 +1450,7 @@ fluidRow(
                 
                 
                 uiOutput("yearc")),
-          # DT::dataTableOutput("tably", width="auto"),
+           # DT::dataTableOutput("tablx", width="auto"),
          
                   # DT::dataTableOutput("tablz", width="auto"),
                 # 

@@ -85,6 +85,8 @@ avgcost = hsv(0.75,.35,vv)
 dividend = hsv(0.75,.58,vv)
 avgnetcost = hsv(0.75,.5,vv)
 
+averagedividend = dividend
+countrydividend = dividend
 # dividend = avgcost
 # avgnetcost = avgcost
 # taxfosindi = avgcost
@@ -133,7 +135,19 @@ width: 60%;
 visibility: collapse;
 }
 "
-
+css_content2 <- "
+#tablu3 {
+color: blue;
+font-family: mypolice1;
+font-size: .87rem;
+line-height: 1.1;
+margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
+border-collapse: collapse;
+overflow: auto;
+width: 60%;
+visibility: collapse;
+}
+"
 # font_add_google("Karla", "lato")
 # showtext_auto()
 # shinyWidgets::shinyWidgetsGallery()
@@ -170,7 +184,7 @@ llist =c("paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "
 
 
 sec=c("fossil", "land", "net", "price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
-      "pop","dividend", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost")
+      "pop","dividend", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost", "averagedividend", "countrydividend")
 
 lu = data.frame(sec)
 lu = as.data.table(lu)
@@ -193,7 +207,8 @@ lu[sec == "countryfossil", pos:=13]
 lu[sec == "countrycost", pos:=14]
 lu[sec == "countrynetcost", pos:=15]
 lu[sec == "countrypop", pos:=16]
-
+lu[sec == "countrydividend", pos:=17]
+lu[sec == "averagedividend", pos:=18]
 
 # decimals in numbers
 lu$le = 0
@@ -213,26 +228,28 @@ lu[sec == "countryfossil", le:=2]
 lu[sec == "countrycost", le:=0]
 lu[sec == "countrynetcost", le:=0]
 lu[sec == "countrypop", le:=0]
-
+lu[sec == "countrydividend", le:=0]
+lu[sec == "averagedividend", le:=0]
 # marks
 lu$mark = "t"
 lu[sec == "fossil", mark:="Gt"]
 lu[sec == "land", mark:="Gt"]
 lu[sec == "net", mark:="Gt"]
-lu[sec == "price", mark:="€/t"]
-lu[sec == "avgcost", mark:="€"]
+lu[sec == "price", mark:="$/t"]
+lu[sec == "avgcost", mark:="$"]
 lu[sec == "avgfossil", mark:="t"]
 lu[sec == "userfossil", mark:="t"]
-lu[sec == "netcost", mark:="€"]
-lu[sec == "usercost",mark:="€"]
+lu[sec == "netcost", mark:="$"]
+lu[sec == "usercost",mark:="$"]
 lu[sec == "pop",mark:="B"]
-lu[sec == "dividend",mark:="€"]
-lu[sec == "avgnetcost", mark:="€"]
-lu[sec == "countrycost", mark:="€"]
-lu[sec == "countrynetcost", mark:="€"]
+lu[sec == "dividend",mark:="$"]
+lu[sec == "avgnetcost", mark:="$"]
+lu[sec == "countrycost", mark:="$"]
+lu[sec == "countrynetcost", mark:="$"]
 lu[sec == "countryfossil", mark:="t"]
 lu[sec == "countrypop", mark:="M"]
-
+lu[sec == "countrydividend", mark:="$"]
+lu[sec == "averagedividend", mark:="$"]
 
 # labels, English
 lu[sec == "fossil", label:="Total emissions"]
@@ -251,30 +268,32 @@ lu[sec == "countrycost", label:="costs"]
 lu[sec == "countrynetcost", label:="net costs"]
 lu[sec == "countryfossil", label:="mean emissions"]
 lu[sec == "countrypop", label:="population"]
-
+lu[sec == "countrydividend", label:="Dividend, average national"]
+lu[sec == "averagedividend", label:="dividend"]
 
 lu[sec == "fossil", label:="Fossil emissions"]
-lu[sec == "land", label:="Land emissions / sinks"]
+lu[sec == "land", label:="Land emissions/sinks"]
 lu[sec == "net", label:="Net emissions"]
 lu[sec == "price", label:="Carbon price"]
-lu[sec == "avgcost", label:="Average carbon costs"]
-lu[sec == "avgfossil", label:="Average emissions"]
-lu[sec == "userfossil", label:="User emissions"]
+lu[sec == "avgcost", label:="Mean carbon costs"]
+lu[sec == "avgfossil", label:="Mean fossil emissions"]
+lu[sec == "userfossil", label:="User fossil emissions"]
 lu[sec == "netcost", label:="User net costs"]
 lu[sec == "usercost", label:="User carbon costs"]
 lu[sec == "pop", label:="World population"]
 lu[sec == "dividend",label:="Carbon dividend"]
 lu[sec == "avgnetcost", label:="Mean net costs"]
-lu[sec == "countrycost", label:="costs"]
+lu[sec == "countrycost", label:="carbon costs"]
 lu[sec == "countrynetcost", label:="net costs"]
 lu[sec == "countryfossil", label:="mean emissions"]
 lu[sec == "countrypop", label:="population"]
+lu[sec == "countrydividend", label:="Mean national dividend"]
+lu[sec == "averagedividend", label:="dividend"]
 
-
-lalist = c("Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
-  "Average emissions",  "Carbon price", "Average carbon costs",
-  "Carbon dividend","Mean net costs", "User emissions", "User carbon costs", "User net costs"
-  )
+# lalist = c("Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
+#   "Average emissions",  "Carbon price", "Average carbon costs",
+#   "Carbon dividend","Mean net costs", "User emissions", "User carbon costs", "User net costs"
+#   )
 
 # colors
 lu$col =fos
@@ -294,7 +313,8 @@ lu[sec == "countrycost", col:=countrycost]
 lu[sec == "countrynetcost", col:=countrynetcost]
 lu[sec == "countryfossil", col:=countryfossil]
 lu[sec == "countrypop", col:=countrypop]
-
+lu[sec == "countrydividend", col:=dividend]
+lu[sec == "averagedividend", col:=dividend]
 
 #  alpha?
 alas=.9
@@ -315,6 +335,8 @@ lu[sec == "countrycost",  ala:=alas]
 lu[sec == "countrynetcost",  ala:=alas]
 lu[sec == "countryfossil",  ala:=alas]
 lu[sec == "countrypop",  ala:=alas]
+lu[sec == "countrydividend", ala:=alas]
+lu[sec == "averagedividend", ala:=alas]
 
 lu$visi = 1
 lu[sec =="pop", visi :=0]
@@ -371,8 +393,8 @@ arg = function(start, end, convergence, coustart) {
   
   vuo = c(2024, 2080)
   yearc = 2080
-  paa = 5
-  muo = "linear"
+  paa = 6
+  muo = "percentual"
   pri = "linear"
   sprice = 50
   eprice = 500

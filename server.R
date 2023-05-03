@@ -106,6 +106,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(valu = NULL)
   rv <- reactiveValues(ale = 0)
   rv <- reactiveValues(alert4 = FALSE)
+  rv <- reactiveValues(alert6 = FALSE)
   
   rv <- reactiveValues(yearc = NULL)
   rv <- reactiveValues(lastyear = NULL)
@@ -127,6 +128,8 @@ server <- function(input,output, session) {
   rv <- reactiveValues(showcountrycost = FALSE)
   rv <- reactiveValues(showcountrynetcost = FALSE)
   rv <- reactiveValues(showcountrypop = FALSE)
+  rv <- reactiveValues(averagedividend = FALSE)
+  rv <- reactiveValues(countrydividend = FALSE)
   
   
   rv <- reactiveValues(plot2 = NULL)
@@ -159,14 +162,14 @@ server <- function(input,output, session) {
     rv <- reactiveValues(muopri = NULL)
     
   
-  rv$infofossiltext = c("Total fossil CO2 emissions across all countries and individuals. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
+  rv$infofossiltext = c("Total fossil CO2 emissions across all countries and individuals. Other greenhouse gases (such as methane) not included. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
   rv$infofossiltextt = c("Fossil CO2 emissions")
   
   rv$infolultext = c("CO2 emissions and sinks from land use change across all countries. In future, also includes technological sinks, such as DACCS and BECCS. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
   rv$infolultextt = c("Land use emissions and sinks")
   
   
-  rv$infonettext = c("Net C02 emissions from fossil and land use across all countries. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
+  rv$infonettext = c("Net CO2 emissions from fossil and land use across all countries. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
   rv$infonettextt = c("Net CO2 emissions")
   
   
@@ -185,26 +188,26 @@ server <- function(input,output, session) {
    rv$infopoputextt = c("World population projection")
    
    
-  rv$infoavgfossil =c("Average fossil CO2 emissions across all individuals. Result of dividing fossil emissions with world population. Does not include land use / sinks")
-  rv$infoavgfossilt =c("Mean fossil CO2 emissions")
+  rv$infoavgfossiltext =c("Average fossil CO2 emissions across all individuals. Result of dividing fossil emissions with world population. Does not include land use/sinks")
+  rv$infoavgfossiltextt =c("Mean fossil CO2 emissions")
   
   
-  rv$infopricetext =c("Global carbon price, €/t. Should be set high enough to achieve the chosen fossil emission reductions.") 
+  rv$infopricetext =c("Global carbon price, $/t. Should be set high enough to achieve the chosen fossil emission reductions. For default carbon price values in different budgets, figure 3.32 in page 360 of IPCC AR6 WG1 chapter 3 has been used as a loose reference point.") 
   rv$infopricetextt =c("Carbon price") 
   
   rv$infoavgcosttext = c("Average carbon cost across all individuals. Product of average emissions and carbon price.")
   rv$infoavgcosttextt= c("Mean carbon cost")
   
   
-  rv$infodividendtext = c("Carbon dividend given to each world citizen.")
+  rv$infodividendtext = c("Carbon dividend given to each world citizen. Equal to the mean carbon cost. Product of average emissions and carbon price.")
   rv$infodividendtextt = c("Carbon dividend")
   
   
-  rv$infoavgnetcosttext = c("Net average income across all individuals. Sum of mean carbon cost and carbon dividend.")
+  rv$infoavgnetcosttext = c("Net average income across all individuals. Sum of mean carbon cost and carbon dividend. Zero.")
   rv$infoavgnetcosttextt = c("Mean net cost")
   
   
-  rv$infouserfossiltext = c("Individual emission path chosen by the user.")
+  rv$infouserfossiltext = c("Individual emission path chosen by the user in phase 4.")
   rv$infouserfossiltextt = c("User emissions")
   
   
@@ -215,13 +218,35 @@ server <- function(input,output, session) {
   rv$infonetcosttext = c("User's net income. Sum of user's carbon cost and carbon dividend.")  
   rv$infonetcosttextt = c("User net cost")  
   
+  rv$infoaveragedividendtext = c("Average dividend across all countries when the chosen percentage of collected carbon price revenue is always distributed as a dividend
+                                 in the country it is collected in instead of global distribution.")  
+  rv$infoaveragedividendtextt = c("Average national dividend")  
+  
+  rv$infocountrydividendtext = c("Dividend in the specific country")  
+  rv$infocountrydividendtextt = c("Country dividend")  
+  
+  rv$infocountryfossiltext = c("Mean emissions across residents in the selected country")  
+  rv$infocountryfossiltextt = c("Mean emissions in selected country")  
+  
+  rv$infocountrypoptext = c("Population in selected country")  
+  rv$infocountrypoptextt = c("Population in selected country")  
+  
+  rv$infocountrycosttext = c("Mean carbon cost in the selected country. Product of country's mean emissions and carbon price")  
+  rv$infocountrycosttextt = c("Mean carbon cost in selected country")  
+  
+  rv$infocountrynetcosttext = c("Mean net carbon cost in selected country. Sum of mean carbon cost in selected country and carbon dividend")  
+  rv$infocountrynetcosttextt = c("Mean net carbon cost in selected country")  
+  
+  # rv$text = c("")  
+  # rv$textt = c("")  
+  
+  
   rv$infopricingtext = c("First value sets the year in which global carbon pricing system starts. Second year sets the year in which global net CO2 emissions reach zero and the global warming is estimated to stop. 
-                         It is assumed that fossil and land use emissions (and thus net emissions) remain same as they were in the last observed year (2021) before the pricing start year. Increasing population still size decreases the average emission 
-                         per person. ") 
+                         It is assumed that fossil and land use emissions (and thus net emissions) remain same as they were in the last observed year (2021) before the pricing start year.") 
   rv$infopricingtextt = c("Pricing start year and carbon neutrality year")  
   
   rv$infoemissionsinktext = c("At carbon neutrality year, fossil emissions and sinks must be equal, meaning zero net emissions, meaning carbon neutrality, for warming to stop.
-                              Set how big the emissions and sinks are.")  
+                              Set how big the emissions and sinks are. ")  
   rv$infoemissionsinktextt = c("Emissions / sink at carbon neutrality year")  
   
   rv$infostartpricetext = c("Start year carbon price sets the carbon price at the first year of carbon pricing. 
@@ -233,6 +258,16 @@ server <- function(input,output, session) {
 The earlier the carbon neutrality year or the higher the population projection, the higher you should consider setting
 the carbon neutrality year carbon price")
   rv$infoendpricetextt = c("Neutrality year carbon price")
+  
+  
+  
+
+  
+  
+  rv$infonationaldivtext = c("What if some of the carbon price revenue collected by the countries is not put to the common global pool to be distributed as a global dividend but 
+                             distributed as a national dividend to the residents of the countries in which the revenue is collected?
+                             This will lower the global redistribution effect of the system. Individual incentives to reduce emissions still remain, but national incentives to reduce emissions are lower.")
+  rv$infonationaldivtextt = c("National carbon dividend")
   
   rv$infoconvergencetext = c("It is assumed that countries' per capita CO2 emissions converge to global average over time from their 2021 historical value. 
                              <br/>
@@ -293,7 +328,8 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                      If emissions stay stable after that or continue to decrease, then the temperature targets are not exceeded.
 
                      2020 and 2021 emissions are known and emissions from 2022 until the year before pricing start year are assumed to equal the 2021 emissions.
-This leaves a budget tho be used from the pricing start year until the carbon neutrality year.                      
+This leaves a remaining budget to be used from the pricing start year until the carbon neutrality year which, together with other simulation choices, 
+defines the annual fossil emissions and land use emissions/sinks.                      
                      The probability estimates for budgets only concern the Transient climate response (TCRE), or the uncertainty in the expected response of additional warming to additional cumulative CO2, and assumes a normal distribution around the central estimate. Other factors such as the level of non-CO2 induced warming, the precise level of historical warming so far, feedback effects,  bring additional uncertainty. The level of these uncertainties is expressed in the source table for carbon budgets at AR6 WG1 C5 table 5.8 (p. 753).  
 ")
   
@@ -302,10 +338,10 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
   
   infolist = c("info3", "info4", "infofossil", "infolul", "infonet", "infopop",
                "infoavgfossil","infoprice", "infoavgcost","infodividend",
-               "infoavgnetcost", "infouserfossil", "infousercost", "infonetcost", 
+               "infoavgnetcost", "infouserfossil", "infousercost", "infonetcost", "infoaveragedividend", "infocountrydividend", "infocountryfossil",
+               "infocountrypop","infocountrycost","infocountrynetcost",
                "infodata", "infobudget","infoemissionsink","infostartprice","infoendprice",
-               "infopricing", "infopopu", "infoconvergence", "infoconvergence1", "infoconvergence2")
-  
+               "infopricing", "infopopu", "infoconvergence", "infoconvergence1", "infoconvergence2", "infonationaldiv")
   
   lapply(
     X = infolist,
@@ -372,7 +408,18 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
     }
     })
   
+ orr = observeEvent(input$national,{
+    if (input$national != 0){
+      rv$alert6 =TRUE
+      
+      orr$destroy()
+      rv$showaveragedividend=TRUE
+      
+    }
+  })
   
+ 
+ 
   # observeEvent(input$nok,{
   #   if (input$nok =="4. User emissions"){
   #     rv$alert5 =TRUE
@@ -633,7 +680,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
   
   
   observeEvent(input$next2, {
-    updateNavlistPanel(session, inputId = "nok", selected = "3. Carbon tax")
+    updateNavlistPanel(session, inputId = "nok", selected = "3. Carbon price")
   })
   
   observeEvent(input$next3, {
@@ -663,7 +710,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
   
   
   observeEvent(input$prev3, {
-    updateNavlistPanel(session, inputId = "nok", selected = "3. Carbon tax")
+    updateNavlistPanel(session, inputId = "nok", selected = "3. Carbon price")
   })
   
   observeEvent(input$prev4, {
@@ -698,7 +745,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
   lapply(
     X = c("showprice" , "showavgcost",
           "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop", "showavgfossil",
-          "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "alert4" ),
+          "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "alert4", "alert6" ),
     FUN = function(i){
       rv[[paste0(i)]] = FALSE
     } )
@@ -715,7 +762,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
   
   showlist = c("showfossil","showland", "shownet", "showavgfossil","showprice" , "showavgcost",
                "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop",
-               "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop")
+               "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "showaveragedividend", "showcountrydividend")
   aat = showlist
   
   
@@ -834,7 +881,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
       
     }
     
-    else if (input$nok =="3. Carbon tax") {
+    else if (input$nok =="3. Carbon price") {
       rv$showprice =TRUE
       rv$showdividend=TRUE
       rv$showavgcost=TRUE
@@ -868,6 +915,22 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
     
   })
   
+  
+  observeEvent(input$national, {
+    
+    if (input$national != 0) {
+      rv$showaveragedividend=TRUE
+    }
+    
+  })
+  
+  observeEvent(input$nationalcoun, {
+    
+    if (input$nationalcoun %in% c(ll2)) {
+      rv$showcountrydividend=TRUE
+    }
+    
+  })
   # 
   # observeEvent(input$countr, {
   #   if (input$countr %in% c(ll2)) {
@@ -1806,6 +1869,9 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
     lux[sec =="countrynetcost", visi := input$showcountrynetcost]
     lux[sec =="countrycost", visi := input$showcountrycost]
     lux[sec =="countrypop", visi := input$showcountrypop]
+    lux[sec =="averagedividend", visi := input$showaveragedividend]
+    lux[sec =="countrydividend", visi := input$showcountrydividend]
+    
     
   })
   
@@ -2264,9 +2330,10 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
       pacu[datso[sec=="price"], price :=i.yy, on=c("year")]
       pacu[,countrycost:=fossilcountry*price ]
       pacu[, dividend:=(1-input$national/100)*dividend]
-      pacu[, nationaldividend:=input$national/100*countrycost]
+      pacu[, countrydividend:=input$national/100*countrycost]
+      pacu[, averagedividend:=(input$national/100)*dividend]
       
-      pacu[,countrynetcost:=countrycost-dividend-nationaldividend]
+      pacu[,countrynetcost:=countrycost-dividend-countrydividend]
       
       updateNumericInput(session, "dummy", value = 1)
       
@@ -2292,6 +2359,9 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
     
     dats$country = "t"
     
+    
+
+    
     if (input$indi %in% c(ll2)) {
       
       req(pacu())
@@ -2309,24 +2379,52 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
       
     }
     
+    if (input$national != 0) {
+      datsk = copy(dats)
+      datsk = datsk[sec %in% c("dividend") & year %in% rv$fyear:rv$lyear,]
+      datsk[, sec:="averagedividend"]
+      datsk[, yy:=input$national/100*yy]
+      datsk[, label:="Average national dividend"]
+      
+      
+      dats[sec %in% "dividend", yy:=yy*(1-input$national/100)]
+      
+      dats=rbind(dats,datsk)
+      
+    }
     
+    #avaragedividend, countrydividend
+    #here rows for averagenational
+
+    
+    # here make new rows for country national
     if (input$nationalcoun %in% c(ll2)) {
       req(pacu())
       pacu = pacu()
 
       # cour1  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, countrycost]
       # cour2  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, c(dividend+nationaldividend)]
-      cour2  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, c(dividend+nationaldividend)]
+      cour2  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, c(dividend+countrydividend)]
       usercost =  dats[year %in% rv$fyear:rv$lyear & sec =="usercost",yy]
         # dats[year %in% rv$fyear:rv$lyear & sec =="usercost", yy:=cour1 ]
 
 
       dats[year %in% rv$fyear:rv$lyear & sec =="netcost", yy:=usercost-cour2 ]
 
+      datsk = copy(dats)
+      datsk = datsk[sec=="dividend" & year %in% rv$fyear:rv$lyear,]
+      countrydividend = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, countrydividend]
+      datsk[, sec:="countrydividend"]
+      datsk[, yy:=countrydividend]
+      datsk[, label:=paste0(input$nationalcoun," national dividend")]
+      
+      dats = rbind(dats, datsk)
+      
+      
 
     }
     
-    
+# here make new rows for country national if national > 0 ja jos ei ole jo tehny yhta ylempana   
     if (is.null(input$countr)) {
       
     } else {
@@ -2415,10 +2513,10 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
     dats = rbind(dats, dummy)
     
     
-    valus =as.numeric(unique(dats[sec %in% c("avgcost", "usercost", "netcost", "avgnetcost", "dividend",  "countrycost", "countrynetcost"),max(yy, na.rm=TRUE)]))
-    dats[sec %in% c("avgcost", "usercost", "netcost", "dividend", "avgnetcost", "countrycost", "countrynetcost"), tyy:= yy/(valus/100)]
+    valus =as.numeric(unique(dats[sec %in% c("avgcost", "usercost", "netcost", "avgnetcost", "dividend",  "countrycost", "countrynetcost", "averagedividend", "countrydividend"),max(yy, na.rm=TRUE)]))
+    dats[sec %in% c("avgcost", "usercost", "netcost", "dividend", "avgnetcost", "countrycost", "countrynetcost", "averagedividend", "countrydividend"), tyy:= yy/(valus/100)]
     
-    dats[sec == "dividend", tyy:=-1*tyy]
+    dats[sec %in% c("dividend", "averagedividend", "countrydividend"), tyy:=-1*tyy]
     dats$valuso = valus
     
     # dats[sec =="countryfossil", visi:=1]
@@ -2601,12 +2699,37 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
     
   }
   )
+  
+  
+  style2 <- reactive({
+    # if (is.null(input$countr)) { 
+    if (rv$alert6 ==TRUE) {
+      # if (input$nok =="EXTRA: Country profiles") { 
+      "#tablu3 {visibility: visible}"
+      
+    }
+    else if (rv$alert6 ==FALSE) {
+      "#tablu3 {visibility: collapse}"
+      
+    }
+    
+  }
+  )
   # 
   output$css_style <- renderUI({
     tags$head(
       tags$style(
         HTML(
           paste0(c(style()), collapse = "\n")
+        )
+      )
+    )})
+  
+  output$css_style2 <- renderUI({
+    tags$head(
+      tags$style(
+        HTML(
+          paste0(c(style2()), collapse = "\n")
         )
       )
     )})
@@ -2665,24 +2788,24 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
     
   )
   
-  # output$tablx = renderDataTable(server=FALSE,{
-  #   pacu()},
-  #   extensions = 'Buttons',
-  #   
-  #   options = list(
-  #     pageLength = 15, 
-  #     scrollX=T,
-  #     scrollY=T,
-  #     
-  #     paging = TRUE,
-  #     searching = TRUE,
-  #     fixedColumns = TRUE,
-  #     autoWidth = TRUE,
-  #     ordering = TRUE,
-  #     dom = 'tB',
-  #     buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
-  #   )
-  # )
+  output$tablx = renderDataTable(server=FALSE,{
+    datsss()},
+    extensions = 'Buttons',
+
+    options = list(
+      pageLength = 20,
+      scrollX=T,
+      scrollY=T,
+
+      paging = TRUE,
+      searching = TRUE,
+      fixedColumns = TRUE,
+      autoWidth = TRUE,
+      ordering = TRUE,
+      dom = 'tB',
+      buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
+    )
+  )
   
   output$tably = DT::renderDataTable(server=FALSE,{
    datssst()},
@@ -2865,8 +2988,8 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
                    aes(x=rv$yearc, xend=rv$yearc, y=100, yend = mi), 
                    color=blu, alpha=.4, linewidth=lsi(1.4))+
       geom_text(data=datsc()[, .SD[which.max(tyy)]], 
-                aes(x=year+2, y=max(tyy)+10, label=paste0("Year ",year, " values:")), 
-                color="white", hjust=0, size=si(2.4), fontface="bold",  family = fam) +
+                aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
+                color="white", hjust=0, size=si(2.2), fontface="bold",  family = fam) +
       # hsv(.55,.6,.76)
       # with_outer_glow(
       #   geom_point(data=datsl()[sec=="price"], 
@@ -2907,7 +3030,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
       
       geom_point(data=datsss(), 
                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
-                 size=si(points), alpha=.1) + 
+                 size=lsi(points), alpha=.1) + 
       
       # tusercost+5
       
@@ -2944,7 +3067,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
                            
                            color=col, alpha=ala*100),
                        fill=bgc,
-                       hjust=0, size=si(2.3), fontface="bold",
+                       hjust=0, size=si(2.2), fontface="bold",
                        family = fam,
                        segment.size =NA,
                        direction = "y",
@@ -2968,16 +3091,16 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
       
       geom_text(data=da,
                 aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-                color="white", hjust=.5, size=si(2.3), fontface="bold") +
+                color="white", hjust=.5, size=si(2.2), fontface="bold") +
       
       geom_text(data=da,
                 aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-                color="white", hjust=.5, size=si(2.3), fontface="bold") +
+                color="white", hjust=.5, size=si(2.2), fontface="bold") +
       
         
       geom_text(data=da,
                 aes(x=1970, y=-3), label = paste0("0"),
-                col="white", fontface="bold" ,  size =si(2.5), hjust =0, vjust=0, angle=c(0)) +
+                col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
       
       geom_segment(data=da,
                    aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
@@ -3047,20 +3170,20 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
       
         geom_text(data=da,
                   aes(x=1970, y=103), label = paste0("Scale maximums"),
-                  col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0.5, angle=c(0)) +
+                  col="white", fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
         
         # geom_point(data=datsf(), aes(y=tyy, x=year, group=sec,  alpha=ala), size=lsi(points*2), color=blu) + 
         #  
         # geom_rect(data=datsf(), aes(xmin=year-35, xmax=year, ymin=min(tyy)-5, ymax=max(tyy)+16) ,
         #           alpha=.02, color=blu, fill=blu, linetype="dashed") +
-          geom_text(data=datsf()[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+10, label=paste0("Year ",year, " values:")), 
-                  color="white", hjust=1, size=si(2.5), fontface="bold",  family = fam) +
+          geom_text(data=datsf()[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
+                  color="white", hjust=1, size=si(2.2), fontface="bold",  family = fam) +
         
         
         geom_label_repel(data=datsf(),
                          aes(x=year-2, y=tyy, label=paste0(label,"    ", sprintf(paste0("%0.",le,"f"),round(yy,le)), " ",mark),
                              color=col, group =sec, alpha=ala),
-                         size=si(2.3), fontface="bold", hjust=1,
+                         size=si(2.2), fontface="bold", hjust=1,
                          family = fam,
                          fill=bgc,
                          # segment.size =NA,
@@ -3094,7 +3217,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
                     aes(x=1970, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") 
         # geom_text(data=datsss()[sec %in% c("price"), ],
-        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
+        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " $/t"), color=col), size=si(2.5), hjust=0)
         
       }    
       # | input$showcountryfossil==T
@@ -3112,10 +3235,10 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
         
         plot1 = plot1+
           geom_text(data=datsss()[sec %in% c("price"), .SD[which.max(yy)]],
-                    aes(x=1970, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "€/t"), color=col),
+                    aes(x=1970, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$/t"), color=col),
                     size=si(2.2), hjust=0, fontface="bold") 
         # geom_text(data=datsss()[sec %in% c("price"), ],
-        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
+        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " $/t"), color=col), size=si(2.5), hjust=0)
         
       }
       
@@ -3123,10 +3246,10 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
         
         plot1 = plot1+
           geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
-                    aes(x=1970, y=103-6*prio, label=paste0(round(max(valuso, na.rm=TRUE), 0), "€"), color=col), 
+                    aes(x=1970, y=103-6*prio, label=paste0(round(max(valuso, na.rm=TRUE), 0), "$"), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") 
         # geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
-        #           aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " €"), color=col), size=si(2.5), hjust=0) 
+        #           aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " $"), color=col), size=si(2.5), hjust=0) 
       }    
       
       
@@ -3157,7 +3280,7 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
                     aes(x=(1965+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
                     size=si(2.2), hjust=0.5, fontface="bold") 
         # geom_text(data=datsss()[sec %in% c("price"), ],
-        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
+        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " $/t"), color=col), size=si(2.5), hjust=0)
         
       }    
       # | input$showcountryfossil==T
@@ -3175,10 +3298,10 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
         
         plot1 = plot1+
           geom_text(data=datsss()[sec %in% c("price"), .SD[which.max(yy)]],
-                    aes(x=(1965+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 0), "€/t"), color=col),
+                    aes(x=(1965+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 0), "$/t"), color=col),
                     size=si(2.2), hjust=0.5, fontface="bold") 
         # geom_text(data=datsss()[sec %in% c("price"), ],
-        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.5), hjust=0)
+        #           aes(x=1970, y=86/2-5, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " $/t"), color=col), size=si(2.5), hjust=0)
         
       }
       
@@ -3186,10 +3309,10 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
         
         plot1 = plot1+
           geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
-                    aes(x=(1965+10*prio), y=103, label=paste0(round(max(valuso, na.rm=TRUE), 0), "€"), color=col), 
+                    aes(x=(1965+10*prio), y=103, label=paste0(round(max(valuso, na.rm=TRUE), 0), "$"), color=col), 
                     size=si(2.2), hjust=0.5, fontface="bold") 
         # geom_text(data=datsss()[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
-        #           aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " €"), color=col), size=si(2.5), hjust=0) 
+        #           aes(x=1970, y=79/2-7, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " $"), color=col), size=si(2.5), hjust=0) 
       }
       
       
@@ -3843,9 +3966,9 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
           
           plot4 = plot4+
             geom_text(data=datsss[sec %in% c("price"), ],
-                      aes(x=1994, y=96, label=paste0(round(max(yy, na.rm=TRUE), 0), " €/t"), color=col), size=si(2.3), hjust=0) +
+                      aes(x=1994, y=96, label=paste0(round(max(yy, na.rm=TRUE), 0), " $/t"), color=col), size=si(2.3), hjust=0) +
             geom_text(data=datsss[sec %in% c("price"), ],
-                      aes(x=1994, y=96/2-1, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " €/t"), color=col), size=si(2.3), hjust=0)
+                      aes(x=1994, y=96/2-1, label=paste0(round(max(yy, na.rm=TRUE)/2, 0), " $/t"), color=col), size=si(2.3), hjust=0)
           
         }
         
@@ -4020,9 +4143,9 @@ This leaves a budget tho be used from the pricing start year until the carbon ne
           
           plot5 = plot5+
             geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
-                      aes(x=1995, y=96, label=paste0(round(max(valuso, na.rm=TRUE), 0), " €"), color=col), size=si(2.3), hjust=0) +
+                      aes(x=1995, y=96, label=paste0(round(max(valuso, na.rm=TRUE), 0), " $"), color=col), size=si(2.3), hjust=0) +
             geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), ],
-                      aes(x=1995, y=96/2-1, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " €"), color=col), size=si(2.3), hjust=0) 
+                      aes(x=1995, y=96/2-1, label=paste0(round(max(valuso, na.rm=TRUE)/2, 0), " $"), color=col), size=si(2.3), hjust=0) 
         }
         
         
