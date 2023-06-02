@@ -1,6 +1,5 @@
 # Created by Ville Seppälä (www.villeseppala.fi)
 
-
 # read in data files from data folder (data files must be created with datacreation.r if they do not exist)
 
 
@@ -34,8 +33,9 @@ library(shinyjs)
 
 
  library(showtext)
+library(slickR)
 
-setDTthreads(0)
+setDTthreads(2)
 
 
 bgc = "black"
@@ -47,9 +47,11 @@ bgc = "black"
     
     blu = rgb(29, 137, 255, maxColorValue = 255)
     blu ="#428bca"
+    
+bgc = hsv(.59,.01,.23)    
+bgc = "darkgrey"
+bgc = hsv(.59,.55,.25)    
 
-bgc = hsv(.59,.5,.3)    
-        
 hh = .81
 vv = .8
 
@@ -59,9 +61,9 @@ net = fos
 # lul = hsv(0.12,hh,vv)
 # net = hsv(0.09,hh,vv)
 # 
-fos = hsv(0.08,.85,vv)
-lul = hsv(0.10,.78,.7)
-net = hsv(0.09,.8,.9)
+fos = hsv(0.08,.75,vv)
+lul = hsv(0.11,.6,.8)
+net = hsv(0.09,.7,.85)
 # fos = hsl(80,80,80)
 # fos =    rgb(145, 76, 90, maxColorValue = 255)
 # lul = fos
@@ -69,21 +71,21 @@ net = hsv(0.09,.8,.9)
 # lul =    rgb(145, 66, 180, maxColorValue = 255)
 # net =   rgb(145, 99, 90, maxColorValue = 255)
 
-pop =hsv(0.57,.75,.95)
+pop =hsv(0.57,.7,.95)
 
 
-tax = hsv(0.35,hh,vv)
+tax = hsv(0.35,.65,vv)
 
 
-fosindi =hsv(.96,.65,vv)  
+fosindi =hsv(.96,.5,.85)  
 fpop = fosindi
 cpop = fosindi
 countryfossil = fosindi 
 
 avgcost = hsv(0.57,.7,.9)
-avgcost = hsv(0.75,.35,vv)
-dividend = hsv(0.75,.58,vv)
-avgnetcost = hsv(0.75,.5,vv)
+avgcost = hsv(0.75,.3,vv)
+dividend =  hsv(0.81,.4,vv)
+avgnetcost =hsv(0.77,.4,vv)
 
 averagedividend = dividend
 countrydividend = dividend
@@ -107,6 +109,19 @@ countrynetcost = avgnetcost
 
 countrypop = pop
 
+
+
+ maxyy=2136
+ minyy=1974
+ 
+ mmaxyy = 2135
+ mminyy = 1996
+ 
+ 
+ mmmaxyy=2140
+ mmminyy=1974
+ 
+ mmin = 
 # font_add_google("Lato", "lato")
 # font_add_google("Gochi Hand", "gochi")
   font_add_google("Saira Extra Condensed", "saira")
@@ -271,29 +286,7 @@ lu[sec == "countrypop", label:="population"]
 lu[sec == "countrydividend", label:="Dividend, average national"]
 lu[sec == "averagedividend", label:="dividend"]
 
-lu[sec == "fossil", label:="Fossil emissions"]
-lu[sec == "land", label:="Land emissions/sinks"]
-lu[sec == "net", label:="Net emissions"]
-lu[sec == "price", label:="Carbon price"]
-lu[sec == "avgcost", label:="Mean carbon costs"]
-lu[sec == "avgfossil", label:="Mean fossil emissions"]
-lu[sec == "userfossil", label:="User fossil emissions"]
-lu[sec == "netcost", label:="User net costs"]
-lu[sec == "usercost", label:="User carbon costs"]
-lu[sec == "pop", label:="World population"]
-lu[sec == "dividend",label:="Carbon dividend"]
-lu[sec == "avgnetcost", label:="Mean net costs"]
-lu[sec == "countrycost", label:="carbon costs"]
-lu[sec == "countrynetcost", label:="net costs"]
-lu[sec == "countryfossil", label:="mean emissions"]
-lu[sec == "countrypop", label:="population"]
-lu[sec == "countrydividend", label:="Mean national dividend"]
-lu[sec == "averagedividend", label:="dividend"]
 
-# lalist = c("Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
-#   "Average emissions",  "Carbon price", "Average carbon costs",
-#   "Carbon dividend","Mean net costs", "User emissions", "User carbon costs", "User net costs"
-#   )
 
 # colors
 lu$col =fos
@@ -342,7 +335,93 @@ lu$visi = 1
 lu[sec =="pop", visi :=0]
 
 
+lu[sec == "fossil", label:="CO2 emissions"]
+lu[sec == "land", label:="Land use and sinks"]
+lu[sec == "net", label:="Net CO2 emissions"]
+lu[sec == "price", label:="Carbon price"]
+lu[sec == "avgcost", label:="Mean CO2 costs"]
+lu[sec == "avgfossil", label:="Mean CO2 emissions"]
+lu[sec == "userfossil", label:="User CO2 emissions"]
+lu[sec == "netcost", label:="User net costs"]
+lu[sec == "usercost", label:="User CO2 costs"]
+lu[sec == "pop", label:="World population"]
+lu[sec == "dividend",label:="Carbon dividend"]
+lu[sec == "avgnetcost", label:="Mean net costs"]
+lu[sec == "countrycost", label:="CO2 costs"]
+lu[sec == "countrynetcost", label:="Coutnry net costs"]
+lu[sec == "countryfossil", label:="Country mean emissions"]
+lu[sec == "countrypop", label:="Country population"]
+lu[sec == "countrydividend", label:="Country national dividend"]
+lu[sec == "averagedividend", label:="Mean dividend"]
 
+
+
+lu[sec == "fossil", labbi:="Global CO2 emissions"]
+lu[sec == "land",labbi:="Global CO2 emissions"]
+lu[sec == "net", labbi:="Global CO2 emissions"]
+lu[sec == "price", labbi:="Carbon price"]
+lu[sec == "avgcost", labbi:="CO2 costs and benefits"]
+lu[sec == "avgfossil", labbi:="Individual CO2 emissions"]
+lu[sec == "userfossil", labbi:="Individual CO2 emissions"]
+lu[sec == "netcost", labbi:="CO2 costs and benefits"]
+lu[sec == "usercost", labbi:="CO2 costs and benefits"]
+lu[sec == "pop", labbi:="Population projection"]
+lu[sec == "dividend",labbi:="CO2 costs and benefits"]
+lu[sec == "avgnetcost", labbi:="CO2 costs and benefits"]
+lu[sec == "countrycost", labbi:="CO2 costs and benefits"]
+lu[sec == "countrynetcost",labbi:="CO2 costs and benefits"]
+lu[sec == "countryfossil", labbi:="Individual CO2 emissions"]
+lu[sec == "countrypop", labbi:="Population projection"]
+lu[sec == "countrydividend", labbi:="CO2 costs and benefits"]
+lu[sec == "averagedividend", labbi:="CO2 costs and benefits"]
+
+
+
+# lalist = c("Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
+#   "Average emissions",  "Carbon price", "Average carbon costs",
+#   "Carbon dividend","Mean net costs", "User emissions", "User carbon costs", "User net costs"
+#   )
+
+
+lu2 = copy(lu)
+lu2[sec == "fossil", labbi:="Globaalit CO2-päästöt"]
+lu2[sec == "land", labbi:="Globaalit CO2-päästöt"]
+lu2[sec == "net", labbi:="Globaalit CO2-päästöt"]
+lu2[sec == "price", labbi:="CO2-päästöjen hinta"]
+lu2[sec == "avgcost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "avgfossil", labbi:="Yksilökohtaiset CO2-päästöt"]
+lu2[sec == "userfossil", labbi:="Yksilökohtaiset CO2-päästöt"]
+lu2[sec == "netcost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "usercost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "pop", labbi:="Väestökehitys"]
+lu2[sec == "dividend",labbi:="CO2 menot ja tulot"]
+lu2[sec == "avgnetcost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "countrycost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "countrynetcost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "countryfossil", labbi:="Yksilökohtaiset CO2-päästöt"]
+lu2[sec == "countrypop", labbi:="Väestökehitys"]
+lu2[sec == "countrydividend", labbi:="CO2 menot ja tulot"]
+lu2[sec == "averagedividend", labbi:="CO2 menot ja tulot"]
+
+
+lu2[sec == "fossil", label:="CO2-päästöt"]
+lu2[sec == "land", label:="Maankäyttö ja nielut"]
+lu2[sec == "net", label:="CO2-nettopäästöt"]
+lu2[sec == "price", label:="Hiilen hinta"]
+lu2[sec == "avgcost", label:="CO2-keskimenot"]
+lu2[sec == "avgfossil", label:="CO2-keskipäästöt"]
+lu2[sec == "userfossil", label:="Käyttäjän CO2-päästöt"]
+lu2[sec == "netcost", label:="Käyttäjän nettomenot"]
+lu2[sec == "usercost", label:="Käyttäjän CO2-menot"]
+lu2[sec == "pop", label:="Maailman väestö"]
+lu2[sec == "dividend",label:="Hiiliosinko"]
+lu2[sec == "avgnetcost", label:="Keskiarvo-nettomenot"]
+lu2[sec == "countrycost", label:="CO2-menot"]
+lu2[sec == "countrynetcost", label:="Maan nettokeskimenot"]
+lu2[sec == "countryfossil", label:="Maan keskiarvopäästöt"]
+lu2[sec == "countrypop", label:="Maan väestö"]
+lu2[sec == "countrydividend", label:="Maan kansallinen osinko"]
+lu2[sec == "averagedividend", label:="Keskiosinko"]
 
 
 
@@ -367,7 +446,7 @@ arg = function(start, end, convergence, coustart) {
   
   vuo = c(2024, 2055)
   yearc = 2055
-  paa = 8
+  paa = 3
   muo = "percentual"
   pri = "linear"
   sprice = 200
@@ -380,7 +459,7 @@ arg = function(start, end, convergence, coustart) {
   
   vuo = c(2024, 2060)
   yearc= 2060
-  paa = 7
+  paa = 4
   muo = "percentual"
   pri = "linear"
   sprice = 150
@@ -579,6 +658,23 @@ cuk = function(col, label, info, show, lab, value) {
       div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))  
   
 }
+
+cuk2 = function(col, label, info, show, lab, value) {
+  div(div(style="display:inline-block", div(  style=paste0("color:",col,";"),
+                                             # HTML(
+                                             # textOutput(txt, label)
+                                              label
+                                              
+                                              # )
+  )),
+  div(style="display:inline-block",HTML( "<font size='2'>",
+                                         as.character(actionLink(style='color:#ffc107',inputId = info,
+                                                                 label = "  ",
+                                                                 icon = icon("fas fa-info-circle"))), "</font>") ),
+  div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
+
+}
+
 
 # div(div(style="display:inline-block", chk(fos, "Total emissions")), 
 #     div(style="display:inline-block",inf("infofossil")),

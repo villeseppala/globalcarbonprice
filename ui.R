@@ -4,14 +4,32 @@
 ui <- dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,
                     
                     dashboardHeader(
-                      # div(style="padding-left: 4px;",
-                                    title = " Global carbon price and dividend -simulator (UNFINISHED, contains errors)"
-                                    # )
-                    ,
+                      actionButton(inputId = "eng", label = NULL, style = "width: 2.5rem; height: 1.5rem; margin: 3px;
+background: url('flag/eng.png');  background-size: cover; background-position: center;"),  
+actionButton(inputId = "fin", label = NULL, style = "width: 2.5rem; height: 1.5rem; margin: 3px;
+background: url('flag/fin.png');  background-size: cover; background-position: center;"),
+                       tagList(uiOutput(style="font-size: 1.3rem !important; margin: 5px; font-weight: 600;
+    line-height: 1.1; ","titletext")),       
+                      
+                    #                 title = " Global carbon price and dividend -simulator (UNFINISHED, may contain errors)"
+                    #                 # )
+                    # ,
                                     # title="ffff",
+# div(style="margin-left: 1px; padding: 1px;",
+ div(id="but",
+    actionButton(inputId="infodata", label="Data sources",
+                 styleclass = "primary", size = "small", block = F,style="line-height: 1.1")),    
+    # actionBttn(inputId ="infodata", 
+    #            label = "Data sources", size="xs", style = "fill", color="primary"),
+div(id="but",
+    
+  actionButton(inputId ="tutorial", label = "Tutorial",
+                 styleclass = "primary", size = "small", block = F,style="line-height: 1.1")
+     )
+,
                                     tagList(a
                                             # (HTML("<font size='4'>", as.character
-                                              (div(style="font-size: 15px !important; margin-right: 5px;",icon("fab fa-github"))
+                                              (div(style="font-size: 15px !important; margin: 5px;",icon("fab fa-github"))
                                                                               # ))
                                                                               , 
                                               href="https://github.com/villeseppala/globalcarbonprice/")
@@ -26,10 +44,40 @@ ui <- dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,
                                               href="https://villeseppala.wordpress.com/2022/09/14/global-carbon-taxation-simulator-project-page/")
                                            # , title=""
                                             # , class="dropdown"
-                                            )
-                                    ,
-                                   actionBttn(inputId ="infodata", label = "Data sources", size="xs", style = "fill", color="primary")
+                                            ),
+
+tagList(a
+        # (HTML("<font size='4'>",as.character
+        (div(style="font-size: 15px !important;  margin-right: 5px;",p("feedback"))
+          # ))
+          ,
+          href="https://forms.gle/3ognTtwyejCB3XZg6")
+        # , title=""
+        # , class="dropdown"
+)
+
+    # )
                                     
+ 
+                    # )                  
+
+  # actionBttn(inputId ="eng", label = "Terial", size="xs",  color="primary",
+#                                style = "width: 50px; height: 50px;
+# background: url('flag/eng.png');  background-size: cover; background-position: center;"),
+#                     
+
+                    #                     tags$button(
+                    #   id = "eng",
+                    #   class = "btn action_button",
+                    #   img(src = "flag/eng.png",
+                    #       height = "30px")
+                    # ),
+                    # tags$button(
+                    #   id = "fin",
+                    #   class = "actionBttn",
+                    #   img(src = "flag/fin.png",
+                    #       height = "30px")
+                    # )
                                     # tags$li(a(href = 'http://shinyapps.company.com',
                                     #           icon("power-off"),
                                     #           title = "Back to Apps Home"),
@@ -122,655 +170,24 @@ $(document).on('shiny:sessioninitialized', function (e) {
 
                     ")),
 
-
-
-tags$style(type = "text/css",
-           
-           
-           HTML(       
-             "
-   
-
-// tarpeeton
-
-
-
-  #tablu .bs4Table {
-       border-collapse: collapse;
-}
-// tarpeeton
-.nav.nav-pills li.disabled {
-background-color: #aaa 
-color: #333 !important;
-cursor: not-allowed !important;
-border-color: white !important;
-}
-
-
-
-
-
-//
-   
-//
-                #nok {
-                color: #f2ede6; 
-}
-
-// {}
-
-
-// tarpeellinen {}
-
-hr {border-top: 2px solid white; margin-bottom:3px; margin-top:3px;}
-
-.dark-mode .card {
-background-color: rgb(45, 36, 36);
-
-}
-
-.dark-mode .content-wrapper {
-background-color: rgb(45, 36, 36);
-color: #fff;
-}
-//
-.content-wrapper>.content {
-padding: .3rem !important;
-}
-
-
-.custom-control-input { 
-visibility: hidden !important;
-
-}
-
-.custom-control-input:checked~.custom-control-label::before {
-    color: #fff;
-    border-color: #007bff;
-    background-color: #007bff;
-    box-shadow: none;
-}
-.dark-mode .custom-control-label::before, .dark-mode .custom-file-label, .dark-mode .custom-file-label::after, .dark-mode .custom-select, .dark-mode .form-control, .dark-mode .input-group-text {
-    background-color: #343a40;
-    color: #fff;
-}
-.custom-switch .custom-control-label::before {
-visibility: hidden !important;
-
-}
-
-.custom-switch .custom-control-label::after { 
-visibility: hidden !important;
-
-}
-.custom-switch {
-visibility: hidden !important;
-
-}
-
-// yläreunan valikko {}
-
-.label .radio-inline {
-font-size: .45rem;
-
-}
-
-p {
-margin-bottom: .1vw;
-}
-
- .card-body {
-               padding: .2vw;
-    background-color:rgb(45, 36, 36) !important;
-
- }
-
-
-
-.accordion {
-
-
-}
-
-#view {
-font-size: .85rem;
-              margin-bottom: .1vw;
-line-height: 1;
-
-}
-
-
-
-#visib {
-font-size: .85rem;
-line-height: 1;
-              margin-bottom: .1vw;
-
-}
-
-#tablu {
-color: blue;
-font-family: Roboto !important;
-font-size: calc(.7vw + .4rem) !important;
-
-line-height: 1.1;
-margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
-border-collapse: collapse;
-overflow: auto;
-}
-
-#tablu p {
-color: blue;
-font-family: Roboto !important;
-font-size: calc(.7vw + .4rem) !important;
-text-decoration: none !important;
-margin-bottom: .2rem !important;
-margin-top: .1rem !important;
-
-line-height: 1.1;
-}
-
-#tablu2 {
-color: blue;
-font-family: 'Saira' !important;
-font-size: calc(.7vw + .4rem) !important;
-
-line-height: 1.1;
-margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
-border-collapse: collapse;
-overflow: auto;
-}
-
-#tablu2 p {
-color: blue;
-font-family: Roboto !important;
-font-size: calc(.7vw + .4rem) !important;
-text-decoration: none !important;
-margin-bottom: .2rem !important;
-margin-top: .1rem !important;
-line-height: 1.1;
-}
-
-#tablu3 {
-color: blue;
-font-family: 'Saira' !important;
-font-size: calc(.7vw + .4rem) !important;
-
-line-height: 1.1;
-margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
-border-collapse: collapse;
-overflow: auto;
-}
-
-#tablu3 p {
-color: blue;
-font-family: Roboto !important;
-font-size: calc(.7vw + .4rem) !important;
-text-decoration: none !important;
-margin-bottom: .2rem !important;
-margin-top: .1rem !important;
-line-height: 1.1;
-}
-
-
-
-          .table {
-              margin-bottom: .1vw;
-overflow: scroll;
-               }
-               
-               .table td {
-               padding: .1vw;
-              margin-bottom: .1vw;
-    background-color:rgb(45, 66, 86) !important;
-border-color: rgb(224, 192, 151) !important;
-               }
-
-               .td {
-               padding: .1vw;
-              margin-bottom: .1vw;
-display: inline-block;
-               }
-
-
- input[type='awesome-checkbox']{ /* style for checkboxes */
-        width: 60px !important; /*Desired width*/
-        height: 30px; /*Desired height*/
-        line-height: 30px; 
-      }
-
-
-
-.form-group {
-margin-bottom: .3rem;
-
-}
-
-//
-        .nav-tabs .nav-item {
-  transform: skew(-22.5deg);
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, .2);
-        }
-
-#bor {
-    
-padding: .4vw !important;
-margin: .0vw !important;
-box-sizing: border-box;
-border-width: 0px;
-}
-
-
-
-
-#bor2 {
- border-color: #3C8DBC;
-border-bottom-color: none;
-            border-width: .2vw;
- border-style: outset;
-border-color: white !important;
-  border-radius: 5px;
-padding: .3vw !important;
-
-
-}
- 
-#bor3 {
- border-color: rgb(92, 61, 46);
-border-bottom-color: none;
-            border-width: .3vw;
- border-style: solid;
-  border-radius: 5px;
-padding: .3vw !important;
-
-
-}
-
-
-
-#bor4 {
- border-color: rgb(184, 92, 56);
-border-bottom-color: none;
-            border-width: .3vw;
- border-style: solid;
-  border-radius: 5px;
-padding: .3vw !important;
-
-
-}
-
-#bor5 {
- border-color: rgb(224, 192, 151);
-border-bottom-color: none;
-            border-width: .3vw;
- border-style: solid; 
-  border-radius: 5px;
-padding: .0vw !important;
-
-}
-
-
-#bor5a {
-    background-color: rgba(224, 192, 151,.1) !important;
-  border-color:rgb(224, 192, 151) !important;
-padding: .5vw !important;
-margin: .0vw !important;
-box-sizing: border-box;
- border-style: solid; 
-  border-radius: 5px;
-            border-width: .2vw;
-}
-
-
-#bor5a .control-label {
-color: rgba(224, 192, 151,.99);
-font-size: calc(.6vw + .7rem);
-text-align: center !important;
-text-decoration: none;
-margin-bottom: .7rem;
-}
-
-#bor5a p {
-color: rgba(224, 192, 151,.99);
-font-size: calc(.7vw + .7rem);
-text-align: left !important;
-text-decoration: none;
-margin-bottom: .5rem;
-margin-top: -.3rem;
-}
-
-
-   .col-sm-12 {
-padding: .0vw;
-   } 
-
-
-   .col-sm-3 {
-padding: .01vw;
-margin: 1.9.vw;
-   } 
-
-
-   .col-sm-4 {
-padding: .01vw;
-box-sizing: border-box;
-
-   } 
-
-   .col-sm-8 {
-padding: 0.1vw;
-margin: 0vw;
-    border-left: 0px;
-box-sizing: border-box;
-
-    } 
-
-
-// left panel texts    border-color:rgb(45, 36, 36) !important;
- {}
-
-    a {
-color: #f2ede6;
-padding-top: .2vw;
-padding-bottom: .2vw;
-
-padding-left: .0vw;
-margin-left: .0vw;
-font-size: calc(.5vw + .44rem);
-line-height: 1.0rem;
-font-weight: 1000 !important;
-
-display: inline;
-    } 
-       
-.row {
-    margin-right: -1.5px;
-    margin-left: -1.5px;
-
-}
-
-
-    a.active {
-color: #f2ede6;
-padding: .0vw;
-margin: .0vw;
-
-display: inline;
-    background-color: rgb(184, 92, 56) !important;
-    display:block !important;
-    } 
-
-// nav extend left selection field backgrounds to whole lenght
-and make vertical instead of horizontal {}             
-  .btn {
-font-size: .8rem;
-}
-          
-         .nav{
-flex-wrap: wrap-reverse;
-  flex-direction: column;
-text-align: left;
-padding: .0vw;
-margin: .0vw;
-line-height: 1.2rem;
-
-}
-
-  // left panel general {}
-
-
-.content-wrapper .nav li {
-  color: #46E8CD;
-
-  border-bottom: .1px solid white;
-  border-top: .1px solid white;
-
-  }
-
-.content-wrapper .nav li a {
-  display: block;
-
-
-  }
-
-
-
-
-
-// left panel active
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, .2);
-{}
-
-//
-.content-wrapper .nav li .active {
-    border-top: 2px solid red;
-    border-bottom: 2px solid red;
-}
-
-// headlines {}
-
-.control-label {
- 
-font-size: calc(.5vw + .5rem);
-line-height: .99rem;
-margin-bottom: 1rem;
-margin-top: .3;
-
-}
-
-
-// right panel active {}
-
-
-  input[type=\"number\"] {
-    width: max(6vw, 52px);
-padding: 0.1rem 0.1rem;
-font-size: .9rem;
-height: calc(.75rem+2px);
-
-  }
-
-
-.tab-pane.active{
-    background-color: rgb(184, 92, 56);
-               margin-left: -0.1vw;
-padding: .5vw;
-font-size: calc(.4vw + .45rem) !important;
-font-weight: 100 !important;
-
-
-}
-
-#sla label{ display: table-cell; text-align: left; vertical-align: middle; 
- width: 40px !important;} 
-#sla .form-group { display: table-row; horizontal-align: right;
- width: 40px !important;
-max-width: 40px;
-
-}
-#sla shiny-input-container:not(.shiny-input-container-inline){
- width: 2rem !important;
-max-width: 2rem;
-}
-#sla .div{
- width: 2rem !important;
-}
-@media all and (min-device-width: 480px) {
-
-#sla p {width: 8.1vw !important; }
-}
-@media all and (max-device-width: 480px) {
- #sla p {
-   width: 38.1vw !important;
-  }
-}
-
-
-.form-check-label {
-font-weight: 100 !important;
-
-}
-label:not(.form-check-label):not(.custom-file-label) {
-
-}
-
-.radio {
-
-line-height: 1;
-margin-bottom: .0rem;
-font-weight: 100 !important;
-
-}
-
-
-
-.card-title {
-font-size: 1.0rem !important; 
-
-}
-
-.card {
-  overflow: hidden;
-margin-bottom: .0vw;
-}
-
-.card-header {
-  overflow: hidden;
-padding: .1vw;
-
-}
-
-.card-header {
-text-align: center;
-  
-}
-
-.body {
-text-align: center;
-
-}
-  
-.card-text {
-    word-wrap: break-word;
-flex-wrap: wrap;
-}
-
-#info .text {
-display: flex;
-flex-wrap: wrap; 
-        flex-direction: row;
-}
-
-
-
-.irs-max {
-height: 0px !important;
-visibility: hidden !important;
-}
-
-.irs-min {
-height: 0px !important;
-visibility: hidden !important;
-}
-
- .irs--shiny .irs-single {
-font-size: calc(.6vw + .6rem);
-z-index: 2;
- }
-
-.irs--shiny .irs-bar {
-border-top: 1px solid rgb(92, 61, 46);
-border-bottom: 1px solid rgb(92, 61, 46);
-}
-
- .irs--shiny .irs-handle {
-color: #428bca !important;
-background-color: #428bca;
- }
-
-
-#yearc .irs-handle {
-color: black !important;
-
-
-}
-
-.dataTables_scrollBody {
-    transform:rotateX(180deg);
-
-}
-.dataTables_scrollBody table {
-    transform:rotateX(180deg);
-
-}
-
-
-
-div.datatables {
-color: white;
-}
-
-table.dataTable tbody tr {
-background-color: rgb(92, 61, 46);
-}
-
-table.dataTable.display tbody tr.odd {
-background-color: rgb(184, 92, 56);
-
-}
-
-
-table.dataTable.display tbody tr:hover {
-background-color: #1d89ff;
-
-}
-
-button.dt-button {
-
-color: white;
-}
-
-tbody {
-vertical-align: left;
-}
-
-pre {
-padding: .1px;
-margin: .1px;
-overflow-y: scroll; 
-}
-
-.irs--shiny .irs-line {
-height: 16px
-
-}
-fas.ca-info-circle {
-color: black;
-
-
-}
-
-.fa a {
-color: black;
-
-}
-
-.btn {
-    font-size: 1.8rem;
-}
-
-#countrr .btn {
-    font-size: .8rem;
-}
-
-#vuo .control-label {
-margin-bottom: 0.2rem !important;
-
-}
-
-
-               ")
+# tags$head(tags$script('
+#                                 var dimension = [0, 0];
+#                                 $(document).on("shiny:connected", function(e) {
+#                                     dimension[0] = window.innerWidth;
+#                                     dimension[1] = window.innerHeight;
+#                                     Shiny.onInputChange("dimension", dimension);
+#                                 });
+#                                 $(window).resize(function(e) {
+#                                     dimension[0] = window.innerWidth;
+#                                     dimension[1] = window.innerHeight;
+#                                     Shiny.onInputChange("dimension", dimension);
+#                                 });
+#                             ')),
+
+tags$head(
+  tags$link(rel = "stylesheet", type = "text/css", href = "cs.css")
 )
+
 
 ,
 uiOutput("css_style"),
@@ -809,36 +226,83 @@ fluidRow(
              collapsible = FALSE,
              # verbatimTextOutput("mobileuser"),
              ignore.init=TRUE
+           ) }),  
+    
+         
+         # div(id="tuto",
+         #     box(
+         #       style = 'overflow-x: hidden',
+         #       # style = 'overflow-y: scroll',
+         #       
+         #       id = "infobox",
+         #       width = NULL,
+         #       title =textOutput("infot"),
+         #       closable = TRUE,
+         #       closed=TRUE,
+         #       collapsible = FALSE,
+         #       textOutput("info"),
+         #       ignore.init=TRUE
+         #       # ))
+         #     )))),
+         
+         
+         div(id="tuto",
+         box(
+           style = 'overflow-x: hidden',
+           # style = 'overflow-y: scroll',
+
+           id = "tutorialbox",
+           # dots = TRUE,
+           width = NULL,
+           title ="Tutorial",
+           closable = TRUE,
+           closed=TRUE,
+           collapsible = FALSE,
+           slickROutput("slickr1",width = "60%", height="50%")
+           # ,ignore.init=TRUE
+           # ))
+         ) ),
+         
+        # div( id = "tuto",
              
-           ) }),    
+#              tagList(
+              # uiOutput("tutbox",width = "90%", height="90%"),
+#                 )
+#              
+# # )
+# ,
+
         
          column(12, id = "bor5",
 
-                
+                # "</font>",
+                # tagList(uiOutput("selitys2")),  
+                # "<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")),
                 accordion(
                   id = "accordion5",
                   accordionItem(
                     # <i class="material-icons">visibility</i>
+                    title = tagList(uiOutput("viewtext")),       
                     
-                    title = HTML("<font size='4'>",
-                                 as.character(icon("far fa-eye")), 
-                                 # "</font>",
-                                 
-                                 # "<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")),
-                                 "  VIEWING SETTINGS  ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
-                    collapsed =TRUE,
+                    # title = HTML("<font size='4'>",
+                    #              as.character(icon("far fa-eye")), 
+                    #              
+                    #         "  VIEWING SETTINGS  ",  
+                    #        as.character( icon("fas fa-caret-square-down")),"</font>"),
+                    collapsed =FALSE,
                      fluidRow(
                       column(2,        id = "bor5a",
                              
                              radioButtons("view", label = "Graph view",
-                                          c("Single graph for all scales" = 1,
-                                            "Separate graphs for each scale (in progress...)" = 2
+                                          c("One graph for all scales" = 1,
+                                            "Side by side graphs for each scale" = 2,
+                                            "Back to back graphs for each scale" = 3
                                             
                                           ),selected=1, inline=TRUE)
                              
                              ,
                              div(style="display:inline-block; font-weight:100;",
-                                 awesomeCheckbox("startvalue", label="Start year labels", value=TRUE))
+                                 awesomeCheckbox("startvalue", label=textOutput("startlabel"), value=TRUE))
                              # ,
                              # 
                              # sliderInput("fonts", label ="Font size", min = 1, max = 10, value = c(5), dragRange=FALSE, ticks = FALSE),
@@ -850,12 +314,17 @@ fluidRow(
                              id = "bor5a",
                              
                              
-                             p(style='font-weight:1000;', "Indicator visibility"),
-                             div(style="display:inline-block",actionBttn(inputId ="showall", label = "Show all", size="xs", style = "fill", color="primary")),
-                             div(style="display:inline-block",actionBttn(inputId ="shownone", label = "Hide  all", size="xs", style = "fill", color="primary")
+                             div(style='font-weight:1000; color: rgba(224, 192, 151) !important;
+                                 font-size: calc(.7vw + .7rem);
+text-align: left !important;
+text-decoration: none;
+margin-bottom: .5rem;
+margin-top: -.3rem;', textOutput("indicatorvisibility")),
+                             div(style="display:inline-block",actionBttn(inputId ="showall", label = textOutput("showall") , size="xs", style = "fill", color="primary")),
+                             div(style="display:inline-block",actionBttn(inputId ="shownone", label = textOutput("shownone") , size="xs", style = "fill", color="primary")
                              ),
                              div(style="display:inline-block; font-weight:100;",
-                                 awesomeCheckbox("visib", label="Automatic, based on SIMULATION SETTINGS phase", value=TRUE)
+                                 awesomeCheckbox("visib", label=textOutput("automatic"), value=TRUE)
                                 # prettySwitch
                                 # checkboxGroupButtons()
                                  # )
@@ -871,62 +340,9 @@ fluidRow(
                     div(
                       id="tablu",
                       class="noku",
-                      bs4Dash::bs4Table(
-                        # "nerf",
-                        
-                        cardWrap = TRUE,
-                        bordered = TRUE,
-                        striped = TRUE, 
-                        
-                        list(
-                          
-                          headTitles = list(
-                            
-                            cuk(fos, "Fossil emissions", "infofossil", "showfossil", NULL, TRUE),
-                            cuk(lul, "Land emissions/sinks", "infolul", "showland", NULL, TRUE),
-                            cuk(net, "Net emissions", "infonet", "shownet", NULL, TRUE),
-                            cuk(pop, "Population", "infopop", "showpop", NULL, FALSE),
-                            cuk(fpop, "Mean fossil emissions", "infoavgfossil", "showavgfossil", NULL, TRUE),
-                            cuk(tax,"Carbon price", "infoprice", "showprice", NULL, FALSE)
-                            # cuk(, "", "", "", NULL, TRUE),
-                            
-                            
-                            # ,
-                            # 
-                            # div(div(style="display:inline-block", chk(fos, "Total emissions")), 
-                            #     div(style="display:inline-block",inf("infofossil")),
-                            #     div(style="display:inline-block",awesomeCheckbox( "showfossil", label=NULL,  value=TRUE))),
-                            # div(div(style="display:inline-block",  chk(lul, "Land emissions/sinks")), 
-                            #     div(style="display:inline-block",awesomeCheckbox("showland", label=NULL, value=TRUE))),
-                            # div(div(style="display:inline-block",  chk(net, "Net emissions")), 
-                            #     div(style="display:inline-block",awesomeCheckbox("shownet", label=NULL, value=TRUE))),
-                            # p("Variable:"),
-                            # 
-                            #  chk(lul, "Land emissions/sinks", "infolul"),
-                            # chk(net, "Net emissions", "infonet"),
-                            # chk(pop, "Population", "infopop"),
-                            # chk(fpop, "Mean emissions", "infoavgfossil"),
-                            # chk(tax, "Carbon tax", "infoprice")
-                            
-                            
-                          # )
-                          # ,
-                          # #
-                          # #
-                          # list(
-                          #   p("Visibility:"),
-                          #   awesomeCheckbox( "showfossil", label=NULL,  value=TRUE),
-                          #   awesomeCheckbox("showland", label=NULL, value=TRUE),
-                          #   awesomeCheckbox("shownet", label=NULL, value=TRUE),
-                          #   awesomeCheckbox("showpop", label=NULL, value=FALSE),
-                          # 
-                          #   awesomeCheckbox("showavgfossil", label=NULL, value=TRUE),
-                          #   awesomeCheckbox("showprice", label=NULL, value=FALSE)
-
-                          )
-                          )
-                        
-                      ), 
+                      # tämä renderUIlla?
+                       
+               
                       
                       bs4Dash::bs4Table(
                         # "nerf",
@@ -938,21 +354,49 @@ fluidRow(
                         list(
 
                           headTitles = list(
-
-                            cuk(avgcost, "Mean carbon costs", "infoavgcost", "showavgcost", NULL, FALSE),
-                            cuk(dividend, "Carbon dividend", "infodividend", "showdividend", NULL, FALSE),
-                            cuk(avgnetcost, "Mean net costs", "infoavgnetcost", "showavgnetcost", NULL, FALSE),
-                            cuk(cpop, "User fossil emissions", "infouserfossil", "showuserfossil", NULL, FALSE),
-                            cuk(taxfosindi, "User carbon costs", "infousercost", "showusercost", NULL, FALSE),
-                            cuk(netcost, "User net costs", "infonetcost", "shownetcost", NULL, FALSE)
+                             cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE),
                             
-                    
+                            # cuk(fos, "Fossil emissions", "infofossil", "showfossil", NULL, TRUE),
+                            cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE),
+                            cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE),
+                            cuk2(pop,textOutput("labelpop"),  "infopop", "showpop", NULL, FALSE),
+                            cuk2(fpop, textOutput("labelavgfossil"),  "infoavgfossil", "showavgfossil", NULL, TRUE),
+                            cuk2(cpop,textOutput("labeluserfossil"), "infouserfossil", "showuserfossil", NULL, FALSE)
+                            
+                            # cuk(, "", "", "", NULL, TRUE),
 
 
+                        
                           )
-                     
+                        )
+                      ),
+                      bs4Dash::bs4Table(
+                        # "nerf",
+                        
+                        cardWrap = TRUE,
+                        bordered = TRUE,
+                        striped = TRUE,
+                        
+                        list(
+                          
+                          headTitles = list(
+                            cuk2(tax,textOutput("labelprice"),  "infoprice", "showprice", NULL, FALSE),
+                            
+                            cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE),
+                            cuk2(dividend, textOutput("labeldividend"),  "infodividend", "showdividend", NULL, FALSE),
+                            cuk2(avgnetcost, textOutput("labelavgnetcost"), "infoavgnetcost", "showavgnetcost", NULL, FALSE),
+                            cuk2(taxfosindi, textOutput("labelusercost"),  "infousercost", "showusercost", NULL, FALSE),
+                            cuk2(netcost,textOutput("labelnetcost"),  "infonetcost", "shownetcost", NULL, FALSE)
+                            
+                            
+                            
+                            
                           )
-                          )
+                          
+                        )
+                      )
+                      
+
 
                       )
                     ,
@@ -970,8 +414,8 @@ fluidRow(
                         striped = TRUE,
                         list(
                           headTitles = list(
-                             cuk(averagedividend, "Average national dividend", "infoaveragedividend", "showaveragedividend", NULL, FALSE),
-                            cuk(countrydividend, "Dividend for selected country", "infocountrydividend", "showcountrydividend", NULL, FALSE)
+                             cuk2(averagedividend, textOutput("labelaveragedividend"),  "infoaveragedividend", "showaveragedividend", NULL, FALSE),
+                            cuk2(countrydividend, textOutput("labelcountrydividend"),  "infocountrydividend", "showcountrydividend", NULL, FALSE)
                             # cuk(countrycost, "Country per capita cost", "countrycost", "showcountrycost", NULL, FALSE),
                             # cuk(countrynetcost, "Country per capita net cost", "countrynetcost", "showcountrynetcost", NULL, FALSE)
                             # 
@@ -997,10 +441,10 @@ fluidRow(
                           striped = TRUE,
                           list(
                               headTitles = list(
-                              cuk(countryfossil, "Country mean emissions", "infocountryfossil", "showcountryfossil", NULL, FALSE),
-                              cuk(countrypop, "Country population", "infocountrypop", "showcountrypop", NULL, FALSE),
-                              cuk(countrycost, "Country per capita cost", "infocountrycost", "showcountrycost", NULL, FALSE),
-                              cuk(countrynetcost, "Country per capita net cost", "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
+                              cuk2(countryfossil,textOutput("labelcountryfossil"), "infocountryfossil", "showcountryfossil", NULL, FALSE),
+                              cuk2(countrypop, textOutput("labelcountrypop"), "infocountrypop", "showcountrypop", NULL, FALSE),
+                              cuk2(countrycost, textOutput("labelcountrycost"),  "infocountrycost", "showcountrycost", NULL, FALSE),
+                              cuk2(countrynetcost, textOutput("labelcountrynetcost"), "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
                               # 
                            
                              )
@@ -1014,7 +458,9 @@ fluidRow(
                     )
                   ))),
          # (div(style="overflow-y: scroll; overflow-x: hidden;",
-         box(
+       
+        div(id="tuto",
+          box(
             style = 'overflow-x: hidden',
             # style = 'overflow-y: scroll',
             
@@ -1027,7 +473,7 @@ fluidRow(
           textOutput("info"),
            ignore.init=TRUE
          # ))
-         ))),
+         )))),
 
 # overflow-x: visible;
 # overflow-x: hidden;
@@ -1049,384 +495,34 @@ fluidRow(
                 #     # status = "teal",
                 #     collapsed =FALSE,          
                 
+                # p(HTML(label, "<font size='3'>",
+                #        as.character(actionLink(style='color:#ffc107', inputId = id, 
+                #                                label = "  ", 
+                #                                icon = icon("far fa-hand-paper"))), "</font>")), 
+                
+                # p(HTML(label, "<font size='3'>",
+                #        as.character(actionLink(style='color:#ffc107', 
+                #                                label =textOutput("simuset"), 
+                #                                icon = icon("far fa-hand-paper"))), "</font>")), 
                 
                 div(
-                  HTML(
-                    "<body style='background-color:aquamarine;'>", 
-                    "<font size='4.5'>", 
-                     "<b>" ,
-                    as.character(icon("far fa-hand-paper")), "  SIMULATION SETTINGS   ", 
-                     "</b>",
-                    "</font>",
-                    "</body>"),
-                  
+                  # HTML(
+                  #   "<body style='background-color:aquamarine;'>", 
+                  #   "<font size='4.5'>", 
+                  #    "<b>" ,
+                  #   as.character(icon("far fa-hand-paper")), textOutput("simuset"), 
+                  #    "</b>",
+                  #   "</font>",
+                  #   "</body>"),
+                # tagList(
+                p(uiOutput("simuset")
+                ),
+                  # ,
+                  # p(HTML(textOutput("simuset"), "<font size='3'>", 
+                  #        as.character(
+                  #                                icon = icon("far fa-hand-paper")), "</font>")), 
                   # h5("Set values:"),
-                  navlistPanel(id="nok", 
-                               selected = "1. Carbon budget",
-                          
-                               # HTML("<font size='5'>",
-                               #      as.character(icon("far fa-eye")), 
-                               #      # "</font>",
-                               #      
-                               #      # "<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")),
-                               #      "  VIEWING SETTINGS  ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
-                               # 
-                               
-                               tabPanel("1. Carbon budget", 
-                                        
-                                        
-                                        #7b396e                                         
-                                         
-                                         
-                                         radioButtons("bud", 
-                                                      
-                                                     inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
-                                                      # label, size, id
-                                                      # 
-                                                      # label=p(HTML("Carbon budget for net CO2 emissions since start of 2020" , "<font size='3'>",
-                                                      #              as.character(actionLink(inputId = "info3", 
-                                                      #                                      label = "  ", 
-                                                      #                                      icon = icon("fas fa-info-circle"))), "</font>")),              
-                                                      
-                                                      # "Carbon budget for net CO2 emissions since start of 2020",
-                                                      
-                                                      
-                                                      c("400Gt (67% likelihood to stay below 1,5C)" = 400,
-                                                        "500Gt (50% likelihood to stay below 1,5C)" = 500,
-                                                        "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
-                                                        "1350Gt (50% likelihood to stay below 2,0C)" = 1350
-                                                        # "1700Gt (67% likelihood to stay below 2,4C)" = 1700,
-                                                        # "2050Gt (50% likelihood to stay below 2,4C)" = 2050
-                                                      ),selected=1150
-                                         ),
-                                         # hr(),
-                                         p("Note: Changing the budget will reset some of the values in this stage and stage 3 to their budget specific defaults"),
-                                         hr(),
-                                        div(style='margin-bottom:0.2rem important;', sliderInput("vuo", 
-                                                     inf("Pricing start year and carbon neutrality year", "infopricing"),
-                                                     # label ="Pricing start year and carbon neutrality year", 
-                                                     min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE)),
-                                         hr(),
-                                         
-                                         tags$div(id="sla",numericInput("paa", 
-                                                                        inf("Emissions / sink at the carbon neutrality year", "infoemissionsink"), 
-                                                                        
-                                                                        # label=p("Emissions / sink at the carbon neutrality year"),
-                                                                        min = 0.1, max = 30,step=.1,value=c(6))),
-                                         
-                                         hr(),
-                                         
-                                         # uiOutput("muor"),
-                                         radioButtons("muo", "Shape of the fossil emission curve",
-                                                    choiceNames=   list(
-                                                        "Linear" ,
-                                                        "Percentual" 
-                                                        # ,
-                                                        # "Logarithmic drop" = "logarithmic"
-                                                      ), 
-                                                    choiceValues= list("linear", "percentual"),
-                                                    selected = "percentual"
-                                                    
-                                                    ),
-                                         
-                                         hr(),
-                                         
-                                         checkboxInput("advance", "Set emission for year before start year"), 
-                                         
-                                         conditionalPanel(
-                                           
-                                           condition="input.advance == 1",
-                                           # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
-                                           # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
-                                           
-                                           
-                                           #                           # uiOutput("splot", width="auto"
-                                           #                           # )
-                                           #          # ,
-                                           hr(),
-                                           tags$div(id="sla",numericInput("fstart", label=p("Total emissions at year before start year"),min = 0.1, max = 50,step=.1,value=c(37.1))),
-                                           
-                                            hr(),
-                                           tags$div(id="sla",numericInput("lstart", label=p("Land use emissions at year before start year"),min = -5, max = 10,step=.1,value=c(3.9)))
-                                           ,p("Note: Emissions from last observed year take a linear trajectory to emissions for year before start year"),
-                                           
-                                         ),
-                                         hr(),
-                                         
-                                         actionBttn(
-                                           inputId = "next1",
-                                           label = "   NEXT >",
-                                           size="xs",
-                                           style = "material-flat", 
-                                           color = "primary"
-                                         )
-                                         
-                                         # actionBttn(
-                                         #   inputId = "next0",
-                                         #   label = "   NEXT >",
-                                         #   size="xs",
-                                         #   style = "material-flat", 
-                                         #   color = "primary"
-                                         # )
-                                         
-                               ),
-                               
-                               #      
-                              
-                               
-                               tabPanel("2. Population projection",
-                                        actionBttn(
-                                          inputId = "prev1",
-                                          label = "< PREVIOUS",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        ),
-                                        hr(),
-                                        
-                                        radioButtons("popc", 
-                                                     inf("Choose UN population projection", "infopopu"), 
-                                                     
-                                                     # "Choose UN population projection",
-                                                     c(
-                                                       "95% range upper limit (12.41B at 2100)" = 5,
-                                                       "80% range upper limit (11.65B at 2100)" = 4,
-                                                       "Median projection (10.35B at 2100)" = 3,
-                                                       "80% range lower limit (9.32B at 2100)" = 2,
-                                                       "95% range lower limit (8.84B at 2100)" = 1
-                                                     ),selected=3
-                                        ),
-                                        hr(),
-                                        
-                                        actionBttn(
-                                          inputId = "next2",
-                                          label = "NEXT >",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        )
-                               ),
-                               
-                               
-                               
-                               tabPanel("3. Carbon price",
-                                        actionBttn(
-                                          inputId = "prev2",
-                                          label = "< PREVIOUS",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        ),
-                                        hr(),
-                                        
-                                        tags$div(id="sla", numericInput("sprice",
-                                                                        inf("Set start year carbon price, $", "infostartprice"), 
-                                                                        
-                                                               min = 1, max = 1000000,step=1,value=c(40))),
-                                        hr(),
-                                        
-                                        tags$div(id="sla",numericInput("eprice", 
-                                                                       inf("Set neutrality year carbon price, $", "infoendprice"), 
-                                                                       
-      
-                                        min = 1, max = 1000000,step=1,value=c(400))),
-                                        
-                                        
-                                        hr(),
-                                        
-                                        
-                                        radioButtons("pri", "Shape of the price curve",
-                                                     choiceNames=list(
-                                                       "Linear",
-                                                       "Percentual"
-                                                        ,
-                                                        "Logarithmic"
-                                                        # ,
-                                                        # "Logarithmic drop" = "logarithmic"
-                                                     ), 
-                                                     choiceValues= list("linear", "percentual", "logarithmic")
-                                                     
-                                        ),
-                                        hr(),
-                                        
-                                        actionBttn(
-                                          inputId = "next3",
-                                          label = "NEXT >",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        )
-                               ),
-                               tabPanel("4. User emissions", 
-                                        actionBttn(
-                                          inputId = "prev3",
-                                          label = "< PREVIOUS",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        ),
-                                        hr(),
-                                        
-                                        tags$div(id="sla",numericInput("indi1", label=p("Start year user emissions, t"),min = .01, max = 40,step=.01,value=c(7.77))),
-                                        hr(),
-                                        
-                                        tags$div(id="sla",numericInput("indi2", label=p("Neutrality year user emissions, t"),min = .01, max = 40,step=.01,value=c(0.77))),
-                                        
-                                        hr(),
-                                        
-                                        radioButtons("muoindi", "Shape of user emission curve",
-                                                     choiceNames=   list(
-                                                       "Linear" ,
-                                                       "Percentual" 
-                                                       # ,
-                                                       # "Logarithmic drop" = "logarithmic"
-                                                     ), 
-                                                     choiceValues= list("linear", "percentual"),
-                                                     selected = "percentual"
-                                                     
-                                        ),
-                                        
-                                        # radioButtons("muoindi", "Shape of emission curve",
-                                        #              c("Linear drop" = "linear","Percentual drop" = "percentual"
-                                        #                
-                                        #              )),
-                                        hr(),
-                                        
-                                        selectInput("indi",
-                                                    inf("ALTERNATIVE: Use country average emission path (this will slower the page considerably) ", "infoconvergence"), 
-                                                    
-                                                    # label = "ALTERNATIVE: Use country average emission path (this will slower the app considerably)",
-                                                    choices =c("none", paaco$country), selected="none"),
-                                        # hr(style = "border-top: 1px solid white; margin-bottom:0px; margin-top:0px;;"),
-                               
-                                        
-                                                 
-                                        conditionalPanel(
-
-                                condition="input.indi != 'none'",
-                               # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
-                               # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
-
-
-                               #                           # uiOutput("splot", width="auto"
-                               #                           # )
-                               #          # ,
-                                         sliderInput("con",
-                                                     
-                                                     inf("Convergence of countries emissions", "infoconvergence1"), 
-                                                     
-                                                     # label ="Convergence of countries' emissions",
-                                                     
-                                                     min = .01, max = 1, value = .5, step=.01)
-                               ),
-                               
-                               hr(),
-                               
-                               actionBttn(
-                                 inputId = "next4",
-                                 label = "EXTRA >",
-                                 size="xs",
-                                 style = "material-flat", 
-                                 color = "primary"
-                               )
-                               
-
-                               ),
-                               tabPanel("EXTRA: Countries",
-                                        actionBttn(
-                                          inputId = "prev4",
-                                          label = "< PREVIOUS",
-                                          size="xs",
-                                          style = "material-flat", 
-                                          color = "primary"
-                                        ),
-                                        
-                                        
-                                        hr(),
-                                        
-                                        sliderInput(
-                                          inputId = "national",
-                                          inf("Allocate a percentage of collected carbon revenue nationally", "infonationaldiv")
-                                          
-                                          # label = "Allocate proportion of collected carbon revenue nationally:"
-                                          , min = 0, max = 100, value = 0, step=1
-                                        ), 
-                                        hr(),
-                                        conditionalPanel(
-                                        condition="input.national != 0",
-                                       
-                                        
-                                        selectInput("nationalcoun", label = "User country of residence for national dividend (This will slower the page considerably)", choices =c("none", paaco$country), selected="none"),
-                                        
-                               ),
-                                        conditionalPanel(
-                                          hr(),
-                                          
-                                          condition="input.countr != '' | input.nationalcoun != 'none'",
-                                          # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
-                                          # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
-                                          
-                                          
-                                          #                           # uiOutput("splot", width="auto"
-                                          #                           # )
-                                          #          # ,
-                                          sliderInput("conb",
-                                                      inf("Convergence of countries emissions", "infoconvergence2"), 
-                                                      
-                                                      # label ="Convergence of countries' emissions", 
-                                                      min = .01, max = 1, value = .5, step=.01)
-                                          
-                                        ),
-                                        
-                                        
-                               hr(),
-                               tags$div(id ="countrr",
-                                        
-                                        pickerInput(
-                                          inputId = "countr",
-                                          label = "Show indicators for specific country/countries (This will slower the page considerably)",
-                                          choices = c(paaco$country),
-                                          selected= NULL,
-                                          options = list(
-                                            `actions-box` = TRUE),
-                                          multiple = TRUE
-                                        )),
-                                        # hr(),
-                                        # 
-                                        # actionBttn(
-                                        #   inputId = "next5",
-                                        #   label = "more EXTRA >",
-                                        #   size="xs",
-                                        #   style = "material-flat", 
-                                        #   color = "primary"
-                                        # )
-                                        
-                                         ),
-                               
-                               # tabPanel("EXTRA: National dividend",
-                               #          actionBttn(
-                               #            inputId = "prev5",
-                               #            label = "< PREVIOUS",
-                               #            size="xs",
-                               #            style = "material-flat", 
-                               #            color = "primary"
-                               #          ),
-                               #          # hr(),
-                               #          # 
-                               #          # sliderInput(
-                               #          #   inputId = "national",
-                               #          #   label = "Allocate proportion of collected carbon revenue nationally:"
-                               #          #   , min = 0, max = 100, value = 0, step=1
-                               #          # ), 
-                               #          
-                               #          hr(),
-                               #          
-                               #          selectInput("nationalcoun", label = "User country of residence for national dividend (Note: selecting this will slower the app considerably)", choices =c("none", paaco$country), selected="none"),
-                               #          
-                               #          
-                               #          )      
-                               # 
-                  ),
+uiOutput("simpan"),
                   uiOutput("cou")
                   # ) )
                 ) 
@@ -1435,32 +531,57 @@ fluidRow(
   
   
   column(9, id ="bor",
-         
-         column(12, id = "bor3",
-                conditionalPanel(condition="input.view ==1", 
+         #
+         column(12, id = "bor3",  
+                
+                
+             
+              uiOutput("yearcui", width="auto"),
+              
+                                
+                conditionalPanel(condition="input.view ==1",
+                                  # div( style = 'overflow-y: scroll',
+                                 
                                  uiOutput("splot", width="auto"
                                  )
-                ),
-                conditionalPanel(condition="input.view ==2", 
-                                 
-                                 uiOutput("splot2", width="auto"
+                                 # )
+                )
+                # , conditionalPanel(condition="input.view ==2",
+                #                    # div( style = 'overflow-y: scroll',
+                #                    uiOutput("yearcui2", width="auto")
+                #                    # )
+                # )
+#                 
+               , conditionalPanel(condition="input.view ==2",
+                                  div( style = 'overflow-y: auto',
+                                       # uiOutput("yearcui2", width="auto")
+                                       # ,
+                                 uiOutput("plotjj", width="auto"
                                  )
+)
+                )
+
+
+             ,  conditionalPanel(condition="input.view ==3",
+                                div( style = 'overflow-y: scroll',
+                                     # uiOutput("yearcui2", width="auto"),
+                                # uiOutput("ssplot2", width="auto"
+                                         uiOutput("plotkk", width="auto"
+                                                  
+                                          )
+
+               )
+               )
+
+
                                  
-                ),
+                )
                 
-                
-                uiOutput("yearc")),
-           # DT::dataTableOutput("tablx", width="auto"),
+
+                # ,uiOutput("yearcui")
+                )
+           
          
-                  # DT::dataTableOutput("tablz", width="auto"),
-                # 
-                # 
-                
-                
-                # ,  width =12 )
-                # ,hover = "plot_hover"
-                #hover = hoverOpts(id ="plot_hover") )           
-         )
   )                 ,
 
 checkboxInput("showtab", "Show the simulation results also in table below"), 
@@ -1472,9 +593,19 @@ conditionalPanel(
                   # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
                   )),
   
-) 
-  )                    
 )
+
+# ,conditionalPanel(
+
+  # condition="input.view == 1",
+  # ,fluidRow(column(width =12, align = "center",    textOutput("hovers")
+  #                 # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
+  # )
+  # )
+  
+# )
+   )                    
+ )
 
 
 
