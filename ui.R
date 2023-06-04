@@ -258,7 +258,7 @@ fluidRow(
            closable = TRUE,
            closed=TRUE,
            collapsible = FALSE,
-           slickROutput("slickr1",width = "60%", height="50%")
+           slickROutput("slickr1",width = "70%", height="60%")
            # ,ignore.init=TRUE
            # ))
          ) ),

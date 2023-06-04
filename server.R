@@ -1395,7 +1395,7 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                            c(
                                              "95% jakauman yläraja (12.41 Mrd 2100)" = 5,
                                              "80% jakauman yläraja (11.65 Mrd 2100)" = 4,
-                                             "Median projection (10.35 Mrd 2100)" = 3,
+                                             "Medianani-projektio (10.35 Mrd 2100)" = 3,
                                              "80% jakauman alaraja (9.32 Mrd  2100)" = 2,
                                              "95% jakauman alaraja (8.84 Mrd 2100)" = 1
                                            ),selected=3
@@ -1764,6 +1764,56 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
   observeEvent(input$bud,{
     
     rv$budget = input$bud
+    
+    
+    if (rv$lang=="eng") {
+      
+      
+      # if (rv$lang == "eng") {
+      
+      # observeEvent(input$bud, {
+        
+        if (input$bud == 400) {
+          rv$budinfo = c("1,5°C with 67% chance")
+          
+        } else if (input$bud ==500) {
+          
+          rv$budinfo = c("1,5°C with 50% chance")
+        } else if (input$bud ==1150) {
+          
+          rv$budinfo = c("2°C with 67% chance")
+        }
+        else if (input$bud ==1350) {
+          
+          rv$budinfo = c("2°C with 50% chance")
+        }
+      # })
+      
+      } else if (rv$lang=="fin") {
+    
+    # observeEvent(input$bud, {
+      if (input$bud == 400) {
+        
+        rv$budinfo = c("1,5°C 67% varmasti")
+        
+      } else if (input$bud ==500) {
+        
+        rv$budinfo = c("1,5°C 50% varmasti")
+      } else if (input$bud ==1150) {
+        
+        rv$budinfo = c("2°C 67% varmasti")
+      }
+      else if (input$bud ==1350) {
+        
+        rv$budinfo = c("2°C 50% varmasti")
+      } 
+    # }) 
+        }
+    
+    
+    
+    
+    
   })
   
   observe({
@@ -2534,6 +2584,33 @@ selected = round(input$plot_click$x,0)
   observeEvent(rv$lang, {
     if (rv$lang=="eng") {
       
+      
+      # if (rv$lang == "eng") {
+      
+      observeEvent(input$bud, {
+        
+        if (input$bud == 400) {
+          rv$budinfo = c("1,5°C with 67% chance")
+          
+        } else if (input$bud ==500) {
+          
+          rv$budinfo = c("1,5°C with 50% chance")
+        } else if (input$bud ==1150) {
+          
+          rv$budinfo = c("2°C with 67% chance")
+        }
+        else if (input$bud ==1350) {
+          
+          rv$budinfo = c("2°C with 50% chance")
+        }
+      })
+      # } else if (rv$lang == "fin") {
+        
+     
+        
+        
+      # }
+      
       # tutbox = renderUI({
       #   box(
       #     style = 'overflow-x: hidden',
@@ -2605,9 +2682,23 @@ selected = round(input$plot_click$x,0)
       })
     } else if (rv$lang=="fin") {
       
-
-     
-      
+observeEvent(input$bud, {
+      if (input$bud == 400) {
+        
+        rv$budinfo = c("1,5°C 67% varmasti")
+        
+      } else if (input$bud ==500) {
+        
+        rv$budinfo = c("1,5°C 50% varmasti")
+      } else if (input$bud ==1150) {
+        
+        rv$budinfo = c("2°C 67% varmasti")
+      }
+      else if (input$bud ==1350) {
+        
+        rv$budinfo = c("2°C 50% varmasti")
+      } 
+})
       observeEvent(input$next1, {
         updateNavlistPanel(session, inputId = "nok", selected = "2. Maailman väestö")
       })
@@ -3058,41 +3149,7 @@ selected = round(input$plot_click$x,0)
   observeEvent(input$bud, {
     # freezeReactiveValue(input, "paa")
     
-    if (rv$lang == "eng") {
-      if (input$bud == 400) {
-        rv$budinfo = c("1,5°C with 67% chance")
-        
-      } else if (input$bud ==500) {
-        
-        rv$budinfo = c("1,5°C with 67% chance")
-      } else if (input$bud ==1150) {
-        
-        rv$budinfo = c("2°C with 67% chance")
-      }
-      else if (input$bud ==1350) {
-        
-        rv$budinfo = c("2°C with 50% chance")
-      }
-    } else if (rv$lang == "fin") {
-      
-      if (input$bud == 400) {
-        
-        rv$budinfo = c("1,5°C 67% varmasti")
-        
-      } else if (input$bud ==500) {
-        
-        rv$budinfo = c("1,5°C 67% varmasti")
-      } else if (input$bud ==1150) {
-        
-        rv$budinfo = c("2°C 67% varmasti")
-      }
-      else if (input$bud ==1350) {
-        
-        rv$budinfo = c("2°C 50% varmasti")
-      } 
-      
-      
-    }
+
     
     updateSliderInput(
       
@@ -4910,6 +4967,8 @@ selected = round(input$plot_click$x,0)
   
   
   sec = reactive({ 
+    withProgress( message="Drawing graph",{
+      
     mil = rv$ffyear
     
     datsf = datsf()
@@ -5356,7 +5415,7 @@ selected = round(input$plot_click$x,0)
     }
 
     plot1
-    
+    }) 
   }) 
   
   
@@ -5386,7 +5445,8 @@ selected = round(input$plot_click$x,0)
   
   sec2 = reactive({ 
     
-    
+    withProgress( message="Drawing graph",{
+      
     if (rv$pll <2) {
       si = 
         function(per) {
@@ -5515,7 +5575,7 @@ selected = round(input$plot_click$x,0)
       
       geom_text(data=da,
                 aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-                col="white", fontface="bold", lineheight=1.2 ,  
+                col="white", fontface="bold", lineheight=1 ,  
                 size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
       
       #bottom years
@@ -5644,13 +5704,15 @@ selected = round(input$plot_click$x,0)
         plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
         plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
         axis.text.x=element_blank(),
-        plot.margin = margin(-5,-4,-5,-4),
+        # plot.margin = margin(-5,-4,-5,-4),
+        plot.margin = margin(-2,-4,-2,-4),
+        
         panel.border = element_blank(), 
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         axis.title.y=element_blank(),
         axis.text.y=element_blank(),
-        plot.background = element_rect(fill =bgc, color=NA), 
+        plot.background = element_rect(fill =bgc,  color=NA), 
         panel.background = element_rect(fill = bgc ,  color=NA)
       )
     
@@ -5687,7 +5749,7 @@ selected = round(input$plot_click$x,0)
         
         
         geom_text(data=da,
-                  aes(x=2020, y= 131),
+                  aes(x=2005, y= 131),
                   label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
                   size=si(1.7), color=net, hjust=0, fontface="bold") +
         
@@ -5745,7 +5807,7 @@ selected = round(input$plot_click$x,0)
 
         
         geom_text(data=da,
-                  aes(x=2020, y= 131),
+                  aes(x=2005, y= 131),
                   label = paste0(rv$budget, " Gt: Nettopäästöjen budjetti 2020 lähtien, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
                   size=si(1.7), color=net, hjust=0, fontface="bold") +
         
@@ -5906,7 +5968,7 @@ selected = round(input$plot_click$x,0)
         
         geom_text(data=da,
                   aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-                  col="white", fontface="bold", lineheight=1.2 ,  
+                  col="white", fontface="bold", lineheight=1 ,  
                   size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
         
         #bottom years
@@ -6031,7 +6093,7 @@ selected = round(input$plot_click$x,0)
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
+          plot.margin = margin(-2,0,-2,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -6238,7 +6300,7 @@ selected = round(input$plot_click$x,0)
         
         geom_text(data=da,
                   aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-                  col="white", fontface="bold", lineheight=1.2 ,  
+                  col="white", fontface="bold", lineheight=1.0 ,  
                   size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
         
         #bottom years
@@ -6363,7 +6425,7 @@ selected = round(input$plot_click$x,0)
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
+          plot.margin = margin(-2,0,-2,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -6563,7 +6625,7 @@ selected = round(input$plot_click$x,0)
         
         geom_text(data=da,
                   aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-                  col="white", fontface="bold", lineheight=1.2 ,  
+                  col="white", fontface="bold", lineheight=1.0 ,  
                   size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
         
         #bottom years
@@ -6689,7 +6751,7 @@ selected = round(input$plot_click$x,0)
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
+          plot.margin = margin(-2,0,-2,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -6894,7 +6956,7 @@ selected = round(input$plot_click$x,0)
         
         geom_text(data=da,
                   aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-                  col="white", fontface="bold", lineheight=1.2 ,  
+                  col="white", fontface="bold", lineheight=1.0 ,  
                   size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
         
         #bottom years
@@ -7018,7 +7080,7 @@ selected = round(input$plot_click$x,0)
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
+          plot.margin = margin(-2,0,-2,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -7302,7 +7364,7 @@ selected = round(input$plot_click$x,0)
     plotx = grid.arrange(grobs=plotlist, layout_matrix=lay)
     
     plotx
-    
+    }) 
   })
   
   
@@ -7341,7 +7403,8 @@ selected = round(input$plot_click$x,0)
   
   sec3 = reactive({
     
-  
+    withProgress( message="Drawing graph",{
+      
     
 
     if (rv$pll <7) {
@@ -7545,7 +7608,7 @@ size=si(2.2), hjust=0, fontface="bold") +
         plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
         plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
         axis.text.x=element_blank(),
-         plot.margin = margin(-5,0,-15,0),
+         plot.margin = margin(-5,0,-5,0),
         panel.border = element_blank(), 
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
@@ -7892,7 +7955,7 @@ size=si(2.2), hjust=0, fontface="bold") +
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-15,0),
+          plot.margin = margin(-5,0,-5,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -8176,7 +8239,7 @@ size=si(2.2), hjust=0, fontface="bold") +
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-15,0),
+          plot.margin = margin(-5,0,-5,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -8456,7 +8519,7 @@ size=si(2.2), hjust=0, fontface="bold") +
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-15,0),
+          plot.margin = margin(-5,0,-5,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -8741,7 +8804,7 @@ size=si(2.2), hjust=0, fontface="bold") +
           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
           axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-15,0),
+          plot.margin = margin(-5,0,-5,0),
           panel.border = element_blank(), 
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(), 
@@ -8956,7 +9019,7 @@ size=si(2.2), hjust=0, fontface="bold") +
     
   })
   
-  
+  })
   
   # output$plot<-renderPlot({
   #   # req(input$accordion3)
@@ -9025,15 +9088,15 @@ size=si(2.2), hjust=0, fontface="bold") +
     ,height=
       function() {
         if (rv$pll ==2 ){
-          session$clientData$output_plotj_width*.67/2
+          session$clientData$output_plotj_width*.65/2
         } else if (rv$pll ==3) {
-          session$clientData$output_plotj_width*.67
+          session$clientData$output_plotj_width*.65
         } else if (rv$pll==5) {
           session$clientData$output_plotj_width*1
         } else if (rv$pll==1) {
-          session$clientData$output_plotj_width*.67
+          session$clientData$output_plotj_width*.65
         } else if (rv$pll==4) {
-          session$clientData$output_plotj_width*.67
+          session$clientData$output_plotj_width*.65
         }
       }
     
@@ -9063,7 +9126,7 @@ size=si(2.2), hjust=0, fontface="bold") +
     }
     ,height=
       function() {
-        session$clientData$output_plotk_width*.67*rv$pll
+        session$clientData$output_plotk_width*.55*rv$pll
       }
     )
   })
