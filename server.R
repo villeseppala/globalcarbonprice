@@ -38,11 +38,8 @@ server <- function(input,output, session) {
   #   sliderInput("yearccc",
   #                label = NULL, min=1970, max=2100, value = 2080, step=1, 
   #               width="100%", animate=TRUE
-  #   )onko t'm' k'ytt'minen sitten mukavampaa. n'in voisi ehk' sanoa. N'inkin voisi ehk' sanoa. N'inkin voisi ehk' sanoa. N'inkin voisi ehk' sanoa. Voisi ehk' sanoa, ett' n'in on. 
-  #   
-  #   
-  # })ei ole mukavaa k'ytt'' t't' ei ole kovin mukavaa k'ytt'' t't't -======
-  
+
+
   output$lets <- renderUI({
     HTML("<p> Displaying greek letter delta as a symbol:<br> \u0394 
          </p>")
@@ -86,6 +83,7 @@ server <- function(input,output, session) {
     radioButtons('pri', 'What item do you select ?', choiceNames = cho, choiceValues = cho2, selected = character(0))
     
   })
+  rv <- reactiveValues(lek = NULL)
   
   rv <- reactiveValues(lang = NULL)
   rv <- reactiveValues(rvtotal= NULL)
@@ -112,6 +110,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(ale = 0)
   rv <- reactiveValues(alert4 = FALSE)
   rv <- reactiveValues(alert6 = FALSE)
+  rv <- reactiveValues(alert8 = FALSE)
   
   rv <- reactiveValues(yearc = NULL)
   rv <- reactiveValues(lastyear = NULL)
@@ -128,6 +127,9 @@ server <- function(input,output, session) {
   rv <- reactiveValues(showfossil = TRUE)
   rv <- reactiveValues(showland = TRUE)
   rv <- reactiveValues(shownet = TRUE)
+  
+  rv <- reactiveValues(showghg = FALSE)
+  rv <- reactiveValues(shownonco2 = FALSE)
   rv <- reactiveValues(showavgfossil = TRUE)
   rv <- reactiveValues(showcountryfossil = FALSE)
   rv <- reactiveValues(showcountrycost = FALSE)
@@ -136,6 +138,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(averagedividend = FALSE)
   rv <- reactiveValues(countrydividend = FALSE)
   
+  rv <- reactiveValues(warn = NULL)
   
   rv <- reactiveValues(plot2 = NULL)
   rv <- reactiveValues(plot3 = NULL)
@@ -174,7 +177,10 @@ server <- function(input,output, session) {
   
   rv = reactiveValues(ffyear= NULL)
   rv = reactiveValues(view= NULL)
+
+  rv = reactiveValues(pressed= FALSE)
   
+    rv$lek = FALSE
   rv$lang = "eng"
   rv$pll = 1
   # observeEvent(rv$lang,{
@@ -216,7 +222,7 @@ server <- function(input,output, session) {
   # 
   
   # secc = c("fossil", "land", "net", "pop", "averagedividend", "countrycost")
-  secc=c("fossil", "land", "net", "price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
+  secc=c("fossil", "land", "net", "ghg","nonco2","price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
          "pop","dividend", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost", "averagedividend", "countrydividend")
   
   
@@ -316,8 +322,12 @@ server <- function(input,output, session) {
                            # label = paste("Shape of the emission curve"),
                            choiceNames = list(paste0("Linear (", format(round(rateli,2)), " Gt each year)"),
                                               paste0("Percentual (", format(round( ratepr,2)), " % each year)")
+                                              # , c("Double exponentiaul")
+                                              
                            ),
-                           choiceValues = list("linear", "percentual"),
+                           choiceValues = list("linear", "percentual" 
+                                               # , "exponential"
+                                               ),
                            selected = rv$muosel
                            
         )
@@ -542,6 +552,17 @@ server <- function(input,output, session) {
       rv$infonettextt = c("Net CO2 emissions")
       
       
+      rv$infoghgtext = c("Total greenhouse gas emissions in CO2-equivalent, calculated as sum of CO2 emissions from Global Carbon Project and non-CO2 emissions from PRIMAP")
+      rv$infoghgtextt = c("Total emissions")
+      
+      rv$infononco2text = c("Other greenhouse gas emissions than CO2, such as methane. 
+                            There is considerable uncertainty on what are realistic values. Range limited to 5-10 at CO2 neutrality year.")
+      rv$infononco2textt = c("Non-CO2 emissions")
+      
+      rv$infononco2utext = c("Other greenhouse gas emissions than CO2, such as methane. 
+                            There is considerable uncertainty on what are realistic values. Range limited to 5-10 at CO2 neutrality year.")
+      rv$infononco2utextt = c("Non-CO2 emissions")
+      
       rv$infopoptext = c("World population, billions. Statistics and projections from United Nations. 
                       By default the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance
                       that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10% 
@@ -673,8 +694,12 @@ the carbon neutrality year carbon price")
       
       
       
-      rv$infodatatext = c("Emission data: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
+      rv$infodatatext = c("CO2 emission data: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
                       https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2022 \n
+                      
+                      Non-CO2 emission data: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
+Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016\n
+                      
                       Population data: Population data and population projections from UN: 
 https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_TotalPopulationBySex.zip \n \n
 
@@ -720,18 +745,29 @@ defines the annual fossil emissions and land use emissions/sinks.
       rv$infonettext = c("Nettohiilidioksidipäästöt, nettona fossilipäästöistä ja maankäyttöpäästöistä ja nieluista. Lähde tiedoille 2021 saakka: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       rv$infonettextt = c("Nettohiilidioksidipäästöt") 
       
+      rv$infoghgtext = c("Laskettu summaamalla yhteen Globan Carbon Projectin hiilidioksidipäästöt ja PRIMAP:in ei-CO2-päästöt")
+      rv$infoghgtextt = c("Kokonaispäästöt")
+      
+      rv$infononco2text = c("Muut kuin hiilidioksidipäästöt. Lähtötiedot PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
+Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016")
+      rv$infononco2textt = c("Ei-CO2-päästöt")
+      
+      rv$infononco2utext = c("Muut kuin hiilidioksidipäästöt. Lähtötiedot PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
+Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016")
+      rv$infononco2utextt = c("Ei-CO2-päästöt")
+      
       rv$infopoptext = c("Maailman väestö, miljardia. Tilastot ja ennusteet: YK. 
                         Oletuksena on valittu mediaaniskenaario. On siis 50% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi ja 
                         50% todennäköisyys, että se on skenaarion arvoja pienempi. Valitsemalla esim. 80% ja
                       https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
       rv$infopoptextt = c("Maailman väestö")
       
-      rv$infopoptext = c("World population, billions. Statistics and projections from United Nations. 
-                      By default the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance
-                      that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10% 
-                      chance that the population is smaller than in the chosen projection. And so on.
-                      https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
-      rv$infopoptextt = c("World population")
+      # rv$infopoptext = c("World population, billions. Statistics and projections from United Nations. 
+      #                 By default the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance
+      #                 that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10% 
+      #                 chance that the population is smaller than in the chosen projection. And so on.
+      #                 https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
+      # rv$infopoptextt = c("World population")
       
       
       
@@ -844,6 +880,11 @@ defines the annual fossil emissions and land use emissions/sinks.
       
       rv$infodatatext = c("Päästö-data: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
                       https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2022 \n
+                      
+                       Ei-CO2-päästödata: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
+Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016\n
+  \n
+                      
                       Väestö-data: Population data and population projections from UN: 
 https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_TotalPopulationBySex.zip \n \n
 
@@ -880,18 +921,22 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
     }
   })
   
-  
+  observeEvent(input$reset, {
+    reset("resu")
+  })  
   # 
   observeEvent(rv$lang, {
     
     if (rv$lang == "eng") {
       
       
+      
       output$simpan <- renderUI({
-        
+        div(id="resu",
         navlistPanel(id="nok", 
                      selected = "1. Carbon budget",
-                     
+                    
+                         
                      # HTML("<font size='5'>",
                      #      as.character(icon("far fa-eye")), 
                      #      # "</font>",
@@ -905,7 +950,7 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                               
                               #7b396e                                         
                               
-                              
+                              div(class="rad",
                               radioButtons("bud", 
                                            
                                            inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
@@ -926,9 +971,9 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                              # "1700Gt (67% likelihood to stay below 2,4C)" = 1700,
                                              # "2050Gt (50% likelihood to stay below 2,4C)" = 2050
                                            ),selected=1150
-                              ),
+                              )),
                               # hr(),
-                              p("Note: Changing the budget will reset some of the values in this stage and stage 3 to their budget specific defaults"),
+                              p("Note: Changing the budget will reset many other values"),
                               hr(),
                               div(style='margin-bottom:0.2rem important;', sliderInput("vuo", 
                                                                                        inf("Pricing start year and carbon neutrality year", "infopricing"),
@@ -938,7 +983,7 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                               
                               tags$div(id="sla",numericInput("paa", 
                                                              inf("Emissions / sink at the carbon neutrality year", "infoemissionsink"), 
-                                                             
+
                                                              # label=p("Emissions / sink at the carbon neutrality year"),
                                                              min = 0.1, max = 30,step=.1,value=c(6))),
                               
@@ -952,35 +997,61 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                            choiceNames=   list(
                                              "Linear" ,
                                              "Percentual"
+                                             # , "Double exponential"
                                              # ,
                                              # "Logarithmic drop" = "logarithmic"
                                            ),
-                                           choiceValues= list("linear", "percentual"),
+                                           choiceValues= list("linear", "percentual"
+                                                              # , "exponential"
+                                                              ),
                                            selected = "percentual"
                                            
                               ),
-                              
+            
+                              # conditionalPanel(
+                              # 
+                              #   condition="input.muo == 'expontial'",
+                              #     hr(),
+                              #   tags$div(id="sla",numericInput("ala", label=p("Cumulative emissions"),min = 300, max = 1000,step=10,value=c(800))),
+                              # 
+                              # 
+                              # ),
                               hr(),
                               
-                              checkboxInput("advance", "Set emission for year before start year"), 
+                              checkboxInput("nonco2", inf("Include other greenhouse gases (non-CO2)", "infononco2u")), 
                               
                               conditionalPanel(
                                 
+                                condition="input.nonco2 == 1",
+                                
+                                # hr(),
+                                tags$div(id="sla",numericInput("nonco2end", label=p("Non-CO2 emissions at CO2 neutrality year"),min = 5, max = 10,step=.1,value=c(7.5)))
+                                
+                            
+                              ),
+                                                
+                              hr(),
+                    
+
+                              checkboxInput("advance", "Advanced: Set emission for year before start year"), 
+                              
+                              div(class="rad",
+                              conditionalPanel(
+                                
                                 condition="input.advance == 1",
-                                # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
-                                # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
+                                                             p("Note: Emissions from last observed year take a linear trajectory to emissions for year before start year"),
                                 
+                                # hr(),
+                                tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(37.1))),
                                 
-                                #                           # uiOutput("splot", width="auto"
-                                #                           # )
-                                #          # ,
-                                hr(),
-                                tags$div(id="sla",numericInput("fstart", label=p("Total emissions at year before start year"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                # hr(),
+                                tags$div(id="sla",numericInput("lstart", label=p("Land use emissions"),min = -5, max = 10,step=.1,value=c(3.9))),
                                 
-                                hr(),
-                                tags$div(id="sla",numericInput("lstart", label=p("Land use emissions at year before start year"),min = -5, max = 10,step=.1,value=c(3.9)))
-                                ,p("Note: Emissions from last observed year take a linear trajectory to emissions for year before start year"),
-                                
+                                conditionalPanel(
+                                  condition="input.nonco2 == 1",
+                                # hr(),
+                                tags$div(id="sla",numericInput("nonco2start", label=p("Non-CO2 emissions"),min = 0.1, max = 20,step=.1,value=c(12.3)))
+                                )    )               
                               ),
                               hr(),
                               
@@ -992,14 +1063,7 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                 color = "primary"
                               )
                               
-                              # actionBttn(
-                              #   inputId = "next0",
-                              #   label = "   NEXT >",
-                              #   size="xs",
-                              #   style = "material-flat", 
-                              #   color = "primary"
-                              # )
-                              
+
                      ),
                      
                      #      
@@ -1088,6 +1152,11 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                 color = "primary"
                               )
                      ),
+                     
+        
+                     
+                     
+                     
                      tabPanel("4. User emissions", 
                               actionBttn(
                                 inputId = "prev3",
@@ -1193,7 +1262,10 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                               conditionalPanel(
                                 hr(),
                                 
-                                condition="input.countr != '' | input.nationalcoun != 'none'",
+                                # condition="input.countr != '' || input.nationalcoun != 'none'",
+                                # condition="output.lek | input.nationalcoun != 'none'",
+                                condition='output.lek',
+                                
                                 # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
                                 # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
                                 
@@ -1259,11 +1331,14 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                      # 
                      
                      
-        )})
-      
+        ) )}
+      )
     } else if (rv$lang == "fin") {
       
       output$simpan <- renderUI({
+        
+        div(id="resu",
+            
         
         navlistPanel(id="nok",
                      selected = "1. Hiilibudjetti",
@@ -1276,12 +1351,137 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                      #      "  VIEWING SETTINGS  ",  as.character( icon("fas fa-caret-square-down")),"</font>"),
                      #
                      
+                     
+                     # tabPanel("1. Carbon budget", 
+                     #          
+                     #          
+                     #          #7b396e                                         
+                     #          
+                     #          div(class="rad",
+                     #              radioButtons("bud", 
+                     #                           
+                     #                           inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
+                     #                           # label, size, id
+                     #                           # 
+                     #                           # label=p(HTML("Carbon budget for net CO2 emissions since start of 2020" , "<font size='3'>",
+                     #                           #              as.character(actionLink(inputId = "info3", 
+                     #                           #                                      label = "  ", 
+                     #                           #                                      icon = icon("fas fa-info-circle"))), "</font>")),              
+                     #                           
+                     #                           # "Carbon budget for net CO2 emissions since start of 2020",
+                     #                           
+                     #                           
+                     #                           c("400Gt (67% likelihood to stay below 1,5C)" = 400,
+                     #                             "500Gt (50% likelihood to stay below 1,5C)" = 500,
+                     #                             "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
+                     #                             "1350Gt (50% likelihood to stay below 2,0C)" = 1350
+                     #                             # "1700Gt (67% likelihood to stay below 2,4C)" = 1700,
+                     #                             # "2050Gt (50% likelihood to stay below 2,4C)" = 2050
+                     #                           ),selected=1150
+                     #              )),
+                     #          # hr(),
+                     #          p("Note: Changing the budget will reset many other values"),
+                     #          hr(),
+                     #          div(style='margin-bottom:0.2rem important;', sliderInput("vuo", 
+                     #                                                                   inf("Pricing start year and carbon neutrality year", "infopricing"),
+                     #                                                                   # label ="Pricing start year and carbon neutrality year", 
+                     #                                                                   min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE)),
+                     #          hr(),
+                     #          
+                     #          tags$div(id="sla",numericInput("paa", 
+                     #                                         inf("Emissions / sink at the carbon neutrality year", "infoemissionsink"), 
+                     #                                         
+                     #                                         # label=p("Emissions / sink at the carbon neutrality year"),
+                     #                                         min = 0.1, max = 30,step=.1,value=c(6))),
+                     #          
+                     #          hr(),
+                     #          
+                     #          
+                     #          # uiOutput("muok"),            
+                     #          
+                     #          
+                     #          radioButtons("muo", "Shape of the fossil emission curve",
+                     #                       choiceNames=   list(
+                     #                         "Linear" ,
+                     #                         "Percentual"
+                     #                         # , "Double exponential"
+                     #                         # ,
+                     #                         # "Logarithmic drop" = "logarithmic"
+                     #                       ),
+                     #                       choiceValues= list("linear", "percentual"
+                     #                                          # , "exponential"
+                     #                       ),
+                     #                       selected = "percentual"
+                     #                       
+                     #          ),
+                     #          
+                     #          # conditionalPanel(
+                     #          # 
+                     #          #   condition="input.muo == 'expontial'",
+                     #          #     hr(),
+                     #          #   tags$div(id="sla",numericInput("ala", label=p("Cumulative emissions"),min = 300, max = 1000,step=10,value=c(800))),
+                     #          # 
+                     #          # 
+                     #          # ),
+                     #          hr(),
+                     #          
+                     #          checkboxInput("nonco2", inf("Include other greenhouse gases (non-CO2)", "infononco2u")), 
+                     #          
+                     #          conditionalPanel(
+                     #            
+                     #            condition="input.nonco2 == 1",
+                     #            
+                     #            # hr(),
+                     #            tags$div(id="sla",numericInput("nonco2end", label=p("Non-CO2 emissions at CO2 neutrality year"),min = 5, max = 10,step=.1,value=c(7.5)))
+                     #            
+                     #            
+                     #          ),
+                     #          
+                     #          hr(),
+                     #          
+                     #          
+                     #          checkboxInput("advance", "Advanced: Set emission for year before start year"), 
+                     #          
+                     #          div(class="rad",
+                     #              conditionalPanel(
+                     #                
+                     #                condition="input.advance == 1",
+                     #                p("Note: Emissions from last observed year take a linear trajectory to emissions for year before start year"),
+                     #                
+                     #                # hr(),
+                     #                tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                     #                
+                     #                # hr(),
+                     #                tags$div(id="sla",numericInput("lstart", label=p("Land use emissions"),min = -5, max = 10,step=.1,value=c(3.9))),
+                     #                
+                     #                conditionalPanel(
+                     #                  condition="input.nonco2 == 1",
+                     #                  # hr(),
+                     #                  tags$div(id="sla",numericInput("nonco2start", label=p("Non-CO2 emissions"),min = 0.1, max = 20,step=.1,value=c(12.3)))
+                     #                )    )               
+                     #          ),
+                     #          hr(),
+                     #          
+                     #          actionBttn(
+                     #            inputId = "next1",
+                     #            label = "   NEXT >",
+                     #            size="xs",
+                     #            style = "material-flat", 
+                     #            color = "primary"
+                     #          )
+                     #          
+                     #          
+                     # ),
+                     
+                     
+                     
                      tabPanel("1. Hiilibudjetti",
                               
                               
                               #7b396e
                               
-                              
+                              div(class="rad",
+                                  
                               radioButtons("bud",
                                            
                                            inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
@@ -1302,9 +1502,9 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                              # "1700Gt (67% likelihood to stay below 2,4C)" = 1700,
                                              # "2050Gt (50% likelihood to stay below 2,4C)" = 2050
                                            ),selected=1150
-                              ),
+                              )),
                               # hr(),
-                              p("Huom: Budjetin muuttaminen resetoi joitain arvoja tässä ja 3. vaiheessa takaisin budjettikohtaisiin oletusarvoihin."),
+                              p("Huom: Budjetin muuttaminen resetoi monia muita valintoja"),
                               hr(),
                               div(style='margin-bottom:0.2rem important;', sliderInput("vuo",
                                                                                        inf("Hinnoittelun aloitusvuosi ja hiilineutraalisuvuosi", "infopricing"),
@@ -1332,13 +1532,35 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                            selected = "percentual"
                                            
                               ),
+             
                               
+                              
+                                               
                               hr(),
                               
-                              checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta"),
-                              
+
+                              # 
+                              checkboxInput("nonco2", inf("Sisällytä muutkin kasvihuonekaasut kuin CO2", "infononco2u")),
+
                               conditionalPanel(
-                                
+
+                                condition="input.nonco2 == 1",
+
+                                # hr(),
+                                tags$div(id="sla",numericInput("nonco2end", label=p("Muut päästöt loppuvuonna"),min = 5, max = 10,step=.1,value=c(7.5)))
+
+
+                              ),
+
+                              hr(),
+   
+
+                              
+                              checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta"),
+                              div(class="rad",
+                                  
+                              conditionalPanel(
+                                    
                                 condition="input.advance == 1",
                                 # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
                                 # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
@@ -1347,13 +1569,19 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                 #                           # uiOutput("splot", width="auto"
                                 #                           # )
                                 #          # ,
-                                hr(),
-                                tags$div(id="sla",numericInput("fstart", label=p("Fossiilipäästöt hinnoittelun alkua edeltävänä vuonna"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta hinnoittelun alkua edeltävään vuoteen"),
                                 
-                                hr(),
-                                tags$div(id="sla",numericInput("lstart", label=p("Maankäytön päästöt hinnoittelun alkua edeltävänä vuonna"),min = -5, max = 10,step=.1,value=c(3.9)))
-                                ,p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta hinnoittelun alkua edeltävään vuoteen"),
+                                # hr(),
+                                tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(37.1))),
                                 
+                                # hr(),
+                                tags$div(id="sla",numericInput("lstart", label=p("Maankäytön päästöt"),min = -5, max = 10,step=.1,value=c(3.9))), 
+                                # hr(),
+                                conditionalPanel(
+                                  condition="input.nonco2 == 1",
+                                tags$div(id="sla",numericInput("nonco2start", label=p("Muut päästöt"),min = 0.1, max = 20,step=.1,value=c(12.3)))
+                                )
+                                )
                               ),
                               hr(),
                               
@@ -1536,6 +1764,13 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                               
                               
                      ),
+                     
+                     
+                     
+    
+                     
+                     
+                     
                      tabPanel("EXTRA: Maat",
                               actionBttn(
                                 inputId = "prev4",
@@ -1548,6 +1783,9 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                               
                               hr(),
                               
+                          
+                              
+                              
                               sliderInput(
                                 inputId = "national",
                                 inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv")
@@ -1556,6 +1794,10 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                 , min = 0, max = 100, value = 0, step=1
                               ),
                               hr(),
+                              
+                              
+                              
+                              
                               conditionalPanel(
                                 condition="input.national != 0",
                                 
@@ -1563,10 +1805,16 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                 selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
                                 
                               ),
+
+                              
                               conditionalPanel(
                                 hr(),
                                 
-                                condition="input.countr != '' | input.nationalcoun != 'none'",
+                                condition='output.lek',
+                                
+                                
+                                # condition="input.countr != '' || input.nationalcoun != 'none'",
+                                
                                 # condition = "(typeof input.df_data_rows_selected !== 'undefined' && input.df_data_rows_selected.length > 0)"
                                 # condition = "(typeof input.indi_rows_selected !== 'undefined' && input.indi_rows_selected.length > 0)",
                                 
@@ -1580,7 +1828,8 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                                             # label ="Convergence of countries' emissions",
                                             min = .01, max = 1, value = .5, step=.01)
                                 
-                              ),
+                              )
+                              ,
                               
                               
                               hr(),
@@ -1632,7 +1881,7 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                      #
                      
                      
-        )}
+    )    )}
       )
       
     }
@@ -1640,9 +1889,39 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
     
   })
   
+  observeEvent(input$nonco2, {
+    if (input$nonco2 ==1 & rv$pressed ==FALSE) {
+      updateNumericInput(
+        inputId = "indi1",
+        value = input$indi1+1.5
+      )
+      updateNumericInput(
+        inputId = "indi2",
+        value = input$indi2+1.5
+      )
+      
+      rv$pressed = TRUE
+    }
+  else  if (input$nonco2 ==0 & rv$pressed ==TRUE & input$indi1 >= 1.5 & input$indi2 >=1.5) {
+      updateNumericInput(
+        inputId = "indi1",
+        value = input$indi1-1.5
+      )
+      updateNumericInput(
+        inputId = "indi2",
+        value = input$indi2-1.5
+      )
+      
+      rv$pressed =FALSE
+    }
+  })
+  
+  
+
+  
   # infodatatext = c("Start start year carbon price defines")
   
-  infolist = c("info3", "info4", "infofossil", "infolul", "infonet", "infopop",
+  infolist = c("info3", "info4", "infofossil", "infolul", "infonet", "infoghg", "infononco2","infononco2u", "infopop",
                "infoavgfossil","infoprice", "infoavgcost","infodividend",
                "infoavgnetcost", "infouserfossil", "infousercost", "infonetcost", "infoaveragedividend", "infocountrydividend", "infocountryfossil",
                "infocountrypop","infocountrycost","infocountrynetcost",
@@ -1738,7 +2017,24 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
   
   
   
-  
+  observeEvent(rv$fyear, {
+    
+    
+    if (rv$lang == "eng") {
+      # Can also set the label and select items
+      updateCheckboxInput(session, "advance", label=paste0("Advanced: Set emission for year before start year (", rv$fyear-1,")"))
+      # label = paste("Shape of the emission curve"),
+      
+    }
+    else if (rv$lang =="fin")
+    {
+      updateCheckboxInput(session, "advance", label=paste0("EXTRA (aseta päästöt vuodelle ennen alkuvuotta (", rv$fyear-1,")"))
+      
+      
+      
+    }
+    
+  })  
   
   # ok <- observe({
   #   # observeEvent(input[[paste0(i)]], {
@@ -1825,8 +2121,8 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
     })
   })
   
-  observeEvent(input$countr,{
-    if (input$countr !=""){
+  observeEvent(rv$lek,{
+    if (rv$lek==TRUE){
       rv$alert4 =TRUE
       o$destroy()
     }
@@ -1844,7 +2140,23 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
     }
   })
   
-  
+  orrb = observeEvent(input$nonco2,{
+    if (input$nonco2 == 1){
+      rv$alert8 =TRUE
+      rv$shownonco2=TRUE
+      rv$showghg=TRUE
+      # orrb$destroy()
+    }
+    
+    if (input$nonco2 == 0){
+      rv$alert8 =FALSE
+      rv$shownonco2=FALSE
+      rv$showghg=FALSE
+      # orrb$destroy()
+    }
+    
+    
+  })
   
   # observeEvent(input$nok,{
   #   if (input$nok =="4. User emissions"){
@@ -1852,6 +2164,36 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
   #     o$destroy()
   #   }
   # })
+  
+  # observeEvent(input$dataset, {
+  #   freezeReactiveValue(input, "column")
+  #   updateSelectInput(inputId = "column", choices = names(dataset()))
+  # })
+  
+  
+  
+  okku= observeEvent(rv$warn, {
+    
+    # req(input$budget, cancelOutput = FALSE)
+    # freezeReactiveValue(input, "budget")
+    
+    if (rv$warn >=0){
+      
+      # 2.1515 3.0287 1.1981 1.8475
+      # if (input$last_btn =="1350") {
+        
+ if ((rv$warn > 2.1515 & rv$warn < 2.1516 ) | (rv$warn > 3.0287 & rv$warn < 3.0288 ) | (rv$warn > 1.198 & rv$warn < 1.199 ) | (rv$warn > 1.8475 & rv$warn < 1.8476 ) | (rv$warn > 0.1625 & rv$warn < 0.1626 )) {
+  
+} else {
+      showNotification("Increasing land use emissions may be unrealistic. Consider setting later carbon neutrality year or increasing emissions/sink at the carbon neutrality year", duration =17)
+      # rv$alert5 =TRUE
+      
+       okku$destroy()
+}
+    }
+    
+  })
+  
   
   okk= observeEvent(input$nok, {
     if (input$nok =="4. User emissions"){
@@ -1874,8 +2216,13 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                          # label = paste("Shape of the emission curve"),
                          choiceNames = list(paste0("Linear (", format(round(rateli,2)), " Gt each year)"),
                                             paste0("Percentual (", format(round( ratepr,2)), " % each year)")
+                                            # ,
+                                            # c("Double exponentiaul")
+                                            
                          ),
-                         choiceValues = list("linear", "percentual"),
+                         choiceValues = list("linear", "percentual"
+                                             # , "exponential"
+                                             ),
                          selected = rv$muosel)
     }
     else if (rv$lang =="fin")
@@ -1883,8 +2230,13 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
       updateRadioButtons(session, "muo","Fossiilipäästöjen käyrän muoto",
                          choiceNames = list(paste0("Lineaarinen (", format(round(rv$rateli,2)), " Gt per vuosi)"),
                                             paste0("Prosentuaalinen (", format(round( rv$ratepr,2)), " % per vuosi)")
+                                            # ,
+                                            # c("Double exponentiaul")
+                                            
                          ),
-                         choiceValues = list("linear", "percentual"),
+                         choiceValues = list("linear", "percentual"
+                                             # , "exponential"
+                                             ),
                          selected = rv$muosel
                          
       )  
@@ -2060,6 +2412,8 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
     
   }    )
   
+  
+
   observeEvent(input$con, {
     updateSliderInput(
       inputId = "conb",
@@ -2166,6 +2520,25 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
     }
   })
   
+  
+  
+  observeEvent(input$nonco2end, {
+    
+    if (input$nonco2end >= 10) {
+      updateNumericInput(session, "nonco2end", value =10)
+    }
+    
+    else if  (input$nonco2end < 5){
+      updateNumericInput(session, "nonco2end", value =5)
+      
+    }
+    # 
+    # else {
+    #   input$nonco2end = input$nonco2end
+    #   
+    #   
+    # }
+  })
   
   # lapply(
   #   X = yearclist,
@@ -2465,7 +2838,7 @@ selected = round(input$plot_click$x,0)
     
     output$slickr1 <- renderSlickR({
       imgs <- list.files("www/images/eng", pattern=".png", full.names = TRUE)
-      slickR(imgs) 
+      slickR(imgs,width = "70%", height="60%") 
       # + settings(dots=TRUE)
     })
     
@@ -2496,7 +2869,7 @@ selected = round(input$plot_click$x,0)
   } else if (rv$lang =="fin") {
     output$slickr1 <- renderSlickR({
       imgs <- list.files("www/images/fin", pattern=".png", full.names = TRUE)
-      slickR(imgs) 
+      slickR(imgs,width = "70%", height="60%") 
       # + settings(dots=TRUE)
     })
     
@@ -2774,7 +3147,7 @@ observeEvent(input$bud, {
   lapply(
     X = c("showprice" , "showavgcost",
           "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop", "showavgfossil",
-          "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "alert4", "alert6" ),
+          "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "alert4", "alert6", "alert8" ),
     FUN = function(i){
       rv[[paste0(i)]] = FALSE
     } )
@@ -2789,7 +3162,7 @@ observeEvent(input$bud, {
   
   
   
-  showlist = c("showfossil","showland", "shownet", "showavgfossil","showprice" , "showavgcost",
+  showlist = c("showfossil","showland", "shownet", "showghg", "shownonco2", "showavgfossil","showprice" , "showavgcost",
                "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop",
                "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "showaveragedividend", "showcountrydividend")
   aat = showlist
@@ -2882,6 +3255,26 @@ observeEvent(input$bud, {
       } )
       
     })
+  lapply(
+    X = showlist,
+    FUN = function(i){
+      
+      observeEvent(rv[[paste0(i)]], {
+        
+        if (rv[[paste0(i)]] ==FALSE) {
+          
+          updateAwesomeCheckbox(
+            session=session,
+            inputId = i,
+            value = FALSE)
+          
+        }
+      } )
+      
+    })
+  
+  
+  
   
   observeEvent(input$nok,{
     if (input$nok %in% c("1. Carbon budget", "1. Hiilibudjetti")) {
@@ -2940,8 +3333,8 @@ observeEvent(input$bud, {
     
   })
   
-  observeEvent(input$countr, { 
-  if (input$countr %in% c(ll2)) {
+  observeEvent(rv$lek, { 
+  if (rv$lek ==TRUE) {
     rv$showcountrycost =TRUE
     rv$showcountryfossil=TRUE
     rv$showcountrynetcost =TRUE
@@ -2972,12 +3365,12 @@ observeEvent(input$bud, {
   
   
   lapply(
-    X = c("showfossil", "showland", "shownet"),
+    X = c("showfossil", "showland", "shownet", "showghg","shownonco2"),
     FUN = function(i){
       
       observeEvent(input[[paste0(i)]], {
         
-        if (input$showfossil == TRUE | input$showland==TRUE | input$shownet ==TRUE) {
+        if (input$showfossil == TRUE || input$showland==TRUE || input$shownet ==TRUE || input$showghg==TRUE || input$shownonco2 ==TRUE) {
           rv$plot2 = "plot2"}
         else {
           rv$plot2 = ""}
@@ -2992,7 +3385,7 @@ observeEvent(input$bud, {
       
       observeEvent(input[[paste0(i)]], {
         
-        if (input$showpop== TRUE | input$showpop ==TRUE) {
+        if (input$showpop== TRUE || input$showpop ==TRUE) {
           rv$plot3 = "plot3"}
         else {
           rv$plot3 = ""}
@@ -3007,7 +3400,7 @@ observeEvent(input$bud, {
       
       observeEvent(input[[paste0(i)]], {
         
-        if (input$showavgfossil == TRUE | input$showuserfossil==TRUE | input$showcountryfossil==TRUE) {
+        if (input$showavgfossil == TRUE || input$showuserfossil==TRUE || input$showcountryfossil==TRUE) {
           rv$plot4 = "plot4"}
         else {
           rv$plot4 = ""}
@@ -3037,9 +3430,9 @@ observeEvent(input$bud, {
       
       observeEvent(input[[paste0(i)]], {
         
-        if (input$showavgcost == TRUE | input$showdividend ==TRUE | input$showavgnetcost==TRUE |
-            input$showusercost==TRUE | input$shownetcost ==TRUE | input$showcountrycost ==TRUE
-            | input$showaveragedividend ==TRUE | input$showcountrydividend ==TRUE | input$showcountrynetcost ==TRUE)   {
+        if (input$showavgcost == TRUE || input$showdividend ==TRUE || input$showavgnetcost==TRUE ||
+            input$showusercost==TRUE || input$shownetcost ==TRUE || input$showcountrycost ==TRUE
+            || input$showaveragedividend ==TRUE || input$showcountrydividend ==TRUE || input$showcountrynetcost ==TRUE)   {
           rv$plot6 = "plot6"}
         else {
           rv$plot6 = ""}
@@ -3148,6 +3541,7 @@ observeEvent(input$bud, {
   
   observeEvent(input$bud, {
     # freezeReactiveValue(input, "paa")
+    priority = 1
     
 
     
@@ -3222,13 +3616,7 @@ observeEvent(input$bud, {
   })
   # year %in% rv$fyear:rv$lyear & 
   dats = reactive({
-    # req(input$bud, cancelOutput = TRUE)
-    # req(input$vuo, cancelOutput = TRUE)
-    # req(input$muo, cancelOutput = TRUE)
-    # req(input$pri, cancelOutput = TRUE)
-    # req(input$paa, cancelOutput = TRUE)
-    # req(input$eprice, cancelOutput = TRUE)
-    # req(input$yearc, cancelOutput = TRUE)
+
     # 
     # print(rv$showfossil)
     # print(rv$showprice)
@@ -3242,6 +3630,8 @@ observeEvent(input$bud, {
     # lstart=input$lstart
     
     # AS of now, budget does not exclude emissions between 2020 and lastyear
+    
+    
     start=ppaa[year ==lastyear & sec =="fossil", yy]
     #land use emission start
     lstart = ppaa[year ==lastyear & sec =="land", yy]
@@ -3265,6 +3655,7 @@ observeEvent(input$bud, {
     fossil = head(fossil,-1)
     land = head(land,-1)  
     
+    # emissions from 2020 to last observed year 
     historyfossil = ppaa[year %in% budgetyear:lastyear & sec =="fossil", yy]
     historyland = ppaa[year %in% budgetyear:lastyear & sec =="land",yy]
     historyyear = ppaa[year %in% budgetyear:lastyear & sec =="land",year]
@@ -3274,28 +3665,15 @@ observeEvent(input$bud, {
     yearl2 = c(historyyear, yearl2)
     
     
+  
     
     
-    #   start=ppaa[year ==lastyear & sec =="fossil", yy]
-    #  # 
-    #   lstart = ppaa[year ==lastyear & sec =="land", yy]
-    #  
-    #   yearl = (lastyear+1):(as.numeric(input$vuo[1])-1)
-    #  # ll = as.numeric(length(yearl))
-    #  # yearl = lastyear:(as.numeric(input$))
-    #  # time  = (lyear-lastyear)
-    # # time = as.numeric(length(yearl))
-    # time = max(as.numeric(length(yearl)),0)
-    # 
-    #  
-    #  # fossil = seq(start, as.numeric(input$fstart), length.out= (time+2))
-    #  # land = seq(lstart, as.numeric(input$lstart),length.out = (time+2))
-    #  
-    #  fossil = seq(start, as.numeric(input$fstart), length.out= time)
-    #  # [,-1]
-    #  land = seq(lstart, as.numeric(input$lstart),length.out = time)
-    # fossil = rep(start, ll)
-    # land = rep(lstart, ll)
+    
+    
+    
+    
+    
+    
     
     
     inter = data.frame(yearl2, fossil, land)
@@ -3309,51 +3687,9 @@ observeEvent(input$bud, {
     
     
     
-    # lstart = input$lstart
-    # start=ppaa[year ==lastyear & sec =="fossil", yy]
-    # #land use emission start
-    # lstart = ppaa[year ==lastyear & sec =="land", yy]
-    # 
-    # # years for calculation
-    # yearl = lastyear:(as.numeric(input$vuo[1]))
-    # 
-    # # years for data set
-    # yearl2 = (lastyear+1):(as.numeric(input$vuo[1])-1)
-    # 
-    # ll = max(as.numeric(length(yearl)),0)
-    # time = max(as.numeric(length(yearl)),0)
-    # 
-    # fossil = seq(start, as.numeric(input$fstart), length.out= time)
-    # # [,-1]
-    # land = seq(lstart, as.numeric(input$lstart),length.out = time)
-    # # [,-1]
-    # fossil = fossil[-1]
-    # land = land[-1]
-    # 
-    # fossil = head(fossil,-1)
-    # land = head(land,-1)
-    # 
-    # # fossil = rep(start, ll)
-    # # land = rep(lstart, ll)
-    # net = fossil+land
-    # ## must fix so  that population is from population projection and not constant   
-    # ppaax = ppaa[1,]
-    # ppax =do.call("rbind", replicate(ll-2, ppaax, simplify = FALSE))
-    # ppax[sec=="fossil", yy:=fossil]
-    # ppax[sec=="land", yy:=land]
-    # ppax[sec=="net", yy:=net]
-    # ppax$year = yearl2
-    # 
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    # non-co2
+
     
     
     
@@ -3385,10 +3721,11 @@ observeEvent(input$bud, {
     
     
     
+    # fossil totals: 
+    
     start = input$fstart
     lstart = input$lstart
-    # start=ppaa[year ==lastyear & sec =="fossil", yy]
-    # lstart = ppaa[year ==lastyear & sec =="land", yy]
+
     
     end<- as.numeric(input$paa)
     lend = (-1)*end
@@ -3428,10 +3765,115 @@ observeEvent(input$bud, {
     
     # emission rate solving with given values
     
+
+    
+    
+    if (input$muo != "exponential") {
+    
+    if (input$muo == "percentual")  {
+      f3 = f3 <- function(rate,start,time, end) {
+        end - start * (1-rate/100)^(time+1)
+      }
+      
+    } else if (input$muo=="linear") {
+      f3 <- function(rate,start,time, end) {
+        end - (start - rate*(time+1))
+      }
+    } 
+    else if  (input$muo=="logarithmic") {
+      f3 <- function(rate,start,time, end) {
+        # end - (start - rate*log(time+1))
+        end - (start - rate^(time+1))
+        
+      }}
+    # else if  (input$muo=="exponential") {
+    #   # need to calculate the area under the curve. For it need to know how much the budget is for emissions and LUC.
+    #   # 
+    #   
+    #   f3 <- function(rate,start,time, end) {
+    #     # end - (start - rate*log(time+1))
+    #     end - (start - rate^(time+1))
+    #     
+    #   }}
+    # 
+    # emission rate solving with given values
+    
+
+      
+    result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+    u = result[1]
+    
+    
+    
+    rate = u
+    # rv$rate = rate
+    
+    #  yearly emissions function
+    if (input$muo == "percentual")  {
+      g = function(start, rate, time) {
+        c(start*(1-rate/100)^(time+1))
+      }
+    } else if (input$muo=="linear") {
+      g = function(start, rate, time) {
+        c(start - rate*(time+1))
+      }
+    } 
+    else if  (input$muo=="logarithmic") {
+      
+      g = function(start, rate, time) {
+        # c(start-rate*log(time+1))
+        c(start-rate^(time+1))
+        
+      }
+      
+      
+      }
+    fossil = g(start, rate, 0:time)
+    
+    
+
+      
+    #applying yearly emission function to calculate emissions
+    
+    
+    # function for emissions cumulation over time
+    if (input$muo == "percentual")  {
+      geomsuma = function(start, rate, time) {
+        x = 0
+        for(i in 0:time) x = x + start * (1-rate/100)^(i+1)
+        return(x)  }
+      
+      
+    } else if (input$muo=="linear") {
+      geomsuma = function(start, rate, time) {
+        x = 0
+        for(i in 0:time) x = x + start - rate*(i+1)
+        return(x)  }  } 
+    else if (input$muo =="logarithmic") {
+      geomsuma = function(start, rate, time) {
+        x = 0
+        for(i in 0:time) x = x + start - rate*log(i+1)
+        
+        # for(i in 0:time) x = x + start - rate*(i)
+        # for(i in 1:time) x = x + start - rate*log((i))
+        return(x)  }  
+      
+    }
+    
+    # applying function for emission cumulatin
+    
+    
+    total = geomsuma(start, rate,time)
     
     
     
     
+    start = input$nonco2start
+    # lstart = input$lstart
+    
+    
+    end<- as.numeric(input$nonco2end)
+    # lend = (-1)*end
     if (input$muo == "percentual")  {
       f3 = f3 <- function(rate,start,time, end) {
         end - start * (1-rate/100)^(time+1)
@@ -3476,39 +3918,206 @@ observeEvent(input$bud, {
       }}
     
     #applying yearly emission function to calculate emissions
-    fossil = g(start, rate, 0:time)
+    nonco2 = g(start, rate, 0:time)
     
     
-    # function for emissions cumulation over time
-    if (input$muo == "percentual")  {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start * (1-rate/100)^(i+1)
-        return(x)  }
+    
+  }
+
+    
+    
+    
+  
+    
+    
+    
+    
+    
+     else if (input$muo == "exponential") {
+       
+       rate = 1
+      times = (lyear - fyear)
+    # fstart= start
+      tim = 0:times
+      end<- as.numeric(input$paa)
+      # SpanFast=(fstart-end)*.30
+      # 
+      # SpanSlow=(fstart-end)*.70
+        
+        # f3 = f3 <- function(rate,start,time, end) {
+        #   end - start*(rate)^((time+1)^(1/1.48))
+        # }    
+        # 
+        # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+        # u = result[1]
+        # rate = u    
+        # g = function(start, rate, time) {
+        #   c(start*(rate)^((time+1)^(1/1.48)))
+        # }
+        # 
+        # fossil = g(start, rate, 0:time)
+        
+      model <- function(theta){
+      # a = function thing
+      a <- theta[1]
+      # b = other function thing
+      b  <- theta[2]
       
+      c  <- theta[3]
       
-    } else if (input$muo=="linear") {
-      geomsuma = function(start, rate, time) {
+      # SpanFast=(Y0-Plateau)*PercentFast*.01
+      #
+      # SpanSlow=(Y0-Plateau)*(100-PercentFast)*.01
+      #
+      # Y=Plateau + SpanFast*exp(-KFast*X) + SpanSlow*exp(-KSlow*X)
+      # Y=end + SpanFast*exp(-a*(times+1)) + SpanSlow*exp(-b*(times+1))
+
+
+      # F1 = end - Y
+      # F2 = input$ala - sum(end + SpanFast*exp(-a*tim) + SpanSlow*exp(-b*tim))
+      # curve goes from start to finish
+    # F1 = end - start*(rate)^((time+1)^(b))
+    # 
+    # 
+    # F2 =  input$ala - sum(start*(rate)^((tim+1)^(b)))
+    
+    F1 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
+    # F3 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
+    
+    F2 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
+    F3 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
+    
+      # area below curve corresponds to necessary carbon reduction for emissions reductions
+      # F2 = input$ala - sum(a^(b*tim)+ fstart)
+      # curve goes from start to finish
+        # F1 = end - (fstart - b^(b^times))
+        #
+        # # area below curve corresponds to necessary carbon reduction for emissions reductions
+        # F2 = input$ala - sum(a^(b*tim)+ fstart)
+
+
+        c(F1=F1,F2=F2, F3=F3)
+      }
+
+      (ss <- multiroot(f = model, start = c(.0015, -.00005, -.0001)))
+
+      fff = unlist(ss, use.names=FALSE)
+     a= fff[1]
+
+      #fb  = speed of emission reduction, second galf
+      b=fff[2]
+      c=fff[3]
+      
+      ga = function(start,a, b,c, time) {
+
+        # c(end + SpanFast*exp(-a*(times+1)) + SpanSlow*exp(-b*(times+1)))
+
+        # c( start*(rate)^((time+1)^(b)))
+        c(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
+        
+        # c(start-rate*log(time+1))
+        # c(start-rate^(time+1))
+      }
+      fossil = ga(start,a, b,c, time=(0:time))
+      geomsuma = function(start, a, b, c,time) {
         x = 0
-        for(i in 0:time) x = x + start - rate*(i+1)
-        return(x)  }  } 
-    else if (input$muo =="logarithmic") {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start - rate*log(i+1)
+        # for(i in 0:time) x = x + start*(rate)^((i+1)^(b))
+        for(i in 0:time) x = x + start + a*(i+1) + b*(i+1)^2 + c*(i+1)^3
         
         # for(i in 0:time) x = x + start - rate*(i)
         # for(i in 1:time) x = x + start - rate*log((i))
-        return(x)  }  
+        return(x)  }
+      total = geomsuma(start, a, b,c, time)
+      # total = sum(fossil)
+       # total = 1500
+     
+     
       
-    }
+      # else if (input$muo =="logarithmic") {
+      #   geomsuma = function(start, rate, time) {
+      #     x = 0
+      #     for(i in 0:time) x = x + start - rate*log(i+1)
+      # 
+      #     # for(i in 0:time) x = x + start - rate*(i)
+      #     # for(i in 1:time) x = x + start - rate*log((i))
+      #     return(x)  }
+      # 
+      # }
+
+      # applying function for emission cumulatin
+
+
+      # total = geomsuma(start, rate,time)
+      
+      
+      
+      
+      
+      
+      
+     
+     fstart = input$nonco2start
+     # lstart = input$lstart
+     
+     
+     end<- as.numeric(input$nonco2end)
+     
+     model <- function(theta){
+       
+       # a = function thing
+       a <- theta[1]
+       # b = other function thing
+       b  <- theta[2]
+       
+       # curve goes from start to finish
+       F1 = end - (fstart - a^(b*times))
+       
+       # area below curve corresponds to necessary carbon reduction for emissions reductions
+       F2 = input$ala - sum(a^(b*tim)+ fstart)
+       
+       
+       c(F1=F1,F2=F2)
+     }
+     
+     (ss <- multiroot(f = model, start = c(2, -.3)))
+     
+     fff = unlist(ss, use.names=FALSE)
+     a= fff[1]
+     
+     #fb  = speed of emission reduction, second galf
+     b=fff[2]
+     
+     ga = function(fstart, a, b, times) {
+       
+       c(a^(b*(times+1)) + fstart)
+       # c(start-rate*log(time+1))
+       # c(start-rate^(time+1))
+       
+       
+     }
+   nonco2= ga(fstart,  a, b, times=(0:times))
+      }
     
-    # applying function for emission cumulatin
+    
+     # fossil  =  ffa^(ffb*time)+ start
+      
+     #  
+
+     
+     
+     # total = geomsuma(start, ffa, ffb,time)
+     
+      # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+      # u = result[1]
+    # } 
+    
+  
     
     
-    total = geomsuma(start, rate,time)
+ 
     
-    
+    # end<- as.numeric(input$end)
+    # lend = (-1)*end
     # ## calculating landuse emissions
     # how much needed to absorb  by land based on cumulative emissions over time
     lbudget= budget - total
@@ -3575,11 +4184,17 @@ observeEvent(input$bud, {
     (ss <- multiroot(f = model, start = c(-12, 5,-30,-200, -30)))
     
     
-    fff = unlist(ss, use.names=FALSE)
+
     
+    
+    
+    
+    
+    fff = unlist(ss, use.names=FALSE)
+   
     #ffa = speed of emission reduction, first half
     ffa= fff[1]
-    
+    rv$warn =ffa
     #fb  = speed of emission reduction, second galf
     ffb=fff[2]
     
@@ -3599,14 +4214,55 @@ observeEvent(input$bud, {
     
     
     
+
     
     
     
     
+    # nonco2 emissions
     
     
+    # fossil totals: 
+    
+   
+    # budget<- as.numeric(input$bud)-sumnet
     
     
+    # if (input$muo == "percentual")  {
+    # f3 = f3 <- function(rate,start,time, end) {
+    #   end - start * (1-rate/100)^(time+1)
+    # }
+    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+    # u = result[1]
+    # 
+    # rv$ratepr = -1*u
+    # # } 
+    # # else if (input$muo=="linear") {
+    # f3 <- function(rate,start,time, end) {
+    #   end - (start - rate*(time+1))
+    # }
+    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+    # u = result[1]
+    # 
+    # rv$rateli = -1*u
+    # # } 
+    # # else if  (input$muo=="logarithmic") {
+    # f3 <- function(rate,start,time, end) {
+    #   # end - (start - rate*log(time+1))
+    #   end - (start - rate^(time+1))
+    #   
+    # }
+    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+    # u = result[1]
+    # 
+    # rv$ratelo = u
+    # }
+    
+    
+    # emission rate solving with given values
+    
+    
+
     
     
     
@@ -3804,6 +4460,7 @@ observeEvent(input$bud, {
     
     
     pop = populaatio()[year %in% rv$fyear:rv$lyear,pop]/1000000000
+    # ghg  = rep(ghg,time+1)
     
     total  = rep(total,time+1)
     
@@ -3816,7 +4473,7 @@ observeEvent(input$bud, {
     
     lend= rep(lend,time+1)
     
-    dats = data.frame(year,  budget, rate, fossil, land,  pop, total, price, userfossil
+    dats = data.frame(year,  budget, rate, fossil, nonco2,  land,  pop, total, price, userfossil
                       
     )                
     
@@ -3828,7 +4485,15 @@ observeEvent(input$bud, {
     
     
     dats[, net := fossil+land]
+    dats[, ghg := fossil+nonco2]
+    
+    
+    if (input$nonco2 == 0) {
     dats[, avgfossil := fossil/pop]
+    } else { 
+      dats[, avgfossil := ghg/pop]
+      
+      }
     
     dats[, avgcost :=price*avgfossil]
     dats[, dividend :=avgcost]
@@ -3836,6 +4501,8 @@ observeEvent(input$bud, {
     
     dats[, usercost := price*userfossil]
     dats[, netcost :=usercost-avgcost]
+    
+    
     
     dats = as.data.table(dats)
     
@@ -3851,10 +4518,11 @@ observeEvent(input$bud, {
     
     dats
     
+    
+    
   })
   
-  
-  
+
   
   lux = reactive({
     lux = as.data.table(lug())
@@ -3862,6 +4530,9 @@ observeEvent(input$bud, {
     lux[sec =="pop", visi := input$showpop]
     lux[sec =="fossil", visi := input$showfossil]
     lux[sec =="land", visi := input$showland]
+    lux[sec =="ghg", visi := input$showghg]
+    lux[sec =="nonco2", visi := input$shownonco2]
+    
     lux[sec =="price", visi := input$showprice]
     lux[sec =="avgcost", visi := input$showavgcost]
     lux[sec =="avgfossil", visi := input$showavgfossil]
@@ -3880,10 +4551,18 @@ observeEvent(input$bud, {
     lux
     
   })
-  
+  output$lek <- reactive({
+    rv$lek
+  })
   
  
-  
+  cait = reactive ({
+    
+    
+    
+    
+    
+  })
   
   
   
@@ -3894,6 +4573,11 @@ observeEvent(input$bud, {
     budd = rv$budd
     # ppaaa = ppaaa()
     ppaa = as.data.table(ppaa)
+    
+    if (input$nonco2 == 1) {
+      ppaa$avgfossil = ppaa$avgghg
+    }
+    
     dats = as.data.table(dats())
     populaatio = as.data.table(populaatio())
     
@@ -3921,7 +4605,12 @@ observeEvent(input$bud, {
     
     # start = input$fstart
     # lstart = input$lstart
+    
+    ## making intermediate data
+    
     start=ppaa[year ==lastyear & sec =="fossil", yy]
+    nstart=ppaa[year ==lastyear & sec =="nonco2", yy]
+    
     #land use emission start
     lstart = ppaa[year ==lastyear & sec =="land", yy]
     
@@ -3935,18 +4624,24 @@ observeEvent(input$bud, {
     time = max(as.numeric(length(yearl)),0)
     
     fossil = seq(start, as.numeric(input$fstart), length.out= time)
+    nonco2 = seq(nstart, as.numeric(input$nonco2start), length.out= time)
+    
+    
     # [,-1]
     land = seq(lstart, as.numeric(input$lstart),length.out = time)
     # [,-1]
+    # rmove observations that already included in data preceding and following the intermediate data
     fossil = fossil[-1]
     land = land[-1]
+    nonco2 = nonco2[-1]
     
     fossil = head(fossil,-1)
     land = head(land,-1)
-    
+    nonco2=head(nonco2,-1)
     # fossil = rep(start, ll)
     # land = rep(lstart, ll)
     net = fossil+land
+    ghg = fossil + nonco2 
     ## must fix so  that population is from population projection and not constant   
     
     
@@ -3963,17 +4658,52 @@ observeEvent(input$bud, {
     ppax$net = net
     
     ppax$pop = pop
+    ppax$nonco2 = nonco2
+    ppax$ghg = ghg
     
     
-    ppax <- gather(ppax, sec, yy, "fossil":"pop")
+    
+    
+    
+  # choose according to gas specification  
+    
+    if (input$nonco2 ==0) {
+    ppax$avgfossil = ppax$fossil/ppax$pop
+    } else {
+      ppax$avgfossil = ppax$ghg/ppax$pop
+    }
+    
+    ppax$avgcost =NA
+    ppax$dividend =NA
+    ppax$avgnetcost =NA
+
+    ppax$usercost = NA
+    ppax$netcost =NA
+
+    
+    
+    
+    ppax <- gather(ppax, sec, yy, "fossil":"netcost")
     
     ppax= as.data.table(ppax)
     # ppax[populaatio[sec=="pop"], yy:=i.pop, on=c("year")]
     # ppax[sec=="pop", yy:= populaatio[ppax,on=.(year), x.pop]]
     # pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
+    ppaa=as.data.table(ppaa)
+    ppaa[sec=="pops", sec:="pop"]
     
-    
-    
+    if (input$nonco2 ==0) {
+   # W   ppaa[sec =="avgghg", yy:=NULL]
+    } else {
+      
+      put = ppaa[sec=="avgghg",]
+      ppaa[sec =="avgfossil", yy:=put$yy]
+      # pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
+      
+      # ppaa[sec =="avgghg", yy:=NULL]
+      
+    }
+  
     
     dats = rbind(ppaa, ppax, dats, fill=TRUE)
     
@@ -3999,7 +4729,34 @@ observeEvent(input$bud, {
   
   pacu = reactive ({
     
-    if (input$indi %in% c(ll2) || input$countr %in% c(ll2) || input$nationalcoun %in% c(ll2))  {
+    
+    
+     lax = 0
+     
+     lek = length(input$countr)
+     
+     if (lek > 1) {
+       rv$lek =TRUE
+       lax =1
+     } else {rv$lek=FALSE}
+     if (lek ==1) {
+      
+     if (input$countr %in% c(ll2)) {
+       lax = 1
+       rv$lek =TRUE
+       
+     }
+     }
+     if (input$indi %in% c(ll2)) {
+       lax = 1
+     }
+     if (input$nationalcoun %in% c(ll2)) {
+       lax = 1
+     }
+     
+     if (lax ==1)  {
+       
+    # if (input$indi %in% c(ll2) || input$countr %in% c(ll2) || input$nationalcoun %in% c(ll2))  {
       
       datso = as.data.table(datss())
       
@@ -4008,21 +4765,45 @@ observeEvent(input$bud, {
       paci = as.data.table(pack)
       
       paci = paci[var ==input$popc,]
-      paci = paci[, yy:=co2cap]
       
+      
+      
+      
+      # if (input$nonco2 ==0) {
+      #   # W   ppaa[sec =="avgghg", yy:=NULL]
+      # } else {
+      #   
+      #   put = ppaa[sec=="avgghg",]
+      #   ppaa[sec =="avgfossil", yy:=put$yy]
+      #   # pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
+      #   
+      #   # ppaa[sec =="avgghg", yy:=NULL]
+      #   
+      # }
+      
+      
+      
+      if (input$nonco2 ==0) {
+      paci = paci[, yy:=co2cap]
       pacu = copy(paci)
+      
+      } else {
+        paci = paci[, yy:=ghgcap]
+        pacu = copy(paci)
+        
+      }
       
       years = rv$years
       
-      aat = c(ll2)
+      
+      
+      
+      ## bunkers
       
       cstart = paci[year ==lastyear & country =="Finland", bunkers/1000000000]
       
       start = input$fstart
-      # lstart = input$lstart
-      # start = unique(datso[sec =="fossil" & year == lastyear, yy])
-      
-      ratio = cstart/start
+          ratio = cstart/start
       cend = ratio*(input$paa)
       
       time= rv$time
@@ -4100,15 +4881,30 @@ observeEvent(input$bud, {
       bunker = g(cstart, rate, 0:time)
       
       
+      # }
+      
+      
+      
+      
+      
+      
       arg = function(start, end, convergence, cstart) {
         
         end - (start-cstart)*(1-convergence)*(end/start)
         
       }
       
+      
+      aat = c(ll2)
+      
+      
       withProgress( message="Calculating country trajectories",{
         
         dei2 = function(mm) {
+          
+          
+          pacu[country ==mm & year %in% c(rv$ffyear:lastyear), countryfossil := yy]
+          
           
           ## since last observation year to start year
           
@@ -4284,11 +5080,16 @@ observeEvent(input$bud, {
           pacu[country ==mm & year %in% c((rv$fyear+1):rv$lyear), countryfossil := ffossil]
           
           
-          
+         # if (input$nonco2=="0") { 
           pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers := bunkera]
           
           pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := bunker]
-          
+         # } else if (input$nonco2 =="1"){
+         #   pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers :=0]
+         #   
+         #   pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := 0]
+         #   
+         # }
           
           incProgress(1/length(aat))     
           
@@ -4304,7 +5105,12 @@ observeEvent(input$bud, {
       pacu[year %in% c(lastyear+1:rv$lyear) & country %in% ll2,
            yyy := sum(countryfossil*pop)/1000000000, by=c("year")]
       
+      if (input$nonco2==0){
       pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
+      } else {
+      pacu[datso[sec=="ghg"], wyy :=i.yy, on=c("year")]
+
+      }
       
       pacu[,cor:=((wyy)/(yyy+bunkers))]
       #      pacu = pacu[,cor:=((wyy*1000000)/(yyy+bunkers))-1]
@@ -4387,6 +5193,9 @@ observeEvent(input$bud, {
     
     
     # here make new rows for country national
+    
+### ADD HERE years before fyear 
+    
     if (input$nationalcoun %in% c(ll2)) {
       req(pacu())
       pacu = pacu()
@@ -4427,13 +5236,13 @@ observeEvent(input$bud, {
         
         datsk = copy(dats)
         
-        datsk = datsk[sec %in% c("userfossil", "pop", "netcost", "usercost") & year %in% rv$fyear:rv$lyear,]
+        datsk = datsk[sec %in% c("fossil", "pop", "netcost", "usercost") & year %in% rv$ffyear:rv$lyear,]
         # 
         datsk$country = mm
         
         
-        datsj = datsk[sec == "userfossil" & year %in% rv$fyear:rv$lyear,]
-        countryfossil = pacu[country ==mm & year %in% rv$fyear:rv$lyear, fossilcountry]
+        datsj = datsk[sec == "fossil" & year %in% rv$ffyear:rv$lyear,]
+        countryfossil = pacu[country ==mm & year %in% rv$ffyear:rv$lyear, fossilcountry]
         datsj[,sec:="countryfossil"]
         datsj[,yy:=countryfossil]
         
@@ -4458,8 +5267,8 @@ observeEvent(input$bud, {
         
         if (rv$lang =="eng") {
           datsj[,label:=paste0(mm, " emissions")]
-          datsjj[,label:=paste0(mm, "mean costs")]
-          datsjjj[,label:=paste0(mm, "mean net costs")]
+          datsjj[,label:=paste0(mm, " mean costs")]
+          datsjjj[,label:=paste0(mm, " mean net costs")]
           datsjjjj[,label:=paste0(mm, " population")]
           
           
@@ -4529,8 +5338,8 @@ observeEvent(input$bud, {
     valus =as.numeric(unique(dats[sec %in% c("pop", "countrypop"),max(yy, na.rm=TRUE)]))
     dats[sec %in% c("pop", "countrypop"), tyy:= yy/(valus/100)]
     
-    valus = as.numeric(unique(dats[sec %in% c("fossil", "land", "net"),max(yy, na.rm=TRUE)]))
-    dats[sec %in% c("fossil", "land", "net", "dummy"), tyy:= yy/(valus/100)]
+    valus = as.numeric(unique(dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2"),max(yy, na.rm=TRUE)]))
+    dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "dummy"), tyy:= yy/(valus/100)]
     
     dats[sec =="countryfossil", visi:=1]
     
@@ -4545,9 +5354,9 @@ observeEvent(input$bud, {
     
     
     xx=0
-    if (nrow(dats[sec %in% c("fossil", "land", "net"),]) >0) {
+    if (nrow(dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2"),]) >0) {
       xx=xx+1
-      dats[sec %in% c("fossil", "land", "net"), prio:=xx]
+      dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), prio:=xx]
     }
     if (nrow(dats[sec %in% c("pop"),]) >0) {
       xx=xx+1
@@ -4576,7 +5385,7 @@ observeEvent(input$bud, {
     tab = as.data.table(datsss())
     tab = tab[order(pos)]
     
-    seclist = c("fossil", "land", "net", "pop", "avgfossil",
+    seclist = c("fossil", "land", "net", "ghg", "nonco2", "pop", "avgfossil",
                 "price", "avgcost","dividend","avgnetcost","userfossil",
                 "usercost",  "netcost", "averagedividend", "nationaldividend")
     tab = tab[sec %in% seclist,]
@@ -4592,7 +5401,7 @@ observeEvent(input$bud, {
     tab = as.data.frame(tab)
     tab = spread(tab, key="label",value="lyy")
     # tab = as.data.table(tab)
-    lalist = c("year","Fossil emissions", "Land emissions/sinks", "Net emissions","World population",
+    lalist = c("year","Fossil emissions", "Land emissions/sinks", "Net emissions","Total emissions","Non-CO2 emissions", "World population",
                "Mean fossil emissions",  "Carbon price", "Mean carbon costs",
                "Carbon dividend", "Mean national dividend", "Dividend for chosen coutnry", "Mean net costs", "User fossil emissions", "User carbon costs", "User net costs"
     )
@@ -4787,6 +5596,21 @@ observeEvent(input$bud, {
     
   }
   )
+  
+  style3 <- reactive({
+    # if (is.null(input$countr)) { 
+    if (rv$alert8 ==TRUE) {
+      # if (input$nok =="EXTRA: Country profiles") { 
+      "#tablu4 {visibility: visible}"
+      
+    }
+    else if (rv$alert8 ==FALSE) {
+      "#tablu4 {visibility: collapse}"
+      
+    }
+    
+  }
+  )
   # 
   
   
@@ -4825,6 +5649,15 @@ observeEvent(input$bud, {
   # 
   # })
   # 
+  # output$ggg <- renderUI({
+  #   tags$head(
+  #     tags$style(
+  #       HTML(
+  #         paste0(c(style()), collapse = "\n")
+  #       )
+  #     )
+  #   )})
+  # 
   output$css_style <- renderUI({
     tags$head(
       tags$style(
@@ -4843,7 +5676,14 @@ observeEvent(input$bud, {
       )
     )})
   
-  
+  output$css_style3 <- renderUI({
+    tags$head(
+      tags$style(
+        HTML(
+          paste0(c(style3()), collapse = "\n")
+        )
+      )
+    )})
   
   #   output$muor <- renderUI({
   #     tagList(
@@ -4899,24 +5739,24 @@ observeEvent(input$bud, {
   #   
   # )
   # 
-  # output$tablx = renderDataTable(server=FALSE,{
-  #   datsss()},
-  #   extensions = 'Buttons',
-  # 
-  #   options = list(
-  #     pageLength = 20,
-  #     scrollX=T,
-  #     scrollY=T,
-  # 
-  #     paging = TRUE,
-  #     searching = TRUE,
-  #     fixedColumns = TRUE,
-  #     autoWidth = TRUE,
-  #     ordering = TRUE,
-  #     dom = 'tB',
-  #     buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
-  #   )
-  # )
+  output$tablx = renderDataTable(server=FALSE,{
+    dats()},
+    extensions = 'Buttons',
+
+    options = list(
+      pageLength = 20,
+      scrollX=T,
+      scrollY=T,
+
+      paging = TRUE,
+      searching = TRUE,
+      fixedColumns = TRUE,
+      autoWidth = TRUE,
+      ordering = TRUE,
+      dom = 'tB',
+      buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
+    )
+  )
   
   output$tably = DT::renderDataTable(server=FALSE,{
     datssst()},
@@ -4967,7 +5807,7 @@ observeEvent(input$bud, {
   
   
   sec = reactive({ 
-    withProgress( message="Drawing graph",{
+    withProgress( message="Drawing graph, please wait",{
       
     mil = rv$ffyear
     
@@ -4988,6 +5828,8 @@ observeEvent(input$bud, {
         function(per) {
           per*session$clientData$output_plot_width*session$clientData$pixelratio/500
         }
+      
+      linehi = 1
     }
     
     if (input$isMobile=="TRUE") {
@@ -4996,6 +5838,8 @@ observeEvent(input$bud, {
         function(per) {
           per*session$clientData$output_plot_width*session$clientData$pixelratio/1500
         }
+      linehi = .8
+      
     }
     
     mi = min(min((datsss[,tyy]), na.rm=T)*1.2,-40)
@@ -5069,22 +5913,29 @@ observeEvent(input$bud, {
                    aes(x=rv$yearc, xend=rv$yearc, y=ma, yend = mi), 
                    color=blu, alpha=.4, linewidth=lsi(1.4))+
       
+
+      # geom_text(data=da,
+      #           aes(x=mil, y=44), label = rv$warn,
+      #           col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+      
+      
       geom_point(data=datsc, 
-                 aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                 aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                  size=lsi(points*2), color=blu) + 
       
       # graphs for fyear to yearc
-
-      
-      geom_area(data=datsl, 
-                aes(y=tyy, x=year, group=sec,  fill=col),
+      geom_area(data=datsl[year < rv$fyear+1,], 
+                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+      geom_area(data=datsl[year > rv$fyear-1,], 
+                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                 size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
       
       geom_line(data=datsl,
-                aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                 linewidth=lsi(lines)) + 
       geom_point(data=datsl, 
-                 aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                 aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                  size=lsi(points)) + 
       
       
@@ -5093,10 +5944,11 @@ observeEvent(input$bud, {
                 aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                 linewidth=lsi(lines), alpha=.1) + 
       geom_point(data=datsss, 
-                 aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                 aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                  size=lsi(points), alpha=.1) + 
       
-
+      
+      
       # pricing and neutrality vertical lines
       geom_segment(data=da,
                    aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
@@ -5197,16 +6049,16 @@ observeEvent(input$bud, {
         geom_text(data=da,
                   aes(x=2020.5, y=.9*mi), label = paste0("Observed\n <=2021"),
                   col="lightgreen", fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                  alpha=.5, lineheight=.99) +
+                  alpha=.5, lineheight=linehi) +
         
         geom_text(data=da,
                   aes(x=2022.5, y=.9*mi), label = paste0("Simulated\n2022=>"),
                   col="lightgreen", fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                  angle=c(0), alpha=.5, lineheight=.99) +
+                  angle=c(0), alpha=.5, lineheight=linehi) +
         
         geom_text(data=da,
                   aes(x=mil-5, y=.9*mi), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-                  col="white", fontface="bold", lineheight=1.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
+                  col="white", fontface="bold", lineheight=linehi+.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
   
     if (rv$yearc >= rv$fyear) {
       plot1 = plot1 + 
@@ -5323,10 +6175,10 @@ observeEvent(input$bud, {
       
       
       
-      if (input$showfossil==TRUE | input$showland==TRUE  | input$shownet==TRUE) {
+      if (input$showfossil==TRUE || input$showland==TRUE  || input$shownet==TRUE) {
         
         plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("fossil", "land", "net"), .SD[which.max(yy)]],
+          geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), .SD[which.max(yy)]],
                     aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") 
         
@@ -5339,7 +6191,7 @@ observeEvent(input$bud, {
                     size=si(2.2), hjust=0, fontface="bold") 
         
       }    
-      if (input$showavgfossil==TRUE | input$showuserfossil==TRUE) {
+      if (input$showavgfossil==TRUE || input$showuserfossil==TRUE) {
         
         plot1 = plot1+
           geom_text(data=datsss[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
@@ -5356,7 +6208,7 @@ observeEvent(input$bud, {
         
       }
       
-      if (input$showusercost==TRUE | input$shownetcost==TRUE  | input$showavgcost==TRUE | input$showdividend==TRUE |  input$showavgnetcost==TRUE) {
+      if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE) {
         
         plot1 = plot1+
           geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
@@ -5373,10 +6225,10 @@ observeEvent(input$bud, {
                   col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0.5, angle=c(0)) 
       
       
-      if (input$showfossil==TRUE | input$showland==TRUE  | input$shownet==TRUE) {
+      if (input$showfossil==TRUE || input$showland==TRUE  || input$shownet==TRUE) {
         
         plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("fossil", "land", "net"), .SD[which.max(yy)]],
+          geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), .SD[which.max(yy)]],
                     aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
                     size=si(2.2), hjust=0.5, fontface="bold") 
       }    
@@ -5388,7 +6240,7 @@ observeEvent(input$bud, {
                     size=si(2.2), hjust=0.5, fontface="bold") 
         
       }    
-      if (input$showavgfossil==TRUE | input$showuserfossil==TRUE) {
+      if (input$showavgfossil==TRUE || input$showuserfossil==TRUE) {
         
         plot1 = plot1+
           geom_text(data=datsss[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
@@ -5405,7 +6257,7 @@ observeEvent(input$bud, {
         
       }
       
-      if (input$showusercost==TRUE | input$shownetcost==TRUE  | input$showavgcost==TRUE | input$showdividend==TRUE |  input$showavgnetcost==TRUE) {
+      if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE) {
         
         plot1 = plot1+
           geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
@@ -5433,19 +6285,9 @@ observeEvent(input$bud, {
   
   
   
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
   sec2 = reactive({ 
     
-    withProgress( message="Drawing graph",{
+    withProgress( message="Drawing graph, please wait",{
       
     if (rv$pll <2) {
       si = 
@@ -5513,7 +6355,7 @@ observeEvent(input$bud, {
     {
       
       
-      inplot= c("fossil", "land", "net", "dummy")
+      inplot= c("fossil", "land", "net", "dummy", "ghg","nonco2")
       datsl = datsl()[sec %in% inplot & year >= mil,]
       datsss = datsss()[sec %in% inplot & year >= mil,]
       datsc =datsc()[sec %in% inplot,]
@@ -5569,7 +6411,7 @@ observeEvent(input$bud, {
       
       
  
-      geom_text(data = datsc[, .SD[which.max(yy)]], 
+      geom_text(data = datsss[, .SD[which.max(yy)]], 
                 aes(x=mix+.05, y=136, color=col, label = labbi),
                 hjust= 0, vjust=0, size = si(4), fontface="bold") + 
       
@@ -5962,7 +6804,7 @@ observeEvent(input$bud, {
                    aes(x=2140,  y=100),
                    color="white", alpha=0, size=si(2))+
         #bottom years
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+.05, y=136, color=col, label = labbi),
                   hjust= 0, vjust=0, size = si(4), fontface="bold") + 
         
@@ -6010,23 +6852,25 @@ observeEvent(input$bud, {
                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
                      color=blu, alpha=.4, linewidth=lsi(1.4))+
         
+
+        
         geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                    size=lsi(points*2), color=blu) + 
         
         # graphs for fyear to yearc
         geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
         geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
         
         geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                   linewidth=lsi(lines)) + 
         geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                    size=lsi(points)) + 
         
         
@@ -6035,10 +6879,14 @@ observeEvent(input$bud, {
                   aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                   linewidth=lsi(lines), alpha=.1) + 
         geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                    size=lsi(points), alpha=.1) + 
         
         
+        
+        
+        
+      
         # pricing and neutrality vertical lines
         geom_segment(data=da,
                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
@@ -6294,7 +7142,7 @@ observeEvent(input$bud, {
                    aes(x=2140,  y=100),
                    color="white", alpha=0, size=si(2))+
         #bottom years
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+.05, y=136, color=col, label = labbi),
                   hjust= 0, vjust=0, size = si(4), fontface="bold") + 
         
@@ -6343,22 +7191,22 @@ observeEvent(input$bud, {
                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
                      color=blu, alpha=.4, linewidth=lsi(1.4))+
         geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                    size=lsi(points*2), color=blu) + 
         
         # graphs for fyear to yearc
         geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
         geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
         
         geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                   linewidth=lsi(lines)) + 
         geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                    size=lsi(points)) + 
         
         
@@ -6367,7 +7215,7 @@ observeEvent(input$bud, {
                   aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                   linewidth=lsi(lines), alpha=.1) + 
         geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                    size=lsi(points), alpha=.1) + 
         
         
@@ -6619,7 +7467,7 @@ observeEvent(input$bud, {
                    aes(x=2140,  y=100),
                    color="white", alpha=0, size=si(2))+
         #bottom years
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+.05, y=136, color=col, label = labbi),
                   hjust= 0, vjust=0, size = si(4), fontface="bold") + 
         
@@ -6950,7 +7798,7 @@ observeEvent(input$bud, {
                    aes(x=2140,  y=100),
                    color="white", alpha=0, size=si(2))+
         #bottom years
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+.05, y=136, color=col, label = labbi),
                   hjust= 0, vjust=0, size = si(4), fontface="bold") + 
         
@@ -6996,24 +7844,27 @@ observeEvent(input$bud, {
         geom_segment(data=da,
                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
                      color=blu, alpha=.4, linewidth=lsi(1.4))+
+
+        
+        
         
         geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                    size=lsi(points*2), color=blu) + 
         
         # graphs for fyear to yearc
         geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
         geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
         
         geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                   linewidth=lsi(lines)) + 
         geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                    size=lsi(points)) + 
         
         
@@ -7022,8 +7873,11 @@ observeEvent(input$bud, {
                   aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                   linewidth=lsi(lines), alpha=.1) + 
         geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                    size=lsi(points), alpha=.1) + 
+        
+        
+        
         
         
         # pricing and neutrality vertical lines
@@ -7390,20 +8244,9 @@ observeEvent(input$bud, {
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   sec3 = reactive({
     
-    withProgress( message="Drawing graph",{
+    withProgress( message="Drawing graph, please wait",{
       
     
 
@@ -7461,7 +8304,7 @@ observeEvent(input$bud, {
       
       
       
-    inplot= c("fossil", "land", "net", "dummy")
+    inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2")
     
     datsl = datsl()[sec %in% inplot & year >= mil,]
     datsss = datsss()[sec %in% inplot & year >= mil,]
@@ -7497,7 +8340,7 @@ observeEvent(input$bud, {
                 aes(x=mil, y=-4), label = paste0("0"),
                 col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
       # horizontal lines
-      geom_text(data = datsc[, .SD[which.max(yy)]], 
+      geom_text(data = datsss[, .SD[which.max(yy)]], 
                 aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
       
       
@@ -7525,24 +8368,25 @@ observeEvent(input$bud, {
                    aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
                    color=blu, alpha=.4, linewidth=lsi(1.4))+
       
+
+      
       geom_point(data=datsc, 
-                 aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                 aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                  size=lsi(points*2), color=blu) + 
       
       # graphs for fyear to yearc
-      
       geom_area(data=datsl[year < rv$fyear+1,], 
-                aes(y=tyy, x=year, group=sec,  fill=col),
+                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                 size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
       geom_area(data=datsl[year > rv$fyear-1,], 
-                aes(y=tyy, x=year, group=sec,  fill=col),
+                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                 size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
       
       geom_line(data=datsl,
-                aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                 linewidth=lsi(lines)) + 
       geom_point(data=datsl, 
-                 aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                 aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                  size=lsi(points)) + 
       
       
@@ -7551,7 +8395,7 @@ observeEvent(input$bud, {
                 aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                 linewidth=lsi(lines), alpha=.1) + 
       geom_point(data=datsss, 
-                 aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                 aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                  size=lsi(points), alpha=.1) + 
       
       
@@ -7840,7 +8684,7 @@ size=si(2.2), hjust=0, fontface="bold") +
                   aes(x=mil, y=-4), label = paste0("0"),
                   col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
         # horizontal lines
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
         
         geom_segment(data=datsc[sec=="dummy",],
@@ -7868,24 +8712,22 @@ size=si(2.2), hjust=0, fontface="bold") +
                      color=blu, alpha=.4, linewidth=lsi(1.4))+
         
         geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                    size=lsi(points*2), color=blu) + 
         
         # graphs for fyear to yearc
-        
-        
         geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
         geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
         
         geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                   linewidth=lsi(lines)) + 
         geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                    size=lsi(points)) + 
         
         
@@ -7894,7 +8736,7 @@ size=si(2.2), hjust=0, fontface="bold") +
                   aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                   linewidth=lsi(lines), alpha=.1) + 
         geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                    size=lsi(points), alpha=.1) + 
         
         
@@ -8124,7 +8966,7 @@ size=si(2.2), hjust=0, fontface="bold") +
                   aes(x=mil, y=-4), label = paste0("0"),
                   col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
         # horizontal lines
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
         
         geom_segment(data=datsc[sec=="dummy",],
@@ -8152,24 +8994,22 @@ size=si(2.2), hjust=0, fontface="bold") +
                      color=blu, alpha=.4, linewidth=lsi(1.4))+
         
         geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                    size=lsi(points*2), color=blu) + 
         
         # graphs for fyear to yearc
-        
-        
         geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
         geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
         
         geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                   linewidth=lsi(lines)) + 
         geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                    size=lsi(points)) + 
         
         
@@ -8178,7 +9018,7 @@ size=si(2.2), hjust=0, fontface="bold") +
                   aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                   linewidth=lsi(lines), alpha=.1) + 
         geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                    size=lsi(points), alpha=.1) + 
         
         
@@ -8404,7 +9244,7 @@ size=si(2.2), hjust=0, fontface="bold") +
                   aes(x=mil, y=-4), label = paste0("0"),
                   col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
         # horizontal lines
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
         
         geom_segment(data=datsc[sec=="dummy",],
@@ -8689,7 +9529,7 @@ size=si(2.2), hjust=0, fontface="bold") +
                   aes(x=mil, y=-4), label = paste0("0"),
                   col="white", fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
         # horizontal lines
-        geom_text(data = datsc[, .SD[which.max(yy)]], 
+        geom_text(data = datsss[, .SD[which.max(yy)]], 
                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
         
         geom_segment(data=datsc[sec=="dummy",],
@@ -8717,24 +9557,22 @@ size=si(2.2), hjust=0, fontface="bold") +
                      color=blu, alpha=.4, linewidth=lsi(1.4))+
         
         geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
                    size=lsi(points*2), color=blu) + 
         
         # graphs for fyear to yearc
-        
-        
         geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
         geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
         
         geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
                   linewidth=lsi(lines)) + 
         geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
                    size=lsi(points)) + 
         
         
@@ -8743,9 +9581,8 @@ size=si(2.2), hjust=0, fontface="bold") +
                   aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
                   linewidth=lsi(lines), alpha=.1) + 
         geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
                    size=lsi(points), alpha=.1) + 
-        
         
         # pricing and neutrality vertical lines
         geom_segment(data=da,
@@ -9021,34 +9858,7 @@ size=si(2.2), hjust=0, fontface="bold") +
   
   })
   
-  # output$plot<-renderPlot({
-  #   # req(input$accordion3)
-  #
-  #   # req(input$alert)
-  #
-  #   sec()
-  #
-  # }
-  #
-  # ,height=
-  #   # ht()
-  #   function() {
-  #     session$clientData$output_plot_width*.67
-  #   }
-  # )
-  #
-  #
-  # output$splot <- renderUI({
-  #
-  #   plotOutput("plot"
-  #              # ,height=paste0(huhu)
-  #              ,width = "auto"
-  #              # ,width = "1000px"
-  #              ,height=session$clientData[["output_plot1_width"]]
-  #
-  #              ,click = "plot_click"
-  #   ) }  )
-  #
+
   
   
   
@@ -9104,12 +9914,35 @@ size=si(2.2), hjust=0, fontface="bold") +
   })
   
   output$plotjj <- renderUI({
+    
+    # dim = input$dim[2]/1.01
+    # ses = session$clientData[["output_plotj_height"]]
+    if (rv$pll ==1) {
+      heeh = "auto"
+      # session$clientData[["output_plotk_width"]]
+    } else {
+    
+      
+     if (input$dim[2]/1.01 > session$clientData[["output_plotj_height"]]) {
+      # heeh =  session$clientData[["output_plotk_width"]]
+      heeh =  session$clientData[["output_plotj_height"]]
+      
+    } else  {
+      heeh =  input$dim[2]/1.01
+      
+      
+    } 
+    }
+    
     div(        
       # style =  "margin-left: 0vw;
       #         margin-top: -3.5vw; ",
     plotOutput("plotj"
                ,width = "auto"
-               ,height = "auto"
+                # ,height = "auto"
+                 # ,height=heeh
+               ,height="100%"
+               
                 ,hover = "plot_hover"
                ,click = "plotj_click"
        
@@ -9137,7 +9970,8 @@ size=si(2.2), hjust=0, fontface="bold") +
     heeh = "auto"
     # session$clientData[["output_plotk_width"]]
     } else {
-      heeh =  session$clientData[["output_plotk_width"]]
+      # heeh =  session$clientData[["output_plotk_width"]]
+      heeh =  input$dim[2]/1.25
       
     }
     
@@ -9164,89 +9998,6 @@ size=si(2.2), hjust=0, fontface="bold") +
   
   
   
-  # 
-  # observe({
-  #   
-  #   if (input$view ==2) {
-  #   if (rv$pll >= 2) {
-  #     output$yearcui2 = renderUI({
-  #       # req(sec2(), cancelOutput = TRUE)
-  #       
-  #       fluidRow(
-  #         style =  "margin-left: 0vw;
-  #             margin-top: 0vw; ",
-  #         
-  #         sliderInput("yearcb", label=NULL,min = 1965, max = 2137,step=1,value=c(2100),
-  #                     width="50%"
-  #         ), 
-  #         
-  #         sliderInput("yearcc", label=NULL,min = 1965, max = 2137,step=1,value=c(2100),
-  #                     width="50%"
-  #         )
-  #         
-  #       )
-  #       
-  #       
-  #     }
-  #     )
-  #   }
-  #   # jos rv$pll = 1, niin 100%, muuten 50%
-  #   
-  #   
-  #   # if (input$view ==2) {
-  #   
-  #   else if (rv$pll < 2) {
-  #     # req(sec2(), cancelOutput = TRUE)
-  #     
-  #     output$yearcui2 = renderUI({
-  #       
-  #       
-  #       
-  #       # fluidRow(
-  #       fluidRow(
-  #         style =  "margin-left: 0vw;
-  #             margin-top: 0vw; ",
-  #         
-  #         sliderInput("yearca", label=NULL,min = 1965, max = 2137,step=1,value=c(2100),
-  #                     width="100%"
-  #         ) )
-  #       
-  #       
-  #     }
-  #     )
-  #   }
-  #   }
-  #   
-  #   else {
-  #     output$yearcui2 = renderUI({
-  #       
-  #       
-  #       
-  #       # fluidRow(
-  #       fluidRow(
-  #         style =  "margin-left: 0vw;
-  #             margin-top: 0vw; ",
-  #         
-  #         sliderInput("yearca", label=NULL,min = 1965, max = 2137,step=1,value=c(2100),
-  #                     width="100%"
-  #         ) )
-  #       
-  #       
-  #     }
-  #     )
-  #   }
-  #   
-  # })
-  
-  # observeEvent(input$view, {
-  #   
-  #   if(input$view == 1){
-  #     shinyjs::show(id = "yearcui")
-  #   }else{
-  #     shinyjs::hide(id = "yearcui")
-  #   }
-  # })
-  # 
         
     output$yearcui = renderUI({
     

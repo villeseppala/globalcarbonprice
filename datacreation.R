@@ -6,6 +6,89 @@ library(data.table)
 library(countrycode)
 
 
+
+
+
+
+
+
+# go to https://www.climatewatchdata.org/data-explorer/
+# click Download bulk data from top right corner and choose ghg emissions
+# put the PIK file on your file location
+
+
+em<-read.csv(file="CW_HistoricalEmissions_PIK.csv", header=T,  sep="," )[,]
+
+em = as.data.table(em)
+
+em[, 4] = NULL
+em = em[gas %in%  c("KYOTOGHG", "CO2"), ]
+em = em[sector=="Total excluding LULUCF", ]
+
+
+em[, 2] = NULL
+
+
+colnames(em)[1] <- "cou"
+colnames(em)[2] <- "gas"
+
+
+
+# em = mutate_all(em, as.character)
+
+emo <- gather(em, year, emission, "X1850":"X2021")
+
+
+emo$year= gsub('X', '', emo$year)
+emo$year = as.numeric(emo$year)
+emo$emission = as.numeric(emo$emission)
+
+
+emo = as.data.frame(emo)
+
+emo$country <- factor(countrycode(sourcevar=emo[, "cou"], 
+                                  origin="iso3c", 
+                                  destination="country.name"))
+
+emo=as.data.table(emo)
+
+
+emo[cou=="EUU", country:="European Union"]
+emo[cou=="WORLD", country:="World"]
+
+colnames(emo)[1] = "iso3c"
+
+emo[iso3c=="WORLD", iso3c:="WLD"]
+
+
+emo[gas =="KYOTOGHG", gas:="ghg"]
+emo[gas =="CO2", gas :="co2"]
+
+# emo[,  , by=c("year", "country")]
+emo = emo[year > 1979,]
+
+emc = emo[gas=="co2",]
+emt = emo[gas=="ghg"]
+emt = emt[, nonco2:= emission - emc[, emission], on=c("year", "iso3c")]
+
+emt[emc, nonco2 := emission - i.emission, on=c("year", "iso3c")]
+
+
+
+# emuk = emo[gas=="total",]
+emt[, emission :=nonco2]
+emt[, gas :="nonco2"]
+
+emt$nonco2=NULL
+
+emo = rbind(emo, emt)
+
+pik = copy(emo)
+
+
+
+
+
 # Emissions from Friedlingstein et al. 2021
 
 #2021
@@ -109,6 +192,15 @@ pops$variant = pops$Variant
 pops$PopTotal = NULL
 pops$Variant = NULL
 
+pops[variant=="Lower 95 PI", var:=1]
+pops[variant=="Lower 80 PI", var:=2]
+
+pops[variant=="Medium", var:=3]
+pops[variant=="Upper 80 PI", var:=4]
+pops[variant=="Upper 95 PI", var:=5]
+pops$var = as.numeric(pops$var)
+
+
 popsw = pops[country=="World",]
 
 paa = pops[paasi2, co2:=i.co2, on =c("year", "iso3c")]
@@ -122,7 +214,60 @@ paac=copy(paa)
 
 
 
+pastyear = 1980
 
+paac = paac[year >=pastyear,]
+paac[variant=="Lower 95 PI", var:=1]
+paac[variant=="Lower 80 PI", var:=2]
+
+paac[variant=="Medium", var:=3]
+paac[variant=="Upper 80 PI", var:=4]
+paac[variant=="Upper 95 PI", var:=5]
+
+
+paac = paac[pik[gas=="nonco2"], nonco2 := i.emission*1000000 , on=c("year", "iso3c")]
+
+
+## approximating non-co2 emissions for countries that do not have nonco2 emissions. 
+
+# first find out how big emitter these countries are relative to each other by using co2
+paac[is.na(nonco2) & year < 2022, kel := sum(co2), by=c("year", "var")]
+paac[is.na(nonco2) & year < 2022, sha := co2/kel]
+
+# next calculate how much ghg emissions are accounted for
+paac[!(iso3c=="WLD"), sumt := sum(nonco2, na.rm=T), by=c("year", "var")]
+
+# compare to total ghg emissions
+paac = paac[paac[iso3c =="WLD",], wor:=i.nonco2, on=c("year", "var")]
+
+# distribute the remainer to countries without ghg emissions by using their relative sizes
+paac[is.na(nonco2) & year < 2022, nonco2 := 1]
+
+paac[is.na(nonco2) & year < 2022, nonco2 := (wor-sum)*sha]
+
+paac$ghg = paac$co2 + paac$nonco2
+
+paac$ghgcap = paac$ghg/paac$pop
+
+
+paac = paac[, !(c("variant", "kel", "sha", "sumt", "wor"))]
+
+
+
+paacw = paac[iso3c =="WLD",]
+# paacw[]
+
+# sum = 
+# paac[paac[iso3c =="WLD"], rem :=]
+
+# rem = pik[year ==2021 & gas =="co2",]
+  
+# paacoo= paac[year ==2021 & var==3,]
+# pikoo= pik[year ==2021 & gas =="co2",]
+# pikoo= pikoo[!(iso3c %in% c("ANNEXI", "BASIC", "ANT", "AOSIS", "NONANNEXI", 	
+#                             "UMBRELLA", "EUU", "WLD", "LDC")),]
+# 
+# pikoo[,sum(emission)]
 
 
 
@@ -160,15 +305,63 @@ paa$lulucf = paa$lulucf*3.664
 paa$net= paa$net*3.664
 
 
+paa = paa[paacw[var==3], ghg := i.ghg/1000000000 , on="year"]
+paa = paa[paacw[var==3], nonco2 := i.nonco2/1000000000 , on="year"]
+# paa = paa[pik, nonco2 := i.nonco2 , on="year"]
+
+
+paa = paa[year >=pastyear,]
+
+paa$land=paa$lulucf
+paa$lulucf = NULL
+# total ghg emissions and non-co2 emissions from Climate Watch
+
+ppaa = copy(paa)
+
+ppaa = ppaa[popsw[var==3,],pops:=i.pop/1000000000, on=c("year")]
+ppaa$avgfossil = ppaa$fossil/ppaa$pop
+ppaa$avgghg= ppaa$ghg/ppaa$pop
+
+
+# year, lyear, budget, lbudget,rate, end, lend, fossil, land,  pop, total, price, userfossil, totalindi
+# net, avgfossil, avgcost, usercost, netcost, zero
+#  
+
+
+
+ppaa$budget = NA
+ppaa$rate=NA
+ppaa$total = NA
+ppaa$price=NA
+ppaa$userfossil=NA
+ppaa$avgcost=NA
+ppaa$usercost=NA
+ppaa$dividend =NA
+ppaa$avgnetcost=NA
+ppaa$netcost=NA
+
+
+ppaa <- gather(ppaa, sec, yy, "fossil":"netcost")
+
+ppaa=as.data.table(ppaa)
+
+
+
+
+
+
+
+
+
+
 
 # replace directory path to save
-
 
 write.csv(paac,"data/countryemissions.csv", row.names = FALSE)
 
 write.csv(popsw,"data/population.csv", row.names = FALSE)
 
-write.csv(paa,"data/globalemissions.csv", row.names = FALSE)
+write.csv(ppaa,"data/globalemissions.csv", row.names = FALSE)
 
 
 

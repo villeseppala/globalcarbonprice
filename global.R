@@ -63,6 +63,10 @@ net = fos
 fos = hsv(0.08,.75,vv)
 lul = hsv(0.11,.6,.8)
 net = hsv(0.09,.7,.85)
+tot = hsv(0.08,.785,.65)
+non = hsv(0.08,.585,.65)
+
+
 # fos = hsl(80,80,80)
 # fos =    rgb(145, 76, 90, maxColorValue = 255)
 # lul = fos
@@ -162,6 +166,20 @@ width: 60%;
 visibility: collapse;
 }
 "
+
+css_content3 <- "
+#tablu4 {
+color: blue;
+font-family: mypolice1;
+font-size: .87rem;
+line-height: 1.1;
+margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
+border-collapse: collapse;
+overflow: auto;
+width: 60%;
+visibility: collapse;
+}
+"
 # font_add_google("Karla", "lato")
 # showtext_auto()
 # shinyWidgets::shinyWidgetsGallery()
@@ -197,7 +215,7 @@ llist =c("paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "
 
 
 
-sec=c("fossil", "land", "net", "price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
+sec=c("fossil", "land", "net", "ghg","nonco2","price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
       "pop","dividend", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost", "averagedividend", "countrydividend")
 
 lu = data.frame(sec)
@@ -223,12 +241,16 @@ lu[sec == "countrynetcost", pos:=15]
 lu[sec == "countrypop", pos:=16]
 lu[sec == "countrydividend", pos:=17]
 lu[sec == "averagedividend", pos:=18]
+lu[sec == "ghg", pos:=19]
+lu[sec == "nonco2", pos:=20]
 
 # decimals in numbers
 lu$le = 0
 lu[sec == "fossil", le:=1]
 lu[sec == "land",le:=1]
 lu[sec == "net",le:=1]
+lu[sec == "ghg",le:=1]
+lu[sec == "nonco2",le:=1]
 lu[sec == "pop", le:=2]
 lu[sec == "avgfossil",le:=2]
 lu[sec == "price", le:=0]
@@ -249,6 +271,8 @@ lu$mark = "t"
 lu[sec == "fossil", mark:="Gt"]
 lu[sec == "land", mark:="Gt"]
 lu[sec == "net", mark:="Gt"]
+lu[sec == "ghg", mark:="Gt"]
+lu[sec == "nonco2", mark:="Gt"]
 lu[sec == "price", mark:="$/t"]
 lu[sec == "avgcost", mark:="$"]
 lu[sec == "avgfossil", mark:="t"]
@@ -266,24 +290,24 @@ lu[sec == "countrydividend", mark:="$"]
 lu[sec == "averagedividend", mark:="$"]
 
 # labels, English
-lu[sec == "fossil", label:="Total emissions"]
-lu[sec == "land", label:="Land use / sinks"]
-lu[sec == "net", label:="Net emissions"]
-lu[sec == "price", label:="Carbon tax"]
-lu[sec == "avgcost", label:="Mean carbon costs"]
-lu[sec == "avgfossil", label:="Mean emissions"]
-lu[sec == "userfossil", label:="User emissions"]
-lu[sec == "netcost", label:="User net costs"]
-lu[sec == "usercost", label:="User carbon costs"]
-lu[sec == "pop", label:="Population"]
-lu[sec == "dividend",label:="Carbon dividend"]
-lu[sec == "avgnetcost", label:="Mean net costs"]
-lu[sec == "countrycost", label:="costs"]
-lu[sec == "countrynetcost", label:="net costs"]
-lu[sec == "countryfossil", label:="mean emissions"]
-lu[sec == "countrypop", label:="population"]
-lu[sec == "countrydividend", label:="Dividend, average national"]
-lu[sec == "averagedividend", label:="dividend"]
+# lu[sec == "fossil", label:="Total emissions"]
+# lu[sec == "land", label:="Land use / sinks"]
+# lu[sec == "net", label:="Net emissions"]
+# lu[sec == "price", label:="Carbon tax"]
+# lu[sec == "avgcost", label:="Mean carbon costs"]
+# lu[sec == "avgfossil", label:="Mean emissions"]
+# lu[sec == "userfossil", label:="User emissions"]
+# lu[sec == "netcost", label:="User net costs"]
+# lu[sec == "usercost", label:="User carbon costs"]
+# lu[sec == "pop", label:="Population"]
+# lu[sec == "dividend",label:="Carbon dividend"]
+# lu[sec == "avgnetcost", label:="Mean net costs"]
+# lu[sec == "countrycost", label:="costs"]
+# lu[sec == "countrynetcost", label:="net costs"]
+# lu[sec == "countryfossil", label:="mean emissions"]
+# lu[sec == "countrypop", label:="population"]
+# lu[sec == "countrydividend", label:="Dividend, average national"]
+# lu[sec == "averagedividend", label:="dividend"]
 
 
 
@@ -292,6 +316,9 @@ lu$col =fos
 lu[sec == "fossil", col:=fos]
 lu[sec == "land", col:=lul]
 lu[sec == "net", col:=net]
+lu[sec == "ghg", col:=tot]
+lu[sec == "nonco2", col:=non]
+
 lu[sec == "price", col:=tax]
 lu[sec == "avgcost", col:=avgcost]
 lu[sec == "avgfossil", col:=fpop]
@@ -314,6 +341,9 @@ lu$ala = 0
 lu[sec == "fossil", ala:=1]
 lu[sec == "land", ala:=1]
 lu[sec == "net", ala:=1]
+lu[sec == "ghg", ala:=1]
+lu[sec == "nonco2", ala:=1]
+
 lu[sec == "price", ala:=alas]
 lu[sec == "avgcost", ala:=alas]
 lu[sec == "avgfossil", ala:=1]
@@ -335,19 +365,22 @@ lu[sec =="pop", visi :=0]
 
 
 lu[sec == "fossil", label:="CO2 emissions"]
-lu[sec == "land", label:="Land use and sinks"]
+lu[sec == "land", label:="Land use change"]
 lu[sec == "net", label:="Net CO2 emissions"]
+lu[sec == "ghg", label:="Total emissions"]
+lu[sec == "nonco2", label:="Non-CO2 emissions"]
+
 lu[sec == "price", label:="Carbon price"]
-lu[sec == "avgcost", label:="Mean CO2 costs"]
-lu[sec == "avgfossil", label:="Mean CO2 emissions"]
-lu[sec == "userfossil", label:="User CO2 emissions"]
+lu[sec == "avgcost", label:="Mean costs"]
+lu[sec == "avgfossil", label:="Mean emissions"]
+lu[sec == "userfossil", label:="User emissions"]
 lu[sec == "netcost", label:="User net costs"]
-lu[sec == "usercost", label:="User CO2 costs"]
+lu[sec == "usercost", label:="User costs"]
 lu[sec == "pop", label:="World population"]
 lu[sec == "dividend",label:="Carbon dividend"]
 lu[sec == "avgnetcost", label:="Mean net costs"]
 lu[sec == "countrycost", label:="CO2 costs"]
-lu[sec == "countrynetcost", label:="Coutnry net costs"]
+lu[sec == "countrynetcost", label:="Country net costs"]
 lu[sec == "countryfossil", label:="Country mean emissions"]
 lu[sec == "countrypop", label:="Country population"]
 lu[sec == "countrydividend", label:="Country national dividend"]
@@ -355,24 +388,27 @@ lu[sec == "averagedividend", label:="Mean dividend"]
 
 
 
-lu[sec == "fossil", labbi:="Global CO2 emissions"]
-lu[sec == "land",labbi:="Global CO2 emissions"]
-lu[sec == "net", labbi:="Global CO2 emissions"]
+lu[sec == "fossil", labbi:="Global emissions"]
+lu[sec == "land",labbi:="Global emissions"]
+lu[sec == "net", labbi:="Global emissions"]
+lu[sec == "ghg", labbi:="Global emissions"]
+lu[sec == "nonco2", labbi:="Global emissions"]
+
 lu[sec == "price", labbi:="Carbon price"]
-lu[sec == "avgcost", labbi:="CO2 costs and benefits"]
+lu[sec == "avgcost", labbi:="Emissions costs and benefits"]
 lu[sec == "avgfossil", labbi:="Individual CO2 emissions"]
 lu[sec == "userfossil", labbi:="Individual CO2 emissions"]
-lu[sec == "netcost", labbi:="CO2 costs and benefits"]
-lu[sec == "usercost", labbi:="CO2 costs and benefits"]
+lu[sec == "netcost", labbi:="Emissions costs and benefits"]
+lu[sec == "usercost", labbi:="Emissions costs and benefits"]
 lu[sec == "pop", labbi:="Population projection"]
-lu[sec == "dividend",labbi:="CO2 costs and benefits"]
-lu[sec == "avgnetcost", labbi:="CO2 costs and benefits"]
-lu[sec == "countrycost", labbi:="CO2 costs and benefits"]
-lu[sec == "countrynetcost",labbi:="CO2 costs and benefits"]
+lu[sec == "dividend",labbi:="Emissions costs and benefits"]
+lu[sec == "avgnetcost", labbi:="Emissions costs and benefits"]
+lu[sec == "countrycost", labbi:="Emissions costs and benefits"]
+lu[sec == "countrynetcost",labbi:="Emissions costs and benefits"]
 lu[sec == "countryfossil", labbi:="Individual CO2 emissions"]
 lu[sec == "countrypop", labbi:="Population projection"]
-lu[sec == "countrydividend", labbi:="CO2 costs and benefits"]
-lu[sec == "averagedividend", labbi:="CO2 costs and benefits"]
+lu[sec == "countrydividend", labbi:="Emissions costs and benefits"]
+lu[sec == "averagedividend", labbi:="Emissions costs and benefits"]
 
 
 
@@ -383,39 +419,45 @@ lu[sec == "averagedividend", labbi:="CO2 costs and benefits"]
 
 
 lu2 = copy(lu)
-lu2[sec == "fossil", labbi:="Globaalit CO2-päästöt"]
-lu2[sec == "land", labbi:="Globaalit CO2-päästöt"]
-lu2[sec == "net", labbi:="Globaalit CO2-päästöt"]
-lu2[sec == "price", labbi:="CO2-päästöjen hinta"]
-lu2[sec == "avgcost", labbi:="CO2 menot ja tulot"]
-lu2[sec == "avgfossil", labbi:="Yksilökohtaiset CO2-päästöt"]
-lu2[sec == "userfossil", labbi:="Yksilökohtaiset CO2-päästöt"]
-lu2[sec == "netcost", labbi:="CO2 menot ja tulot"]
-lu2[sec == "usercost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "fossil", labbi:="Globaalit päästöt"]
+lu2[sec == "land", labbi:="Globaalit päästöt"]
+lu2[sec == "net", labbi:="Globaalit päästöt"]
+lu2[sec == "ghg", labbi:="Globaalit päästöt"]
+lu2[sec == "nonco2", labbi:="Globaalit päästöt"]
+
+lu2[sec == "price", labbi:="Päästöjen hinta"]
+lu2[sec == "avgcost", labbi:="Päästömenot ja -tulot"]
+lu2[sec == "avgfossil", labbi:="Yksilökohtaiset Päästöt"]
+lu2[sec == "userfossil", labbi:="Yksilökohtaiset Päästöt"]
+lu2[sec == "netcost", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "usercost", labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "pop", labbi:="Väestökehitys"]
-lu2[sec == "dividend",labbi:="CO2 menot ja tulot"]
-lu2[sec == "avgnetcost", labbi:="CO2 menot ja tulot"]
-lu2[sec == "countrycost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "dividend",labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "avgnetcost", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "countrycost", labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "countrynetcost", labbi:="CO2 menot ja tulot"]
-lu2[sec == "countryfossil", labbi:="Yksilökohtaiset CO2-päästöt"]
+lu2[sec == "countryfossil", labbi:="Yksilökohtaiset päästöt"]
 lu2[sec == "countrypop", labbi:="Väestökehitys"]
-lu2[sec == "countrydividend", labbi:="CO2 menot ja tulot"]
-lu2[sec == "averagedividend", labbi:="CO2 menot ja tulot"]
+lu2[sec == "countrydividend", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "averagedividend", labbi:="Menot ja tulot päästöistä"]
 
 
 lu2[sec == "fossil", label:="CO2-päästöt"]
-lu2[sec == "land", label:="Maankäyttö ja nielut"]
+lu2[sec == "land", label:="Maankäytön muutos"]
 lu2[sec == "net", label:="CO2-nettopäästöt"]
+lu2[sec == "ghg", label:="Kokonaispäästöt"]
+lu2[sec == "nonco2", label:="Muut päästöt"]
+
 lu2[sec == "price", label:="Hiilen hinta"]
-lu2[sec == "avgcost", label:="CO2-keskimenot"]
-lu2[sec == "avgfossil", label:="CO2-keskipäästöt"]
-lu2[sec == "userfossil", label:="Käyttäjän CO2-päästöt"]
+lu2[sec == "avgcost", label:="Keskipäästömenot"]
+lu2[sec == "avgfossil", label:="Keskipäästöt"]
+lu2[sec == "userfossil", label:="Käyttäjän päästöt"]
 lu2[sec == "netcost", label:="Käyttäjän nettomenot"]
-lu2[sec == "usercost", label:="Käyttäjän CO2-menot"]
+lu2[sec == "usercost", label:="Käyttäjän päästömenot"]
 lu2[sec == "pop", label:="Maailman väestö"]
 lu2[sec == "dividend",label:="Hiiliosinko"]
-lu2[sec == "avgnetcost", label:="Keskiarvo-nettomenot"]
-lu2[sec == "countrycost", label:="CO2-menot"]
+lu2[sec == "avgnetcost", label:="Keskinettomenot"]
+lu2[sec == "countrycost", label:="menot"]
 lu2[sec == "countrynetcost", label:="Maan nettokeskimenot"]
 lu2[sec == "countryfossil", label:="Maan keskiarvopäästöt"]
 lu2[sec == "countrypop", label:="Maan väestö"]
@@ -510,22 +552,17 @@ da = data.frame(l,r)
 
 
 # first year to show in graphs?
-pastyear = 1970
 
 
 # population projections
 paac = as.data.table(paac)
-paac = paac[year >=pastyear,]
-paac[variant=="Lower 95 PI", var:=1]
-paac[variant=="Lower 80 PI", var:=2]
 
-paac[variant=="Medium", var:=3]
-paac[variant=="Upper 80 PI", var:=4]
-paac[variant=="Upper 95 PI", var:=5]
+pack = copy(paac)
+# pack = paac[year >=pastyear, ]
 
 
-pack = paac[year >=pastyear, ]
-paaco = paac[year==2021 & variant =="Medium",]
+
+paaco = paac[year==2021 & var ==3,]
 paaco = paaco[order(country)]
 
 ll = as.character(paaco$country)
@@ -538,48 +575,21 @@ ll2 = as.character(paaco$country)
 
 
 pop2 = as.data.table(pop2)
-pop2[variant=="Lower 95 PI", var:=1]
-pop2[variant=="Lower 80 PI", var:=2]
-
-pop2[variant=="Medium", var:=3]
-pop2[variant=="Upper 80 PI", var:=4]
-pop2[variant=="Upper 95 PI", var:=5]
+# pop2[variant=="Lower 95 PI", var:=1]
+# pop2[variant=="Lower 80 PI", var:=2]
+# 
+# pop2[variant=="Medium", var:=3]
+# pop2[variant=="Upper 80 PI", var:=4]
+# pop2[variant=="Upper 95 PI", var:=5]
 
 # pop2[var=="med", var:=2]
 # pop2[var=="high", var:=3]
 
-pop2$var = as.numeric(pop2$var)
 
 ppaa = as.data.table(ppaa)
-ppaa = ppaa[year >=pastyear,]
-ppaa$land=ppaa$lulucf
-ppaa$lulucf = NULL
-
-ppaa = ppaa[pop2[var==3,],pop:=i.pop/1000000000, on=c("year")]
-ppaa$avgfossil = ppaa$fossil/ppaa$pop
+# ppaa = ppaa[year >=pastyear,]
 
 
-# year, lyear, budget, lbudget,rate, end, lend, fossil, land,  pop, total, price, userfossil, totalindi
-# net, avgfossil, avgcost, usercost, netcost, zero
-# 
-
-
-
-ppaa$budget = NA
-ppaa$rate=NA
-ppaa$total = NA
-ppaa$price=NA
-ppaa$userfossil=NA
-ppaa$avgcost=NA
-ppaa$usercost=NA
-ppaa$dividend =NA
-ppaa$avgnetcost=NA
-ppaa$netcost=NA
-
-
-ppaa <- gather(ppaa, sec, yy, "fossil":"netcost")
-
-ppaa=as.data.table(ppaa)
 lastyear = as.numeric(ppaa[, max(year)])
 
 budgetyear = 2020

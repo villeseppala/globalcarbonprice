@@ -135,6 +135,11 @@ $(document).ready(function(){
 
                     ")),
 
+
+tags$head(tags$script(HTML("$(document).on('click', function () {
+                                Shiny.onInputChange('last_btn',this.id);
+                             });"))),
+
 tags$script(HTML('
                      
        
@@ -192,7 +197,7 @@ tags$head(
 ,
 uiOutput("css_style"),
 uiOutput("css_style2"),
-
+uiOutput("css_style3"),
 # border-color: rgb(92, 61, 46);
 
 
@@ -258,7 +263,13 @@ fluidRow(
            closable = TRUE,
            closed=TRUE,
            collapsible = FALSE,
-           slickROutput("slickr1",width = "70%", height="60%")
+           # uiOutput("slicks")
+           # if (input$isMobile ==T) {
+           # slickROutput("slickr1",width = "100%", height="100%")
+           # } else {
+             slickROutput("slickr1",width = "80%", height="70%")
+             
+           # }
            # ,ignore.init=TRUE
            # ))
          ) ),
@@ -401,6 +412,36 @@ margin-top: -.3rem;', textOutput("indicatorvisibility")),
                       )
                     ,
                       
+
+div(
+  #table joka näkyy jos averagedividend tai countrydividend relevantteja
+  id="tablu4",
+  class="noku",
+  # width ="50%",
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE,
+    bordered = TRUE,
+    striped = TRUE,
+    list(
+      headTitles = list(
+        cuk2(non, textOutput("labelnonco2"),  "infononco2", "shownonco2", NULL, FALSE),
+        
+        cuk2(tot, textOutput("labelghg"),  "infoghg", "showghg", NULL, FALSE)
+        # cuk(countrycost, "Country per capita cost", "countrycost", "showcountrycost", NULL, FALSE),
+        # cuk(countrynetcost, "Country per capita net cost", "countrynetcost", "showcountrynetcost", NULL, FALSE)
+        # 
+        
+      )
+      
+    )
+    
+    
+  )
+  
+), 
+
+
                     
                     div(
                       #table joka näkyy jos averagedividend tai countrydividend relevantteja
@@ -523,10 +564,16 @@ fluidRow(
                   #                                icon = icon("far fa-hand-paper")), "</font>")), 
                   # h5("Set values:"),
 uiOutput("simpan"),
+div(id="ress",
+    actionButton("reset", "Reset")),
+
                   uiOutput("cou")
                   # ) )
-                ) 
+                )
+
          )
+,checkboxInput("showtab", "Show the simulation results also in table below")
+
   ),
   
   
@@ -584,7 +631,8 @@ uiOutput("simpan"),
          
   )                 ,
 
-checkboxInput("showtab", "Show the simulation results also in table below"), 
+
+
 
 conditionalPanel(
   
@@ -594,7 +642,10 @@ conditionalPanel(
                   )),
   
 )
-
+# ,
+# fluidRow(column(width =12, align = "center",   DT::dataTableOutput("tablx", width="100%")
+#                 # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
+# ))
 # ,conditionalPanel(
 
   # condition="input.view == 1",
