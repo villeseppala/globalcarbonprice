@@ -33,19 +33,7 @@ library(shinyjs)
 
  library(showtext)
 library(slickR)
-<<<<<<< HEAD
-# <<<<<<< HEAD
-#  # library(ragg)
-# =======
-#  library(ragg)
-# >>>>>>> ea17a408358c78949bee7e1a1c395d40dd46b3d9
-=======
-<<<<<<< HEAD
- # library(ragg)
-=======
- library(ragg)
->>>>>>> ea17a408358c78949bee7e1a1c395d40dd46b3d9
->>>>>>> a9498a8e499cc23c03d8059ac23d318c78e1124f
+
 setDTthreads(2)
 
 
