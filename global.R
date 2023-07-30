@@ -33,7 +33,7 @@ library(shinyjs)
 
  library(showtext)
 library(slickR)
-
+ # library(ragg)
 setDTthreads(2)
 
 
@@ -50,34 +50,25 @@ bgc = "black"
 bgc = hsv(.59,.01,.23)    
 bgc = "darkgrey"
 bgc = hsv(.59,.55,.25)    
+bgc = rgb(242, 227, 219, maxColorValue = 255)
+bgc = rgb(242, 100, 219, maxColorValue = 255)
+bgc = hsv(.7,.0,.84)     
 
 hh = .81
 vv = .8
 
-fos = hsv(0.08,hh,vv)
-lul = fos
-net = fos
-# lul = hsv(0.12,hh,vv)
-# net = hsv(0.09,hh,vv)
-# 
-fos = hsv(0.08,.75,vv)
-lul = hsv(0.11,.6,.8)
-net = hsv(0.09,.7,.85)
-tot = hsv(0.08,.785,.65)
-non = hsv(0.08,.585,.65)
 
+tot = hsv(0.07,.785,.85)
+non = hsv(0.06,.785,.75)
 
-# fos = hsl(80,80,80)
-# fos =    rgb(145, 76, 90, maxColorValue = 255)
-# lul = fos
-# net = fos
-# lul =    rgb(145, 66, 180, maxColorValue = 255)
-# net =   rgb(145, 99, 90, maxColorValue = 255)
+fos = hsv(0.07,.99,.88)
+lul = hsv(0.11,.99,.858)
+net = hsv(0.09,.99,.885)
 
 pop =hsv(0.57,.7,.95)
 
 
-tax = hsv(0.35,.65,vv)
+tax = hsv(0.35,.65,.7)
 
 
 fosindi =hsv(.96,.5,.85)  
@@ -112,23 +103,35 @@ countrynetcost = avgnetcost
 
 countrypop = pop
 
+hih =.58
 
 
- maxyy=2136
- minyy=1974
+ maxyy=2138
+ minyy=1979
  
- mmaxyy = 2135
- mminyy = 1996
+ mmaxyy = 2147
+ mminyy = 1997
  
  
- mmmaxyy=2140
+ mmmaxyy=2145
  mmminyy=1974
  
  mmin = 
 # font_add_google("Lato", "lato")
 # font_add_google("Gochi Hand", "gochi")
   font_add_google("Saira Extra Condensed", "saira")
-# # font_add_google("Roboto Condensed", "roboto")
+ font_add_google("Saira Condensed", "saira")
+ 
+ font_add_google("Roboto Condensed", "roboto")
+ 
+ font_add_google("Archivo Narrow", "jsans")
+ font_add_google("IBM Plex Sans Condensed", "jsans")
+ font_add_google("IBM Plex Sans Condensed", "jsans")
+ font_add_google("Cabin Condensed", "jsans")
+ font_add_google("PT Sans", "jsans")
+ 
+ fam = "jsans"
+ 
 #  font_add_google("Asap", "asap")
 
 # dir.create('~/.fonts')
@@ -137,12 +140,13 @@ countrypop = pop
 
  showtext_auto()
 
- fam = "saira"
+ # fam = "saira"
+ 
 # showtext_auto()
 
 css_content <- "
 #tablu2 {
-color: blue;
+color: red;
 font-family: mypolice1;
 font-size: .87rem;
 line-height: 1.1;
@@ -155,7 +159,7 @@ visibility: collapse;
 "
 css_content2 <- "
 #tablu3 {
-color: blue;
+color: red;
 font-family: mypolice1;
 font-size: .87rem;
 line-height: 1.1;
@@ -169,7 +173,7 @@ visibility: collapse;
 
 css_content3 <- "
 #tablu4 {
-color: blue;
+color: red;
 font-family: mypolice1;
 font-size: .87rem;
 line-height: 1.1;
@@ -194,14 +198,6 @@ sliderInput2 <- function(inputId, label, min, max, value, step, from_min, from_m
 }
 
 
-# sliderInput2 <- function(inputId, label, min, max, value, step=NULL, from_min, from_max, width, animate){
-#   x <- sliderInput(inputId, label, min, max, value, step, width, animate)
-#   x$children[[2]]$attribs <- c(x$children[[2]]$attribs, 
-#                                "data-from-min" = from_min, 
-#                                "data-from-max" = from_max, 
-#                                "data-from-shadow" = TRUE)
-#   x
-# }
 
 
 llist =c("paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "indi","popc","con")
@@ -379,11 +375,11 @@ lu[sec == "usercost", label:="User costs"]
 lu[sec == "pop", label:="World population"]
 lu[sec == "dividend",label:="Carbon dividend"]
 lu[sec == "avgnetcost", label:="Mean net costs"]
-lu[sec == "countrycost", label:="CO2 costs"]
+lu[sec == "countrycost", label:="Country costs"]
 lu[sec == "countrynetcost", label:="Country net costs"]
-lu[sec == "countryfossil", label:="Country mean emissions"]
+lu[sec == "countryfossil", label:="Country emissions"]
 lu[sec == "countrypop", label:="Country population"]
-lu[sec == "countrydividend", label:="Country national dividend"]
+lu[sec == "countrydividend", label:="National dividend"]
 lu[sec == "averagedividend", label:="Mean dividend"]
 
 
@@ -396,8 +392,8 @@ lu[sec == "nonco2", labbi:="Global emissions"]
 
 lu[sec == "price", labbi:="Carbon price"]
 lu[sec == "avgcost", labbi:="Emissions costs and benefits"]
-lu[sec == "avgfossil", labbi:="Individual CO2 emissions"]
-lu[sec == "userfossil", labbi:="Individual CO2 emissions"]
+lu[sec == "avgfossil", labbi:="Individual emissions"]
+lu[sec == "userfossil", labbi:="Individual emissions"]
 lu[sec == "netcost", labbi:="Emissions costs and benefits"]
 lu[sec == "usercost", labbi:="Emissions costs and benefits"]
 lu[sec == "pop", labbi:="Population projection"]
@@ -405,7 +401,7 @@ lu[sec == "dividend",labbi:="Emissions costs and benefits"]
 lu[sec == "avgnetcost", labbi:="Emissions costs and benefits"]
 lu[sec == "countrycost", labbi:="Emissions costs and benefits"]
 lu[sec == "countrynetcost",labbi:="Emissions costs and benefits"]
-lu[sec == "countryfossil", labbi:="Individual CO2 emissions"]
+lu[sec == "countryfossil", labbi:="Individual emissions"]
 lu[sec == "countrypop", labbi:="Population projection"]
 lu[sec == "countrydividend", labbi:="Emissions costs and benefits"]
 lu[sec == "averagedividend", labbi:="Emissions costs and benefits"]
@@ -426,16 +422,16 @@ lu2[sec == "ghg", labbi:="Globaalit päästöt"]
 lu2[sec == "nonco2", labbi:="Globaalit päästöt"]
 
 lu2[sec == "price", labbi:="Päästöjen hinta"]
-lu2[sec == "avgcost", labbi:="Päästömenot ja -tulot"]
-lu2[sec == "avgfossil", labbi:="Yksilökohtaiset Päästöt"]
-lu2[sec == "userfossil", labbi:="Yksilökohtaiset Päästöt"]
+lu2[sec == "avgcost", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "avgfossil", labbi:="Yksilökohtaiset päästöt"]
+lu2[sec == "userfossil", labbi:="Yksilökohtaiset päästöt"]
 lu2[sec == "netcost", labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "usercost", labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "pop", labbi:="Väestökehitys"]
 lu2[sec == "dividend",labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "avgnetcost", labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "countrycost", labbi:="Menot ja tulot päästöistä"]
-lu2[sec == "countrynetcost", labbi:="CO2 menot ja tulot"]
+lu2[sec == "countrynetcost", labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "countryfossil", labbi:="Yksilökohtaiset päästöt"]
 lu2[sec == "countrypop", labbi:="Väestökehitys"]
 lu2[sec == "countrydividend", labbi:="Menot ja tulot päästöistä"]
@@ -459,9 +455,9 @@ lu2[sec == "dividend",label:="Hiiliosinko"]
 lu2[sec == "avgnetcost", label:="Keskinettomenot"]
 lu2[sec == "countrycost", label:="menot"]
 lu2[sec == "countrynetcost", label:="Maan nettokeskimenot"]
-lu2[sec == "countryfossil", label:="Maan keskiarvopäästöt"]
+lu2[sec == "countryfossil", label:="Maan keskipäästöt"]
 lu2[sec == "countrypop", label:="Maan väestö"]
-lu2[sec == "countrydividend", label:="Maan kansallinen osinko"]
+lu2[sec == "countrydividend", label:="Kansallinen osinko"]
 lu2[sec == "averagedividend", label:="Keskiosinko"]
 
 
@@ -627,35 +623,28 @@ chk = function(col, label, info) {
 }
 
 
-# chk = function(col, label) {
-#   p(style=paste0("color:",col,";"),
-#     HTML(label)
-#   )
-# } 
-
-
-
-# label=p(HTML("Carbon budget for net CO2 emissions since start of 2020" , "<font size='3'>",
-#              as.character(actionLink(inputId = "info3", 
-#                                      label = "  ", 
-#                                      icon = icon("fas fa-info-circle"))), "</font>")),   
-
 
 inf = function(label, id) {
-  label=p(HTML(label, "<font size='3'>",
-               as.character(actionLink(style='color:#ffc107', inputId = id, 
-                                       label = "  ", 
-                                       icon = icon("fas fa-info-circle"))), "</font>"))  
-  
+  # div(style="display:inline-block",
+  label=p(HTML(label, "<font size='1'>",
+               as.character(actionLink( inputId = id, 
+                                       label = " ", 
+                                       icon = icon("fas fa-info-circle"))), "</font>"))
+  # )  
 }
-# 
-# inf = function(info) {
-#   
-# HTML( "<font size='2'>", 
-#       as.character(actionLink(inputId = info, 
-#                               label = "  ", 
-#                               icon = icon("info"))), "</font>")  
-# }
+
+
+
+
+
+inf2 = function( id) {
+  div(style="display:inline-block",
+  label=p(HTML("<font size='2'>",
+               as.character(actionLink(inputId = id, 
+                                      label = " ", 
+                                      icon = icon("fas fa-info-circle"))), "</font>")))
+  }
+
 cuk = function(col, label, info, show, lab, value) {
   div(div(style="display:inline-block",   p(style=paste0("color:",col,";"),
                                             HTML(label)
@@ -668,23 +657,36 @@ cuk = function(col, label, info, show, lab, value) {
   
 }
 
+
+
+
 cuk2 = function(col, label, info, show, lab, value) {
-  div(div(style="display:inline-block", div(  style=paste0("color:",col,";"),
-                                             # HTML(
-                                             # textOutput(txt, label)
+  div(div(style="display:inline-block", div(style=paste0("color:",col,";","font-weight:1000; "),
                                               label
-                                              
-                                              # )
   )),
   div(style="display:inline-block",HTML( "<font size='2'>",
-                                         as.character(actionLink(style='color:#ffc107',inputId = info,
+                                         as.character(actionLink(inputId = info,
                                                                  label = "  ",
                                                                  icon = icon("fas fa-info-circle"))), "</font>") ),
-  div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
+  # div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
+  div(style="display:inline-block; ",checkboxInput(show, label=lab,  value=FALSE)))
 
 }
 
 
-# div(div(style="display:inline-block", chk(fos, "Total emissions")), 
-#     div(style="display:inline-block",inf("infofossil")),
-#     div(style="display:inline-block",awesomeCheckbox( "showfossil", label=NULL,  value=TRUE))),
+
+cuk3 = function(col, label, info, show, lab, value) {
+  div(style="display:inline-block; ",
+    div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)),
+    
+    div(style="display:inline-block; ", div(  style=paste0("color:",col,";"),
+                                              label
+  )),
+  div(style="display:inline-block; ",HTML( "<font size='2'>",
+                                         as.character(actionLink(inputId = info,
+                                                                 label = "  ",
+                                                                 icon = icon("fas fa-info-circle"))), "</font>") )
+    )
+  
+}
+
