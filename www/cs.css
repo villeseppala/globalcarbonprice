@@ -138,13 +138,34 @@ width: .1px;
     background-color: var(--colink) !important;
     border-color: var(--colink) !important;
 }
+/*
+      input[type='checkbox']{ /* style for checkboxe
+        width: 30px !important; /*Desired width
+        height: 30px !important; Desired height
+        line-height: 30px !important; 
+      }
 
+.checkbox {
+          width: 30px !important; /*Desired width
+        height: 30px !important; /*Desired height
+        line-height: 30px !important; 
+  
+}
+*/
 
 .checkbox-primary input[type="checkbox"]:checked+label::before, .checkbox-primary input[type="radio"]:checked+label::before {
       color: var(--colink) !important;
 
     background-color: var(--colink) !important;
     border-color: var(--colink) !important;
+}
+
+input[type=checkbox] {
+    box-sizing: border-box;
+    margin-top: .5vw;
+    width:  calc(.5rem + .5vw) !important;
+    height: calc(.5rem + .5vw) !important;
+    line-height: .3px !important;
 }
 
 .irs--shiny .irs-from, .irs--shiny .irs-to, .irs--shiny .irs-single {
@@ -362,7 +383,7 @@ input[type=awesome-checkbox] {
 #tablu {
 color: red;
 font-family: Roboto !important;
-font-size: calc(.85vw + .15rem) !important;
+font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -377,7 +398,7 @@ overflow: auto;
 #tablu p {
 color: blue;
 font-family: Roboto !important;
-font-size: calc(.85vw + .1rem)  !important;
+font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
@@ -388,7 +409,7 @@ line-height: 1.1;
 #tablu2 {
 color: blue;
 font-family: Roboto !important;
-font-size: calc(.85vw + .1rem)  !important;
+font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -400,7 +421,7 @@ overflow: auto;
 #tablu2 p {
 color: blue;
 font-family: Roboto !important;
-font-size: calc(.85vw + .1rem)  !important;
+font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
@@ -410,7 +431,7 @@ line-height: 1.1;
 #tablu3 {
 color: blue;
 font-family: Roboto !important;
-font-size:calc(.85vw + .1rem)  !important;
+font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -422,7 +443,7 @@ overflow: auto;
 #tablu3 p {
 color: blue;
 font-family: Roboto !important;
-font-size: calc(.85vw + .1rem)  !important;
+font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
@@ -431,7 +452,7 @@ line-height: 1.1;
 #tablu4 {
 color: blue;
 font-family: Roboto !important;
-font-size: calc(.85vw + .1rem) !important;
+font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -443,7 +464,7 @@ overflow: auto;
 #tablu4 p {
 color: blue;
 font-family: Roboto !important;
-font-size: calc(.85vw + .1rem)  !important;
+font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;

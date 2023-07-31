@@ -297,7 +297,7 @@ uiOutput("css_style3"),
 #     
          fluidRow(
            
-           column(3, style = " padding: .2vw;",  
+           column(2, style = " padding: .2vw;",  
                   # div(
                   column(12,id = "bor5",
                  
@@ -330,7 +330,7 @@ uiOutput("css_style3"),
                   )      
            ),
            
-           column(9,style = " padding: .2vw;",  
+           column(10,style = " padding: .2vw;",  
         
      column(12,id = "bor5",
 
@@ -381,6 +381,23 @@ uiOutput("css_style3"),
      
       ),
          # (div(style="overflow-y: scroll; overflow-x: hidden;",
+
+div(id="tuto",
+    box(
+      style = 'overflow-y: scroll',
+      # style = 'overflow-y: scroll',
+      
+      id = "tutobox",
+      width = NULL,
+      title =textOutput("tutorit"),
+      closable = TRUE,
+      closed=TRUE,
+      collapsible = FALSE,
+      uiOutput("tutori"),
+      ignore.init=TRUE
+      # ))
+    )),
+
        
         div(id="tuto",
           box(
@@ -393,7 +410,7 @@ uiOutput("css_style3"),
            closable = TRUE,
            closed=TRUE,
            collapsible = FALSE,
-          textOutput("info"),
+         uiOutput("info"),
            ignore.init=TRUE
          # ))
          )),
@@ -467,7 +484,17 @@ margin-top: -.3rem;',
 
 tagList(uiOutput(style = 'text-align: center', "viewtext"))),
 # textOutput("indicatorvisibility"),
- 
+div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
+div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
+),
+div(id="sla",
+    # style="display:inline-block; font-weight:100;",
+    checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
+    
+    
+    # awesomeCheckbox("visib", label=textOutput("automatic"), value=TRUE)
+)
+,
                 
                 div(
                   id="tablu",
@@ -678,7 +705,7 @@ div(
            
 
            
-         ), 
+         )
          
          
        
@@ -688,17 +715,7 @@ div(
 #                 ),
          
 
-         div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
-         div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
-         ),
-         div(id="sla",
-           # style="display:inline-block; font-weight:100;",
-              checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
-                           
-             
-             # awesomeCheckbox("visib", label=textOutput("automatic"), value=TRUE)
-         )
-         
+
 
 
          ),

@@ -324,7 +324,7 @@ server <- function(input,output, session) {
                                          "  RESULT VISIBILITY  ",  
                                          # as.character( icon("fas fa-caret-square-down")),
                                          "</font>"))
-      output$titletext = renderText(" Global carbon price and dividend -simulator")
+      output$titletext = renderText(" Global carbon price simulator")
       # updateactionBttn("infodata", label="Data sources")
       updateActionButton("infodata", label="Data sources", session=session)
       updateActionButton("tutorial", label="Tutorial", session=session)
@@ -461,7 +461,7 @@ server <- function(input,output, session) {
                                          "  TULOSTEN NÄKYVYYS  ",  
                                          # as.character( icon("fas fa-caret-square-down")),
                                          "</font>"))
-      output$titletext = renderText(" Globaali hiilivero ja hiiliosinko -simulaattori")
+      output$titletext = renderText(" Globaali hiilivero -simulaattori")
       updateActionButton("infodata", label="Data-lähteet", session=session)
       updateActionButton("tutorial", label="Tutoriaali", session=session)
       # updateBox("mobilebox",   title = "Jos käytät sivua puhelimella, suosittelemme vaakanäkymää")
@@ -590,7 +590,88 @@ server <- function(input,output, session) {
     
     if (rv$lang == "eng") {
       
+      rv$tutotextt = c("Tutoriaali")
       
+      rv$tutotext = HTML("
+       <b>What is this page?</b> 
+       <br>
+Global carbon price would be an efficient tool for stopping global warming. If the revenue from carbon price was distributed as a global carbon dividend, it would also reduce global income inequality significantly. 
+
+On this page, you can simulate CO2 emission and CO2 price pathways for reaching carbon neutrality and thus stopping global warming. Simulation choices have major implications on your personal carbon costs and the global income distribution. 
+<br><br>
+
+
+<b>Page structure</b>
+<br>
+SIMULATION RESULTS are shown at the graph section in the bottom right of the page. You can also choose to show the results in a table. 
+<br>
+
+ RESULT VISIBILITY settings at the left side control what variable are shown in the results graph. 
+By default, indicators are added to the graphs based on your phase in the simulation inputs selection (Automatic). However, you can also select them on or off manually. 
+
+<br>
+GRAPH VIEW settings control whether the results are shown in one or more graphs. 
+<br>
+Results depend on your choices in SIMULATION INPUTS section at the top of the page. 
+Simulation inputs are divided to 4 thematic phases + an extra phase for country specific inputs. All inputs have predetermined sensible default values so that you can focus on changing the inputs you are most interested in.
+<br><br>
+<b>Carbon budget</b>
+<br>
+First input choice is the carbon budget. With this choice, you define the ambition level of the simulation. Carbon budget is a special type of input, which also changes some of the other inputs to their carbon budget specific defaults in phases 1 and 3. 
+<br>
+Next inputs, together with the budget, define the CO2 emissions for each year. Land use emissions and net emissions react to those choices and to the budget so that the cumulative net emissions equal to the carbon budget in the carbon neutrality year, when the warming stops. 
+<br><br>
+<b>Population projection</b>
+<br>
+Population projection choice defines how the world population will evolve. Mean CO2 emissions are the results of dividing the CO2 emission by the population. 
+<br>
+By default, the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10%  chance that the population is smaller than in the chosen projection. And so on.
+<br><br>
+<b>Carbon price</b>
+<br>
+It is very difficult to estimate what level of carbon pricing is adequate for reaching specific emission targets. It is therefore recommended for the user to explore major changes in carbon pricing to see their effects on carbon costs. 
+<br>
+In reality, if a specific global carbon pricing trajectory is adopted, it will be readjusted down or up depending on whether the emissions evolve better or worse than in the estimated trajectory. Readjusting the pricing will then readjust the emissions. 
+
+<br>
+<br>
+<b>User emissions</b>
+<br>
+In this phase, you can try out different paths for your own emissions and explore what kind of annual carbon costs they would result in. 
+
+<br
+If you are using an online carbon footprint calculator to estimate your current emissions for the starting year, please take into account
+if they consider all greenhouse gas emissions, including non-CO2. If they do, you should also have them set on in the Carbon budget phase. 
+<br
+By choosing the country level emissions from the ALTERNATIVE selection you can use the predicted per capita emission path of a specific country as your own emissions. 
+
+
+<br><br>
+<b>EXTRA: Countries</b>
+<br>
+In this section, you can explore the effect of a global carbon price system in which some of the carbon price revenue is not divided equally across the world, but a chosen percentage is given as a dividend for the citizens of the country in which that specific revenue is collected in. 
+
+Also, you can explore the mean emission and carbon cost trajectories across different countries, assuming that the mean emissions between the countries converge according to a predetermined model. The convergence model is highly speculative. 
+
+<br>
+<br>
+
+<b>Info buttons</b>
+<br>
+Click the info buttons across the UI to receive more information on various input choices and resulting indicators. 
+
+
+<br>
+<br>
+
+<b>Caveats / What is not included?</b>
+<br>
+Achieving the necessary carbon sinks will also cause costs, which, however, are not modeled in the simulation. Sinks can be achieved through the carbon price as well.
+<br
+Please give feedback if you have ideas on how to involve sinks in the model. 
+
+
+")
       
       rv$infofossiltext = c("Total fossil CO2 emissions across all countries and individuals. Other greenhouse gases (such as methane) not included. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       rv$infofossiltextt = c("Fossil CO2 emissions")
@@ -753,21 +834,31 @@ the carbon neutrality year carbon price")
       
       
       
-      rv$infodatatext = c("CO2 emission data: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
+      rv$infodatatext = HTML("CO2 emission data: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
                       https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2022 \n
-                      
-                      Non-CO2 emission data: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
+                      <br> 
+                      <br> 
+                      Total emission data: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
 Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016\n
-                      
+ <br> 
+Non-CO2 emissions calculated by deducing CO2 emissions from Total emissions. 
+<br>
+<br>
                       Population data: Population data and population projections from UN: 
 https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_TotalPopulationBySex.zip \n \n
-
+<br>
+<br>
 IPCC reports have been used for carbon budgets and ballpark for carbon prices and land use emissions / sinks. \n
+<br>
+<br>
 Carbon budgets from tablge 5.8 in page 753 of AR6 WG1 Chapter 5. \n
+<br>
 IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change[Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, In press, doi:10.1017/9781009157896.
 \n
-
+<br>
+<br>
 For default carbon price values, figure 3.32 in page 360 of AR6 WG1 chapter 3 has been used as a loose reference point. \n
+<br>
 IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [P.R. Shukla, J. Skea, R. Slade, A. Al Khourdajie, R. van Diemen, D. McCollum, M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, J. Malley, (eds.)]. Cambridge University Press, Cambridge, UK and New York, NY, USA. doi: 10.1017/9781009157926
 ")
       
@@ -790,7 +881,72 @@ defines the annual fossil emissions and land use emissions/sinks.
       
     }  else if (rv$lang =="fin") {
       
+      rv$tutotextt = c("Tutoriaali")
       
+      rv$tutotext = HTML("
+       <b>Mikä tämä sivu on?</b> 
+       <br>
+Globaali hiilen hinta olisi tehokas tapa ilmastonmuutoksen pysäyttämiseen. Mikäli hiilen hinnoittelun tuotot lisäksi jaettaisiin globaalina hiiliosinkona, maailman tuloerot kaventuisivat huomattavasti. Tällä sivulla voit tutkia erilaisia päästötavoitepolkuja ja havainnoida miten vaihtelu niihin vaadittavassa hiilen hinnoittelussa vaikuttaisi tuloihisi ja laajemmin globaaliin tulonjakoon.
+<br><br>
+
+
+<b>Rakenne</b>
+<br>
+SIMULAATION TULOKSET näkyvät graafiosiossa oikeassa alakulmassa. Voit näyttää tulokset myös taulukkomuodossa. 
+<br>
+
+ TULOSTEN NÄKYVYYS -asetuksissa vasemmassa reunassa voit säätää minkä muuttujien tuloksia haluat näyttää. Oletusarvoisesti indikaattoreita lisätään graafinäkymään simulaatiovalintojen vaiheen mukaan (Automaattinen). Voit kuitenkin valita niitä näkymään tai pois näkymästä myös manuaalisesti.
+<br>
+GRAAFINÄKYMÄ-asetuksista oikeassa yläreunassa voit säätää miten eri skaaloilla olevia indikaattoreita näytetään 
+<br>
+Tulokset riippuvat  valinnoistasi SIMULAATIOVALINNAT-osiossa graafiosion yläpuolella. Simulaatiovalinnoissa on neljä vaihetta + lisävaihe maakohtaisille valinnoille. Kaikissa valinnoissa on esitäytetyt oletusarvot, joten voit myös keskittyä muuttamaan tai kokeilemaan vain niitä valintoja, joista olet eniten kiinnostunut. 
+<br><br>
+<b>Hiilibudjetti</b>
+<br>
+Ensimmäisenä simulaationäkymän valintanäkymässä on hiilibudjetti. Tämä määrittää simulaation lämpötilatavoitteen eli kunnianhimon tason. Budjettivalinta on siitä erityinen, että että se muuttaa joitain muita valintoja niiden budjettikohtaisiin oletusarvoihiin vaiheissa 1 ja 3.  
+<br>
+Seuraavat valinnat, yhdessä hiilibudjetin kanssa, määrittävät hiilidioksidipäästöt kullekin vuodelle. Käyttäjänä kontrolloit fossiilipäästöjen käyrän muotoa, ja maankäytön päästöt ja nielu, ja edellisten summana laskettavat nettopäästöt, reagoivat valintoihisi, niin että kumulatiiviset nettopäästöt vastaavat valittua hiilibudjettia hiilineutraaliusvuonna, kun lämpeneminen pysähtyy.  
+<br><br>
+<b>Väestön määrä</b>
+<br>
+Väestön määrä -valinnassa valitset jonkun YK:N väestön määrä -projektioista määrität miten maailman väestö tulee kehittymään yli ajan simulaatiossasi. Yhdessä globaalien CO2-päästöjen kanssa väestömäärä määrittää CO2-keskipäästöt kaikkien maailman ihmisten keskuudessa.
+<br>
+Oletuksena on valittu mediaaniskenaario. On siis 50% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi ja 50% todennäköisyys, että se on skenaarion arvoja pienempi. 
+Valitsemalla projektion “jakauman ylin 20%” on 20% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi. Valitsemalla “jakauman alin 5%” on 5% todennäköisyys, että väestömäärä on projektion arvoja suurempi. Jne. 
+<br><br>
+<b>Hiilen hinnan valinta</b>
+<br>
+On hyvin vaikea arvioida, että mikä hiilen hinnan taso on riittävä saavuttamaan tietyn lämpötilatavoitteen. Kannattaakin tutkailla erilaisia hiilen hintoja ja niiden vaikutusta päästömenoihin. Mikäli globaali hiilen hinta otettaisiin käyttöön, niin sitä säädettäisiin aiottua polkua tiukemmaksi tai löysemmäksi riippuen siitä, miten päästöt kehittyvät odotettuun nähden. 
+<br>
+<br>
+<b>Käyttäjäpäästöt</b>
+<br>
+Tässä osiossa pääset asettamaan itsellesi henkilökohtaisia päästövähennyspolkuja ja tutkailemaan millaisia vuosittaisia päästökustannuksia niistä sinulle syntyisi. 
+
+Valitsemalla maakohtaiset päästöt VAIHTOEHTO-kohdasta voit käyttää jonkin maan kansalaisten keskimääräistä estimoitua päästövähennyspolkua omana päästövähennyspolkunasi. Voit käyttää päästöjen arvioinnissa hyödyksi myös netin hiilijalanjälkilaskureita. Tällöin on tärkeä huomioida, että sisältääkö laskuri kaikki kasvihuonekaasupäästöt vai pelkän hiilidioksidin. 
+<br><br>
+<b>EXTRA: Maat</b>
+<br>
+Tässä osiossa voit halutessasi havainnoida sellaista globaalia hiilen hinnoittelujärjestelmää, jossa kaikkea hinnoittelun tuottoa ei jaeta tasan kaikkien maailman kansalaisten kesken, vaan valitsemasi prosenttiosuus siitä annetaankin hiiliosinkona aina vain sen maan kansalaisille, jossa se on kerätty.
+
+Voit myös tutkia keskipäästöjen ja -kustannusten polkuja eri maissa, olettaen että maiden keskipäästöt yhtenevät ennalta määrätyn mallin mukaisesti. 
+<br>
+<br>
+
+<b>Info-näppäimet </b>
+<br>
+Klikkaamalla käyttöliittymän infonäppäimiä saat lisätietoa eri indikaattoreista ja simulaatiovalinnoista. 
+
+<br>
+<br>
+
+<b>Puutteet / Mitä ei ole huomioitu</b>
+<br>
+Hiilineutraaliuuteen riittävien hiilinielujen saavuttamisesta koituu myös kustannuksia, joita ei kuitenkaan ole simulaatiossa mallinnettu. Nieluihin voidaan myös kannustaa hiilen hinnoittelun kautta, niin että sillä voimistetaan olemassa olevaa metsittymiskehitystä ja vähennetään metsäkatoa.
+<br>
+Annathan palautetta, mikäli sinulle on ideoita, että miten sisällyttää maankäytön muutoksen päästöt ja nielut malliin
+
+")
       # rv$labelfossil = "Fossiilipäästöt"
       rv$infofossiltext = c("Kaikki fossiiliset CO2-päästöt kaikissa maissa. Ei sisällä muita kasvihuonekaasupäästöjä (kuten metaania).
                         Datalähde päästöille 2021 ja ennen: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
@@ -816,6 +972,7 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       rv$infononco2utextt = c("Ei-CO2-päästöt")
       
       rv$infopoptext = c("Maailman väestö, miljardia. Tilastot ja ennusteet: YK. 
+                         <br>
                         Oletuksena on valittu mediaaniskenaario. On siis 50% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi ja 
                         50% todennäköisyys, että se on skenaarion arvoja pienempi. Valitsemalla esim. 80% ja
                       https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
@@ -830,7 +987,7 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       
       
       
-      rv$infoavgfossiltext =c("Keskimääräiset fossiilipäästöt kaikkien maailman yksilöidene kesken. Laskettu jakamalla fossiilipäästöt maailman väestöllä. Ei sisällä maankäytön päästöjä tai nieluja")
+      rv$infoavgfossiltext =c("Keskimääräiset fossiilipäästöt kaikkien maailman yksilöiden kesken. Laskettu jakamalla fossiilipäästöt maailman väestöllä. Ei sisällä maankäytön päästöjä tai nieluja")
       rv$infoavgfossiltextt =c("Keskimääräiset hiilidioksidipäästöt")
       
       
@@ -947,23 +1104,26 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       rv$infoconvergence2textt = c("Maiden päästöjen yhteneminen")
       
       
-      rv$infodatatext = c("Päästö-data: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
+      rv$infodatatext = HTML("CO2-päästöt: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
                       https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2022 \n
-                      
-                       Ei-CO2-päästödata: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
+                      <br>
+                      <br>
+                       Kokonaispäästödata: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
 Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016\n
-  \n
+  <br>
+Ei-CO2-päästöt on laskettu vähentämällä kokonaispäästöistä CO2-päästöt. 
+<br><br>
                       
                       Väestö-data: Population data and population projections from UN: 
 https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_TotalPopulationBySex.zip \n \n
-
+<br><br>
 IPCC:N raportteja on käytety hiilibudjettien valitsemiseen ja hiilen hinnan ja maankäytön päästöjen ja nielujen oletusarvojen löyhänä lähtökohtana\n
-Hiilibudjetit IPCC AR6 WGI -raportin luvun 5 taulukosta 5.8 sivulta 753 \n
-IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change[Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, In press, doi:10.1017/9781009157896.
+<br><br>Hiilibudjetit IPCC AR6 WGI -raportin luvun 5 taulukosta 5.8 sivulta 753 \n
+<br>IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change[Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, In press, doi:10.1017/9781009157896.
 \n
-
+<br><br>
 IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille \n
-IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [P.R. Shukla, J. Skea, R. Slade, A. Al Khourdajie, R. van Diemen, D. McCollum, M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, J. Malley, (eds.)]. Cambridge University Press, Cambridge, UK and New York, NY, USA. doi: 10.1017/9781009157926
+<br>IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [P.R. Shukla, J. Skea, R. Slade, A. Al Khourdajie, R. van Diemen, D. McCollum, M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, J. Malley, (eds.)]. Cambridge University Press, Cambridge, UK and New York, NY, USA. doi: 10.1017/9781009157926
 ")
       
       rv$infodatatextt = c("Data-lähteet")      
@@ -1554,28 +1714,46 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
                "infodata", "infobudget","infoemissionsink","infostartprice","infoendprice",
                "infopricing", "infopopu", "infoconvergence", "infoconvergence1", "infoconvergence2", "infonationaldiv")
   
-  # lapply(
-  #   X = infolist,
-  #   FUN = function(i){
-  #     observeEvent(input[[paste0(i)]], {
-  #       updateBox("infobox")
-  #       rv$info = rv[[paste0(i,"text")]]
-  #       rv$infot = rv[[paste0(i,"textt")]]
-  #       
-  #     })})
+
   
-  # lapply(
-  #   X = infolist,
-  #   FUN = function(i){
-  #     observeEvent(input$fin, {
-  #       updateBox("infobox", action = "update")
-  #       rv$info = rv[[paste0(i,"text")]]
-  #       rv$infot = rv[[paste0(i,"textt")]]
-  # 
-  #     })})
-  # # 
-  # 
+
   
+  
+  output$tutori = renderUI({
+    rv$tutotext
+  })
+  output$tutorit = renderText({
+    paste0(rv$tutotextt)
+  })
+  
+  
+  
+
+  
+  observeEvent(input$tutorial, {
+    updateBox("tutobox", action = "restore")
+  })
+
+  
+  ogg <- observe({
+    updateBox("tutobox", action = "remove")
+    # shinyjs::click("add")
+    ogg$destroy() # destroy observer as it has no use after initial button click
+  })
+
+  
+  
+  observeEvent(input$tutorial, {
+    updateBox("tutorialbox", action = "restore")
+  })
+  
+  output$info = renderText({
+    rv$info
+  })
+  
+  output$infot = renderText({
+    paste0("Info: ",rv$infot)
+  })
   
   lapply(
     X = infolist,
@@ -1583,21 +1761,8 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
       observeEvent(input[[paste0(i)]], {
         updateBox("infobox", action = "restore")
         rv$info = rv[[paste0(i,"text")]]
-        
         rv$infot = rv[[paste0(i,"textt")]]
-        
       })})
-  
-  
-  output$info = renderText({
-    rv$info
-  })
-  output$infot = renderText({
-    paste0("Info: ",rv$infot)
-  })
-  
-  
-  
   
   o <- observe({
     updateBox("infobox", action = "remove")
@@ -1606,11 +1771,6 @@ IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of W
   })
   
   
-  observeEvent(input$tutorial, {
-    updateBox("tutorialbox", action = "restore")
-    
-    
-  })
   
   # initially select carbon budget from left menu
   # o <- observe({
@@ -9948,7 +10108,7 @@ size=si(2.2), hjust=0, fontface="bold") +
   })
   
   observe({
-    rats = 1.1
+    rats = 1.07
     
   output$plotjj <- renderUI({
     

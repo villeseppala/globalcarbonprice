@@ -37,6 +37,8 @@ library(slickR)
 setDTthreads(2)
 
 
+
+
 bgc = "black"
     
   bgc = "darkgrey"
@@ -103,7 +105,7 @@ countrynetcost = avgnetcost
 
 countrypop = pop
 
-hih =.58
+hih =.63
 
 
  maxyy=2138
