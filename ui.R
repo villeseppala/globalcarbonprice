@@ -382,8 +382,8 @@ uiOutput("stylerota"),
          ),
      
      div(id="ress",
-         actionButton("reset", "Reset"),
-         bookmarkButton(label="Share")
+         actionButton("reset", "Reset")
+         # , bookmarkButton(label="Share")
          
          
          )
