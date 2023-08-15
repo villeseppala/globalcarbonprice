@@ -1,7 +1,7 @@
 
 
 
-ui <- dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,help = NULL, 
+ui <- function(request) {dashboardPage(dark=TRUE, fullscreen=TRUE, scrollToTop=TRUE,help = NULL, 
                     
                     dashboardHeader(
                       actionButton(inputId = "eng", label = NULL, style = "width: 2.5rem; height: 1.5rem; margin: 3px;
@@ -119,7 +119,17 @@ tagList(a
 
                      ")),
                      
-                     
+                     tags$head(
+                       # taken from accepted answer
+                       tags$script(
+                         "$(document).on('shiny:inputchanged', function(event) {
+          if (event.name != 'changed') {
+            Shiny.setInputValue('changed', event.name);
+          }
+        });"
+                       )
+        # through to here
+                     ),
                      
                      
                      
@@ -136,7 +146,11 @@ $(document).ready(function(){
                     ")),
 
 
-tags$head(tags$script(HTML("$(document).on('click', function () {
+# tags$head(tags$script(HTML("$(document).on('click', function () {
+#                                 Shiny.onInputChange('last_btn',this.id);
+#                              });"))),
+
+tags$head(tags$script(HTML("$(document).on('click', '.needed', function () {
                                 Shiny.onInputChange('last_btn',this.id);
                              });"))),
 
@@ -244,6 +258,7 @@ tags$head(
 uiOutput("css_style"),
 uiOutput("css_style2"),
 uiOutput("css_style3"),
+uiOutput("stylerota"),
 
 # uiOutput("cssroot"),
 
@@ -301,22 +316,31 @@ uiOutput("css_style3"),
                   # div(
                   column(12,id = "bor5",
                  
-                         tagList( uiOutput("graview")
+                         tagList( uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center;","graview")
                          ),
-                            div(style="background-color: var(--colbtable);",
+                            div(style="background-color: var(--colbtable); padding: .5vw;",
      
                          
                   radioButtons("view", label = "Graph separation",
                                c("One graph for all scales" = 1,
-                                 "Side by side graphs for each scale" = 2,
-                                 "Back to back graphs for each scale" = 3
+                                 "Side by side graphs, two in row" = 2,
+                                 "Back to back graphs" = 3,
+                                 "Side by side graphs, all in one row" = 4
                                  
-                               ),selected=1, inline=TRUE)
+                               ),selected=4, inline=TRUE)
+                  
+                  
+                  # ,sliderInput("hei", label="Graph height", min=.5, max=1.5, value =1, step =.01 )
+                  # ,sliderInput("fonts", label = "Graph tont size",min=.5, max=1.5, value =1, step =.01 )
+                  
+                  # 
+                  # sliderInput("conb",
+                  #             inf("Convergence of countries emissions", "infoconvergence2"), 
+                  #             min = .01, max = 1, value = .5, step=.01)
 
                   # ,div(style="display:inline-block; font-weight:100;",
                   #      awesomeCheckbox("startvalue", label=textOutput("startlabel"), value=TRUE))
-                  ,div(id="sla",
-                       checkboxInput("startvalue", label=textOutput("startlabel"), value=TRUE))
+
                   
                   # ,
                   # 
@@ -354,11 +378,15 @@ uiOutput("css_style3"),
         # column()
         # style = "align:center; "    ,
       # tagList(uiOutput(style = 'text-align: center', "viewtext"))
-      tagList( uiOutput("simuset")
+      tagList( uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center; padding-left: 2vw;", "simuset")
          ),
      
      div(id="ress",
-         actionButton("reset", "Reset"))
+         actionButton("reset", "Reset"),
+         bookmarkButton(label="Share")
+         
+         
+         )
      # )
       ),
      
@@ -401,7 +429,7 @@ div(id="tuto",
        
         div(id="tuto",
           box(
-            style = 'overflow-x: hidden',
+            style = 'overflow-x: hidden, font-size: .5vw',
             # style = 'overflow-y: scroll',
             
            id = "infobox",
@@ -424,18 +452,19 @@ div(id="tuto",
 # overflow-x: auto;
 
 
-fluidRow(id="bor5",style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
-  column(2, div(
-         # p(style = 'text-align: right',"Observe specific year:")
-         tagList(uiOutput(style = 'font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right;', "obsyear")
-         )  
-         )),
-  
-  
-  
-  column(10,         div(
-    uiOutput("yearcui", width="auto")))
-),
+# fluidRow(id="bor5",style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
+#   column(2, div(
+# 
+#          # p(style = 'text-align: right',"Observe specific year:")
+#          tagList(uiOutput(style = 'font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right;', "obsyear")
+#          )  
+#          )),
+#   
+#   
+#   
+#   column(10,         div(
+#     uiOutput("yearcui", width="auto")))
+# ),
 
 
 fluidRow(
@@ -475,26 +504,16 @@ fluidRow(
                 div(
                 # id = "bor5a",
                 
-                div(style='font-weight:1000; 
-                                 font-size: calc(.7vw + .7rem);
+                div(style='
+
 text-align: left !important;
 text-decoration: none;
-margin-bottom: .5rem;
-margin-top: -.3rem;',
+margin-bottom: .0rem;
+margin-top: -.2rem;',
 
-tagList(uiOutput(style = 'text-align: center', "viewtext"))),
+tagList(uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center;", "viewtext"))),
 # textOutput("indicatorvisibility"),
-div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
-div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
-),
-div(id="sla",
-    # style="display:inline-block; font-weight:100;",
-    checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
-    
-    
-    # awesomeCheckbox("visib", label=textOutput("automatic"), value=TRUE)
-)
-,
+div(style="text-align: right;",textOutput("yearc")),
                 
                 div(
                   id="tablu",
@@ -506,22 +525,31 @@ div(id="sla",
             
                  p(" "),
                 bs4Dash::bs4Table(
-                  cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                  cardWrap = TRUE, bordered = TRUE,striped = FALSE,
                   list( headTitles = list(
                       cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE)   
-                    )  )  ), 
-              
+                    # ) , list(rv$fossill) )  ), 
+                 )  
+                 ,   list(uiOutput("fossill") )
+                 )), 
+
                 bs4Dash::bs4Table(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE) 
-                  )  )  ), 
+                  )  
+                  ,   list(uiOutput("landl") )
+                  
+                  )  ), 
                 
                 bs4Dash::bs4Table(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)   
-                  )  )  )   ),
+                  ) 
+                  ,   list(uiOutput("netl") )
+                  
+                  )  )   ),
                 
                 
                 div(
@@ -534,13 +562,16 @@ div(id="sla",
                     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                     list( headTitles = list(
                       cuk2(non, textOutput("labelnonco2"),  "infononco2", "shownonco2", NULL, FALSE)
-                    )  )  ), 
+                    )   ,   list(uiOutput("nonco2l") )
+                    )  ), 
                   
                   bs4Dash::bs4Table(
                     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                     list( headTitles = list(
                       cuk2(tot, textOutput("labelghg"),  "infoghg", "showghg", NULL, FALSE)
-                    )  )  )
+                    )
+                    ,   list(uiOutput("ghgl") )
+                    )  )
                   
                 ), 
   
@@ -554,7 +585,7 @@ div(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(pop,textOutput("labelpop"),  "infopop", "showpop", NULL, FALSE)
-                  )  )  )), 
+                  )    ,   list(uiOutput("popl") ) )  )), 
                 
                 
                 div(
@@ -566,7 +597,9 @@ div(
                     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                     list( headTitles = list(
                       cuk2(countrypop, textOutput("labelcountrypop"), "infocountrypop", "showcountrypop", NULL, FALSE)
-                    )  )  )
+                    ) 
+                    ,   list(uiOutput("countrypopl") )
+                    )  )
                
                 ),
                 
@@ -582,12 +615,16 @@ div(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(fpop, textOutput("labelavgfossil"),  "infoavgfossil", "showavgfossil", NULL, TRUE)
-                  )  )  ), 
+                  )
+                  ,   list(uiOutput("avgfossill") )
+                  )  ), 
                 bs4Dash::bs4Table(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(cpop,textOutput("labeluserfossil"), "infouserfossil", "showuserfossil", NULL, FALSE)
-                  )  )  )),
+                  )
+                  ,   list(uiOutput("userfossill") )
+                  )  )),
                 
                 
                 div(
@@ -600,7 +637,9 @@ div(
                     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                     list( headTitles = list(
                       cuk2(countryfossil,textOutput("labelcountryfossil"), "infocountryfossil", "showcountryfossil", NULL, FALSE)
-                    )  )  ), 
+                    )
+                    ,   list(uiOutput("countryfossill") )
+                    )  ), 
                   
               
                   
@@ -614,7 +653,10 @@ div(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(tax,textOutput("labelprice"),  "infoprice", "showprice", NULL, FALSE)
-                  )  )  ), 
+                  )
+                  
+                  ,   list(uiOutput("pricel") )
+                  )  ), 
                 
                 p(" "),
                 
@@ -622,27 +664,41 @@ div(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE)
-                  )  )  ), 
+                  )
+                  ,   list(uiOutput("avgcostl") )
+                  )  ), 
                 bs4Dash::bs4Table(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(dividend, textOutput("labeldividend"),  "infodividend", "showdividend", NULL, FALSE)
-                  )  )  ), 
+                  )
+                  ,   list(uiOutput("dividendl") )
+                  
+                  )  ), 
                 bs4Dash::bs4Table(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(avgnetcost, textOutput("labelavgnetcost"), "infoavgnetcost", "showavgnetcost", NULL, FALSE)
-                  )  )  ), 
+                  )
+                  ,   list(uiOutput("avgnetcostl") )
+                  
+                  )  ), 
                 bs4Dash::bs4Table(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(taxfosindi, textOutput("labelusercost"),  "infousercost", "showusercost", NULL, FALSE)
-                  )  )  ), 
+                  )
+                  ,   list(uiOutput("usercostl") )
+                  
+                  )  ), 
                 bs4Dash::bs4Table(
                   cardWrap = TRUE, bordered = TRUE,striped = TRUE,
                   list( headTitles = list(
                     cuk2(netcost,textOutput("labelnetcost"),  "infonetcost", "shownetcost", NULL, FALSE)
-                  )  )  )),
+                  )
+                  ,   list(uiOutput("netcostl") )
+                  
+                  )  )),
                 
       
          
@@ -664,13 +720,19 @@ div(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
       cuk2(countrycost, textOutput("labelcountrycost"),  "infocountrycost", "showcountrycost", NULL, FALSE)
-    )  )  ), 
+    )
+    ,   list(uiOutput("countrycostl") )
+    
+    )  ), 
   
   bs4Dash::bs4Table(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
       cuk2(countrynetcost, textOutput("labelcountrynetcost"), "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
-    )  )  ), 
+    )
+    ,   list(uiOutput("countrynetcostl") )
+    
+    )  ), 
   
   
 ),
@@ -696,18 +758,31 @@ div(
              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
              list( headTitles = list(
                cuk2(averagedividend, textOutput("labelaveragedividend"),  "infoaveragedividend", "showaveragedividend", NULL, FALSE)
-             )  )  ), 
+             )
+             ,   list(uiOutput("averagedividendl") )
+             
+             )  ), 
            bs4Dash::bs4Table(
              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
              list( headTitles = list(
                cuk2(countrydividend, textOutput("labelcountrydividend"),  "infocountrydividend", "showcountrydividend", NULL, FALSE)
-             )  )  ) 
+             )
+             ,   list(uiOutput("countrydividendl") )
+             
+             )  ) 
            
 
            
          )
-         
-         
+,
+div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
+div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
+),
+div(style="display:inline-block;",id="sla",
+    checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
+)
+,div(id="sla",
+     checkboxInput("startvalue", label=textOutput("startlabel"), value=TRUE))
        
 # div(id="ress",
 #     actionButton("reset", "Reset"))
@@ -720,62 +795,9 @@ div(
 
          ),
          
-# div(
-# id = "bor5a",
-# 
-# radioButtons("view", label = "Graph view",
-#              c("One graph for all scales" = 1,
-#                "Side by side graphs for each scale" = 2,
-#                "Back to back graphs for each scale" = 3
-#                
-#              ),selected=1, inline=TRUE)
-# 
-# ,
-# # ,
-# # 
-# # sliderInput("fonts", label ="Font size", min = 1, max = 10, value = c(5), dragRange=FALSE, ticks = FALSE),
-# # hr(),
-# 
-# 
-#          ),
-         
-                # accordion(
-                #   id = "accordion6",
-                #   accordionItem(
-                #     title = HTML("<font size='5'>", as.character( icon("fas fa-edit")), "VALUES",  as.character( icon("fas fa-caret-square-down")),"</font>"),
-                #     # status = "teal",
-                #     collapsed =FALSE,          
-                
-                # p(HTML(label, "<font size='3'>",
-                #        as.character(actionLink(style='color:#ffc107', inputId = id, 
-                #                                label = "  ", 
-                #                                icon = icon("far fa-hand-paper"))), "</font>")), 
-                
-                # p(HTML(label, "<font size='3'>",
-                #        as.character(actionLink(style='color:#ffc107', 
-                #                                label =textOutput("simuset"), 
-                #                                icon = icon("far fa-hand-paper"))), "</font>")), 
-                
+
                 div(
-                  # HTML(
-                  #   "<body style='background-color:aquamarine;'>", 
-                  #   "<font size='4.5'>", 
-                  #    "<b>" ,
-                  #   as.character(icon("far fa-hand-paper")), textOutput("simuset"), 
-                  #    "</b>",
-                  #   "</font>",
-                  #   "</body>"),
-                # tagList(
-                  
-
-                  
-  
-                  # ,
-                  # p(HTML(textOutput("simuset"), "<font size='3'>", 
-                  #        as.character(
-                  #                                icon = icon("far fa-hand-paper")), "</font>")), 
-                  # h5("Set values:"),
-
+     
 
                   uiOutput("cou")
                   # ) )
@@ -789,9 +811,86 @@ div(
   column(10,style = " padding: .2vw;",  
          #
          column(12, id = "bor5",  
-                
-                p(uiOutput(style = 'text-align: center', "simuresults")
+                # fluidRow(style = "justify-content: flex-start;",
+                #          column(3,
+                #                 p(uiOutput(style = "margin-left: 2vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: center;", "simuresults")
+                #                 )),
+                #          column(2,
+                #   div(style="margin-left: 1vw; display:inline-block;",id="ress", actionButton("go", "Redraw")),
+                #          # ),
+                #   # column(1,
+                #   div(id="sla",style="margin-top: .4vw; margin-left: .56vw; display:inline-block;",
+                #       checkboxInput("autodraw",  label="Auto-redraw", value=FALSE)
+                #   )) ,       
+                # 
+                # 
+                # # fluidRow(style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
+                # column(7,  
+                #        fluidRow(
+                #        column(4, div(
+                #            
+                #            # p(style = 'text-align: right',"Observe specific year:")
+                #            tagList(uiOutput(style = 'font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right;', "obsyear")
+                #            )  
+                #          )),
+                #          
+                #          
+                #          
+                #          column(8,         div(
+                #            uiOutput("yearcui", width="auto")))
+                #        )
+                # # ),
+                # )
+                # ),
+                fluidRow(style = "justify-content: flex-start;",
+                         column(4,
+                         div(style="display:inline-block;",
+                                p(uiOutput(style = "margin-left: 2vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: center;", "simuresults")
+                                )),
+                         div(style="display:inline-block;",
+                                div(style="margin-left: 3vw; display:inline-block; margin-top: -10.6vw !important;",id="ress", actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
+                                # ),
+                                # column(1,
+                                div(style="margin-top: .5vw; margin-left: .23vw; display:inline-block;",
+                                    checkboxInput("autodraw",  
+                                                  # label=textOutput(style="display:inline-block;","autoredraw"), 
+                                                  label="Auto", 
+                                                  
+                                                    value=FALSE)
+                                )
+                             ) 
+                         ),       
+                         
+                         column(8,
+                                # fluidRow(
+                                  
+                         # fluidRow(style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
+                         div(
+                           # style="display:inline-block;",  
+                                 fluidRow(
+                                   column(4,
+                                         div(
+                                    
+                                    # p(style = 'text-align: right',"Observe specific year:")
+                                    tagList(uiOutput(style = 'font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right;', "obsyear")
+                                    )  
+                                   )
+                                  ),
+                                  
+                                  
+                                  
+                                   column(8,         
+                                         div(
+                                            style="padding-top: 0.4vw; padding-right: 0.4vw; margin-bottom: 0.9rem;",  
+                                    uiOutput("yearcui", width="auto"))
+                                     )
+                                )
+                                # ),
+                          )
+                         )
                 ),
+                
+                div(id = "rota", class = "rota",
              # div(
              #  uiOutput("yearcui", width="auto")),
               
@@ -808,7 +907,7 @@ div(
                 #                    uiOutput("yearcui2", width="auto")
                 #                    # )
                 # )
-#                 
+
                , conditionalPanel(condition="input.view ==2",
                                   div( style = 'overflow-y: auto',
                                        # uiOutput("yearcui2", width="auto")
@@ -817,20 +916,43 @@ div(
                                  )
 )
                 )
-
+# , conditionalPanel(condition="input.view ==2",
+#                    div( style = 'overflow-y: auto',
+#                         # uiOutput("yearcui2", width="auto")
+#                         # ,
+#                         plotOutput("plotj", width="auto"
+#                         )
+#                    )
+# )
 
              ,  conditionalPanel(condition="input.view ==3",
                                 div( style = 'overflow-y: scroll',
                                      # uiOutput("yearcui2", width="auto"),
                                 # uiOutput("ssplot2", width="auto"
-                                         uiOutput("plotkk", width="auto"
-                                                  
+                                         uiOutput("plotkk"
+                                                   , width="auto"
                                           )
-
                )
                )
 
 
+,  conditionalPanel(condition="input.view ==4",
+                    div( 
+                        style = 'overflow-x: scroll',
+                         # uiOutput("yearcui2", width="auto"),
+                         # uiOutput("ssplot2", width="auto",
+                       
+                         uiOutput("plotll"
+                                   # , width="100%"
+                                  , height="auto"
+                                  # ,
+                                  # height =="auto"
+                                  
+                         )
+                         
+                    )
+)
+                )
 # 
 ,div(style = " background-color:var(--colb)!important; font-size: 1.2vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2022:"))
 
@@ -838,6 +960,10 @@ div(
                 )
 ,div(id="sla"
      ,checkboxInput("showtab", "Show the simulation results also in table below")
+     # ,
+     # textOutput("pul")
+   
+     
 )           
 
                 # ,uiOutput("yearcui")
@@ -857,6 +983,8 @@ conditionalPanel(
                   )),
   
 )
+# ,textOutput("last")
+# ,textOutput("lastButtonCliked")
 # ,
 # fluidRow(column(width =12, align = "center",   DT::dataTableOutput("tablx", width="100%")
 #                 # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
@@ -872,7 +1000,7 @@ conditionalPanel(
 # )
   )
    )                    
- )
+ )}
 
 
 

@@ -60,31 +60,40 @@ hh = .81
 vv = .8
 
 
-tot = hsv(0.07,.785,.85)
-non = hsv(0.06,.785,.75)
 
-fos = hsv(0.07,.99,.88)
-lul = hsv(0.11,.99,.858)
-net = hsv(0.09,.99,.885)
+fos = hsv(0.08,0.93,0.89)
+lul = hsv(	0.13,1,0.78)
+net = hsv(0.10,0.88,0.85)
+tot = hsv(0.08,0.8,0.78)
+non = hsv(0.11,0.93,0.71)
 
-pop =hsv(0.57,.7,.95)
-
-
-tax = hsv(0.35,.65,.7)
+pop =hsv(0.73,0.52,1)
 
 
-fosindi =hsv(.96,.5,.85)  
-fpop = fosindi
+tax = hsv(0.3,0.93,0.78)
+
+
+fpop = hsv(0.56,0.86,1)
+fosindi =hsv(0.52,0.72,0.81)  
 cpop = fosindi
-countryfossil = fosindi 
+# cpop = fosindi
+countryfossil = hsv(0.54,0.78,0.88)  
 
-avgcost = hsv(0.57,.7,.9)
-avgcost = hsv(0.75,.3,vv)
-dividend =  hsv(0.81,.4,vv)
-avgnetcost =hsv(0.77,.4,vv)
+# avgcost = hsv(0.57,.7,.9)
+avgcost = hsv(0.94,0.63,0.89)
+dividend =  hsv(0.87,0.639,0.89)
+avgnetcost =hsv(0.9,0.6,0.89)
+taxfosindi =hsv(0.95,0.59,0.8)
+netcost = hsv(	0.91,0.58,0.83)
 
-averagedividend = dividend
-countrydividend = dividend
+averagedividend =hsv(0.86,0.63,0.79)
+countrydividend = hsv(0.88,0.73,0.81)
+
+
+countrycost = hsv(0.94,0.63,0.79)
+countrynetcost = hsv(0.9,0.63,0.69)
+
+countrypop = hsv(0.75,0.52,.8)
 # dividend = avgcost
 # avgnetcost = avgcost
 # taxfosindi = avgcost
@@ -96,17 +105,12 @@ countrydividend = dividend
 
 # 
 
-taxfosindi = avgcost
-netcost = avgnetcost
 # 
 # 
-countrycost = avgcost
-countrynetcost = avgnetcost
 
-countrypop = pop
 
 hih =.63
-
+prinet = 120
 
  maxyy=2138
  minyy=1979
@@ -628,7 +632,7 @@ chk = function(col, label, info) {
 
 inf = function(label, id) {
   # div(style="display:inline-block",
-  label=p(HTML(label, "<font size='1'>",
+  label=p(label,HTML("<font size='1'>",
                as.character(actionLink( inputId = id, 
                                        label = " ", 
                                        icon = icon("fas fa-info-circle"))), "</font>"))
@@ -692,3 +696,4 @@ cuk3 = function(col, label, info, show, lab, value) {
   
 }
 
+enableBookmarking(store = "url")

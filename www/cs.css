@@ -16,14 +16,14 @@
 --collinea: #41644A;
 --collineb: #41644A;
 
---colb: #5E5D5E; 
+--colb: #484B4D; 
 --colb: #89D681;
 
 --colbcard:  #c9d1ca;
 --colb: #6CA56C;
 --colb: #67CEC4;
 
---colb: #D6D6D6;
+--colb: #D3DDE0;
 
 --colt: #426f83;;
 --colm: #67CEC4;
@@ -47,11 +47,11 @@
 --colb: #5E5D5E; 
 --colb: #35473F;
 --colb: #2E2E2E;
---colb: #404040;
+--colb: #484B4D;
 
---colbcard:  #455740;
 --colbcard: #2E2E2E;
 --colbcard: #2f4238;
+--colbcard: #316051;
 
 --colbtable: #565656;
 
@@ -59,20 +59,120 @@
 
 --colt: #F0EBCE;
 --colm: #305C36;
---colo: #9f8e71;
+--colo: #F0EBCE;
 
 --colslide:#4995B3;
 
---colink: #6CA56C;
+--colink: #2cd2eb;
+--colbut:  #237c85;
 
-
---colcheck:  #2f4238;
+--colcheck:  #237c85;
 
 --collinea: #9f8e71;
 --collineb: #F0EBCE;
 }
 
+.tabbable > .nav > li > a[data-value='1. Global emissions'] { color:#D98C1A !important; }
+
+.tabbable > .nav > li > a.active[data-value='1. Global emissions'] {  border-top: .2vw solid #D98C1A !important;
+                             border-inline: .2vw solid #D98C1A !important;}
+
+.tab-pane.active[data-value='1. Global emissions'] {
+border-block: .2vw solid #D98C1A !important;
+                             border-inline: .2vw solid #D98C1A !important;
+}
+
+.tabbable > .nav > li > a[data-value='2. Population projection'] { color:#AD7AFF !important }
+.tabbable > .nav > li > a.active[data-value='2. Population projection'] {  border-top: .2vw solid #AD7AFF !important;
+                             border-inline: .2vw solid #AD7AFF !important;}
+                             .tab-pane.active[data-value='2. Population projection'] {
+border-block: .2vw solid #AD7AFF !important;
+                             border-inline: .2vw solid #AD7AFF !important;
+}
+
+
+.tabbable > .nav > li > a[data-value='3. Carbon price'] { color:#33C70E !important }
+.tabbable > .nav > li > a.active[data-value='3. Carbon price'] {  border-top: .2vw solid #33C70E !important;
+                             border-inline: .2vw solid #33C70E !important;}
+                             .tab-pane.active[data-value='3. Carbon price'] {
+border-block: .2vw solid #33C70E!important;
+                             border-inline: .2vw solid #33C70E !important;
+}
+                             
+                             .tabbable > .nav > li > a[data-value='4. User emissions'] { color:#24B0FF !important }
+.tabbable > .nav > li > a.active[data-value='4. User emissions'] {  border-top: .2vw solid #24B0FF !important;
+                             border-inline: .2vw solid #24B0FF !important;}
+                             .tab-pane.active[data-value='4. User emissions'] {
+border-block: .2vw solid #24B0FF !important;
+                             border-inline: .2vw solid #24B0FF !important;
+}
+                             .tabbable > .nav > li > a[data-value='EXTRA: Countries'] { color:yellow !important }
+.tabbable > .nav > li > a.active[data-value='EXTRA: Countries'] {  border-top: .2vw solid yellow !important;
+                             border-inline: .2vw solid yellow !important;}
+                             .tab-pane.active[data-value='EXTRA: Countries'] {
+border-block: .2vw solid yellow !important;
+                             border-inline: .2vw solid yellow !important;
+}
+
+.tabbable > .nav > li > a[data-value='1. Globaalit päästöt'] { color:#D98C1A !important; }
+
+.tabbable > .nav > li > a.active[data-value='1. Globaalit päästöt'] {  border-top: .2vw solid #D98C1A !important;
+                             border-inline: .2vw solid #D98C1A !important;}
+
+.tab-pane.active[data-value='1. Globaalit päästöt'] {
+border-block: .2vw solid #D98C1A !important;
+                             border-inline: .2vw solid #D98C1A !important;
+}
+
+.tabbable > .nav > li > a[data-value='2. Maailman väestö'] { color:#AD7AFF !important }
+.tabbable > .nav > li > a.active[data-value='2. Maailman väestö'] {  border-top: .2vw solid #AD7AFF !important;
+                             border-inline: .2vw solid #AD7AFF !important;}
+                             .tab-pane.active[data-value='2. Maailman väestö'] {
+border-block: .2vw solid #AD7AFF !important;
+                             border-inline: .2vw solid #AD7AFF !important;
+}
+
+
+.tabbable > .nav > li > a[data-value='3. Hiilen hinta'] { color:#33C70E !important }
+.tabbable > .nav > li > a.active[data-value='3. Hiilen hinta'] {  border-top: .2vw solid #33C70E !important;
+                             border-inline: .2vw solid #33C70E !important;}
+                             .tab-pane.active[data-value='3. Hiilen hinta'] {
+border-block: .2vw solid #33C70E!important;
+                             border-inline: .2vw solid #33C70E !important;
+}
+                             
+                             .tabbable > .nav > li > a[data-value='4. Käyttäjän päästöt'] { color:#24B0FF !important }
+.tabbable > .nav > li > a.active[data-value='4. Käyttäjän päästöt'] {  border-top: .2vw solid #24B0FF !important;
+                             border-inline: .2vw solid #24B0FF !important;}
+                             .tab-pane.active[data-value='4. Käyttäjän päästöt'] {
+border-block: .2vw solid #24B0FF !important;
+                             border-inline: .2vw solid #24B0FF !important;
+}
+                             .tabbable > .nav > li > a[data-value='EXTRA: Maat'] { color:yellow !important }
+.tabbable > .nav > li > a.active[data-value='EXTRA: Maat'] {  border-top: .2vw solid yellow !important;
+                             border-inline: .2vw solid yellow !important;}
+                             .tab-pane.active[data-value='EXTRA: Maat'] {
+border-block: .2vw solid yellow !important;
+                             border-inline: .2vw solid yellow !important;
+}
+
+.tabbable[data-value='1. Global emissions'] {border-block: 2px solid white !important;
+                             border-inline: 2px solid white !important;}
+
+.nav-tabs > li > .nav-link.active {
+   border-color: green !important;
+}
+
+
+
+
+
+
 /*
+
+.tabbable > .nav > li > a[data-value='3. Carbon price'] { color:lightgreen !important}
+.tabbable > .nav > li > a[data-value='4. User emissions'] { color:pink !important}
+.tabbable > .nav > li > a[data-value='EXTRA: Countries'] { color:yellow !important}
 --colinfo: #5ABAE0;
 
 --colinfo: #5ABAE0;
@@ -98,11 +198,11 @@
  .tab-content .tab-pane .sox {
     margin: 0.5vw;
 }
-*/
+
 .dark-mode .nav-tabs {
     border-color: transparent !important;
 }
-
+*/
 .custom-control-input:checked~.custom-control-label::before {
     color: #fff;
     border-color: orange!important;
@@ -162,10 +262,39 @@ width: .1px;
 
 input[type=checkbox] {
     box-sizing: border-box;
-    margin-top: .5vw;
+    margin-top: .1vw;
     width:  calc(.5rem + .5vw) !important;
     height: calc(.5rem + .5vw) !important;
-    line-height: .3px !important;
+    line-height: .1vw !important;
+
+}
+
+#noku input[type=checkbox] {
+          margin-bottom: -2.9vw !important;
+
+  
+}
+
+
+.noku .shiny-input-container:not(.shiny-input-container-inline) {
+            margin-bottom: -2.9vw !important;
+
+}
+
+input[type="radio"]{
+    box-sizing: border-box;
+    margin-top: .1vw;
+    width:  calc(.4rem + .4vw) !important;
+    height: calc(.4rem + .4vw) !important;
+    line-height: .1vw !important;
+  
+  
+}
+
+
+.navbar-expand .navbar-nav .nav-link {
+    padding-right: 0rem;
+    padding-left: 0rem;
 }
 
 .irs--shiny .irs-from, .irs--shiny .irs-to, .irs--shiny .irs-single {
@@ -211,9 +340,20 @@ background-color: var(--colbcard);
 }
 hr {border-top: 2px solid white; margin-bottom:3px; margin-top:3px;}
 
+
+
+rota.scroller {
+  width: 300px;
+  height: 100px;
+  overflow-y: scroll;
+} 
 /*
 .dark-mode .card {
 background-color: rgb(45, 36, 36);
+.rota {
+  scrollbar-color: red yellow;
+}
+  scrollbar-color: pink lightblue;
 
 } */
 
@@ -488,13 +628,26 @@ overflow: scroll;
                }
                
                .table td {
-               padding: .1vw !important;
+                                padding-top: .1vw !important;
+
+               padding-bottom: .1vw !important;
+                              padding-right: .2vw !important;
+
               margin-bottom: .1vw;
     background-color:var(--colb)!important;
 border-color: var(--collinea) !important;
+ border: 0px solid white;
 text-align: right;
 
                }
+
+.table-bordered {
+  
+  border-color: green;
+  border: .1vw solid var(--collinea) !important;
+  
+}     
+               
 /*
                .td {
                padding: .1vw;
@@ -717,13 +870,13 @@ margin-top: -.3rem;
 }
 
   
-#bor5  a {
+#bor5 a {
 
 
 padding-left: .5vw;
 padding-right: .8vw;
 
-
+margin-top: 0vw !important;
 color: var(--colink);
 padding-top: .0vw;
 padding-bottom: .0vw;
@@ -931,6 +1084,11 @@ label:not(.form-check-label):not(.custom-file-label) {
     font-weight: 500 !important;
 }
 
+.slug .p {
+  font-weight: 500 !important;
+
+}
+
 .radio label:not(.form-check-label):not(.custom-file-label)  {
 font-weight: 500 !important;
 }
@@ -939,19 +1097,30 @@ font-weight: 500 !important;
 font-weight: 500 !important;
 }
 
+
+
 .tab-pane.active{
+  
     background-color: var(--colbtable);
                margin-left: 0.5vw;
                               margin-right: 0.3vw;
                               margin-top: 0.2vw;
 
-padding: 1.0vw;
+padding: .6vw;
+padding-right: 1.3vw;
 padding-top: .6vw;
 padding-bottom: .2vw;
 
 font-size: calc(.45vw + .47rem) !important;
 font-weight: 100 !important;
 
+
+}
+
+#view {
+
+font-size: calc(.45vw + .47rem) !important;
+font-weight: 100 !important;
 
 }
 
@@ -967,6 +1136,21 @@ horizontal-align: right;
  width: 40px !important;
  
 max-width: 40px;
+
+#rota {
+    transform:rotateX(180deg);
+
+}
+
+#rota img {
+    transform:rotateX(180deg);
+
+}
+
+#rota .shiny-output-error {
+    transform:rotateX(180deg);
+
+}
 */
 
 }
@@ -1133,7 +1317,6 @@ color: black !important;
 }
 
 
-
 div.datatables {
 color: white !important;
 }
@@ -1190,9 +1373,14 @@ color: black;
 }
 
 #but .btn {
-    font-size: .8rem;
-    line-height: 1.1 !important;
-    margin: 3px;
+
+    
+        font-size: calc(.45vw + .45rem);
+    line-height: .4 !important;
+  
+    padding: .5vw;
+        margin-right: .3vw;
+    
 }
 
 #tably .dt-button {
@@ -1234,7 +1422,14 @@ border-width: 2px;
 margin-bottom: .2rem;
 margin-top: .2em;
 
+}
 
+#tuto .shiny-html-output {
+  font-size: calc(.5vw + .5rem) !important;
+}
+
+#tuto .shiny-text-output {
+  font-size: calc(.6vw + .6rem) !important;
 }
 
 
@@ -1252,10 +1447,11 @@ color: var(--colo);
 }
 
 #ress .btn {
-    font-size: .8rem;
-    line-height: 1.1 !important;
+    font-size: calc(.47vw + .47rem);
+    line-height: .4 !important;
     text-align: right;
-        margin-right: 1.3vw;
+    padding: .6vw;
+        margin-right: .3vw;
 }
 
 .card-title {
