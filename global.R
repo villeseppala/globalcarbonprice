@@ -35,7 +35,7 @@ library(shinyjs)
 library(slickR)
 library(reactlog)
 
-reactlog::reactlog_enable()
+# reactlog::reactlog_enable()
 setDTthreads(2)
 # shiny::reactlogShow()
 
