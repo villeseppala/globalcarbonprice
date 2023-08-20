@@ -916,6 +916,7 @@ div(style="display:inline-block;",id="sla",
                                  )
 )
                 )
+
 # , conditionalPanel(condition="input.view ==2",
 #                    div( style = 'overflow-y: auto',
 #                         # uiOutput("yearcui2", width="auto")

@@ -33,11 +33,14 @@ library(shinyjs)
 
  library(showtext)
 library(slickR)
+library(reactlog)
 
+reactlog::reactlog_enable()
 setDTthreads(2)
+# shiny::reactlogShow()
 
 
-
+lihh =.99
 
 bgc = "black"
     
