@@ -33,7 +33,7 @@ library(shinyjs)
 
  library(showtext)
 library(slickR)
-library(reactlog)
+# library(reactlog)
 
 # reactlog::reactlog_enable()
 setDTthreads(2)
