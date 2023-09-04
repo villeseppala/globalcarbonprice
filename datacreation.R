@@ -5,6 +5,7 @@ library(readxl)
 library(data.table)
 library(countrycode)
 
+library(wbstats)
 
 
 
@@ -15,6 +16,20 @@ library(countrycode)
 # go to https://www.climatewatchdata.org/data-explorer/
 # click Download bulk data from top right corner and choose ghg emissions
 # put the PIK file on your file location
+
+emu<-read.csv(file="primap2023march.csv", header=T,  sep="," )[,]
+emu = as.data.table(emu)
+emu[area..ISO3.=="FIN" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
+
+
+
+emu<-read.csv(file="primapnor.csv", header=T,  sep="," )[,]
+emu = as.data.table(emu)
+emu[area..ISO3.=="EARTH" & entity =="KYOTOGHG (AR4GWP100)"  & category..IPCC2006_PRIMAP.=="M.LULUCF" & scenario..PRIMAP.hist. == "HISTCR",X2019]
+
+emu[area..ISO3.=="FIN" & entity =="CO2"  & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP",X2021]
+
+
 
 
 em<-read.csv(file="CW_HistoricalEmissions_PIK.csv", header=T,  sep="," )[,]
@@ -250,7 +265,25 @@ paac$ghg = paac$co2 + paac$nonco2
 paac$ghgcap = paac$ghg/paac$pop
 
 
+
 paac = paac[, !(c("variant", "kel", "sha", "sumt", "wor"))]
+
+
+
+
+
+
+gdpdata <- wb(indicator = "NY.GDP.MKTP.KD", startdate = 1959, enddate = 2022)
+
+gdpdata=as.data.table(gdpdata)
+gdpdata = gdpdata[indicator =="GDP (constant 2015 US$)",]
+# gdpdata$country
+gdpdata$year = as.numeric(gdpdata$date)
+
+
+
+paac = paac[gdpdata, gdp :=i.value, on=c("year", "iso3c")]
+paac$gdpcap = paac$gdp/paac$pop
 
 
 

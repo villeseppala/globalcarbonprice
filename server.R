@@ -3,19 +3,26 @@
 server <- function(input,output, session) {
   
   output$testy= renderText("testyy")
-  output$pul= renderText(rv$pll)
+  output$pul= renderText(rv$luk)
+  output$xx= renderText(rv$x)
+  output$yy= renderText(rv$y)
+   output$cor= renderText(rv$cor)
+   # output$couexp= renderText(rv$coux)
+   
+   output$couexp = renderUI({
+     rv$coux
+   })
   # observe({
   # })
   # output$last= renderText({input$last_btn})
   output$last= renderText({input$changed})
-  
   output$dimension_display <- renderText({
     paste(input$dim[1], input$dim[2], input$dim[2]/input$dim[1])
   })
   
   observeEvent(rv$yearc, {
     req(datsss())
-
+    
   })
   
   observeEvent(input$view, {
@@ -31,7 +38,6 @@ server <- function(input,output, session) {
       onBookmark(function(state) {
         state$values[[paste0(j)]] <- input[[paste0(j)]]
       })   
-      
     }
   )
   
@@ -96,8 +102,8 @@ server <- function(input,output, session) {
   #   sliderInput("yearccc",
   #                label = NULL, min=1970, max=2100, value = 2080, step=1, 
   #               width="100%", animate=TRUE
-
-
+  
+  
   output$lets <- renderUI({
     HTML("<p> Displaying greek letter delta as a symbol:<br> \u0394 
          </p>")
@@ -159,7 +165,9 @@ server <- function(input,output, session) {
   rv <- reactiveValues(autodraw =FALSE)
   rv <- reactiveValues(wii =NULL)
   rv <- reactiveValues(lastt =NULL)
-  
+   rv <- reactiveValues(x =NULL)
+   rv <- reactiveValues(lurk =NULL)
+   
   rv <- reactiveValues(avgfossil = NULL)
   rv <- reactiveValues(pop = NULL)
   rv <- reactiveValues(fossill = NULL)
@@ -197,7 +205,7 @@ server <- function(input,output, session) {
   
   
   
-   rv <- reactiveValues(lek = NULL)
+  rv <- reactiveValues(lek = NULL)
   
   rv <- reactiveValues(lang = NULL)
   rv <- reactiveValues(rvtotal= NULL)
@@ -215,7 +223,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(fyear = NULL)
   rv <- reactiveValues(time = NULL)
   rv <- reactiveValues(year = NULL)
-  rv <- reactiveValues(x = NULL)
+  # rv <- reactiveValues(x = NULL)
   rv <- reactiveValues(y = NULL)
   rv <- reactiveValues(paa = NULL)
   rv <- reactiveValues(prate = NULL)
@@ -291,24 +299,26 @@ server <- function(input,output, session) {
   
   rv = reactiveValues(ffyear= NULL)
   rv = reactiveValues(view= NULL)
-
-  rv = reactiveValues(pressed= FALSE)
   
-    rv$lek = FALSE
+  rv = reactiveValues(pressed=TRUE)
+  rv$lurk =0
+  
+  rv$x =0
+  rv$lek = FALSE
   rv$lang = "eng"
   rv$bgc = hsv(.1,.1,.7)
   rv$teksvari = "white"
   rv$obsvari = "lightgreen"
   
-    rv$pll = 1
-    rv$plll = 1
+  rv$pll = 1
+  rv$plll = 1
+  
+  observeEvent(input$last_btn, {
+    rv$lastt =c(input$last_btn)
     
-    observeEvent(input$last_btn, {
-      rv$lastt =c(input$last_btn)
-      
-      
-    })
-    output$lastButtonCliked=renderText({input$last_btn})
+    
+  })
+  output$lastButtonCliked=renderText({input$last_btn})
   # observeEvent(rv$lang,{
   #   
   #   if  
@@ -344,7 +354,16 @@ server <- function(input,output, session) {
       }
   })
   # 
+  observeEvent(input$comcou, {
+    if (input$comcou !="none") {
+      
+      rv$lurk=1
+    }
+  })
   
+  observeEvent(rv$x, { 
+    rv$lurk=0
+  })
   # secc = c("fossil", "land", "net", "pop", "averagedividend", "countrycost")
   secc=c("fossil", "land", "net", "ghg","nonco2","price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
          "pop","dividend", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost", "averagedividend", "countrydividend")
@@ -373,192 +392,184 @@ server <- function(input,output, session) {
     }
     
     
-    })
-  
-  
+  })
+
   
   
   # output$fossill = renderText(rv$fossill)
-
+  
   output$fossill = renderText(
     # {
     # div(style="font-weight:1000; ", 
     
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
-          # '<span style=\"color:',lul,'\">',  rv$landl,"Gt", '</span>',
-          # "=",
-          # '<span style=\"color:',net,'\">', rv$netl,"Gt", '</span>',
-          sep = "")
-  # )
-  # }
-    )
+      '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
+      # '<span style=\"color:',lul,'\">',  rv$landl,"Gt", '</span>',
+      # "=",
+      # '<span style=\"color:',net,'\">', rv$netl,"Gt", '</span>',
+      sep = "")
+    # )
+    # }
+  )
   
   output$landl = renderText(
     # div(style="font-weight:700; "),
     
     paste(
       # rv$yearc,": ",
-          # '<span style=\"color:',fos, '\">', rv$fossill, "Gt",'</span>',
-          '<span style=\"color:',lul,'\"><b>',  rv$landl," Gt", '</b></span>',
-          # "=",
-          # '<span style=\"color:',net,'\">', rv$netl,"Gt", '</span>',
-          sep = "")
+      # '<span style=\"color:',fos, '\">', rv$fossill, "Gt",'</span>',
+      '<span style=\"color:',lul,'\"><b>',  rv$landl," Gt", '</b></span>',
+      # "=",
+      # '<span style=\"color:',net,'\">', rv$netl,"Gt", '</span>',
+      sep = "")
   )
   
   output$netl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>',  rv$landplus, '</b></span>',
-          
-          '<span style=\"color:',lul,'\"><b>',  rv$landl," Gt", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-          '<span style=\"color:',net,'\"><b>', rv$netl," Gt", '</b></span>',
-          sep = "")
+      '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>',  rv$landplus, '</b></span>',
+      
+      '<span style=\"color:',lul,'\"><b>',  rv$landl," Gt", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+      '<span style=\"color:',net,'\"><b>', rv$netl," Gt", '</b></span>',
+      sep = "")
   )
   
   output$ghgl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
-          '<span style=\"color:',rv$teksvari,'\">',  " + ", '</b></span>',
-          
-          '<span style=\"color:',non,'\"><b>',  rv$nonco2l," Gt", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-          '<span style=\"color:',tot,'\"><b>', rv$ghgl," Gt", '</b></span>',
-          sep = "")
+      '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
+      '<span style=\"color:',rv$teksvari,'\">',  " + ", '</b></span>',
+      
+      '<span style=\"color:',non,'\"><b>',  rv$nonco2l," Gt", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+      '<span style=\"color:',tot,'\"><b>', rv$ghgl," Gt", '</b></span>',
+      sep = "")
   )
   output$nonco2l = renderText(
     paste(
       # rv$yearc,": ",
-          # '<span style=\"color:',fos, '\">', rv$fossill, "Gt",'</span>',
-          # '<span style=\"color:',rv$teksvari,'\">',  "+", '</span>',
-          
-          '<span style=\"color:',non,'\"><b>',  rv$nonco2l," Gt", '</b></span>',
-          # '<span style=\"color:',rv$teksvari,'\">', "=",'</span>',
-          # '<span style=\"color:',ghg,'\">', rv$ghgl,"Gt", '</span>',
-          sep = "")
+      # '<span style=\"color:',fos, '\">', rv$fossill, "Gt",'</span>',
+      # '<span style=\"color:',rv$teksvari,'\">',  "+", '</span>',
+      
+      '<span style=\"color:',non,'\"><b>',  rv$nonco2l," Gt", '</b></span>',
+      # '<span style=\"color:',rv$teksvari,'\">', "=",'</span>',
+      # '<span style=\"color:',ghg,'\">', rv$ghgl,"Gt", '</span>',
+      sep = "")
   )
   
   output$popl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',pop,'\"><b>',  rv$popl," B", '</b></span>',
-          sep = "")
+      '<span style=\"color:',pop,'\"><b>',  rv$popl," B", '</b></span>',
+      sep = "")
   )
   
   output$avgfossill = renderText(
     paste(
       # rv$yearc,": ",
-           '<span style=\"color:',rv$totalcolor, '\"><b>', rv$totall, " Gt",'</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>',  " / ", '</b></span>',
-          '<span style=\"color:',pop,'\"><b>',  rv$popl," B", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-          '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
-
-          sep = "")
+      '<span style=\"color:',rv$totalcolor, '\"><b>', rv$totall, " Gt",'</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>',  " / ", '</b></span>',
+      '<span style=\"color:',pop,'\"><b>',  rv$popl," B", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+      '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
+      
+      sep = "")
   )
   
   output$pricel = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-          sep = "")
+      '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
+      sep = "")
   )
   
   output$avgcostl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
-          
-          '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-          '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
-          
-          sep = "")
+      '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
+      
+      '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+      '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
+      
+      sep = "")
   )
   
-  # if(input$national == 0) {
-    # 
-    # rv <- reactiveValues(countrypopl = NULL)
-    # 
-    # pacu[, dividend:=(1-input$national/100)*dividend]
-    # pacu[, countrydividend:=input$national/100*countrycost]
-    # pacu[, averagedividend:=(input$national/100)*dividend]
-    # '<span style=\"color:',rv$teksvari,'\">',  "(1-",rv$national,  ")*", '</span>',
+  
   
   
   output$dividendl = renderText(
     if (input$national == 0) {
       
-    paste(
-      # rv$yearc,": ",
-          
-          '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
-          
-          '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-      
-          
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-          '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-          
-          sep = "") } else {
-             paste(
-               # rv$yearc,": ",
-                  '<span style=\"color:',rv$teksvari,'\"><b>',  "((1-",rv$nationall,  ") * ", '</b></span>',
-                  
-                  '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
-                  '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
-                  
-                  '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-                  '<span style=\"color:',rv$teksvari,'\"><b>',  ")", '</b></span>',
-                  '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-                  '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-                  
-                  sep = "") 
+      paste(
+        # rv$yearc,": ",
+        
+        '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
+        
+        '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
+        
+        
+        '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+        '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+        
+        sep = "") } else {
+          paste(
+            # rv$yearc,": ",
+            '<span style=\"color:',rv$teksvari,'\"><b>',  "(1-",rv$nationall,  ") * ", '</b></span>',
             
+            '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
+            '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
             
-          }
+            '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
+            '<span style=\"color:',rv$teksvari,'\"><b>',  "", '</b></span>',
+            '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+            '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+            
+            sep = "") 
+          
+          
+        }
   )
   
   output$avgnetcostl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-          
-          '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-          '<span style=\"color:',avgnetcost,'\"><b>',  rv$avgnetcostl," $", '</b></span>',
-          
-          sep = "")
+      '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+      
+      '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+      '<span style=\"color:',avgnetcost,'\"><b>',  rv$avgnetcostl," $", '</b></span>',
+      
+      sep = "")
   )
   
   output$userfossill = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',fosindi,'\"><b>',  rv$userfossill," t", '</b></span>',
-          
-          sep = "")
+      '<span style=\"color:',fosindi,'\"><b>',  rv$userfossill," t", '</b></span>',
+      
+      sep = "")
   )
   
   output$usercostl = renderText(
     paste(
       # rv$yearc,": ",
-          
-          '<span style=\"color:',fosindi,'\"><b>',  rv$userfossill," t", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
-          
-          '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-          
-          '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
-          
-          sep = "")
+      
+      '<span style=\"color:',fosindi,'\"><b>',  rv$userfossill," t", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
+      
+      '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+      
+      '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
+      
+      sep = "")
   )
   
   
@@ -566,88 +577,88 @@ server <- function(input,output, session) {
     if (input$national == 0) {
       paste(
         # rv$yearc,": ",
-            '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
-            '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-            
-            '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-            '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-            '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
-            
-            
-            sep = "")
+        '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+        
+        '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+        '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
+        
+        
+        sep = "")
       
       
     } else if (input$national != 0) {
-
-
+      
+      
       if (input$nationalcoun %in% c(ll2)) {
         paste(
           # rv$yearc,": ",
-              '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
-              '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-
-              '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-              '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-              '<span style=\"color:',dividend,'\"><b>',  rv$usernatl," $", '</b></span>',
-
-              '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-              '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
-
-
-              sep = "")
-
-
-
+          '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
+          '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+          
+          '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+          '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+          '<span style=\"color:',dividend,'\"><b>',  rv$usernatl," $", '</b></span>',
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+          '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
+          
+          
+          sep = "")
+        
+        
+        
       } else {
         paste(
           # rv$yearc,": ",
-              '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
-              '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-
-              '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-              '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-              '<span style=\"color:',dividend,'\"><b>',  rv$averagedividendl," $", '</b></span>',
-
-              '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-              '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
-
-
-              sep = "")
-
+          '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
+          '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+          
+          '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+          '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+          '<span style=\"color:',dividend,'\"><b>',  rv$averagedividendl," $", '</b></span>',
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+          '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
+          
+          
+          sep = "")
+        
       }
     }
   )
   
-
+  
   
   
   
   output$countryfossill = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',countryfossil,'\"><b>',  rv$countryfossill," t", '</b></span>',
-
-          sep = "")
+      '<span style=\"color:',countryfossil,'\"><b>',  rv$countryfossill," t", '</b></span>',
+      
+      sep = "")
   )
   
   output$countrycostl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',countryfossil,'\"><b>',  rv$countryfossill," t", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>',  "*", '</b></span>',
-          
-          '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-          '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
-          
-          sep = "")
+      '<span style=\"color:',countryfossil,'\"><b>',  rv$countryfossill," t", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>',  "*", '</b></span>',
+      
+      '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+      '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
+      
+      sep = "")
   )
   output$countrypopl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',countrypop,'\"><b>',  rv$countrypopl," t", '</b></span>',
-          
-          sep = "")
+      '<span style=\"color:',countrypop,'\"><b>',  rv$countrypopl," t", '</b></span>',
+      
+      sep = "")
   )
   
   
@@ -659,15 +670,15 @@ server <- function(input,output, session) {
       
       paste(
         # rv$yearc,": ",
-            '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
-            '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
-            
-            '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-            '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-            '<span style=\"color:',countrynetcost,'\"><b>',  rv$countrynetcostl," $", '</b></span>',
-            
-            
-            sep = "")
+        '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
+        
+        '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+        '<span style=\"color:',countrynetcost,'\"><b>',  rv$countrynetcostl," $", '</b></span>',
+        
+        
+        sep = "")
       
       
     } else if (input$national != 0) {
@@ -675,54 +686,54 @@ server <- function(input,output, session) {
       
       
       # if (input$nationalcoun %in% c(ll2)) {
-        paste(
-          # rv$yearc,": ",
-              '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
-              '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
-              
-              '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-              '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
-              '<span style=\"color:',dividend,'\"><b>',  rv$countrydividendl," $", '</b></span>',
-              
-              '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-              '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
-              
-              
-              sep = "")
+      paste(
+        # rv$yearc,": ",
+        '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
+        
+        '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
+        '<span style=\"color:',dividend,'\"><b>',  rv$countrydividendl," $", '</b></span>',
+        
+        '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+        '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
         
         
-      }
+        sep = "")
+      
+      
+    }
     
   )
- 
+  
   
   output$countrydividendl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
-          '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
-          
-
-          '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-          '<span style=\"color:',countrydividend,'\"><b>',  rv$countrydividend," $", '</b></span>',
-          
-          sep = "")
+      '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
+      '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
+      
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+      '<span style=\"color:',countrydividend,'\"><b>',  rv$countrydividend," $", '</b></span>',
+      
+      sep = "")
   )
   
   output$averagedividendl = renderText(
     paste(
       # rv$yearc,": ",
-          '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
-          '<span style=\"color:',dividend,'\"><b>',  rv$avgcostl," $", '</b></span>',
-          
-          
-          '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-          '<span style=\"color:',averagedividend,'\"><b>',  rv$averagedividend," $", '</b></span>',
-          
-          sep = "")
+      '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
+      '<span style=\"color:',dividend,'\"><b>',  rv$avgcostl," $", '</b></span>',
+      
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+      '<span style=\"color:',averagedividend,'\"><b>',  rv$averagedividend," $", '</b></span>',
+      
+      sep = "")
   )
   
-
+  
   
   # rv <- reactiveValues(countryfossill = NULL)
   # rv <- reactiveValues(countrycostl = NULL)
@@ -781,7 +792,7 @@ server <- function(input,output, session) {
   #   # div(style="color: orange;",
   #   rv$landl
   # )
-    # )
+  # )
   
   
   # output$fossill = renderUI({
@@ -793,6 +804,7 @@ server <- function(input,output, session) {
     
     if (rv$lang == "eng") {
       
+      rv$pressed = TRUE
       
       lapply(
         X = secc,
@@ -807,12 +819,35 @@ server <- function(input,output, session) {
         })
       
       
-   
+      
       
       updateTabsetPanel(session,  "nok", selected = "1. Global emissions")
       
       
+      updateCheckboxInput("showmainplot", "Main plots", session=session)
+      updateCheckboxInput("showcolplot", "Compare countries (slows page)", session=session)
       
+
+      # updateSliderTextInput("xyear", label="Näytä tiedot vuodelle", session=session)
+      # updateSliderInput("conc", inf("Maiden päästöjen yhdentyminen", "infoconvergence2"),  session=session)
+      updateRadioButtons("yvar", label= "Show country averages for",       c(
+        # "GDP per capita" = "gdpcap",
+        "Net costs per capita"= "countrynetcost",
+        "Carbon costs per capita"="countrycost",
+        
+        "Emissions per capita" = "countryfossil"
+        
+      ),  session=session)
+      updateRadioButtons("xvar", label="Arrange x-axis by 2021 value of:",       
+                         c(
+                           # "GDP per capita" = "gdpcap",
+                           "Emissions per capita" = "countryfossil",
+                           
+                           "GDP per capita" = "gdpcap"
+                           
+                         ),  session=session)
+      updateSelectInput("comcou", label = "Details for country", session=session)
+      updateCheckboxInput("showexp", label = "Show how country outcomes are calculated", session=session)
       
       output$indicatorvisibility = renderText({  c("Indicator visibility")  })  
       output$showall = renderText({  c("Show all")  })  
@@ -823,7 +858,7 @@ server <- function(input,output, session) {
       
       output$startlabel = renderText({  c("Start year values")  })  
       
-      output$obsyear = renderText({  c("Observe specific year")  })  
+      output$obsyear = renderText({  c("Observe year:")  })  
       
       # output$simuset = renderText({  c("SIMULATION INPUTS")  })  
       
@@ -834,21 +869,33 @@ server <- function(input,output, session) {
       # rv$infofossiltext = c("Total fossil CO2 emissions across all countries and individuals. Other greenhouse gases (such as methane) not included. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       # rv$infofossiltextt = c("Fossil CO2 emissions")
       # output$viewtext = renderText("  VIEWING SETTINGS")
-
+      
       output$titletext = renderText(" Global carbon price simulator")
       # updateactionBttn("infodata", label="Data sources")
       updateActionButton("infodata", label="Data sources", session=session)
       updateActionButton("tutorial", label="Tutorial", session=session)
       # updateBollux("mobilebox",             title = "If you are using mobile, landscape rotation is recommended")
-      updateRadioButtons("view", label = "Graph separation",
-                                           c("One graph for all scales" = 1,
-                                             "Side by side graphs, two in row" = 2,
-                                             "Back to back graphs" = 3,
-                                             "Side by side graphs, all in one row" = 4),
+      # updateRadioButtons("view", label = "Graph separation",
+      #                    c("One graph for all scales" = 1,
+      #                      "Side by side graphs, two in row" = 2,
+      #                      "Back to back graphs" = 3,
+      #                      "Side by side graphs, all in one row" = 4),
+      #                    # selected =3,
+      #                    selected = rv$view,
+      #                    
+      #                    session = session)
+      
+      updateSelectInput("view", label = "Graph separation",
+                         c("One graph for all scales" = 1,
+                           "Side by side graphs, two in row" = 2,
+                           "Back to back graphs" = 3,
+                           "Side by side graphs, all in one row" = 4),
                          # selected =3,
                          selected = rv$view,
                          
-                         session = session)    
+                         session = session)
+      
+      
       output$simuset =  renderText(HTML("<font size='4'>",
                                         as.character(icon("far fa-hand-paper")), 
                                         
@@ -864,12 +911,12 @@ server <- function(input,output, session) {
       #                                    "  RESULT VISIBILITY  ",  
       #                                    # as.character( icon("fas fa-caret-square-down")),
       #                                    "</font>"))
-      output$viewtext =  renderText( "RESULT VISIBILITY")
+      output$viewtext =  renderText( "RESULT INDICATORS")
       
       output$simuset =  renderText( "INPUTS")
       
       output$graview =  renderText( "GRAPH VIEW")
-       
+      
       
       # output$simuresults =  renderText(HTML("<font size='4'>",
       #                                   as.character(icon("far fa-hand-paper")), 
@@ -893,7 +940,7 @@ server <- function(input,output, session) {
                            ),
                            choiceValues = list("linear", "percentual" 
                                                # , "exponential"
-                                               ),
+                           ),
                            selected = rv$muosel
                            
         )
@@ -948,6 +995,7 @@ server <- function(input,output, session) {
       
       
     }  else if (rv$lang =="fin") {
+      rv$pressed = TRUE
       
       lapply(
         X = secc,
@@ -963,6 +1011,30 @@ server <- function(input,output, session) {
       updateTabsetPanel(session,  "nok", selected = "1. Globaalit päästöt")
       
       updateCheckboxInput(session, "showtab", "Näytä tulokset myös taulukossa alapuolella")
+
+      
+      updateCheckboxInput("showmainplot", "Päätulokset", session=session)
+      updateCheckboxInput("showcolplot", "Vertaa maita (hidastaa sivua)", session=session)
+      # updateSliderTextInput("xyear", label="Näytä tiedot vuodelle", session=session)
+      # updateSliderInput("conc", inf("Maiden päästöjen yhdentyminen", "infoconvergence2"),  session=session)
+      updateRadioButtons("yvar", label="Näytä maakeskiarvot:",         c(
+        # "GDP per capita" = "gdpcap",
+        "Nettokustannukset henkeä kohden"= "countrynetcost",
+        "Päästökustannukset henkeä kohden"="countrycost",
+        
+        "Päästöt henkeä kohden" = "countryfossil"
+        
+      ),  session=session)
+      updateRadioButtons("xvar", label="Järjestä maat vaaka-asteikolle 2021-arvon perusteella:",        
+                         c(
+        # "GDP per capita" = "gdpcap",
+        "Päästöt henkeä kohden" = "countryfossil",
+        
+        "BKT henkeä kohden" = "gdpcap"
+        
+      ),  session=session)
+      updateSelectInput("comcou", label = "Yksityiskohdat maalle", session=session)
+      updateCheckboxInput("showexp", label = "Näytä miten maiden arvot on laskettu", session=session)
       
       # rv$labelfossil = lu2[sec=="fossil", label]
       
@@ -976,41 +1048,50 @@ server <- function(input,output, session) {
       output$showall = renderText({  c("Näytä kaikki")  })  
       output$shownone = renderText({  c("Piilota kaikki")  })  
       output$automatic = renderText({  c("Automattinen")  })  
-      output$redraw = renderText({  c("Piirrä")  })  
+      output$redraw = renderText({  c("Piirrä uudestaan")  })  
       output$autoredraw = renderText({  c("Autom. piirto")  })  
       
       output$startlabel = renderText({  c("Lähtövuoden arvot")  })  
       # output$simuset = renderText({  c("SIMULAATIOVALINNAT")  })  
-      output$obsyear = renderText({  c("Havainnoi tiettyä vuotta")  })  
+      output$obsyear = renderText({  c("Havainnoi vuotta:")  })  
       
       
-
+      
       output$titletext = renderText(" Globaali hiilivero -simulaattori")
       updateActionButton("infodata", label="Data-lähteet", session=session)
       updateActionButton("tutorial", label="Tutoriaali", session=session)
       # updateBox("mobilebox",   title = "Jos käytät sivua puhelimella, suosittelemme vaakanäkymää")
-
-                         
-                         updateRadioButtons("view",label = "Graafien erittely",
-                                            c("Yksi graafi kaikille asteikoille" = 1,
-                                              "Vierekkäiset graafit eri asteikoille" = 2,
-                                              "Peräkkäiset graafit eri asteikoille" = 3,
-                                              "Vierekkäiset, kaikki samalla asteikoilla" = 4), 
+      
+      
+      # updateRadioButtons("view",label = "Graafien erittely",
+      #                    c("Yksi graafi kaikille asteikoille" = 1,
+      #                      "Vierekkäiset graafit eri asteikoille" = 2,
+      #                      "Peräkkäiset graafit eri asteikoille" = 3,
+      #                      "Vierekkäiset, kaikki samalla asteikoilla" = 4), 
+      #                    
+      #                    selected = rv$view,
+      #                    # selected =3,
+      #                    session = session)   
+      
+      updateSelectInput("view",label = "Graafien erittely",
+                         c("Yksi graafi kaikille asteikoille" = 1,
+                           "Vierekkäiset graafit eri asteikoille" = 2,
+                           "Peräkkäiset graafit eri asteikoille" = 3,
+                           "Vierekkäiset, kaikki samalla asteikoilla" = 4), 
                          
                          selected = rv$view,
                          # selected =3,
                          session = session)   
       
-   
       
       
-      output$viewtext =  renderText( "TULOSTEN NÄKYVYYS")
+      output$viewtext =  renderText( "TULOSMUUTTUJAT")
       
       output$simuset =  renderText( "VALINNAT")
       
-      output$graview =  renderText( "GRAAFINÄKYMÄ")
+      # output$graview =  renderText( "GRAAFINÄKYMÄ")
       
-     
+      
       
       output$simuresults =  renderText( "TULOKSET")
       
@@ -1199,6 +1280,69 @@ Please give feedback if you have ideas on how to involve sinks in the model.
 
 
 ")
+ 
+      
+  rv$coux =HTML(        "
+        It is assumed that countries' per capita CO2 emissions converge to global average over time from their 2021 historical value.
+Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
+                          <br>
+                        
+      Formula for calculating country specific per capita emissions (COBS) at the neutrality year is:
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      in which:
+<br>
+WOBS = World per capita emissions at observed year
+      <br>
+CSTART = Country per capita emissions at start year
+      <br>
+WSTART = World per capita emissions at start year
+      <br>
+CONV = Convergence factor chose by the user
+      <br>
+      <br>
+
+Intermediate emissions between pricing start year and carbon neutrality year are calculated as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
+      <br>
+A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals equal the annual global emissions. It is same for all countries in a given year. 
+      <br>
+      <br>
+   Country per capita costs are calculated by multiplying thus received per capita emissions with the carbon price value (chosen by user) of the given year. 
+
+      <br>
+   Country per capita net costs are calculated by deducting the carbon dividend from the carbon costs.
+
+     <br>
+      <br>
+
+GDP per capita for 2021 is calculated by dividing GDP in 2015 $ (World Bank) by UN population estimate.   
+
+ 
+
+
+      
+      "
+  ) 
+    
+      rv$fortext = c("Formula for calculating country specific emissions:")
+      rv$formula= c("COBS = CORR*WOBS*(1-CONV)*((WSTART-CSTART)/WSTART)")
+      
+      rv$cobs = c("COBS = Country per capita emissions at observed year")
+      rv$wobs = c("WOBS = World per capita emissions at observed year")
+      rv$cstart = c("CSTART = Country per capita emissions at start year")
+      rv$wstart = c("WSTART = World per capita emissions at start year")
+      rv$convergence = c("CONV = Convergence factor chose by the user")
+      rv$correction = c("CORR = Correction factor to balance country emissions to global emissions at observed year. Same for all countries.")
+      # 
+      # rv$corr 
+      # rv$conv
+      # rv$wstar
+      # rv$cstar
+      # 
+      #   rv$wob
+      # rv$cob
       
       rv$infofossiltext = c("Total fossil CO2 emissions across all countries and individuals. Other greenhouse gases (such as methane) not included. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       rv$infofossiltextt = c("Fossil CO2 emissions")
@@ -1225,7 +1369,7 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
 Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016")
       rv$infononco2utextt = c("Non-CO2 emissions")
       
-
+      
       
       rv$infopoptext = c("World population, billions. Statistics and projections from United Nations. 
                       By default the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance
@@ -1313,7 +1457,7 @@ The earlier the carbon neutrality year or the higher the population projection, 
 the carbon neutrality year carbon price")
       rv$infoendpricetextt = c("Neutrality year carbon price")
       
-    
+      
       rv$infostartusertext = c("Set estimate of your own emissions at the start year. They could be similar or a bit lower than your current emissions. 
                                You can use various online carbon footprint calculators to estimate your emissions. 
                                Notice that if in the carbon budget section you left out other gases than CO2, you should leave them out from this estimate as well. 
@@ -1322,9 +1466,9 @@ the carbon neutrality year carbon price")
       rv$infoendusertext = c("Set estimate of your emissions at the carbon neutrality year. Estimate how greatly the chosen carbon price path affects your emissions.
                              Notice that if in the carbon budget section you left out other gases than CO2, you should leave them out from this estimate as well. ")
       rv$infoendusertextt = c("Neutrality year carbon price")
-     
       
-
+      
+      
       
       rv$infonationaldivtext = c("What if some of the carbon price revenue collected by the countries is not put to the common global pool to be distributed as a global dividend but 
                              distributed as a national dividend to the residents of the countries in which the revenue is collected?
@@ -1340,7 +1484,7 @@ the carbon neutrality year carbon price")
                              as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
                              A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
                              equal the annual global CO2 emissions")
-      rv$infoconvergencetextt = c("Convergence of countries emissions")
+      rv$infoconvergencetextt = c("Convergence of countries' emissions")
       
       rv$infoconvergence1text = c("It is assumed that countries' per capita emissions converge to global average over time from their 2021 historical value. 
                              <br/>
@@ -1351,7 +1495,7 @@ the carbon neutrality year carbon price")
                              as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
                              A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
                              equal the annual global CO2 emissions")
-      rv$infoconvergence1textt = c("Convergence of countries emissions")
+      rv$infoconvergence1textt = c("Convergence of countries' emissions")
       
       rv$infoconvergence2text = c("It is assumed that countries' per capita CO2 emissions converge to global average over time from their 2021 historical value. 
                              <br/>
@@ -1362,7 +1506,7 @@ the carbon neutrality year carbon price")
                              as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
                              A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
                              equal the annual global emissions")
-      rv$infoconvergence2textt = c("Convergence of countries emissions")
+      rv$infoconvergence2textt = c("Convergence of countries' emissions")
       
       
       
@@ -1695,6 +1839,10 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
     reset("resu")
   })  
   # 
+  
+
+  
+  
   observeEvent(rv$lang, {
     
     if (rv$lang == "eng") {
@@ -1704,271 +1852,278 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       output$simpan <- renderUI({
         div(id="resu",
             
-      
             
-       shiny::tabsetPanel(id="nok", 
-                     selected = "1. Global emissions",
-                
-                     tabPanel("1. Global emissions",
-                              
-                          
-                         fluidRow(   class="sox",  
-                           
-                           column(4
-                                  , 
-                                  id = "luu",
-                              div(
-                                class="rad",
-                              radioButtons("bud", 
-                                           
-                                           inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
-                                      
-                                           
-                                           c("400Gt (67% likelihood to stay below 1,5C)" = 400,
-                                             "500Gt (50% likelihood to stay below 1,5C)" = 500,
-                                             "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
-                                             "1350Gt (50% likelihood to stay below 2,0C)" = 1350
-                                             
-                                           ),selected=1150
-                              )),
-                              p("Note: Changing the budget will reset many other values")
-                           
-                           ),
-                           column(5, id = "luu",
-     
-                                  sliderInput("vuo", 
-                                              inf("Pricing start year and carbon neutrality year", "infopricing"),
-                                              min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE), 
-                                  hr(),
-                              tags$div(id="sla",numericInput("paa", 
-                                                             inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink"), 
-                                                             min = 0.1, max = 30,step=.1,value=c(6))),
-                              hr(),
-                  
-                           
-                              radioButtons("muo", "Shape of the fossil emission curve",
-                                           choiceNames=   list(
-                                             "Linear" ,
-                                             "Percentual"
-                                           ),
-                                           
-                                           choiceValues= list("linear", "percentual"
-                                                              ),
-                                           selected = "percentual"
-                                           
-                              ) , 
-                           
-               
-                        
-                
-                           ),
-             
-                           column(3,  
-                                   tags$div(id="sla",
-                     checkboxInput("nonco2",  label = "Include other greenhouse gases than just CO2 (recommended)"
-                                                          
-                                                          )
-                            
-                                            ), 
-                    div(class="slug",    
-                      conditionalPanel(
-                                
-                        condition="input.nonco2 == 1",
-                                             tags$div(id="sla", class="slug",  numericInput("nonco2end",
-                                                            p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year", 
-                                                                "infononco2u")),
-
-                                                            min = 5, max = 10,step=.1,value=c(7.5)))
-                                
-                            
-                              )),
-                                                
-                               hr(),
-                    
-                    tags$div(id="sla",
-                              checkboxInput("advance", "Advanced: Set emission for year before start year")), 
-                              
-                              div(class="rad",
-                              conditionalPanel(
-                                
-                                condition="input.advance == 1",
-                                                             p("Note: Emissions from last observed year take a linear trajectory to emissions for year before start year"),
-                                
-                                tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(37.1))),
-                                
-                                tags$div(id="sla",numericInput("lstart", label=p("Land use emissions"),min = -5, max = 10,step=.1,value=c(3.9))),
-                                
-                                conditionalPanel(
-                                  condition="input.nonco2 == 1",
-                                tags$div(id="sla",numericInput("nonco2start", label=p("Non-CO2 emissions"),min = 0.1, max = 20,step=.1,value=c(12.3)))
-                                )    )               
-                              )   )
-                            
-), 
-
-                     ),
-
-                     
-                     tabPanel( "2. Population projection",
-                          
-                              radioButtons("popc", 
-                                           inf("Choose UN population projection", "infopopu"), 
-
-                                           c(
-                                             "95% range upper limit (12.41 billion at 2100)" = 5,
-                                             "80% range upper limit (11.65 billion at 2100)" = 4,
-                                             "Median projection (10.35 billion at 2100)" = 3,
-                                           "80% range lower limit (9.32 billion at 2100)" = 2,
-                                             "95% range lower limit (8.84 billion at 2100)" = 1
-                                           ),selected=3
-                              )
-                            
-                     ),
-                     
-                     tabPanel("3. Carbon price",
-                              p("Carbon price should be set high enough to achieve the emission target set in phase 1"),
-                              
-                              fluidRow(
-                              column(6, id = "luu",
-                                                       tags$div(id="sla", class="slug",  numericInput("sprice",
-                                                            p(class="slug", style="font-weight: 500 !important;", inf("Start year carbon price, $", 
-                                                                "infostartprice")),
-
+            
+            
+            
+            
+            
+     shiny::tabsetPanel(id="nok", 
+                               selected = "1. Global emissions",
+                               
+                               tabPanel("1. Global emissions",
+                                        
+                                        
+                                        fluidRow(   class="sox",  
+                                                    
+                                                    column(4
+                                                           , 
+                                                           id = "luu",
+                                                           
+                                                           sliderInput("vuo", 
+                                                                       inf("Pricing start year and carbon neutrality year", "infopricing"),
+                                                                       min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE), 
+                                                           
+                                                           # div(
+                                                           #   class="rad",
+                                                           #   radioButtons("bud", 
+                                                           #                
+                                                           #                inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
+                                                           #                
+                                                           #                
+                                                           #                c("400Gt (67% likelihood to stay below 1,5C)" = 400,
+                                                           #                  "500Gt (50% likelihood to stay below 1,5C)" = 500,
+                                                           #                  "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
+                                                           #                  "1350Gt (50% likelihood to stay below 2,0C)" = 1350
+                                                           #                  
+                                                           #                ),selected=1150
+                                                           #   )),
+                                                           # p("Note: Changing the budget will reset many other values")
+                                                           
+                                                    ),
+                                                    column(4, id = "luu",
+                                                           
+                                                                                                                # hr(),
+                                                           tags$div(id="sla",numericInput("paa", 
+                                                                                          inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink"), 
+                                                                                          min = 0.1, max = 30,step=.1,value=c(6))),
+                                                           hr(),
+                                                           
+                                                           
+                                                           radioButtons("muo", "Shape of the fossil emission curve",
+                                                                        choiceNames=   list(
+                                                                          "Linear" ,
+                                                                          "Percentual"
+                                                                        ),
+                                                                        
+                                                                        choiceValues= list("linear", "percentual"
+                                                                        ),
+                                                                        selected = "percentual"
+                                                                        
+                                                           ) , 
+                                                           
+                                                           
+                                                           
+                                                           
+                                                    ),
+                                                    
+                                                    column(4,  
+                                                           tags$div(id="sla",
+                                                                    checkboxInput("nonco2", 
+                                                                                  label = "Include other greenhouse gases than just CO2 (recommended)",
+                                                                                  value=TRUE
+                                                                                  
+                                                                    )
+                                                                    
+                                                           ), 
+                                                           div(class="slug",    
+                                                               conditionalPanel(
+                                                                 
+                                                                 condition="input.nonco2 == 1",
+                                                                 tags$div(id="sla", class="slug",  numericInput("nonco2end",
+                                                                                                                p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year", 
+                                                                                                                                                                          "infononco2u")),
+                                                                                                                
+                                                                                                                min = 5, max = 10,step=.1,value=c(7.5)))
+                                                                 
+                                                                 
+                                                               )),
+                                                           
+                                                           hr(),
+                                                           
+                                                           tags$div(id="sla",
+                                                                    checkboxInput("advance", "Advanced: Set emission for year before start year")), 
+                                                           
+                                                           div(class="rad",
+                                                               conditionalPanel(
+                                                                 
+                                                                 condition="input.advance == 1",
+                                                                 p("Note: Emissions from last observed year (2021) take a linear trajectory to emissions for year before start year."),
+                                                                 
+                                                                 tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                                                 
+                                                                 tags$div(id="sla",numericInput("lstart", label=p("Land use emissions"),min = -5, max = 10,step=.1,value=c(3.9))),
+                                                                 
+                                                                 conditionalPanel(
+                                                                   condition="input.nonco2 == 1",
+                                                                   tags$div(id="sla",numericInput("nonco2start", label=p("Non-CO2 emissions"),min = 0.1, max = 20,step=.1,value=c(12.3)))
+                                                                 )    )               
+                                                           )   )
+                                                    
+                                        ), 
+                                        
+                               ),
+                               
+                               
+                               tabPanel( "2. Population projection",
+                                         
+                                         radioButtons("popc", 
+                                                      inf("Choose UN population projection", "infopopu"), 
+                                                      
+                                                      c(
+                                                        "95% range upper limit (12.41 billion at 2100)" = 5,
+                                                        "80% range upper limit (11.65 billion at 2100)" = 4,
+                                                        "Median projection (10.35 billion at 2100)" = 3,
+                                                        "80% range lower limit (9.32 billion at 2100)" = 2,
+                                                        "95% range lower limit (8.84 billion at 2100)" = 1
+                                                      ),selected=3
+                                         )
+                                         
+                               ),
+                               
+                               tabPanel("3. Carbon price",
+                                        p("Carbon price should be set high enough to achieve the emission target set in phase 1"),
+                                        
+                                        fluidRow(
+                                          column(6, id = "luu",
+                                                 tags$div(id="sla", class="slug",  numericInput("sprice",
+                                                                                                p(class="slug", style="font-weight: 500 !important;", inf("Start year carbon price, $", 
+                                                                                                                                                          "infostartprice")),
+                                                                                                
+                                                                                                
+                                                                                                min = 1, max = 1000000,step=1,value=c(40))),
+                                                 hr(),
+                                                 # 
+                                                 # tags$div(id="sla", numericInput("sprice",
+                                                 #                                 inf("Alkuvuoden hiilen hinta, $", "infostartprice"),
+                                                 #                                 inf("Muut päästöt hiilineutraaliusvuonna",
+                                                 #                                     tags$div(id="sla",numericInput("eprice",
+                                                 
+                                                 
+                                                 
+                                                 tags$div(id="sla",numericInput("eprice", 
+                                                                                inf("Neutrality year carbon price, $", "infoendprice"), 
+                                                                                
+                                                                                
+                                                                                min = 1, max = 1000000,step=1,value=c(400))),
+                                                 
+                                                 
+                                          ),
+                                          
+                                          column(6, 
+                                                 radioButtons("pri", "Shape of the price curve",
+                                                              choiceNames=list(
+                                                                "Linear",
+                                                                "Percentual"
+                                                                ,
+                                                                "Logarithmic"
+                                                              ), 
+                                                              choiceValues= list("linear", "percentual", "logarithmic")
                                                               
-                                                              min = 1, max = 1000000,step=1,value=c(40))),
-                              hr(),
-                              # 
-                              # tags$div(id="sla", numericInput("sprice",
-                              #                                 inf("Alkuvuoden hiilen hinta, $", "infostartprice"),
-                              #                                 inf("Muut päästöt hiilineutraaliusvuonna",
-                              #                                     tags$div(id="sla",numericInput("eprice",
-                                                                                                 
-                              
-                              
-                              tags$div(id="sla",numericInput("eprice", 
-                                                             inf("Neutrality year carbon price, $", "infoendprice"), 
+                                                 )
+                                          )
+                                        )
+                                        
+                               ),
+                               
+                               
+                               
+                               tabPanel("4. User emissions", 
+                                        
+                                        
+                                        fluidRow(
+                                          
+                                          column(4, id = "luu",
+                                                 tags$div(id="sla",numericInput("indi1", label=inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
+                                                 hr(),
+                                                 tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
+                                                 
+                                                 # hr(),
+                                                 
+                                          ), 
+                                          column(4, id = "luu",
+                                                 
+                                                 radioButtons("muoindi", "Shape of user emission curve",
+                                                              choiceNames=   list(
+                                                                "Linear" ,
+                                                                "Percentual" 
+                                                                
+                                                              ), 
+                                                              choiceValues= list("linear", "percentual"),
+                                                              selected = "percentual"
+                                                              
+                                                 )
+                                                 
+                                          ), 
+                                          column(4,
+                                                 selectInput("indi",
+                                                             inf("ALTERNATIVE: Use country average emission path as your emission path (this will slower the page considerably) ", "infoconvergence"), 
                                                              
-                                                             
-                                                             min = 1, max = 1000000,step=1,value=c(400))),
-                              
-                              
-                              ),
-                              
-                              column(6, 
-                              radioButtons("pri", "Shape of the price curve",
-                                           choiceNames=list(
-                                             "Linear",
-                                             "Percentual"
-                                             ,
-                                             "Logarithmic"
-                                                        ), 
-                                           choiceValues= list("linear", "percentual", "logarithmic")
-                                           
-                              )
-                              )
-                              )
-                           
-                     ),
-            
-                                                                                                                             
-
-                     tabPanel("4. User emissions", 
-                       
-                              
-                              fluidRow(
-                              
-                                column(4, id = "luu",
-                              tags$div(id="sla",numericInput("indi1", label=inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
-                              hr(),
-                              
-                              tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-                              
-                              # hr(),
-                              
-                                ), 
-                              column(4, id = "luu",
-                              
-                              radioButtons("muoindi", "Shape of user emission curve",
-                                           choiceNames=   list(
-                                             "Linear" ,
-                                             "Percentual" 
+                                                             choices =c("none", paaco$country), selected="none", selectize=TRUE),
+                                                 conditionalPanel(
+                                                   
+                                                   condition="input.indi != 'none'",
+                                                   sliderInput("con",
+                                                               
+                                                               inf("Convergence of countries emissions", "infoconvergence1"), 
+                                                               min = .01, max = 1, value = .5, step=.01)
+                                                 )  ) )
+                               )   
+                               ,
+                               tabPanel("EXTRA: Countries",
+                                        fluidRow(
+                                          column(4, id = "luu",
+                                                 sliderInput(
+                                                   inputId = "national",
+                                                   inf("Allocate a percentage of collected carbon revenue nationally", "infonationaldiv")
+                                                   
+                                                   , min = 0, max = 100, value = 0, step=1, ticks=FALSE
+                                                 ), 
+                                                 conditionalPanel(
+                                                   condition="input.national != 0",
+                                                   hr(),
+                                                   
+                                                   
+                                                   selectInput("nationalcoun", label = "User country of residence for national dividend (This will slower the page considerably)", choices =c("none", paaco$country), selected="none"),
+                                                   
+                                                 )),
                                           
-                                           ), 
-                                           choiceValues= list("linear", "percentual"),
-                                           selected = "percentual"
-                                           
-                              )
-                              
-                              ), 
-                              column(4,
-                              selectInput("indi",
-                                          inf("ALTERNATIVE: Use country average emission path as your emission path (this will slower the page considerably) ", "infoconvergence"), 
                                           
-                                          choices =c("none", paaco$country), selected="none"),
-                    conditionalPanel(
-                                
-                                condition="input.indi != 'none'",
-                                                             sliderInput("con",
-                                            
-                                            inf("Convergence of countries emissions", "infoconvergence1"), 
-                                                                                 min = .01, max = 1, value = .5, step=.01)
-                              )  ) )
-                              )   
-,
-                     tabPanel("EXTRA: Countries",
-                                                       fluidRow(
-                                column(4, id = "luu",
-                              sliderInput(
-                                inputId = "national",
-                                inf("Allocate a percentage of collected carbon revenue nationally", "infonationaldiv")
-                                
-                                , min = 0, max = 100, value = 0, step=1
-                              ), 
-                              conditionalPanel(
-                                condition="input.national != 0",
-                                hr(),
-                                
-                                
-                                selectInput("nationalcoun", label = "User country of residence for national dividend (This will slower the page considerably)", choices =c("none", paaco$country), selected="none"),
-                                
-                              )),
-       
-                  
-                              
-                              
-                                                   column(4,
-                              tags$div(id ="countrr",
-                                       
-                                       pickerInput(
-                                         inputId = "countr",
-                                         label = "Show indicators for specific country/countries (This will slower the page considerably)",
-                                         choices = c(paaco$country),
-                                         selected= NULL,
-                                         options = pickerOptions(
-                                           `actions-box` = TRUE,container = "body"),
-                                         multiple = TRUE
                                           
-                                       ))
-
-                     ),
-                     column(4, 
-                            conditionalPanel(
-                              condition='output.lek == 1',
-                              # condition="rv$lek == 1",
-                              hr(),
-                              
-                              sliderInput("conb",
-                                          inf("Convergence of countries emissions", "infoconvergence2"), 
-                                          min = .01, max = 1, value = .5, step=.01)
-                              
-                            ) 
-                     )
-                     )
-                     )
-              
-                     
-                     
-        ) )}
+                                          
+                                          column(4,
+                                                 tags$div(id ="countrr",
+                                                          
+                                                          pickerInput(
+                                                            inputId = "countr",
+                                                            label = "Show indicators for specific country/countries (This will slower the page considerably)",
+                                                            choices = c(paaco$country),
+                                                            selected= NULL,
+                                                            options = pickerOptions(
+                                                              `actions-box` = TRUE,container = "body"),
+                                                            multiple = TRUE
+                                                            
+                                                          ))
+                                                 
+                                          ),
+                                          column(4, 
+                                                 conditionalPanel(
+                                                   condition='output.lek == 1',
+                                                   # condition="rv$lek == 1",
+                                                   hr(),
+                                                   
+                                                   sliderInput("conb",
+                                                               inf("Convergence of countries emissions", "infoconvergence2"), 
+                                                               min = .01, max = 1, value = .5, step=.01)
+                                                   
+                                                 ) 
+                                          )
+                                        )
+                               )
+                               
+                               
+                               
+            ) )}
       )
     } else if (rv$lang == "fin") {
       
@@ -1976,269 +2131,274 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
         
         div(id="resu",
             
-        
-        tabsetPanel(id="nok",
-                    
-                    
-                    
-                    
-                    
-                    selected = "1. Globaalit päästöt",
-                    
-                    tabPanel("1. Globaalit päästöt",
-                             
-                             
-                             fluidRow(   class="sox",  
-                                         
-                                         column(4
-                                                , 
-                                                id = "luu",
-                                                div(
-                                                  class="rad",
-                                                  radioButtons("bud", 
-                                                               
-                                                               inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
-     
-                                                               
-                                                               c("400Gt (67% todennäköisyys pysyä alle 1,5C)" = 400,
-                                                                 "500Gt (50% todennäköisyys pysyä alle 1,5C)" = 500,
-                                                                 "1150Gt (67% todennäköisyys pysyä alle 2,0C)" = 1150,
-                                                                 "1350Gt (50% todennäköisyys pysyä alle 2,0C)" = 1350
-                                                               ),selected=1150
-                                                  )),
-                                                p("Huom: Budjetin muuttaminen resetoi monia muita valintoja")
-                                                
-                                         ),
-                                         column(5, id = "luu",
-                                                
-                                                sliderInput("vuo", 
-                                                            inf("Hinnoittelun aloitusvuosi ja hiilineutraalisuvuosi", "infopricing"),
-                                                            min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE),
-                                                hr(),
-                                                
-                                                tags$div(id="sla",numericInput("paa", 
-                                                                               inf("CO2-päästöt/nielu loppuvuonna", "infoemissionsink"), 
-                                                                               min = 0.1, max = 30,step=.1,value=c(6))),
-                                                
-                                                hr(),
-                                                
-                                                radioButtons("muo", "Fossiilipäästöjen käyrän muoto",
-                                                             choiceNames=   list(
-                                                               "Lineaarinen" ,
-                                                               "Prosentuaalinen"
-                                                             ),
-                                                             
-                                                             choiceValues= list("linear", "percentual"
-                                                             ),
-                                                             selected = "percentual"
-                                                             
-                                                ) 
-                                                
-                                                
+            
+            tabsetPanel(id="nok",
+                        
+                        
 
-                                         ),
-                    
-                    
-                    
-                                         column(3,  
-                                                tags$div(id="sla",
-                                                         checkboxInput("nonco2",  label = "Sisällytä muutkin kasvihuonekaasut kuin CO2 (suositeltua)"
-                                                                       
-                                                         )
-                                                         
-                                                ), 
-                                                div(class="slug",    
-                                                    conditionalPanel(
-                                                      
-                                                      condition="input.nonco2 == 1",
-                                                      tags$div(id="sla", class="slug",  numericInput("nonco2end",
-                                                                                                     p(class="slug", style="font-weight: 500 !important;",
-                                                                                                       inf("Muut päästöt hiilineutraaliusvuonna", 
-                                                                                                                                                               "infononco2u")),
-                                                                                                     
-                                                                                                     min = 5, max = 10,step=.1,value=c(7.5)))
-                                                      
-                                                      
-                                                    )),
-                                                
-                                                hr(),
-                                                
-                                                tags$div(id="sla",
-                                                         checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta")), 
-                                                
-                                                div(class="rad",
-                                                    conditionalPanel(
-                                                      
-                                                      condition="input.advance == 1",
-                                                      p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta hinnoittelun alkua edeltävään vuoteen"),
-                                                      
-                                                      tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(37.1))),
-                                                      
-                                                      tags$div(id="sla",numericInput("lstart", label=p("Maankäytön päästöt"),min = -5, max = 10,step=.1,value=c(3.9))),
-                                                      
-                                                      conditionalPanel(
-                                                        condition="input.nonco2 == 1",
-                                                        tags$div(id="sla",numericInput("nonco2start", label=p("Muut päästöt"),min = 0.1, max = 20,step=.1,value=c(12.3)))
-                                                      )    )               
-                                                )   )
-                                         
-                             ), 
-                             
-                    ),
-                    
-                    tabPanel(
-                     
-                             "2. Maailman väestö",
-                             
-   
-                             
-                             radioButtons("popc", 
-                                          inf("Valitse YK:n väestöprojektio", "infopopu"), 
-                                          
-                                          c(
-                                            "95% jakauman yläraja (12.41 miljardia vuonna 2100)" = 5,
-                                            "80% jakauman yläraja (11.65 miljardia vuonna 2100)" = 4,
-                                            "Mediaani-projektio (10.35 miljardia vuonna 2100)" = 3,
-                                            "80% jakauman alaraja (9.32 miljardia vuonna  2100)" = 2,
-                                            "95% jakauman alaraja (8.84 miljardia vuonna 2100)" = 1
-                                          ),selected=3
-                             )
-                             
-                    ),
-
-                            tabPanel("3. Hiilen hinta",
-                             
-                        p("Hiilen hinta tulisi asettaa tarpeeksi korkeaksi, että sen avulla saavutetaan vaiheessa 1. asetettu päästötavoite"),
-                                     
-                                     
-                             fluidRow(
-                               column(6, id = "luu",
-                                      tags$div(id="sla", numericInput("sprice",
-                                                                      inf("Alkuvuoden hiilen hinta, $", "infostartprice"), 
-                                                                      
-                                                                      min = 1, max = 1000000,step=1,value=c(40))),
-                                      hr(),
-                                      
-                                      tags$div(id="sla",numericInput("eprice", 
-                                                                     inf("Loppuvuoden hiilen hinta, $", "infoendprice"), 
-                                                                     
-                                                                     
-                                                                     min = 1, max = 1000000,step=1,value=c(400))),
-                                      
-                                      
-                               ),
-                               
-                               column(6, 
-                                      radioButtons("pri", "Hintakäyrän muoto",
-                                                   choiceNames=list(
-                                                     "Lineaarinen",
-                                                     "Prosentuaalinen"
-                                                     ,
-                                                     "Logaritminen"
-                                                   ), 
-                                                   choiceValues= list("linear", "percentual", "logarithmic")
-                                                   
-                                      )
-                               )
-                             )
-                             
-                    ),
-                    
-                    
-                                   tabPanel("4. Käyttäjän päästöt",
-                             
-                             
-                             fluidRow(
-                               
-                               column(4, id = "luu",
-                                      tags$div(id="sla",numericInput("indi1", label=inf("Alkuvuoden päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
-                                      hr(),
-                                      
-                                      tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-                                      
-                                      # hr(),
-                                      
-                               ), 
-                               column(4, id = "luu",
-                                      
-                                      radioButtons("muoindi", "Käyttäjän päästöjen käyrän muoto",
-                                                   choiceNames=   list(
-                                                     "Lineaarinen" ,
-                                                     "Prosentuaalinen"
-                                                     
-                                                   ), 
-                                                   choiceValues= list("linear", "percentual"),
-                                                   selected = "percentual"
-                                                   
-                                      )
-                                      
-                               ), 
-                               column(4,
-                                      selectInput("indi",
-                                                  inf("VAIHTOEHTO: Käytä tietyn maan keskipäästöjä (tämä hidastaa sivua huomattavasti) ", "infoconvergence"), 
-                                                  
-                                                  choices =c("none", paaco$country), selected="none"),
-                                      conditionalPanel(
-                                        
-                                        condition="input.indi != 'none'",
-                                        sliderInput("con",
+                        
+                        
+                        selected = "1. Globaalit päästöt",
+                        
+                        tabPanel("1. Globaalit päästöt",
+                                 
+                                 
+                                 fluidRow(   class="sox",  
+                                             
+                                             column(4
+                                                    , 
+                                                    id = "luu",
                                                     
-                                                    inf("Maiden päästöjen yhdentymsien aste", "infoconvergence1"), 
-                                                    min = .01, max = 1, value = .5, step=.01)
-                                      )  ) )
-                    )   
-                    ,
-                    
-
-                     
-                    tabPanel("EXTRA: Maat",
-                             fluidRow(
-                               column(6, id = "luu",
-                                      sliderInput(
-                                        inputId = "national",
-                                        inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv")
-                                        
-                                        , min = 0, max = 100, value = 0, step=1
-                                      ), 
-                                      conditionalPanel(
-                                        condition="input.national != 0",
-                                        hr(),
-                                        
-                                        
-                                        selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
-                                        
-                                      ),
-                                      conditionalPanel(
-                                         condition='output.lek',
-                                        # condition="rv$lek == 'true'",
-                                        
-                                        hr(),
-                                        
-                                        sliderInput("conb",
-                                                    inf("Maiden päästöjen yhdentymisen aste", "infoconvergence2"), 
-                                                    min = .01, max = 1, value = .5, step=.01)
-                                        
-                                      )),
-                               column(6,
-                                      tags$div(id ="countrr",
-                                               
-                                               pickerInput(
-                                                 inputId = "countr",
-                                                 label = "Näytä indikaattorit tietylle maalle/maille (tämä hidastaa sivua huomattavasti)",
-                                                 choices = c(paaco$country),
-                                                 selected= NULL,
-                                                 options = pickerOptions(
-                                                   `actions-box` = TRUE,container = "body"),
-                                                 multiple = TRUE
-                                                 
-                                               ))
-                                      
-                               )
-                             )
-                    )
-    
-          
-    )    )}
+                                                    sliderInput("vuo", 
+                                                                inf("Hinnoittelun aloitusvuosi ja hiilineutraalisuvuosi", "infopricing"),
+                                                                min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE),
+                                                    
+                                                    
+                                                    # div(
+                                                    #   class="rad",
+                                                    #   radioButtons("bud", 
+                                                    #                
+                                                    #                inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
+                                                    #                
+                                                    #                
+                                                    #                c("400Gt (67% todennäköisyys pysyä alle 1,5C)" = 400,
+                                                    #                  "500Gt (50% todennäköisyys pysyä alle 1,5C)" = 500,
+                                                    #                  "1150Gt (67% todennäköisyys pysyä alle 2,0C)" = 1150,
+                                                    #                  "1350Gt (50% todennäköisyys pysyä alle 2,0C)" = 1350
+                                                    #                ),selected=1150
+                                                    #   )),
+                                                    # p("Huom: Budjetin muuttaminen resetoi monia muita valintoja")
+                                                    
+                                             ),
+                                             column(4, id = "luu",
+                                                    
+                                                                                                     # hr(),
+                                                    
+                                                    tags$div(id="sla",numericInput("paa", 
+                                                                                   inf("CO2-päästöt/nielu loppuvuonna", "infoemissionsink"), 
+                                                                                   min = 0.1, max = 30,step=.1,value=c(6))),
+                                                    
+                                                    hr(),
+                                                    
+                                                    radioButtons("muo", "Fossiilipäästöjen käyrän muoto",
+                                                                 choiceNames=   list(
+                                                                   "Lineaarinen" ,
+                                                                   "Prosentuaalinen"
+                                                                 ),
+                                                                 
+                                                                 choiceValues= list("linear", "percentual"
+                                                                 ),
+                                                                 selected = "percentual"
+                                                                 
+                                                    ) 
+                                                    
+                                                    
+                                                    
+                                             ),
+                                             
+                                             
+                                             
+                                             column(4,  
+                                                    tags$div(id="sla",
+                                                             checkboxInput("nonco2",  label = "Sisällytä muutkin kasvihuonekaasut kuin CO2 (suositeltua)"
+                                                                   , value=TRUE        
+                                                             )
+                                                             
+                                                    ), 
+                                                    div(class="slug",    
+                                                        conditionalPanel(
+                                                          
+                                                          condition="input.nonco2 == 1",
+                                                          tags$div(id="sla", class="slug",  numericInput("nonco2end",
+                                                                                                         p(class="slug", style="font-weight: 500 !important;",
+                                                                                                           inf("Muut päästöt hiilineutraaliusvuonna", 
+                                                                                                               "infononco2u")),
+                                                                                                         
+                                                                                                         min = 5, max = 10,step=.1,value=c(7.5)))
+                                                          
+                                                          
+                                                        )),
+                                                    
+                                                    hr(),
+                                                    
+                                                    tags$div(id="sla",
+                                                             checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta")), 
+                                                    
+                                                    div(class="rad",
+                                                        conditionalPanel(
+                                                          
+                                                          condition="input.advance == 1",
+                                                          p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta (2021) hinnoittelun alkua edeltävään vuoteen. Oletusarvoina on vuoden 2021 arvot."),
+                                                          
+                                                          tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                                          
+                                                          tags$div(id="sla",numericInput("lstart", label=p("Maankäytön päästöt"),min = -5, max = 10,step=.1,value=c(3.9))),
+                                                          
+                                                          conditionalPanel(
+                                                            condition="input.nonco2 == 1",
+                                                            tags$div(id="sla",numericInput("nonco2start", label=p("Muut päästöt"),min = 0.1, max = 20,step=.1,value=c(12.3)))
+                                                          )    )               
+                                                    )   )
+                                             
+                                 ), 
+                                 
+                        ),
+                        
+                        tabPanel(
+                          
+                          "2. Maailman väestö",
+                          
+                          
+                          
+                          radioButtons("popc", 
+                                       inf("Valitse YK:n väestöprojektio", "infopopu"), 
+                                       
+                                       c(
+                                         "95% jakauman yläraja (12.41 miljardia vuonna 2100)" = 5,
+                                         "80% jakauman yläraja (11.65 miljardia vuonna 2100)" = 4,
+                                         "Mediaani-projektio (10.35 miljardia vuonna 2100)" = 3,
+                                         "80% jakauman alaraja (9.32 miljardia vuonna  2100)" = 2,
+                                         "95% jakauman alaraja (8.84 miljardia vuonna 2100)" = 1
+                                       ),selected=3
+                          )
+                          
+                        ),
+                        
+                        tabPanel("3. Hiilen hinta",
+                                 
+                                 p("Hiilen hinta tulisi asettaa tarpeeksi korkeaksi, että sen avulla saavutetaan vaiheessa 1. asetettu päästötavoite"),
+                                 
+                                 
+                                 fluidRow(
+                                   column(6, id = "luu",
+                                          tags$div(id="sla", numericInput("sprice",
+                                                                          inf("Alkuvuoden hiilen hinta, $", "infostartprice"), 
+                                                                          
+                                                                          min = 1, max = 1000000,step=1,value=c(40))),
+                                          hr(),
+                                          
+                                          tags$div(id="sla",numericInput("eprice", 
+                                                                         inf("Loppuvuoden hiilen hinta, $", "infoendprice"), 
+                                                                         
+                                                                         
+                                                                         min = 1, max = 1000000,step=1,value=c(400))),
+                                          
+                                          
+                                   ),
+                                   
+                                   column(6, 
+                                          radioButtons("pri", "Hintakäyrän muoto",
+                                                       choiceNames=list(
+                                                         "Lineaarinen",
+                                                         "Prosentuaalinen"
+                                                         ,
+                                                         "Logaritminen"
+                                                       ), 
+                                                       choiceValues= list("linear", "percentual", "logarithmic")
+                                                       
+                                          )
+                                   )
+                                 )
+                                 
+                        ),
+                        
+                        
+                        tabPanel("4. Käyttäjän päästöt",
+                                 
+                                 
+                                 fluidRow(
+                                   
+                            
+                                   
+                                   column(4, id = "luu",
+                                          tags$div(id="sla",numericInput("indi1", label=inf("Alkuvuoden päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
+                                          hr(),
+                                          
+                                          tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
+                                          
+                                          # hr(),
+                                          
+                                   ), 
+                                   column(4, id = "luu",
+                                          
+                                          radioButtons("muoindi", "Käyttäjän päästöjen käyrän muoto",
+                                                       choiceNames=   list(
+                                                         "Lineaarinen" ,
+                                                         "Prosentuaalinen"
+                                                         
+                                                       ), 
+                                                       choiceValues= list("linear", "percentual"),
+                                                       selected = "percentual"
+                                                       
+                                          )
+                                          
+                                   ), 
+                                   column(4,
+                                          selectInput("indi",
+                                                      inf("VAIHTOEHTO: Käytä tietyn maan keskipäästöjä (tämä hidastaa sivua huomattavasti) ", "infoconvergence"), 
+                                                      
+                                                      choices =c("none", paaco$country), selected="none"),
+                                          conditionalPanel(
+                                            
+                                            condition="input.indi != 'none'",
+                                            sliderInput("con",
+                                                        
+                                                        inf("Maiden päästöjen yhdentymsien aste", "infoconvergence1"), 
+                                                        min = .01, max = 1, value = .5, step=.01)
+                                          )  ) )
+                        )   
+                        ,
+                        
+                        
+                        
+                        tabPanel("EXTRA: Maat",
+                                 fluidRow(
+                                   column(6, id = "luu",
+                                          sliderInput(
+                                            inputId = "national",
+                                            inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv")
+                                            
+                                            , min = 0, max = 100, value = 0, step=1, ticks = FALSE
+                                          ), 
+                                          conditionalPanel(
+                                            condition="input.national != 0",
+                                            hr(),
+                                            
+                                            
+                                            selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
+                                            
+                                          ),
+                                          conditionalPanel(
+                                            condition='output.lek',
+                                            # condition="rv$lek == 'true'",
+                                            
+                                            hr(),
+                                            
+                                            sliderInput("conb",
+                                                        inf("Maiden päästöjen yhdentymisen aste", "infoconvergence2"), 
+                                                        min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
+                                            
+                                          )),
+                                   column(6,
+                                          tags$div(id ="countrr",
+                                                   
+                                                   pickerInput(
+                                                     inputId = "countr",
+                                                     label = "Näytä indikaattorit tietylle maalle/maille (tämä hidastaa sivua huomattavasti)",
+                                                     choices = c(paaco$country),
+                                                     selected= NULL,
+                                                     options = pickerOptions(
+                                                       `actions-box` = TRUE,container = "body"),
+                                                     multiple = TRUE
+                                                     
+                                                   ))
+                                          
+                                   )
+                                 )
+                        )
+                        
+                        
+            )    )}
       )
       
     }
@@ -2254,19 +2414,19 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       )
       updateNumericInput(
         inputId = "indi2",
-        value = input$indi2+1.5
+        value = input$indi2+.7
       )
       
       rv$pressed = TRUE
     }
-  else  if (input$nonco2 ==0 & rv$pressed ==TRUE & input$indi1 >= 1.5 & input$indi2 >=1.5) {
+    else  if (input$nonco2 ==0 & rv$pressed ==TRUE & input$indi1 >= 1.5 & input$indi2 >=.7) {
       updateNumericInput(
         inputId = "indi1",
         value = input$indi1-1.5
       )
       updateNumericInput(
         inputId = "indi2",
-        value = input$indi2-1.5
+        value = input$indi2-.7
       )
       
       rv$pressed =FALSE
@@ -2274,7 +2434,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
   })
   
   
-
+  
   
   # infodatatext = c("Start start year carbon price defines")
   
@@ -2285,9 +2445,9 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                "infodata", "infobudget","infoemissionsink","infostartprice","infoendprice",
                "infopricing", "infopopu", "infoconvergence", "infoconvergence1", "infoconvergence2", "infonationaldiv")
   
-
   
-
+  
+  
   
   
   output$tutori = renderUI({
@@ -2299,12 +2459,12 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
   
   
   
-
+  
   
   observeEvent(input$tutorial, {
     updateBox("tutobox", action = "restore")
   })
-
+  
   # observeEvent(input$mobile, {
   #   if (input$mobile  == TRUE) {
   #     rv$lihh =.8
@@ -2320,7 +2480,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
     # shinyjs::click("add")
     ogg$destroy() # destroy observer as it has no use after initial button click
   })
-
+  
   osg <- observe({
     click("go")
     # updateBox("tutobox", action = "remove")
@@ -2374,34 +2534,34 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
   #   # shinyjs::click("add")
   #   ok$destroy() # destroy observer as it has no use after initial button click
   # })
-
+  
   # 
   ok <- observe({
     # observeEvent(input[[paste0(i)]], {
     if (input$dim[1] > 1200) {
       rv$view==4
       
-    updateRadioButtons(session,  "view", selected = "4")
+      updateRadioButtons(session,  "view", selected = "4")
     } else {
       rv$view==3
       
       # if (input$dimension > 1000) {
-        updateRadioButtons(session,  "view", selected = "3")
+      updateRadioButtons(session,  "view", selected = "3")
       
-       }
+    }
     # shinyjs::click("add")
     ok$destroy() # destroy observer as it has no use after initial button click
   })
   
   
-
-observeEvent(rv$fyear, {
+  
+  observeEvent(rv$fyear, {
     
     
     if (rv$lang == "eng") {
       updateCheckboxInput(session, "advance", label=paste0("Advanced: Set emission for year before start year (", rv$fyear-1,")"))
       
-
+      
     }
     
     
@@ -2410,75 +2570,75 @@ observeEvent(rv$fyear, {
     {
       updateCheckboxInput(session, "advance", label=paste0("EXTRA (aseta päästöt vuodelle ennen alkuvuotta (", rv$fyear-1,")"))
       
-
+      
       
     }
     
   })  
-
-
-
-# tags$div(id="sla", class="slug",  numericInput("nonco2end",
-#                                                p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year",
-#                                                                                                          "infononco2u")),
-#                                                tags$div(id="sla", class="slug",  numericInput("nonco2end",
-#                                                                                               p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year",
-#                                                                                                                                                         "infononco2u")),
-#                                                                                               tags$div(id="sla",numericInput("eprice",
-#                                                                                                                              inf("Set neutrality year carbon price, $", "infoendprice"),
-#                                                                                                                              tags$div(id="sla",numericInput("indi1", label=inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
-#                                                                                                                              hr(),
-# 
-#                                                                                                                              tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-#                                                                                                                              tags$div(id="sla", class="slug",  numericInput("nonco2end",
-#                                                                                                                                                                             p(class="slug", style="font-weight: 500 !important;",
-#                                                                                                                                                                               tags$div(id="sla", numericInput("sprice",
-#                                                                                                                                                                                                               inf("Alkuvuoden hiilen hinta, $", "infostartprice"),
-#                                                                                                                                                                                                               inf("Muut päästöt hiilineutraaliusvuonna",
-#                                                                                                                                                                                                                   tags$div(id="sla",numericInput("eprice",
-#                                                                                                                                                                                                                                                  inf("Loppuvuoden hiilen hinta, $", "infoendprice"),                                                                                                                                                                                                "infononco2u")),
-# 
-# 
-#                                                                                                                                                                                                                   column(4, id = "luu",
-#                                                                                                                                                                                                                          tags$div(id="sla",numericInput("indi1", label=inf("Alkuvuoden päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
-#                                                                                                                                                                                                                          hr(),
-# 
-#                                                                                                                                                                                                                          tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-# 
-# 
-# 
-# 
-# 
-# 
-
-observeEvent(rv$lyear, {
-  
-  
-  if (rv$lang == "eng") {
-
-    updateNumericInput(session, "paa", label=paste0("CO2 emissions/sink at the carbon neutrality year (", rv$lyear,"), Gt"))
-    # rv$lok = paste0("Non-CO2 emissions at CO2 neutrality year (", rv$lyear,"), Gt")
-    # updateNumericInput(session, "nonco2end", label= p(class="slug", style="font-weight: 500 !important;", inf(rv$lok,
-    #                                                                                                           "infononco2u")))
-    # updateNumericInput(session, "indi2", label= inf(paste0("Neutrality year user emissions, t", rv$lyear),"infoenduser" ))
-    
-    
-  # tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-    
-    
-  }
   
   
   
-  else if (rv$lang =="fin")
-  {
-
-    updateNumericInput(session, "paa", label=paste0("CO2-päästöt/nielu loppuvuonna (", rv$lyear,"), Gt"))
-    
-    
-  }
+  # tags$div(id="sla", class="slug",  numericInput("nonco2end",
+  #                                                p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year",
+  #                                                                                                          "infononco2u")),
+  #                                                tags$div(id="sla", class="slug",  numericInput("nonco2end",
+  #                                                                                               p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year",
+  #                                                                                                                                                         "infononco2u")),
+  #                                                                                               tags$div(id="sla",numericInput("eprice",
+  #                                                                                                                              inf("Set neutrality year carbon price, $", "infoendprice"),
+  #                                                                                                                              tags$div(id="sla",numericInput("indi1", label=inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
+  #                                                                                                                              hr(),
+  # 
+  #                                                                                                                              tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
+  #                        2f3c441                                                                                                      tags$div(id="sla", class="slug",  numericInput("nonco2end",
+  #                                                                                                                                                                             p(class="slug", style="font-weight: 500 !important;",
+  #                                                                                                                                                                               tags$div(id="sla", numericInput("sprice",
+  #                                                                                                                                                                                                               inf("Alkuvuoden hiilen hinta, $", "infostartprice"),
+  #                                                                                                                                                                                                               inf("Muut päästöt hiilineutraaliusvuonna",
+  #                                                                                                                                                                                                                   tags$div(id="sla",numericInput("eprice",
+  #                                                                                                                                                                                                                                                  inf("Loppuvuoden hiilen hinta, $", "infoendprice"),                                                                                                                                                                                                "infononco2u")),
+  # 
+  # 
+  #                                                                                                                                                                                                                   column(4, id = "luu",
+  #                                                                                                                                                                                                                          tags$div(id="sla",numericInput("indi1", label=inf("Alkuvuoden päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
+  #                                                                                                                                                                                                                          hr(),
+  # 
+  #                                                                                                                                                                                                                          tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
+  # 
+  # 
+  # 
+  # 
+  # 
+  # 
   
-}) 
+  # observeEvent(rv$lyear, {
+  #   
+  #   
+  #   if (rv$lang == "eng") {
+  #     
+  #     updateNumericInput(session, "paa", label=paste0("CO2 emissions/sink at the carbon neutrality year (", rv$lyear,"), Gt"))
+  #     # rv$lok = paste0("Non-CO2 emissions at CO2 neutrality year (", rv$lyear,"), Gt")
+  #     # updateNumericInput(session, "nonco2end", label= p(class="slug", style="font-weight: 500 !important;", inf(rv$lok,
+  #     #                                                                                                           "infononco2u")))
+  #     # updateNumericInput(session, "indi2", label= inf(paste0("Neutrality year user emissions, t", rv$lyear),"infoenduser" ))
+  #     
+  #     
+  #     # tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
+  #     
+  #     
+  #   }
+  #   
+  #   
+  #   
+  #   else if (rv$lang =="fin")
+  #   {
+  #     
+  #     updateNumericInput(session, "paa", label=paste0("CO2-päästöt/nielu loppuvuonna (", rv$lyear,"), Gt"))
+  #     
+  #     
+  #   }
+  #   
+  # }) 
   
   
   # ok <- observe({
@@ -2500,8 +2660,8 @@ observeEvent(rv$lyear, {
   
   observeEvent(input$dark_mode, {
     if (input$dark_mode == TRUE) {
-
-      rv$bgc = "#484B4D"
+      
+      rv$bgc = "#2f3c44"
       rv$teksvari = "white"
       rv$obsvari = "lightgreen"
       
@@ -2511,7 +2671,7 @@ observeEvent(rv$lyear, {
       rv$obsvari = "darkgreen"
       
     }
-
+    
   })
   # observeEvent(input$dark, {
   #   if (input$dark == TRUE) {
@@ -2522,7 +2682,7 @@ observeEvent(rv$lyear, {
   #   }
   # 
   # })
-
+  
   
   lllist =c("country","bud","vuo","paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "indi","popc","con")
   
@@ -2537,26 +2697,26 @@ observeEvent(rv$lyear, {
       # if (rv$lang == "eng") {
       
       # observeEvent(input$bud, {
+      
+      if (input$bud == 400) {
+        rv$budinfo = c("1,5°C with 67% chance")
         
-        if (input$bud == 400) {
-          rv$budinfo = c("1,5°C with 67% chance")
-          
-        } else if (input$bud ==500) {
-          
-          rv$budinfo = c("1,5°C with 50% chance")
-        } else if (input$bud ==1150) {
-          
-          rv$budinfo = c("2°C with 67% chance")
-        }
-        else if (input$bud ==1350) {
-          
-          rv$budinfo = c("2°C with 50% chance")
-        }
+      } else if (input$bud ==500) {
+        
+        rv$budinfo = c("1,5°C with 50% chance")
+      } else if (input$bud ==1150) {
+        
+        rv$budinfo = c("2°C with 67% chance")
+      }
+      else if (input$bud ==1350) {
+        
+        rv$budinfo = c("2°C with 50% chance")
+      }
       # })
       
-      } else if (rv$lang=="fin") {
-    
-    # observeEvent(input$bud, {
+    } else if (rv$lang=="fin") {
+      
+      # observeEvent(input$bud, {
       if (input$bud == 400) {
         
         rv$budinfo = c("1,5°C 67% varmasti")
@@ -2572,8 +2732,8 @@ observeEvent(rv$lyear, {
         
         rv$budinfo = c("2°C 50% varmasti")
       } 
-    # }) 
-        }
+      # }) 
+    }
     
     
     
@@ -2593,13 +2753,13 @@ observeEvent(rv$lyear, {
   observeEvent(rv$lek,{
     if (rv$lek==TRUE){
       rv$alert4 =TRUE
-
+      
       rv$showcountryfossil=TRUE   
       rv$showcountrycost=TRUE   
       rv$showcountrynetcost=TRUE   
       rv$showcountrypop=TRUE   
       
-
+      
       
       # o$destroy()
     } else if (rv$lek==FALSE) {
@@ -2612,7 +2772,7 @@ observeEvent(rv$lyear, {
     }
   })
   
-
+  
   
   # observeEvent()
   
@@ -2649,7 +2809,7 @@ observeEvent(rv$lyear, {
     if (input$national == 0){
       rv$alert6 =FALSE
       rv$showaveragedividend=FALSE
-
+      
     }
     
   })
@@ -2699,15 +2859,15 @@ observeEvent(rv$lyear, {
       
       # 2.1515 3.0287 1.1981 1.8475
       # if (input$last_btn =="1350") {
-        
- if ((rv$warn > 2.1515 & rv$warn < 2.1516 ) | (rv$warn > 3.0287 & rv$warn < 3.0288 ) | (rv$warn > 1.198 & rv$warn < 1.199 ) | (rv$warn > 1.8475 & rv$warn < 1.8476 ) | (rv$warn > 0.1625 & rv$warn < 0.1626 )) {
-  
-} else {
-      showNotification("Increasing land use emissions may be unrealistic. Consider setting later carbon neutrality year or increasing emissions/sink at the carbon neutrality year", duration =17)
-      # rv$alert5 =TRUE
       
-       okku$destroy()
-}
+      if ((rv$warn > 2.1515 & rv$warn < 2.1516 ) | (rv$warn > 3.0287 & rv$warn < 3.0288 ) | (rv$warn > 1.198 & rv$warn < 1.199 ) | (rv$warn > 1.8475 & rv$warn < 1.8476 ) | (rv$warn > 0.1625 & rv$warn < 0.1626 )) {
+        
+      } else {
+        showNotification("Increasing land use emissions may be unrealistic. Consider setting later carbon neutrality year or increasing emissions/sink at the carbon neutrality year", duration =17)
+        # rv$alert5 =TRUE
+        
+        okku$destroy()
+      }
     }
     
   })
@@ -2740,7 +2900,7 @@ observeEvent(rv$lyear, {
                          ),
                          choiceValues = list("linear", "percentual"
                                              # , "exponential"
-                                             ),
+                         ),
                          selected = rv$muosel)
     }
     else if (rv$lang =="fin")
@@ -2754,7 +2914,7 @@ observeEvent(rv$lyear, {
                          ),
                          choiceValues = list("linear", "percentual"
                                              # , "exponential"
-                                             ),
+                         ),
                          selected = rv$muosel
                          
       )  
@@ -2931,10 +3091,14 @@ observeEvent(rv$lyear, {
   }    )
   
   
-
+  
   observeEvent(input$con, {
     updateSliderInput(
       inputId = "conb",
+      value = input$con
+    )
+    updateSliderInput(
+      inputId = "conc",
       value = input$con
     )
   })
@@ -2944,8 +3108,21 @@ observeEvent(rv$lyear, {
       inputId = "con",
       value = input$conb
     )
+    updateSliderInput(
+      inputId = "conc",
+      value = input$conb
+    )
   })
-  
+  observeEvent(input$conc, {
+    updateSliderInput(
+      inputId = "con",
+      value = input$conc
+    )
+    updateSliderInput(
+      inputId = "conb",
+      value = input$conc
+    )
+  })
   
   observeEvent(input$indi1,{
     rv$indi1 = input$indi1
@@ -2976,11 +3153,11 @@ observeEvent(rv$lyear, {
   observeEvent(input$autodraw, {
     if (input$autodraw == TRUE) {
       shinyjs::disable("go")
-
+      
     }
     else if (input$autodraw ==FALSE){
       shinyjs::enable("go")
-
+      
     }
   })
   
@@ -3027,17 +3204,26 @@ observeEvent(rv$lyear, {
     )
     # }
   })
-
+  
   # first to update just rv$yearc, then additionals with req()
-  
-  
-  
-  
-  
   
   yearclist = c("yearc")
   
-  
+  # observeEvent(input$xvar, {
+  #   
+  #   
+  #   if  (input$xvar=='gdpcap') {
+  #     updateSliderInput(session, "xcen", value = 197, max=197)
+  #     
+  #   } else {
+  #     updateSliderInput(session, "xcen", value = 218, max=218)
+  #     
+  #     
+  #   }
+  #   
+  #   # req(datsss())
+  #   
+  # })
   
   # yearclist = c("yearc", "yearca")
   observeEvent(input$yearc, {
@@ -3059,10 +3245,11 @@ observeEvent(rv$lyear, {
       rv$yearc=rv$ffyear
       
     }
-    
-    # req(datsss())
+
     
   })
+  
+
   
   
   
@@ -3084,7 +3271,7 @@ observeEvent(rv$lyear, {
     # }
   })
   
-
+  
   
   observeEvent(input$plot_click, {
     # if (input$plot_click$x < 1 & input$plot_click$x > 0) {
@@ -3092,10 +3279,10 @@ observeEvent(rv$lyear, {
       session = session,
       inputId = "yearc",
       # selected = input$plot_click$x
-selected = round(input$plot_click$x,0)
-  # round(
-    # minyy+(maxyy-minyy)*input$plot_click$x
-    # ,0)
+      selected = round(input$plot_click$x,0)
+      # round(
+      # minyy+(maxyy-minyy)*input$plot_click$x
+      # ,0)
     )
     # }
   })
@@ -3103,39 +3290,39 @@ selected = round(input$plot_click$x,0)
   observeEvent(input$plotj_click, {
     # minyy = mminyy
     # maxyy =mmaxyy
-
+    
     if (rv$pll >=2 ){
-
+      
       if (input$plotj_click$x < .50 & input$plotj_click$x > -.02) {
-
-
-
+        
+        
+        
         updateSliderTextInput(
           session = session,
           inputId = "yearc",
           selected = round(rv$ffyear+(mmaxyy-mminyy)*(input$plotj_click$x+.02)*1.88,0))
-
-
-
+        
+        
+        
       } else if (input$plotj_click$x < 1 & input$plotj_click$x > .50) {
-
+        
         updateSliderTextInput(
           session = session,
           inputId = "yearc",
           selected =  round(rv$ffyear+(mmaxyy-(mmaxyy-rv$ffyear)*0.04-rv$ffyear)*(input$plotj_click$x-.52)*2),0)
         # selected =  round(mminyy+(mmaxyy-mminyy)*(input$plotj_click$x-.5)*2),0)
-  
+        
       }
     }
-
+    
     else if (rv$pll ==1) {
       updateSliderTextInput(
         session = session,
         inputId = "yearc",
         selected = round(rv$ffyear+(mmaxyy-(mmaxyy-rv$ffyear)*0.04-rv$ffyear)*input$plotj_click$x*1),0)
-
+      
     }
-
+    
   })
   #     
   observeEvent(input$plotk_click, {
@@ -3157,7 +3344,7 @@ selected = round(input$plot_click$x,0)
   # })
   
   # value = 1965+
-
+  
   # 
   # observeEvent(input$plota_click, {
   #   updateSliderInput(
@@ -3240,71 +3427,71 @@ selected = round(input$plot_click$x,0)
   #   #   }
   #   # }
   # })
-      
+  
   
   observeEvent(rv$lang, {
-  if (rv$lang=="eng") {
-    
-    output$slickr1 <- renderSlickR({
-      imgs <- list.files("www/images/eng", pattern=".png", full.names = TRUE)
-      slickR(imgs,width = "70%", height="60%") 
-      # + settings(dots=TRUE)
-    })
-    
-    # updateBox("tutorialbox", 
-    #           action = "update",
-    #           
-    #           options = list(
-    #             style = 'overflow-x: hidden',
-    #             # style = 'overflow-y: scroll',
-    #             
-    #             id = "tutorialbox",
-    #             # dots = TRUE,
-    #             width = NULL,
-    #             title ="Tutorial",
-    #             closable = TRUE,
-    #             closed=TRUE,
-    #             collapsible = FALSE,
-    #             slickROutput("slickr1",width = "90%", height="90%")
-    #             )              # ,
-    #           
-    #           # slickROutput("slickr1",width = "90%", height="90%")
-    #           
-    #           
-    #           # action = "remove"
-    #           )
-  
-
-  } else if (rv$lang =="fin") {
-    output$slickr1 <- renderSlickR({
-      imgs <- list.files("www/images/fin", pattern=".png", full.names = TRUE)
-      slickR(imgs,width = "70%", height="60%") 
-      # + settings(dots=TRUE)
-    })
-    
-    # updateBox("tutorialbox",
-    #           action = "update",
-    #           
-    #           options = list(
-    #             style = 'overflow-x: hidden',
-    #             # style = 'overflow-y: scroll',
-    #             
-    #             id = "tutorialbox",
-    #             # dots = TRUE,
-    #             width = NULL,
-    #             title ="Tutoriaali",
-    #             closable = FALSE,
-    #             closed=TRUE,
-    #             collapsible = FALSE,
-    #             slickROutput("slickr2",width = "90%", height="90%")
-    #             
-    #             )
-    #           
-    #           # slickROutput("slickr2",width = "90%", height="90%")              
-    #           )
-    
-
-  }
+    if (rv$lang=="eng") {
+      
+      output$slickr1 <- renderSlickR({
+        imgs <- list.files("www/images/eng", pattern=".png", full.names = TRUE)
+        slickR(imgs,width = "70%", height="60%") 
+        # + settings(dots=TRUE)
+      })
+      
+      # updateBox("tutorialbox", 
+      #           action = "update",
+      #           
+      #           options = list(
+      #             style = 'overflow-x: hidden',
+      #             # style = 'overflow-y: scroll',
+      #             
+      #             id = "tutorialbox",
+      #             # dots = TRUE,
+      #             width = NULL,
+      #             title ="Tutorial",
+      #             closable = TRUE,
+      #             closed=TRUE,
+      #             collapsible = FALSE,
+      #             slickROutput("slickr1",width = "90%", height="90%")
+      #             )              # ,
+      #           
+      #           # slickROutput("slickr1",width = "90%", height="90%")
+      #           
+      #           
+      #           # action = "remove"
+      #           )
+      
+      
+    } else if (rv$lang =="fin") {
+      output$slickr1 <- renderSlickR({
+        imgs <- list.files("www/images/fin", pattern=".png", full.names = TRUE)
+        slickR(imgs,width = "70%", height="60%") 
+        # + settings(dots=TRUE)
+      })
+      
+      # updateBox("tutorialbox",
+      #           action = "update",
+      #           
+      #           options = list(
+      #             style = 'overflow-x: hidden',
+      #             # style = 'overflow-y: scroll',
+      #             
+      #             id = "tutorialbox",
+      #             # dots = TRUE,
+      #             width = NULL,
+      #             title ="Tutoriaali",
+      #             closable = FALSE,
+      #             closed=TRUE,
+      #             collapsible = FALSE,
+      #             slickROutput("slickr2",width = "90%", height="90%")
+      #             
+      #             )
+      #           
+      #           # slickROutput("slickr2",width = "90%", height="90%")              
+      #           )
+      
+      
+    }
   })
   # output$tutbox = renderUI({
   # 
@@ -3388,10 +3575,10 @@ selected = round(input$plot_click$x,0)
         }
       })
       # } else if (rv$lang == "fin") {
-        
-     
-        
-        
+      
+      
+      
+      
       # }
       
       # tutbox = renderUI({
@@ -3413,11 +3600,11 @@ selected = round(input$plot_click$x,0)
       # })
       
       # if (rv$lang == "eng") {
-        
- 
+      
+      
       # }
       # if (rv$lang == "fin") {
-  
+      
       # }
       
       
@@ -3468,23 +3655,23 @@ selected = round(input$plot_click$x,0)
       output$yearc= renderText(paste("Arvot vuodelle ",rv$yearc))
       
       
-observeEvent(input$bud, {
-      if (input$bud == 400) {
-        
-        rv$budinfo = c("1,5°C 67% varmasti")
-        
-      } else if (input$bud ==500) {
-        
-        rv$budinfo = c("1,5°C 50% varmasti")
-      } else if (input$bud ==1150) {
-        
-        rv$budinfo = c("2°C 67% varmasti")
-      }
-      else if (input$bud ==1350) {
-        
-        rv$budinfo = c("2°C 50% varmasti")
-      } 
-})
+      observeEvent(input$bud, {
+        if (input$bud == 400) {
+          
+          rv$budinfo = c("1,5°C 67% varmasti")
+          
+        } else if (input$bud ==500) {
+          
+          rv$budinfo = c("1,5°C 50% varmasti")
+        } else if (input$bud ==1150) {
+          
+          rv$budinfo = c("2°C 67% varmasti")
+        }
+        else if (input$bud ==1350) {
+          
+          rv$budinfo = c("2°C 50% varmasti")
+        } 
+      })
       observeEvent(input$next1, {
         updateTabsetPanel(session, inputId = "nok", selected = "2. Maailman väestö")
       })
@@ -3554,11 +3741,11 @@ observeEvent(input$bud, {
   
   
   showlista = c(
-                "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop")
+    "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop")
   
   lapply(
     X = c(
-          "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop","alert4", "alert6", "alert8" ),
+      "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop","alert4", "alert6", "alert8" ),
     FUN = function(i){
       rv[[paste0(i)]] = FALSE
     } )
@@ -3606,16 +3793,16 @@ observeEvent(input$bud, {
   # uncheck variables if pressed "Show all"
   
   showlistc = c("showfossil","showland", "shownet", "showavgfossil","showprice" , "showavgcost",
-               "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop"
-               )
+                "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop"
+  )
   showlistd = c( "showghg", "shownonco2")
   showliste = c(
-                "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop")
-
+    "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop")
+  
   showlistf = c("showaveragedividend")
   showlistg = c("showcountrydividend")
   
-    # 
+  # 
   # observeEvent(input$nationalcoun, {
   #   
   #   if (input$nationalcoun %in% c(ll2)) {
@@ -3685,12 +3872,12 @@ observeEvent(input$bud, {
     FUN = function(i){
       observeEvent(input$showall, {
         if (rv$lek==TRUE) {
-        updateAwesomeCheckbox(
-          session=session,
-          inputId = i,
-          value = TRUE)
+          updateAwesomeCheckbox(
+            session=session,
+            inputId = i,
+            value = TRUE)
         }
-
+        
         
       })
       
@@ -3705,9 +3892,9 @@ observeEvent(input$bud, {
           session=session,
           inputId = i,
           value = TRUE)
-
+        
       })
-    
+      
     })
   
   
@@ -3716,29 +3903,29 @@ observeEvent(input$bud, {
     FUN = function(i){
       observeEvent(input$showall, {
         if (input$nonco2==TRUE) {
-        updateAwesomeCheckbox(
-          session=session,
-          inputId = i,
-          value = TRUE)
+          updateAwesomeCheckbox(
+            session=session,
+            inputId = i,
+            value = TRUE)
         } 
-
+        
         
       })
       
     })
   
   
-      # 
-      # observeEvent(input$showall, {
-      # 
-      #   updateAwesomeCheckbox(
-      #     session=session,
-      #     inputId = "visib",
-      #     value = FALSE)
-      #   
-      # })
-      # 
-
+  # 
+  # observeEvent(input$showall, {
+  # 
+  #   updateAwesomeCheckbox(
+  #     session=session,
+  #     inputId = "visib",
+  #     value = FALSE)
+  #   
+  # })
+  # 
+  
   
   lapply(
     X = showlist,
@@ -3757,7 +3944,7 @@ observeEvent(input$bud, {
         
       }     )
       
-    
+      
       
       observeEvent(input$shownone, {
         updateAwesomeCheckbox(
@@ -3917,7 +4104,7 @@ observeEvent(input$bud, {
     
   })
   
-
+  
   # 
   
   
@@ -3952,7 +4139,7 @@ observeEvent(input$bud, {
       } )
     } )
   # 
-
+  
   lapply(
     X = c("showavgfossil", "showuserfossil", "showcountryfossil"),
     FUN = function(i){
@@ -4102,7 +4289,7 @@ observeEvent(input$bud, {
     # freezeReactiveValue(input, "paa")
     priority = 1
     
-
+    
     
     updateSliderInput(
       
@@ -4175,7 +4362,7 @@ observeEvent(input$bud, {
   })
   # year %in% rv$fyear:rv$lyear & 
   dats = reactive({
-
+    
     # 
     # print(rv$showfossil)
     # print(rv$showprice)
@@ -4224,7 +4411,7 @@ observeEvent(input$bud, {
     yearl2 = c(historyyear, yearl2)
     
     
-  
+    
     
     
     
@@ -4248,7 +4435,7 @@ observeEvent(input$bud, {
     
     
     # non-co2
-
+    
     
     
     
@@ -4284,7 +4471,7 @@ observeEvent(input$bud, {
     
     start = input$fstart
     lstart = input$lstart
-
+    
     
     end<- as.numeric(input$paa)
     lend = (-1)*end
@@ -4324,253 +4511,253 @@ observeEvent(input$bud, {
     
     # emission rate solving with given values
     
-
+    
     
     
     if (input$muo != "exponential") {
-    
-    if (input$muo == "percentual")  {
-      f3 = f3 <- function(rate,start,time, end) {
-        end - start * (1-rate/100)^(time+1)
-      }
       
-    } else if (input$muo=="linear") {
-      f3 <- function(rate,start,time, end) {
-        end - (start - rate*(time+1))
-      }
-    } 
-    else if  (input$muo=="logarithmic") {
-      f3 <- function(rate,start,time, end) {
-        # end - (start - rate*log(time+1))
-        end - (start - rate^(time+1))
+      if (input$muo == "percentual")  {
+        f3 = f3 <- function(rate,start,time, end) {
+          end - start * (1-rate/100)^(time+1)
+        }
         
-      }}
-    # else if  (input$muo=="exponential") {
-    #   # need to calculate the area under the curve. For it need to know how much the budget is for emissions and LUC.
-    #   # 
-    #   
-    #   f3 <- function(rate,start,time, end) {
-    #     # end - (start - rate*log(time+1))
-    #     end - (start - rate^(time+1))
-    #     
-    #   }}
-    # 
-    # emission rate solving with given values
-    
-
+      } else if (input$muo=="linear") {
+        f3 <- function(rate,start,time, end) {
+          end - (start - rate*(time+1))
+        }
+      } 
+      else if  (input$muo=="logarithmic") {
+        f3 <- function(rate,start,time, end) {
+          # end - (start - rate*log(time+1))
+          end - (start - rate^(time+1))
+          
+        }}
+      # else if  (input$muo=="exponential") {
+      #   # need to calculate the area under the curve. For it need to know how much the budget is for emissions and LUC.
+      #   # 
+      #   
+      #   f3 <- function(rate,start,time, end) {
+      #     # end - (start - rate*log(time+1))
+      #     end - (start - rate^(time+1))
+      #     
+      #   }}
+      # 
+      # emission rate solving with given values
       
-    result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-    u = result[1]
-    
-    
-    
-    rate = u
-    # rv$rate = rate
-    
-    #  yearly emissions function
-    if (input$muo == "percentual")  {
-      g = function(start, rate, time) {
-        c(start*(1-rate/100)^(time+1))
-      }
-    } else if (input$muo=="linear") {
-      g = function(start, rate, time) {
-        c(start - rate*(time+1))
-      }
-    } 
-    else if  (input$muo=="logarithmic") {
       
-      g = function(start, rate, time) {
-        # c(start-rate*log(time+1))
-        c(start-rate^(time+1))
+      
+      result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+      u = result[1]
+      
+      
+      
+      rate = u
+      # rv$rate = rate
+      
+      #  yearly emissions function
+      if (input$muo == "percentual")  {
+        g = function(start, rate, time) {
+          c(start*(1-rate/100)^(time+1))
+        }
+      } else if (input$muo=="linear") {
+        g = function(start, rate, time) {
+          c(start - rate*(time+1))
+        }
+      } 
+      else if  (input$muo=="logarithmic") {
+        
+        g = function(start, rate, time) {
+          # c(start-rate*log(time+1))
+          c(start-rate^(time+1))
+          
+        }
+        
+        
+      }
+      fossil = g(start, rate, 0:time)
+      
+      
+      
+      
+      #applying yearly emission function to calculate emissions
+      
+      
+      # function for emissions cumulation over time
+      if (input$muo == "percentual")  {
+        geomsuma = function(start, rate, time) {
+          x = 0
+          for(i in 0:time) x = x + start * (1-rate/100)^(i+1)
+          return(x)  }
+        
+        
+      } else if (input$muo=="linear") {
+        geomsuma = function(start, rate, time) {
+          x = 0
+          for(i in 0:time) x = x + start - rate*(i+1)
+          return(x)  }  } 
+      else if (input$muo =="logarithmic") {
+        geomsuma = function(start, rate, time) {
+          x = 0
+          for(i in 0:time) x = x + start - rate*log(i+1)
+          
+          # for(i in 0:time) x = x + start - rate*(i)
+          # for(i in 1:time) x = x + start - rate*log((i))
+          return(x)  }  
         
       }
       
-      
-      }
-    fossil = g(start, rate, 0:time)
-    
-    
-
-      
-    #applying yearly emission function to calculate emissions
-    
-    
-    # function for emissions cumulation over time
-    if (input$muo == "percentual")  {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start * (1-rate/100)^(i+1)
-        return(x)  }
+      # applying function for emission cumulatin
       
       
-    } else if (input$muo=="linear") {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start - rate*(i+1)
-        return(x)  }  } 
-    else if (input$muo =="logarithmic") {
-      geomsuma = function(start, rate, time) {
-        x = 0
-        for(i in 0:time) x = x + start - rate*log(i+1)
+      total = geomsuma(start, rate,time)
+      
+      
+      
+      
+      start = input$nonco2start
+      # lstart = input$lstart
+      
+      
+      end<- as.numeric(input$nonco2end)
+      # lend = (-1)*end
+      if (input$muo == "percentual")  {
+        f3 = f3 <- function(rate,start,time, end) {
+          end - start * (1-rate/100)^(time+1)
+        }
         
-        # for(i in 0:time) x = x + start - rate*(i)
-        # for(i in 1:time) x = x + start - rate*log((i))
-        return(x)  }  
+      } else if (input$muo=="linear") {
+        f3 <- function(rate,start,time, end) {
+          end - (start - rate*(time+1))
+        }
+      } 
+      else if  (input$muo=="logarithmic") {
+        f3 <- function(rate,start,time, end) {
+          # end - (start - rate*log(time+1))
+          end - (start - rate^(time+1))
+          
+        }}
+      
+      
+      # emission rate solving with given values
+      result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+      u = result[1]
+      
+      rate = u
+      # rv$rate = rate
+      
+      #  yearly emissions function
+      if (input$muo == "percentual")  {
+        g = function(start, rate, time) {
+          c(start*(1-rate/100)^(time+1))
+        }
+      } else if (input$muo=="linear") {
+        g = function(start, rate, time) {
+          c(start - rate*(time+1))
+        }
+      } 
+      else if  (input$muo=="logarithmic") {
+        
+        g = function(start, rate, time) {
+          # c(start-rate*log(time+1))
+          c(start-rate^(time+1))
+          
+        }}
+      
+      #applying yearly emission function to calculate emissions
+      nonco2 = g(start, rate, 0:time)
+      
+      
       
     }
     
-    # applying function for emission cumulatin
-    
-    
-    total = geomsuma(start, rate,time)
     
     
     
     
-    start = input$nonco2start
-    # lstart = input$lstart
     
     
-    end<- as.numeric(input$nonco2end)
-    # lend = (-1)*end
-    if (input$muo == "percentual")  {
-      f3 = f3 <- function(rate,start,time, end) {
-        end - start * (1-rate/100)^(time+1)
-      }
+    
+    
+    
+    else if (input$muo == "exponential") {
       
-    } else if (input$muo=="linear") {
-      f3 <- function(rate,start,time, end) {
-        end - (start - rate*(time+1))
-      }
-    } 
-    else if  (input$muo=="logarithmic") {
-      f3 <- function(rate,start,time, end) {
-        # end - (start - rate*log(time+1))
-        end - (start - rate^(time+1))
-        
-      }}
-    
-    
-    # emission rate solving with given values
-    result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-    u = result[1]
-    
-    rate = u
-    # rv$rate = rate
-    
-    #  yearly emissions function
-    if (input$muo == "percentual")  {
-      g = function(start, rate, time) {
-        c(start*(1-rate/100)^(time+1))
-      }
-    } else if (input$muo=="linear") {
-      g = function(start, rate, time) {
-        c(start - rate*(time+1))
-      }
-    } 
-    else if  (input$muo=="logarithmic") {
-      
-      g = function(start, rate, time) {
-        # c(start-rate*log(time+1))
-        c(start-rate^(time+1))
-        
-      }}
-    
-    #applying yearly emission function to calculate emissions
-    nonco2 = g(start, rate, 0:time)
-    
-    
-    
-  }
-
-    
-    
-    
-  
-    
-    
-    
-    
-    
-     else if (input$muo == "exponential") {
-       
-       rate = 1
+      rate = 1
       times = (lyear - fyear)
-    # fstart= start
+      # fstart= start
       tim = 0:times
       end<- as.numeric(input$paa)
       # SpanFast=(fstart-end)*.30
       # 
       # SpanSlow=(fstart-end)*.70
-        
-        # f3 = f3 <- function(rate,start,time, end) {
-        #   end - start*(rate)^((time+1)^(1/1.48))
-        # }    
-        # 
-        # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-        # u = result[1]
-        # rate = u    
-        # g = function(start, rate, time) {
-        #   c(start*(rate)^((time+1)^(1/1.48)))
-        # }
-        # 
-        # fossil = g(start, rate, 0:time)
-        
+      
+      # f3 = f3 <- function(rate,start,time, end) {
+      #   end - start*(rate)^((time+1)^(1/1.48))
+      # }    
+      # 
+      # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+      # u = result[1]
+      # rate = u    
+      # g = function(start, rate, time) {
+      #   c(start*(rate)^((time+1)^(1/1.48)))
+      # }
+      # 
+      # fossil = g(start, rate, 0:time)
+      
       model <- function(theta){
-      # a = function thing
-      a <- theta[1]
-      # b = other function thing
-      b  <- theta[2]
-      
-      c  <- theta[3]
-      
-      # SpanFast=(Y0-Plateau)*PercentFast*.01
-      #
-      # SpanSlow=(Y0-Plateau)*(100-PercentFast)*.01
-      #
-      # Y=Plateau + SpanFast*exp(-KFast*X) + SpanSlow*exp(-KSlow*X)
-      # Y=end + SpanFast*exp(-a*(times+1)) + SpanSlow*exp(-b*(times+1))
-
-
-      # F1 = end - Y
-      # F2 = input$ala - sum(end + SpanFast*exp(-a*tim) + SpanSlow*exp(-b*tim))
-      # curve goes from start to finish
-    # F1 = end - start*(rate)^((time+1)^(b))
-    # 
-    # 
-    # F2 =  input$ala - sum(start*(rate)^((tim+1)^(b)))
-    
-    F1 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
-    # F3 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
-    
-    F2 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
-    F3 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
-    
-      # area below curve corresponds to necessary carbon reduction for emissions reductions
-      # F2 = input$ala - sum(a^(b*tim)+ fstart)
-      # curve goes from start to finish
+        # a = function thing
+        a <- theta[1]
+        # b = other function thing
+        b  <- theta[2]
+        
+        c  <- theta[3]
+        
+        # SpanFast=(Y0-Plateau)*PercentFast*.01
+        #
+        # SpanSlow=(Y0-Plateau)*(100-PercentFast)*.01
+        #
+        # Y=Plateau + SpanFast*exp(-KFast*X) + SpanSlow*exp(-KSlow*X)
+        # Y=end + SpanFast*exp(-a*(times+1)) + SpanSlow*exp(-b*(times+1))
+        
+        
+        # F1 = end - Y
+        # F2 = input$ala - sum(end + SpanFast*exp(-a*tim) + SpanSlow*exp(-b*tim))
+        # curve goes from start to finish
+        # F1 = end - start*(rate)^((time+1)^(b))
+        # 
+        # 
+        # F2 =  input$ala - sum(start*(rate)^((tim+1)^(b)))
+        
+        F1 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
+        # F3 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
+        
+        F2 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
+        F3 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
+        
+        # area below curve corresponds to necessary carbon reduction for emissions reductions
+        # F2 = input$ala - sum(a^(b*tim)+ fstart)
+        # curve goes from start to finish
         # F1 = end - (fstart - b^(b^times))
         #
         # # area below curve corresponds to necessary carbon reduction for emissions reductions
         # F2 = input$ala - sum(a^(b*tim)+ fstart)
-
-
+        
+        
         c(F1=F1,F2=F2, F3=F3)
       }
-
+      
       (ss <- multiroot(f = model, start = c(.0015, -.00005, -.0001)))
-
+      
       fff = unlist(ss, use.names=FALSE)
-     a= fff[1]
-
+      a= fff[1]
+      
       #fb  = speed of emission reduction, second galf
       b=fff[2]
       c=fff[3]
       
       ga = function(start,a, b,c, time) {
-
+        
         # c(end + SpanFast*exp(-a*(times+1)) + SpanSlow*exp(-b*(times+1)))
-
+        
         # c( start*(rate)^((time+1)^(b)))
         c(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
         
@@ -4588,9 +4775,9 @@ observeEvent(input$bud, {
         return(x)  }
       total = geomsuma(start, a, b,c, time)
       # total = sum(fossil)
-       # total = 1500
-     
-     
+      # total = 1500
+      
+      
       
       # else if (input$muo =="logarithmic") {
       #   geomsuma = function(start, rate, time) {
@@ -4602,10 +4789,10 @@ observeEvent(input$bud, {
       #     return(x)  }
       # 
       # }
-
+      
       # applying function for emission cumulatin
-
-
+      
+      
       # total = geomsuma(start, rate,time)
       
       
@@ -4614,66 +4801,66 @@ observeEvent(input$bud, {
       
       
       
-     
-     fstart = input$nonco2start
-     # lstart = input$lstart
-     
-     
-     end<- as.numeric(input$nonco2end)
-     
-     model <- function(theta){
-       
-       # a = function thing
-       a <- theta[1]
-       # b = other function thing
-       b  <- theta[2]
-       
-       # curve goes from start to finish
-       F1 = end - (fstart - a^(b*times))
-       
-       # area below curve corresponds to necessary carbon reduction for emissions reductions
-       F2 = input$ala - sum(a^(b*tim)+ fstart)
-       
-       
-       c(F1=F1,F2=F2)
-     }
-     
-     (ss <- multiroot(f = model, start = c(2, -.3)))
-     
-     fff = unlist(ss, use.names=FALSE)
-     a= fff[1]
-     
-     #fb  = speed of emission reduction, second galf
-     b=fff[2]
-     
-     ga = function(fstart, a, b, times) {
-       
-       c(a^(b*(times+1)) + fstart)
-       # c(start-rate*log(time+1))
-       # c(start-rate^(time+1))
-       
-       
-     }
-   nonco2= ga(fstart,  a, b, times=(0:times))
-      }
-    
-    
-     # fossil  =  ffa^(ffb*time)+ start
       
-     #  
-
-     
-     
-     # total = geomsuma(start, ffa, ffb,time)
-     
-      # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-      # u = result[1]
+      fstart = input$nonco2start
+      # lstart = input$lstart
+      
+      
+      end<- as.numeric(input$nonco2end)
+      
+      model <- function(theta){
+        
+        # a = function thing
+        a <- theta[1]
+        # b = other function thing
+        b  <- theta[2]
+        
+        # curve goes from start to finish
+        F1 = end - (fstart - a^(b*times))
+        
+        # area below curve corresponds to necessary carbon reduction for emissions reductions
+        F2 = input$ala - sum(a^(b*tim)+ fstart)
+        
+        
+        c(F1=F1,F2=F2)
+      }
+      
+      (ss <- multiroot(f = model, start = c(2, -.3)))
+      
+      fff = unlist(ss, use.names=FALSE)
+      a= fff[1]
+      
+      #fb  = speed of emission reduction, second galf
+      b=fff[2]
+      
+      ga = function(fstart, a, b, times) {
+        
+        c(a^(b*(times+1)) + fstart)
+        # c(start-rate*log(time+1))
+        # c(start-rate^(time+1))
+        
+        
+      }
+      nonco2= ga(fstart,  a, b, times=(0:times))
+    }
+    
+    
+    # fossil  =  ffa^(ffb*time)+ start
+    
+    #  
+    
+    
+    
+    # total = geomsuma(start, ffa, ffb,time)
+    
+    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+    # u = result[1]
     # } 
     
-  
     
     
- 
+    
+    
     
     # end<- as.numeric(input$end)
     # lend = (-1)*end
@@ -4743,14 +4930,14 @@ observeEvent(input$bud, {
     (ss <- multiroot(f = model, start = c(-12, 5,-30,-200, -30)))
     
     
-
+    
     
     
     
     
     
     fff = unlist(ss, use.names=FALSE)
-   
+    
     #ffa = speed of emission reduction, first half
     ffa= fff[1]
     rv$warn =ffa
@@ -4773,7 +4960,7 @@ observeEvent(input$bud, {
     
     
     
-
+    
     
     
     
@@ -4783,7 +4970,7 @@ observeEvent(input$bud, {
     
     # fossil totals: 
     
-   
+    
     # budget<- as.numeric(input$bud)-sumnet
     
     
@@ -4821,7 +5008,7 @@ observeEvent(input$bud, {
     # emission rate solving with given values
     
     
-
+    
     
     
     
@@ -5048,11 +5235,11 @@ observeEvent(input$bud, {
     
     
     if (input$nonco2 == 0) {
-    dats[, avgfossil := fossil/pop]
+      dats[, avgfossil := fossil/pop]
     } else { 
       dats[, avgfossil := ghg/pop]
       
-      }
+    }
     
     dats[, avgcost :=price*avgfossil]
     dats[, dividend :=avgcost]
@@ -5081,7 +5268,7 @@ observeEvent(input$bud, {
     
   })
   
-
+  
   
   lux = reactive({
     lux = as.data.table(lug())
@@ -5243,7 +5430,7 @@ observeEvent(input$bud, {
   })
   outputOptions(output, "lek", suspendWhenHidden = FALSE)
   
- 
+  
   cait = reactive ({
     
     
@@ -5353,10 +5540,10 @@ observeEvent(input$bud, {
     
     
     
-  # choose according to gas specification  
+    # choose according to gas specification  
     
     if (input$nonco2 ==0) {
-    ppax$avgfossil = ppax$fossil/ppax$pop
+      ppax$avgfossil = ppax$fossil/ppax$pop
     } else {
       ppax$avgfossil = ppax$ghg/ppax$pop
     }
@@ -5364,30 +5551,30 @@ observeEvent(input$bud, {
     ppax$avgcost =NA
     ppax$dividend =NA
     ppax$avgnetcost =NA
-
+    
     ppax$usercost = NA
     ppax$netcost =NA
-
+    
     
     
     
     ppax <- gather(ppax, sec, yy, "fossil":"netcost")
     
     ppax= as.data.table(ppax)
-
+    
     ppaa=as.data.table(ppaa)
     ppaa[sec=="pops", sec:="pop"]
     
     if (input$nonco2 ==0) {
-   # W   ppaa[sec =="avgghg", yy:=NULL]
+      # W   ppaa[sec =="avgghg", yy:=NULL]
     } else {
       
       put = ppaa[sec=="avgghg",]
       ppaa[sec =="avgfossil", yy:=put$yy]
-
+      
       
     }
-  
+    
     
     dats = rbind(ppaa, ppax, dats, fill=TRUE)
     
@@ -5413,48 +5600,53 @@ observeEvent(input$bud, {
   
   pacu = reactive ({
     
-    
+    #rv$lek to indicate whether to show country specific variables in left hand side
     
     # test if pacu is needed (if lax==1) then create pacu otherwise dont
-     lax = 0
-     
-     lek = length(input$countr)
-     
-     if (lek > 1) {
-       rv$lek =TRUE
-       lax =1
-     } else if (lek ==1) {
+    lax = 0
+    
+    lek = length(input$countr)
+    rv$luk = lek
+    if (lek > 1) {
+      rv$lek =TRUE
+      lax =1
+    } else if (lek ==1) {
       
-     if (input$countr %in% c(ll2)) {
-       lax = 1
-       rv$lek =TRUE
-       
-     } else {
-       lax = 0
-       # rv$lek =FALSE
-       
-       
-     }
-     } else if (lek==0) {
-       rv$lek=FALSE
-     }
-     
-     if (input$indi %in% c(ll2)) {
-       lax = 1
-     }
-     if (input$nationalcoun %in% c(ll2)) {
-       lax = 1
-       rv$lek =TRUE
-       
-     }
-     
-     
-      if (input$nationalcoun %in% c("none") & input$countr == "")  {
-rv$lek == FALSE
-      }       
-     if (lax ==1)  {
-       
-    # if (input$indi %in% c(ll2) || input$countr %in% c(ll2) || input$nationalcoun %in% c(ll2))  {
+      if (input$countr %in% c(ll2)) {
+        lax = 1
+        rv$lek =TRUE
+        
+      } else {
+        lax = 0
+        # rv$lek =FALSE
+        
+        
+      }
+    } else if (lek==0) {
+      rv$lek=FALSE
+    }
+    
+    if (input$indi %in% c(ll2)) {
+      lax = 1
+    }
+    if (input$nationalcoun %in% c(ll2)) {
+      lax = 1
+      rv$lek =TRUE
+      
+    }
+    
+    if (input$showcolplot ==TRUE) {
+      lax=1
+    }
+    
+    
+    
+    if (input$nationalcoun %in% c("none") & lek==0)  {
+      rv$lek == FALSE
+    }       
+    if (lax ==1)  {
+      
+      # if (input$indi %in% c(ll2) || input$countr %in% c(ll2) || input$nationalcoun %in% c(ll2))  {
       
       datso = as.data.table(datss())
       
@@ -5468,9 +5660,9 @@ rv$lek == FALSE
       
       
       if (input$nonco2 ==0) {
-      paci = paci[, yy:=co2cap]
-      pacu = copy(paci)
-      
+        paci = paci[, yy:=co2cap]
+        pacu = copy(paci)
+        
       } else {
         paci = paci[, yy:=ghgcap]
         pacu = copy(paci)
@@ -5487,7 +5679,7 @@ rv$lek == FALSE
       cstart = paci[year ==lastyear & country =="Finland", bunkers/1000000000]
       
       start = input$fstart
-          ratio = cstart/start
+      ratio = cstart/start
       cend = ratio*(input$paa)
       
       time= rv$time
@@ -5597,13 +5789,13 @@ rv$lek == FALSE
           # start, end, convergence, coustart
           cstart = pacu[country == mm & year == lastyear, yy]
           start =datso[sec =="avgfossil" & year == lastyear, yy]
-          
           # end =datso[sec =="avgfossil" & year == lastyear, yy]
           
           end = datso[sec =="avgfossil" & year == rv$fyear, yy]
           # convergence =.01
+          # have milder convergence for the period before the last year lyear is included
           convergence =input$con*((rv$fyear-lastyear)/(rv$lyear-rv$fyear))
-          
+
           cend = arg(start, end, convergence, cstart )
           
           if (input$muo == "percentual" & cstart >=cend)  {
@@ -5628,18 +5820,18 @@ rv$lek == FALSE
             }
           }
           
-          
-          else if  (input$muo=="logarithmic" & cstart >=cend) {
-            f3 <- function(rate,cstart,time, cend) {
-              cend - (cstart - rate*log(time+1))
-              
-            }}
-          
-          else if  (input$muo=="logarithmic" & cstart <cend) {
-            f3 <- function(rate,cstart,time, cend) {
-              cend - (cstart + rate*log(time+1))
-              
-            }}
+          # 
+          # else if  (input$muo=="logarithmic" & cstart >=cend) {
+          #   f3 <- function(rate,cstart,time, cend) {
+          #     cend - (cstart - rate*log(time+1))
+          #     
+          #   }}
+          # 
+          # else if  (input$muo=="logarithmic" & cstart <cend) {
+          #   f3 <- function(rate,cstart,time, cend) {
+          #     cend - (cstart + rate*log(time+1))
+          #     
+          #   }}
           result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=-0, upper=100)$root
           u = result[1]
           
@@ -5666,14 +5858,14 @@ rv$lek == FALSE
               c(cstart + rate*(time+1))
             }
           }
-          else if  (input$muo=="logarithmic" & cstart >=cend) {
-            g = function(cstart, rate, time) {
-              c(cstart-rate*log(time+1))
-            }}
-          else if  (input$muo=="logarithmic" & cstart <cend) {
-            g = function(cstart, rate, time) {
-              c(cstart+rate*log(time+1))
-            }}
+          # else if  (input$muo=="logarithmic" & cstart >=cend) {
+          #   g = function(cstart, rate, time) {
+          #     c(cstart-rate*log(time+1))
+          #   }}
+          # else if  (input$muo=="logarithmic" & cstart <cend) {
+          #   g = function(cstart, rate, time) {
+          #     c(cstart+rate*log(time+1))
+          #   }}
           
           
           ffossil = g(cstart, rate, 1:time)
@@ -5713,19 +5905,21 @@ rv$lek == FALSE
               cend - (cstart + rate*(time+1))
             }
           }
-          else if  (input$muo=="logarithmic" & cstart >=cend) {
-            f3 <- function(rate,cstart,time, cend) {
-              cend - (cstart - rate*log(time+1))
-              
-            }}
           
-          else if  (input$muo=="logarithmic" & cstart <cend) {
-            f3 <- function(rate,cstart,time, cend) {
-              cend - (cstart + rate*log(time+1))
-              
-            }}
+          # else if  (input$muo=="logarithmic" & cstart >=cend) {
+          #   f3 <- function(rate,cstart,time, cend) {
+          #     cend - (cstart - rate*log(time+1))
+          #     
+          #   }}
+          # 
+          # else if  (input$muo=="logarithmic" & cstart <cend) {
+          #   f3 <- function(rate,cstart,time, cend) {
+          #     cend - (cstart + rate*log(time+1))
+          #     
+          #   }}
           # emission rate solving with given values
-          result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=-0, upper=100)$root
+        
+            result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=-0, upper=100)$root
           u = result[1]
           
           rate = u
@@ -5751,29 +5945,31 @@ rv$lek == FALSE
               c(cstart + rate*(time+1))
             }
           }
-          else if  (input$muo=="logarithmic" & cstart >=cend) {
-            g = function(cstart, rate, time) {
-              c(cstart-rate*log(time+1))
-            }}
-          else if  (input$muo=="logarithmic" & cstart <cend) {
-            g = function(cstart, rate, time) {
-              c(cstart+rate*log(time+1))
-            }}
+          
+          # else if  (input$muo=="logarithmic" & cstart >=cend) {
+          #   g = function(cstart, rate, time) {
+          #     c(cstart-rate*log(time+1))
+          #   }}
+          # else if  (input$muo=="logarithmic" & cstart <cend) {
+          #   g = function(cstart, rate, time) {
+          #     c(cstart+rate*log(time+1))
+          #   }}
+          
           ffossil = g(cstart, rate, 1:time)
           
           pacu[country ==mm & year %in% c((rv$fyear+1):rv$lyear), countryfossil := ffossil]
           
           
-         # if (input$nonco2=="0") { 
+          # if (input$nonco2=="0") { 
           pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers := bunkera]
           
           pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := bunker]
-         # } else if (input$nonco2 =="1"){
-         #   pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers :=0]
-         #   
-         #   pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := 0]
-         #   
-         # }
+          # } else if (input$nonco2 =="1"){
+          #   pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers :=0]
+          #   
+          #   pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := 0]
+          #   
+          # }
           
           incProgress(1/length(aat))     
           
@@ -5786,19 +5982,20 @@ rv$lek == FALSE
       
       ## create correction factor to account for that emissions multiplied by population
       ## don't equal for world emissions needed for budget
-      pacu[year %in% c(lastyear+1:rv$lyear) & country %in% ll2,
+    
+        pacu[year %in% c(lastyear+1:rv$lyear) & country %in% ll2,
            yyy := sum(countryfossil*pop)/1000000000, by=c("year")]
       
       if (input$nonco2==0){
-      pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
+        pacu[datso[sec=="fossil"], wyy :=i.yy, on=c("year")]
       } else {
-      pacu[datso[sec=="ghg"], wyy :=i.yy, on=c("year")]
-
+        pacu[datso[sec=="ghg"], wyy :=i.yy, on=c("year")]
       }
       
       pacu[,cor:=((wyy)/(yyy+bunkers))]
-      #      pacu = pacu[,cor:=((wyy*1000000)/(yyy+bunkers))-1]
+      rv$cor = unique(pacu[year ==rv$yearc, cor])
       
+      #      pacu = pacu[,cor:=((wyy*1000000)/(yyy+bunkers))-1]
       pacu[, fossilcountry:=cor*countryfossil]
       pacu[year <=lastyear, fossilcountry:=countryfossil]
       
@@ -5893,7 +6090,7 @@ rv$lek == FALSE
     
     # here make new rows for country national
     
-### ADD HERE years before fyear 
+    ### ADD HERE years before fyear 
     
     if (input$nationalcoun %in% c(ll2)) {
       req(pacu())
@@ -6064,14 +6261,14 @@ rv$lek == FALSE
     if (input$nonco2 ==0) {
       rv$totall =rv$fossill
       
-    rv$totalcolor =fos
+      rv$totalcolor =fos
     } else {
       rv$totall =rv$ghgl
       
       rv$totalcolor =tot
       
     }
-  
+    
     
     
     
@@ -6083,7 +6280,7 @@ rv$lek == FALSE
     
     
     
-  
+    
     
     # rv$pll = nrow(distinct(dats, labbi))
     valus =as.numeric(unique(dats[sec %in% c("avgcost", "usercost", "netcost", "avgnetcost", "dividend",  "countrycost", "countrynetcost", "averagedividend", "countrydividend"),max(yy, na.rm=TRUE)]))
@@ -6093,7 +6290,7 @@ rv$lek == FALSE
     dats$valuso = valus
     
     # dats[sec =="countryfossil", visi:=1]
-     # dats = dats[visi==1,]
+    # dats = dats[visi==1,]
     
     
     valus =as.numeric(unique(dats[sec %in% c("price"),max(yy, na.rm=TRUE)]))
@@ -6145,9 +6342,10 @@ rv$lek == FALSE
     
   })
   
-  # eventReactive(input$go, {
-  #   rv$pll = length(unique(datsss()$labbi))
-  # })  
+
+  
+  
+  
   
   datssst = reactive({
     tab = as.data.table(datsss())
@@ -6194,8 +6392,8 @@ rv$lek == FALSE
   
   ogug <- observe({
     rv$pll = length(unique(datsl()$labbi))
-      # shinyjs::click("add")
-      ogug$destroy() # destroy observer as it has no use after initial button click
+    # shinyjs::click("add")
+    ogug$destroy() # destroy observer as it has no use after initial button click
   })
   
   datsl = reactive ({
@@ -6207,10 +6405,10 @@ rv$lek == FALSE
     
     datsl = datsl[year <= yearu,]
     # & year >=rv$fyear
-
-      rv$pll = length(unique(datsl$labbi))
-     # rv$pll = length(unique(datsl$labbi))
-     
+    
+    rv$pll = length(unique(datsl$labbi))
+    # rv$pll = length(unique(datsl$labbi))
+    
     
     datsl[, ayy:=mean(yy), by=c("sec")]
     
@@ -6219,15 +6417,15 @@ rv$lek == FALSE
     if (rv$lang == "eng") {
       
       datsl[, labu:=  as.character(paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, ", ", label))]  
-    
-      if (input$view ==2){
       
-        if (rv$pll < 2){
-       datsl[, labuf:=  as.character(paste0(label," ", sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark))]  
-      } else   if (rv$pll > 1) {
-        datsl[, labuf:=  as.character(paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark))]  
+      if (input$view ==2){
         
-      }
+        if (rv$pll < 2){
+          datsl[, labuf:=  as.character(paste0(label," ", sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark))]  
+        } else   if (rv$pll > 1) {
+          datsl[, labuf:=  as.character(paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark))]  
+          
+        }
       }
       if (input$view==3) {
         datsl[, labuf:=  as.character(paste0(label," ", sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark))]  
@@ -6255,19 +6453,19 @@ rv$lek == FALSE
       # sprintf(paste0("%0.",4,"s"),format(1.511,decimal.mark=","))
       datsl[, labu:=  as.character(paste0(format(round(yy,le), decimal.mark=",", nsmall=le) ," ", mark, ", ", label)), by=sec]  
       
-       if (input$view ==2){
+      if (input$view ==2){
         
-      if (rv$pll < 2){
-        datsl[, labuf:=  as.character(paste0(label, " ", format(round(yy,le), decimal.mark=",", nsmall=le) ," ", mark)), by=sec]  
-        
-        
-       # datsl[, labuf:=  as.character(paste0(label," " , sprintf(paste0("%0.",le,"s"),format(round(yy,le), decimal.mark=",")) ," ", mark))]  
-      } else  if (rv$pll > 1) {
-        datsl[, labuf:=  as.character(paste0(format(round(yy,le), decimal.mark=",", nsmall=le) ," ", mark)), by=sec]  
-        
-        # datsl[, labuf:=  as.character(paste0(sprintf(paste0("%0.",le,"s"),format(round(yy,le), decimal.mark=",")) ," ", mark))]  
-        
-      }
+        if (rv$pll < 2){
+          datsl[, labuf:=  as.character(paste0(label, " ", format(round(yy,le), decimal.mark=",", nsmall=le) ," ", mark)), by=sec]  
+          
+          
+          # datsl[, labuf:=  as.character(paste0(label," " , sprintf(paste0("%0.",le,"s"),format(round(yy,le), decimal.mark=",")) ," ", mark))]  
+        } else  if (rv$pll > 1) {
+          datsl[, labuf:=  as.character(paste0(format(round(yy,le), decimal.mark=",", nsmall=le) ," ", mark)), by=sec]  
+          
+          # datsl[, labuf:=  as.character(paste0(sprintf(paste0("%0.",le,"s"),format(round(yy,le), decimal.mark=",")) ," ", mark))]  
+          
+        }
       }
       if (input$view==3) {
         # datsl[, labuf:=  as.character(paste0(sprintf(paste0("%0.",le,"s"),format(round(yy,le), decimal.mark=",")) ," ", mark))]  
@@ -6307,15 +6505,15 @@ rv$lek == FALSE
     datsc = datsc[year == yearu,]
     # pacuc = pacuc[year == yearu,]
     
-
+    
     # observe({
-
+    
     # })
     #this dropping?
     
     # if (rv$lang =="eng"){
-  
-       # } ,decimal.mark=","
+    
+    # } ,decimal.mark=","
     # if (rv$lang=="fin") {
     # datsc[, labu:=  as.character(paste0(sprintf(paste0("%0.",le,"f"),round(yy,le))," ", mark, ", ", label))]  
     # 
@@ -6327,7 +6525,7 @@ rv$lek == FALSE
     # ppaa = ppaa[pop2[var==3,],pop:=i.pop/1000000000, on=c("year")]
     
     datsc[, alas :=(year-rv$fyear)/100]
-
+    
     
     datsc
     
@@ -6436,8 +6634,8 @@ rv$lek == FALSE
   rootcss <- reactive({
     # if (is.null(input$countr)) { 
     # if (rv$alert6 ==TRUE) {
-      # if (input$nok =="EXTRA: Country profiles") { 
-      "
+    # if (input$nok =="EXTRA: Country profiles") { 
+    "
     :root,
 .theme--light{
     @each $varName, $value in $themeBase__map {
@@ -6455,11 +6653,11 @@ rv$lek == FALSE
     
     
     "
-      
+    
     # }
     # else if (rv$alert6 ==FALSE) {
-      # "#tablu3 {visibility: collapse}"
-      # 
+    # "#tablu3 {visibility: collapse}"
+    # 
     # }
     
   }
@@ -6590,35 +6788,17 @@ rv$lek == FALSE
     c("If you are mobile user, landscape rotation is recommended")
   })
   
-  # output$tablz = renderDataTable(server=FALSE,{
-  #  pacu()},
-  #   extensions = 'Buttons',
-  #   
-  #   options = list(
-  #     pageLength = 100, 
-  #     scrollX=T,
-  #     scrollY=T,
-  #     
-  #     paging = TRUE,
-  #     searching = TRUE,
-  #     fixedColumns = TRUE,
-  #     autoWidth = TRUE,
-  #     ordering = TRUE,
-  #     dom = 'tB',
-  #     buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
-  #   )
-  #   
-  # )
+  
   # 
   output$tablx = renderDataTable(server=FALSE,{
-    dats()},
+    pacu()},
     extensions = 'Buttons',
-
+    
     options = list(
       pageLength = 20,
       scrollX=T,
       scrollY=T,
-
+      
       paging = TRUE,
       searching = TRUE,
       fixedColumns = TRUE,
@@ -6653,10 +6833,10 @@ rv$lek == FALSE
   teksvari = hsv(.23, 0, .45)
   
   
-  observeEvent(input$plot_hover, {
-    rv$x = input$plot_hover$x
-    rv$y = input$plot_hover$y
-  })  
+  # observeEvent(input$colplot_hover, {
+  #   rv$x = input$colplot_hover$x
+  #   rv$y = input$colplot_hover$y
+  # })  
   
   ht = reactive(as.numeric(session$clientData$output_plot_width*.7))
   ht = reactive(
@@ -6666,10 +6846,10 @@ rv$lek == FALSE
     }
   )
   
-
   
   
-
+  
+  
   
   
   
@@ -6682,468 +6862,468 @@ rv$lek == FALSE
   sec = reactive({ 
     withProgress( message="Drawing graph, please wait",{
       
-    mil = rv$ffyear
-    
-    datsf = datsf()
-    datsc = datsc()
-    datsl = datsl()[year >= mil,]
-    datsss = datsss()[year >= mil,]
-    
-    si = 
-      function(per) {
-        per*session$clientData$output_plot_width*session$clientData$pixelratio/.8/
-          (570+.15*session$clientData$output_plot_width)
+      mil = rv$ffyear
+      
+      datsf = datsf()
+      datsc = datsc()
+      datsl = datsl()[year >= mil,]
+      datsss = datsss()[year >= mil,]
+      
+      si = 
+        function(per) {
+          per*session$clientData$output_plot_width*session$clientData$pixelratio/.8/
+            (570+.15*session$clientData$output_plot_width)
+        }
+      # }
+      if (input$isMobile=="FALSE") {
+        
+        lsi = 
+          function(per) {
+            per*session$clientData$output_plot_width*session$clientData$pixelratio/500
+          }
+        
+        linehi = 1
       }
-    # }
-    if (input$isMobile=="FALSE") {
       
-      lsi = 
-        function(per) {
-          per*session$clientData$output_plot_width*session$clientData$pixelratio/500
-        }
+      if (input$isMobile=="TRUE") {
+        
+        lsi = 
+          function(per) {
+            per*session$clientData$output_plot_width*session$clientData$pixelratio/1500
+          }
+        linehi = .8
+        
+      }
       
-      linehi = 1
-    }
-    
-    if (input$isMobile=="TRUE") {
+      mi = min(min((datsss[,tyy]), na.rm=T)*1.2,-40)
+      ma = 137
+      # hi = ma - mi
       
-      lsi = 
-        function(per) {
-          per*session$clientData$output_plot_width*session$clientData$pixelratio/1500
-        }
-      linehi = .8
       
-    }
-    
-    mi = min(min((datsss[,tyy]), na.rm=T)*1.2,-40)
-    ma = 137
-    # hi = ma - mi
-    
-    
-    mix = mil
-    max = 2130
-    max = 2142
-    
-    ly = 1991
-    ala = .3
-    dis = 16.8
-    seg = .3
-    scas = 2.5
-    lines = .7
-    lines2 =.2
-    points=1.1
-    segalfa=.7
-    lee = 0
-    # fam = "roboto"
-    fam = fam
-    bgc = rv$bgc
-    teksvari = rv$teksvari
-    obsvari = rv$obsvari
-    
-    
-    plot1=   ggplot(datsf)+
+      mix = mil
+      max = 2130
+      max = 2142
       
-# graph limits
-      geom_segment(data=da,
-                   aes(x=mil-10, xend=2100, y=0, yend=0), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+      ly = 1991
+      ala = .3
+      dis = 16.8
+      seg = .3
+      scas = 2.5
+      lines = .7
+      lines2 =.2
+      points=1.1
+      segalfa=.7
+      lee = 0
+      # fam = "roboto"
+      fam = fam
+      bgc = rv$bgc
+      teksvari = rv$teksvari
+      obsvari = rv$obsvari
       
-      geom_point(data=da,
-                 aes(x=2140,  y=100),
-                 color=teksvari, alpha=0, size=si(2))+
-      #bottom years
-      geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                aes(x=year, y=.76*mi, label=c(year)),
-                color=teksvari, angle=0,size =si(2.4), alpha=.6) +
       
-      # vertical lines
-      geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                   (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                   color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-
-      geom_text(data=da,
-                aes(x=mil, y=-4), label = paste0("0"),
-                col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-# horizontal lines
-      
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.3) +
-    
+      plot1=   ggplot(datsf)+
+        
+        # graph limits
+        geom_segment(data=da,
+                     aes(x=mil-10, xend=2100, y=0, yend=0), 
+                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+        
+        geom_point(data=da,
+                   aes(x=2140,  y=100),
+                   color=teksvari, alpha=0, size=si(2))+
+        #bottom years
+        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                  aes(x=year, y=.76*mi, label=c(year)),
+                  color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+        
+        # vertical lines
+        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+        
+        geom_text(data=da,
+                  aes(x=mil, y=-4), label = paste0("0"),
+                  col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+        # horizontal lines
+        
         geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      
-      geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-
-      # blue line for yearc      
-      geom_segment(data=da,
-                   aes(x=rv$yearc, xend=rv$yearc, y=ma, yend = mi), 
-                   color=blu, alpha=.4, linewidth=lsi(1.4))+
-      
-
-      # geom_text(data=da,
-      #           aes(x=mil, y=44), label = rv$warn,
-      #           col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-      
-      
-      geom_point(data=datsc, 
-                 aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                 size=lsi(points*2), color=blu) + 
-      
-      # graphs for fyear to yearc
-      geom_area(data=datsl[year < rv$fyear+1,], 
-                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-      geom_area(data=datsl[year > rv$fyear-1,], 
-                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-      
-      geom_line(data=datsl,
-                aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                linewidth=lsi(lines)) + 
-      geom_point(data=datsl, 
-                 aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                 size=lsi(points)) + 
-      
-      
-      # graphs for first year to lyear 
-      geom_line(data=datsss, 
-                aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                linewidth=lsi(lines), alpha=.1) + 
-      geom_point(data=datsss, 
-                 aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                 size=lsi(points), alpha=.1) + 
-      
-      
-      
-      # pricing and neutrality vertical lines
-      geom_segment(data=da,
-                   aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                   color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.2 ) +
-      geom_segment(data=da, 
-                   aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                   color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.2 ) +  
-      
-      # observed and simulated vertical line
-
-      
-      geom_segment(data=da,
-                   aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                   color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-      
-      # yearc labels
-      geom_label_repel(data=datsc,
-                       aes(x=year+3, y=tyy,
-                           label=labu,
-                           color=col, alpha=ala*100),
-                       fill=bgc,
-                       hjust=0, size=si(2.2), fontface="bold",
-                       family = fam,
-                       segment.size =NA,
-                       direction = "y",
-                       label.padding =0,
-                       xlim=c(mil,2177),
-                       label.size=0,
-                       max.iter=5000,
-                       force=.01, force_pull=10,box.padding=.1 ,
-                       seed=5) +
-      
-      
-      
-      scale_color_identity() + 
-      scale_alpha_identity() + 
-      
-      scale_fill_identity() + 
-      
-      scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-      coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-      
-      
-      theme(
-        axis.title.x=element_blank(),
-        plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-        plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-        axis.text.x=element_blank(),
-        plot.margin = margin(-5*input$dim[1]/2990,-5*input$dim[1]/90,-5*input$dim[1]/290,-5*input$dim[1]/200, unit = "pt"),
-        panel.border = element_blank(), 
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(), 
-        axis.title.y=element_blank(),
-        axis.text.y=element_blank(),
-        plot.background = element_rect(fill =bgc, color=NA), 
-        panel.background = element_rect(fill = bgc ,  color=NA)
-      )
-    
-    
-    
-    if (rv$lang =="eng") {
-      
-      plot1 = plot1 +
-        geom_text(data=da,
-                  aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.3) +
         
-        geom_text(data=da,
-                  aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+        geom_segment(data=datsc[sec=="dummy",],
+                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+        geom_segment(data=datsc[sec=="dummy",],
+                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+        geom_segment(data=datsc[sec=="dummy",],
+                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+        geom_segment(data=datsc[sec=="dummy",],
+                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
         
+        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
         
-   
+        # blue line for yearc      
+        geom_segment(data=da,
+                     aes(x=rv$yearc, xend=rv$yearc, y=ma, yend = mi), 
+                     color=blu, alpha=.4, linewidth=lsi(1.4))+
         
-        
-        
-        geom_text(data=da,
-                  aes(x=mil+10, y= 131),
-                  label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
-        
-        
-        geom_text(data=da,
-                  aes(x=rv$fyear, y= 127),
-                  label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
-                  ),
-                  size=si(1.7), color=net, hjust=1, fontface="bold") +
-        
-
-        
-       
-        geom_text(data=datsc[, .SD[which.max(tyy)]],
-                  aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                  color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-        
-        
-        
-        geom_text(data=da,
-                  aes(x=2020.5, y=.9*mi), label = paste0("Historical\n <=2021"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                  alpha=.5, lineheight=linehi) +
-        
-        geom_text(data=da,
-                  aes(x=2022.5, y=.9*mi), label = paste0("Simulated\n2022=>"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                  angle=c(0), alpha=.5, lineheight=linehi) 
         
         # geom_text(data=da,
-        #           aes(x=mil-5, y=.9*mi), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold", lineheight=linehi+.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
-  
-    if (rv$yearc >= rv$fyear) {
-      plot1 = plot1 + 
-        geom_text(data=da,
-                  aes(x=rv$yearc, y= 123),  label = paste0(
-                    format(round(rv$rvtotal,1), nsmall=1), " Gt used from ", rv$fyear, " to " , rv$yearc
-                  ) ,
-                  size=si(1.7), color=net, hjust=1, fontface="bold") 
-    }  
-          
-    }
-    
-    if (rv$lang == "fin") {
-      
-      plot1 = plot1 +
-        geom_text(data=da,
-                  aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        geom_text(data=da,
-                  aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-    
+        #           aes(x=mil, y=44), label = rv$warn,
+        #           col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
         
         
-        geom_text(data=da,
-                  aes(x=mil+10, y= 131),
-                  label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
+        geom_point(data=datsc, 
+                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                   size=lsi(points*2), color=blu) + 
+        
+        # graphs for fyear to yearc
+        geom_area(data=datsl[year < rv$fyear+1,], 
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+        geom_area(data=datsl[year > rv$fyear-1,], 
+                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+        
+        geom_line(data=datsl,
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                  linewidth=lsi(lines)) + 
+        geom_point(data=datsl, 
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                   size=lsi(points)) + 
         
         
-        geom_text(data=da,
-                  aes(x=rv$fyear, y= 127),
-                  label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
-                  ),
-                  size=si(1.7), color=net, hjust=1, fontface="bold") +
-      
+        # graphs for first year to lyear 
+        geom_line(data=datsss, 
+                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                  linewidth=lsi(lines), alpha=.1) + 
+        geom_point(data=datsss, 
+                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                   size=lsi(points), alpha=.1) + 
         
-        geom_text(data=datsc[, .SD[which.max(tyy)]],
-                  aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                  color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
         
-        geom_text(data=da,
-                  aes(x=2020.5, y=.9*mi), label = paste0("Havainnoitu\n <=2021", rv$lang),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                  alpha=.5, lineheight=lihh) +
         
-        geom_text(data=da,
-                  aes(x=2022.5, y=.9*mi), label = paste0("Simuloitu\n2022=>"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                  angle=c(0), alpha=.5, lineheight=lihh) 
+        # pricing and neutrality vertical lines
+        geom_segment(data=da,
+                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.2 ) +
+        geom_segment(data=da, 
+                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.2 ) +  
         
-        # geom_text(data=da,
-        #           aes(x=mil-5, y=.9*mi), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
-      
-      
-      if (rv$yearc >= rv$fyear) {
-        plot1 = plot1 + 
-          geom_text(data=da,
-                    aes(x=rv$yearc, y= 123),
-                    label = paste0(
-                      format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty vuodesta ", rv$fyear, " ja vuoteen " , rv$yearc
-                    ),
-                    size=si(1.7), color=net, hjust=1, fontface="bold") 
-      }   
-    }
-    
-    
-    if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-      plot1 = plot1 +
+        # observed and simulated vertical line
         
-        geom_label_repel(data=datsf,
-                         aes(x=year-2, y=tyy, label=paste0(labuf),
-                             color=col, group =sec, alpha=ala),
-                         size=si(2.2), fontface="bold", hjust=1,
-                         family = fam,
+        
+        geom_segment(data=da,
+                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+        
+        # yearc labels
+        geom_label_repel(data=datsc,
+                         aes(x=year+3, y=tyy,
+                             label=labu,
+                             color=col, alpha=ala*100),
                          fill=bgc,
-                         # segment.size =NA,
+                         hjust=0, size=si(2.2), fontface="bold",
+                         family = fam,
                          segment.size =NA,
                          direction = "y",
                          label.padding =0,
-                         # box.padding=.1,
-                         # nudge_x=18,
                          xlim=c(mil,2177),
                          label.size=0,
                          max.iter=5000,
                          force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5
-                         )
-                         
+                         seed=5) +
+        
+        
+        
+        scale_color_identity() + 
+        scale_alpha_identity() + 
+        
+        scale_fill_identity() + 
+        
+        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+        
+        
+        theme(
+          axis.title.x=element_blank(),
+          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+          axis.text.x=element_blank(),
+          plot.margin = margin(-5*input$dim[1]/2990,-5*input$dim[1]/90,-5*input$dim[1]/290,-5*input$dim[1]/200, unit = "pt"),
+          panel.border = element_blank(), 
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(), 
+          axis.title.y=element_blank(),
+          axis.text.y=element_blank(),
+          plot.background = element_rect(fill =bgc, color=NA), 
+          panel.background = element_rect(fill = bgc ,  color=NA)
+        )
+      
+      
+      
       if (rv$lang =="eng") {
+        
         plot1 = plot1 +
+          geom_text(data=da,
+                    aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
           
           geom_text(data=da,
-                    aes(x=mil, y=103), label = paste0("Maximums"),
-                    col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+                    aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
           
-          geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
-                    color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
           
-      
-      }  else if (rv$lang=="fin") {
-        plot1 = plot1 +
+          
+          
+          
           
           geom_text(data=da,
-                    aes(x=mil, y=103), label = paste0("Maksimit"),
-                    col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+                    aes(x=mil+10, y= 131),
+                    label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
+                    size=si(1.7), color=net, hjust=0, fontface="bold") +
           
-          geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
-                    color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-      }
-      
-      
-      
-      if (input$showfossil==TRUE || input$showland==TRUE  || input$shownet==TRUE) {
+          
+          geom_text(data=da,
+                    aes(x=rv$fyear, y= 127),
+                    label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
+                    ),
+                    size=si(1.7), color=net, hjust=1, fontface="bold") +
+          
+          
+          
+          
+          geom_text(data=datsc[, .SD[which.max(tyy)]],
+                    aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+          
+          
+          
+          geom_text(data=da,
+                    aes(x=2020.5, y=.9*mi), label = paste0("Historical\n <=2021"),
+                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                    alpha=.5, lineheight=linehi) +
+          
+          geom_text(data=da,
+                    aes(x=2022.5, y=.9*mi), label = paste0("Simulated\n2022=>"),
+                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                    angle=c(0), alpha=.5, lineheight=linehi) 
         
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
-                    size=si(2.2), hjust=0, fontface="bold") 
+        # geom_text(data=da,
+        #           aes(x=mil-5, y=.9*mi), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+        #           col=teksvari, fontface="bold", lineheight=linehi+.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
         
-      }    
-      if (input$showpop==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("pop"),.SD[which.max(yy)] ],
-                    aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
-                    size=si(2.2), hjust=0, fontface="bold") 
-        
-      }    
-      if (input$showavgfossil==TRUE || input$showuserfossil==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*prio, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), "t"), color=col),
-                    size=si(2.2), hjust=0, fontface="bold") 
-      }
-      
-      if (input$showprice==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("price"), .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$/t"), color=col),
-                    size=si(2.2), hjust=0, fontface="bold") 
-        
-      }
-      
-      if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$"), color=col), 
-                    size=si(2.2), hjust=0, fontface="bold") 
-      }    
-      
-      
-      
-    } else {
-      plot1 = plot1+
-        geom_text(data=da,
-                  aes(x=mil, y=108), label = paste0("Max"),
-                  col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0.5, angle=c(0)) 
-      
-      
-      if (input$showfossil==TRUE || input$showland==TRUE  || input$shownet==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), .SD[which.max(yy)]],
-                    aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
-                    size=si(2.2), hjust=0.5, fontface="bold") 
-      }    
-      if (input$showpop==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("pop"),.SD[which.max(yy)] ],
-                    aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
-                    size=si(2.2), hjust=0.5, fontface="bold") 
-        
-      }    
-      if (input$showavgfossil==TRUE || input$showuserfossil==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
-                    aes(x=(mil-5+10*prio), y=103, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), "t"), color=col),
-                    size=si(2.2), hjust=0.5, fontface="bold") 
-      }
-      
-      if (input$showprice==TRUE) {
-        
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("price"), .SD[which.max(yy)]],
-                    aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 0), "$/t"), color=col),
-                    size=si(2.2), hjust=0.5, fontface="bold") 
+        if (rv$yearc >= rv$fyear) {
+          plot1 = plot1 + 
+            geom_text(data=da,
+                      aes(x=rv$yearc, y= 123),  label = paste0(
+                        format(round(rv$rvtotal,1), nsmall=1), " Gt used from ", rv$fyear, " to " , rv$yearc
+                      ) ,
+                      size=si(1.7), color=net, hjust=1, fontface="bold") 
+        }  
         
       }
       
-      if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE) {
+      if (rv$lang == "fin") {
         
-        plot1 = plot1+
-          geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
-                    aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 0), "$"), color=col), 
-                    size=si(2.2), hjust=0.5, fontface="bold") 
+        plot1 = plot1 +
+          geom_text(data=da,
+                    aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+          
+          geom_text(data=da,
+                    aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+          
+          
+          
+          
+          geom_text(data=da,
+                    aes(x=mil+10, y= 131),
+                    label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
+                    size=si(1.7), color=net, hjust=0, fontface="bold") +
+          
+          
+          geom_text(data=da,
+                    aes(x=rv$fyear, y= 127),
+                    label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
+                    ),
+                    size=si(1.7), color=net, hjust=1, fontface="bold") +
+          
+          
+          geom_text(data=datsc[, .SD[which.max(tyy)]],
+                    aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+          
+          geom_text(data=da,
+                    aes(x=2020.5, y=.9*mi), label = paste0("Havainnoitu\n <=2021", rv$lang),
+                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                    alpha=.5, lineheight=lihh) +
+          
+          geom_text(data=da,
+                    aes(x=2022.5, y=.9*mi), label = paste0("Simuloitu\n2022=>"),
+                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                    angle=c(0), alpha=.5, lineheight=lihh) 
+        
+        # geom_text(data=da,
+        #           aes(x=mil-5, y=.9*mi), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+        #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
+        
+        
+        if (rv$yearc >= rv$fyear) {
+          plot1 = plot1 + 
+            geom_text(data=da,
+                      aes(x=rv$yearc, y= 123),
+                      label = paste0(
+                        format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty vuodesta ", rv$fyear, " ja vuoteen " , rv$yearc
+                      ),
+                      size=si(1.7), color=net, hjust=1, fontface="bold") 
+        }   
       }
-    }
-
-    plot1
+      
+      
+      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+        plot1 = plot1 +
+          
+          geom_label_repel(data=datsf,
+                           aes(x=year-2, y=tyy, label=paste0(labuf),
+                               color=col, group =sec, alpha=ala),
+                           size=si(2.2), fontface="bold", hjust=1,
+                           family = fam,
+                           fill=bgc,
+                           # segment.size =NA,
+                           segment.size =NA,
+                           direction = "y",
+                           label.padding =0,
+                           # box.padding=.1,
+                           # nudge_x=18,
+                           xlim=c(mil,2177),
+                           label.size=0,
+                           max.iter=5000,
+                           force=.01, force_pull=10,box.padding=.1 ,
+                           seed=5
+          )
+        
+        if (rv$lang =="eng") {
+          plot1 = plot1 +
+            
+            geom_text(data=da,
+                      aes(x=mil, y=103), label = paste0("Maximums"),
+                      col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+            
+            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
+                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          
+          
+        }  else if (rv$lang=="fin") {
+          plot1 = plot1 +
+            
+            geom_text(data=da,
+                      aes(x=mil, y=103), label = paste0("Maksimit"),
+                      col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+            
+            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
+                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+        }
+        
+        
+        
+        if (input$showfossil==TRUE || input$showland==TRUE  || input$shownet==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), .SD[which.max(yy)]],
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
+                      size=si(2.2), hjust=0, fontface="bold") 
+          
+        }    
+        if (input$showpop==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("pop"),.SD[which.max(yy)] ],
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
+                      size=si(2.2), hjust=0, fontface="bold") 
+          
+        }    
+        if (input$showavgfossil==TRUE || input$showuserfossil==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
+                      aes(x=mil, y=103-6*prio, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), "t"), color=col),
+                      size=si(2.2), hjust=0, fontface="bold") 
+        }
+        
+        if (input$showprice==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("price"), .SD[which.max(yy)]],
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$/t"), color=col),
+                      size=si(2.2), hjust=0, fontface="bold") 
+          
+        }
+        
+        if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$"), color=col), 
+                      size=si(2.2), hjust=0, fontface="bold") 
+        }    
+        
+        
+        
+      } else {
+        plot1 = plot1+
+          geom_text(data=da,
+                    aes(x=mil, y=108), label = paste0("Max"),
+                    col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0.5, angle=c(0)) 
+        
+        
+        if (input$showfossil==TRUE || input$showland==TRUE  || input$shownet==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), .SD[which.max(yy)]],
+                      aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
+                      size=si(2.2), hjust=0.5, fontface="bold") 
+        }    
+        if (input$showpop==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("pop"),.SD[which.max(yy)] ],
+                      aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
+                      size=si(2.2), hjust=0.5, fontface="bold") 
+          
+        }    
+        if (input$showavgfossil==TRUE || input$showuserfossil==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
+                      aes(x=(mil-5+10*prio), y=103, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), "t"), color=col),
+                      size=si(2.2), hjust=0.5, fontface="bold") 
+        }
+        
+        if (input$showprice==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("price"), .SD[which.max(yy)]],
+                      aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 0), "$/t"), color=col),
+                      size=si(2.2), hjust=0.5, fontface="bold") 
+          
+        }
+        
+        if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE) {
+          
+          plot1 = plot1+
+            geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
+                      aes(x=(mil-5+10*prio), y=103, label=paste0(round(max(yy, na.rm=TRUE), 0), "$"), color=col), 
+                      size=si(2.2), hjust=0.5, fontface="bold") 
+        }
+      }
+      
+      plot1
     }) 
   }) 
   
@@ -7170,38 +7350,38 @@ rv$lek == FALSE
   
   
   
-     sec2 = reactive({ 
-       # rv$pll = length(unique(datsl()$labbi))
-       # rv$plll = length(unique(datsl()$labbi))
-       
-       # if (input$autodraw==TRUE) {
-       #   rv$plll = length(unique(datsl()$labbi))
-       # } else
-       # {
-       #   eventReactive(input$go==TRUE, {
-       # 
-       #     rv$plll = length(unique(datsl()$labbi))
-       # 
-       #   })
-       # 
-       # }
-       
-       if (input$autodraw==TRUE) {
-         rv$pll = length(unique(datsl()$labbi))
-       } else
-       {
-         eventReactive(input$go==TRUE, {
-           
-           rv$pll = length(unique(datsl()$labbi))
-           rv$plll = length(unique(datsl()$labbi))
-           # rv$plll = rv$pll
-           
-         })
-         
-       }
-       
-          # rv$pll = length(unique(datsss()$labbi))
-       
+  sec2 = reactive({ 
+    # rv$pll = length(unique(datsl()$labbi))
+    # rv$plll = length(unique(datsl()$labbi))
+    
+    # if (input$autodraw==TRUE) {
+    #   rv$plll = length(unique(datsl()$labbi))
+    # } else
+    # {
+    #   eventReactive(input$go==TRUE, {
+    # 
+    #     rv$plll = length(unique(datsl()$labbi))
+    # 
+    #   })
+    # 
+    # }
+    
+    if (input$autodraw==TRUE) {
+      rv$pll = length(unique(datsl()$labbi))
+    } else
+    {
+      eventReactive(input$go==TRUE, {
+        
+        rv$pll = length(unique(datsl()$labbi))
+        rv$plll = length(unique(datsl()$labbi))
+        # rv$plll = rv$pll
+        
+      })
+      
+    }
+    
+    # rv$pll = length(unique(datsss()$labbi))
+    
     withProgress( message="Drawing graph, please wait",{
       # req(rv$pll, cancelOutput = TRUE)
       
@@ -7215,24 +7395,24 @@ rv$lek == FALSE
           }
         # }
         if (input$isMobile=="FALSE") {
-
+          
           lsi =
             function(per) {
               per*session$clientData$output_plotj_width*session$clientData$pixelratio/800
             }
         }
-
+        
         if (input$isMobile=="TRUE") {
-
+          
           lsi =
             function(per) {
               per*session$clientData$output_plotj_width*session$clientData$pixelratio/2000
             }
         }
-
-
+        
+        
       } else {
-          
+        
         si = 
           function(per) {
             per*session$clientData$output_plotj_width*session$clientData$pixelratio/.8/
@@ -7255,1597 +7435,597 @@ rv$lek == FALSE
             }
         }
         
-        }
+      }
       
       rv$wii = si(3)
       
-    
-    mil = rv$ffyear
-    
-    
-    if (rv$pll < 2) {
-    plotma = margin(-5*input$dim[1]/1000,-15*input$dim[1]/1000,-12*input$dim[1]/1000,-15*input$dim[1]/1000, unit = "pt")
-    } else {
-      plotma = margin(-2*input$dim[1]/1000,-5*input$dim[1]/1000,-1*input$dim[1]/1000,-7*input$dim[1]/1000, unit = "pt")
       
-    }
-     ma = 141
-    
-     mix = rv$ffyear
-     max = 2143
-     bgc = rv$bgc
-     teksvari = rv$teksvari
-     obsvari = rv$obsvari
-     
-    
-    if (rv$plot2 == "plot2")
-    {
+      mil = rv$ffyear
       
       
-      inplot= c("fossil", "land", "net", "dummy", "ghg","nonco2")
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      
-
-      
-      # if (input$is_mobile_device=="TRUE") {
-      #
-      #   si =
-      #     function(per) {
-      #       per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
-      #     }
-      # }
-      
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.18,-18)
-    
-
-      # hi = ma - mi
-      hi = ma-mi
-      
-      
-     
- 
-      
-      ly = 1991
-      ala = .3
-      dis = 16.8
-      seg = .3
-      scas = 2.5
-      lines = .7
-      lines2 =.2
-      points=1.1
-      segalfa=.7
-      lee = 0
-      fam = fam
-      
-    
-    
-    
-    
-    
-    plot2=   ggplot(datsf)+
-      
-      
-      # graph limits
-      geom_segment(data=da,
-                   aes(x=mix, xend=2100, y=0, yend=0), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-      
-      geom_point(data=da,
-                 aes(x=2140,  y=100),
-                 color=teksvari, alpha=0, size=si(2))+
-      
-      
- 
-      geom_text(data = datsss[, .SD[which.max(yy)]], 
-                aes(x=mix+.05, y=136, color=col, label = labbi),
-                hjust= 0, vjust=0, size = si(4), fontface="bold") + 
-      
-   
-      
-      # geom_text(data=da,
-      #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-      #           col=teksvari, fontface="bold", lineheight=1 ,  
-      #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
-      
-      #bottom years
-      geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                aes(x=year, y=-3, label=c(year)),
-                color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
-      
-      geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                   (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                   color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-      
-
-      
-      # vertical lines
-
-      
-      
-      # horizontal lines
-      
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-      
-      
-      
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-      
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      
-      geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-      
-      # blue line for yearc      
-      geom_segment(data=da,
-                   aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                   color=blu, alpha=.4, linewidth=lsi(1.4))+
-      
-      geom_point(data=datsc, 
-                 aes(y=tyy, x=year, group=sec,  alpha=ala), 
-                 size=lsi(points*2), color=blu) + 
-      
-      # graphs for fyear to yearc
-      # geom_area(data=datsl, 
-      #           aes(y=tyy, x=year, group=sec,  fill=col),
-      #           size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-      
-      geom_area(data=datsl[year < rv$fyear+1,], 
-                aes(y=tyy, x=year, group=sec,  fill=col),
-                size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-      geom_area(data=datsl[year > rv$fyear-1,], 
-                aes(y=tyy, x=year, group=sec,  fill=col),
-                size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-      
-      geom_line(data=datsl,
-                aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
-                linewidth=lsi(lines)) + 
-      geom_point(data=datsl, 
-                 aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
-                 size=lsi(points)) + 
-      
-      
-      # graphs for first year to lyear 
-      geom_line(data=datsss, 
-                aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                linewidth=lsi(lines), alpha=.1) + 
-      geom_point(data=datsss, 
-                 aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
-                 size=lsi(points), alpha=.1) + 
-      
-      
-      # pricing and neutrality vertical lines
-      geom_segment(data=da,
-                   aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                   color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-      geom_segment(data=da, 
-                   aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                   color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-      
-      # observed and simulated vertical line
-      geom_segment(data=da,
-                   aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                   color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-      
-        # yearc labels
-      geom_label_repel(data=datsc,
-                       aes(x=year+3, y=tyy,
-                           label=labu,
-                           color=col, alpha=ala*100),
-                       fill=bgc,
-                       hjust=0, 
-                       size=si(2.4),
-                       # size=si(2.4), 
-                       
-                       fontface="bold",
-                       family = fam,
-                       segment.size =NA,
-                       direction = "y",
-                       label.padding =0,
-                       xlim=c(mil,2177),
-                       label.size=0,
-                       max.iter=5000,
-                       force=.01, force_pull=10,box.padding=.1 ,
-                       seed=5) +
-      
-      
-
-      
-         
-      
-      scale_color_identity() + 
-      scale_alpha_identity() + 
-      
-      scale_fill_identity() + 
-      
-      scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-      coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-      
-      
-      theme(
-        axis.title.x=element_blank(),
-        plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-        plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-        axis.text.x=element_blank(),
-        # plot.margin = margin(-5,-4,-5,-4),
-        
-        # plot.margin = margin(-2,-4,-2,-4),
-         plot.margin = plotma,
-        panel.border = element_blank(), 
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(), 
-        axis.title.y=element_blank(),
-        axis.text.y=element_blank(),
-        plot.background = element_rect(fill =bgc,  color=NA), 
-        panel.background = element_rect(fill = bgc ,  color="grey")
-      )
-    
-    
-    if (rv$pll > 1) {
-      plot2 = plot2 + 
-        geom_text(data=da,
-                  aes(x=mil, y=103), label = paste0("Max"),
-                  col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
-        geom_text(data=datsss[, .SD[which.max(yy)]],
-                  aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-                  size=si(2.0), hjust=0, fontface="bold") 
-    }
-    
-    
-    if (rv$lang =="eng") {
-      
-   
-        
-        if (rv$yearc > rv$fyear) {
-          plot2 = plot2 +
-          geom_text(data=da,
-                    aes(x=rv$yearc, y= 123),  label = paste0(
-                      format(round(rv$rvtotal,1), nsmall=1), " Gt used ", rv$fyear, "-" , rv$yearc
-                    )
-                    ,
-                    size=si(1.7), color=net, hjust=1, fontface="bold") 
-          
-        }
-      plot2 = plot2 +
-        
-        # headline 
-            
-        
-        
-        geom_text(data=da,
-                  aes(x=2005, y= 131),
-                  label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
-        
-        
-        
-        geom_text(data=da,
-                  aes(x=rv$fyear, y= 127),
-                  label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used 2020-", rv$fyear-1
-                  ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
-        
-
-        geom_text(data=da,
-                  aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        geom_text(data=da,
-                  aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        
-        geom_text(data=datsc[, .SD[which.max(tyy)]],
-                  aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                  color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-        
-        
-        geom_text(data=da,
-                  aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                  alpha=.5, lineheight=lihh) +
-        
-        geom_text(data=da,
-                  aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                  angle=c(0), alpha=.5, lineheight=lihh)  
-    
-
-      
-          }
-    
-    if (rv$lang == "fin") {
-      
-      if (rv$yearc > rv$fyear) {
-        plot2 = plot2 +
-      geom_text(data=da,
-                aes(x=rv$yearc, y= 123),
-                label = paste0(
-                  format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty ", rv$fyear, "-" , rv$yearc
-                ),
-                size=si(1.7), color=net, hjust=1, fontface="bold")
-      
-      }
-      
-      plot2 = plot2 +
-
-        
-        geom_text(data=da,
-                  aes(x=2005, y= 131),
-                  label = paste0(rv$budget, " Gt: Nettopäästöjen budjetti 2020 lähtien, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
-        
-        
-        geom_text(data=da,
-                  aes(x=rv$fyear, y= 127),
-                  label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty 2020-", rv$fyear
-                  ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
-        
-
-        
-        
-        geom_text(data=da,
-                  aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        geom_text(data=da,
-                  aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        
-
-        
-        geom_text(data=datsc[, .SD[which.max(tyy)]],
-                  aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                  color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-        
-        geom_text(data=da,
-                  aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                  alpha=.5, lineheight=.99) +
-        
-        geom_text(data=da,
-                  aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                  angle=c(0), alpha=.5, lineheight=.99) 
-     
-      
-    }
-    
-    
-    if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-      
-      # if (rv$pll < 2) {
-      
-      plot2 = plot2 +
-
-        
-        
-        geom_label_repel(data=datsf,
-                         aes(x=year-2, y=tyy, label=paste0(labuf),
-                             color=col, group =sec, alpha=ala),
-                         size=si(2.2), fontface="bold", hjust=1,
-                         family = fam,
-                         fill=bgc,
-                         # segment.size =NA,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         # box.padding=.1,
-                         # nudge_x=18,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5
-        )
-      # }
-      
-      if (rv$lang =="eng") {
-        plot2 = plot2 +
-          
-
-          
-          geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                    color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-        
-        
-      }  else if (rv$lang=="fin") {
-        plot2 = plot2 +
-          
-
-          
-          geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                    color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-      }
-      
-      
-    } 
-
-  
-    
-    gplot2= ggplotGrob(plot2)
-    li2 = list(gplot2)
-    # li2 = list(plot2)
-    # plotlist = append(plotlist, li2)
-    plotlist = c(li2)
-    
-    # plot1
-    
-  } 
-  
-  
-  
-    
-    
-    if (rv$plot3 == "plot3")
-    {
-      
-      
-      inplot= c("pop", "dummy", "countrypop")
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      
-
-      
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
-      # hi = ma - mi
-      hi = ma-mi
-      
-      
-      
-      # mix = rv$ffyear
-      # max = 2130
-      
-      
-      ly = 1991
-      ala = .3
-      dis = 16.8
-      seg = .3
-      scas = 2.5
-      lines = .7
-      lines2 =.2
-      points=1.1
-      segalfa=.7
-      lee = 0
-      fam = fam
-      
-      
-    
-      plot3=   ggplot(datsf)+
-        
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mix, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+.05, y=136, color=col, label = labbi),
-                  hjust= 0, vjust=0, size = si(4), fontface="bold") + 
-        
-        # geom_text(data=da,
-        #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold", lineheight=1 ,  
-        #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
-        
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=-3, label=c(year)),
-                  color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
-        
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-        
-   
-        # horizontal lines
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-        
-
-        
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        
-        
-        
-        
-      
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
-           # yearc labels
-        
-        
-        # geom_text(data=da,
-        #           aes(x=mil, y=103), label = paste0("Max"),
-        #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
-        # geom_text(data=datsss[, .SD[which.max(yy)]],
-        #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-        #           size=si(2.1), hjust=0, fontface="bold") +
-        
-        geom_label_repel(data=datsc,
-                         aes(x=year+3, y=tyy,
-                             label=labu,
-                             color=col, alpha=ala*100),
-                         fill=bgc,
-                         hjust=0, size=si(2.4), fontface="bold",
-                         family = fam,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5) +
-    
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = plotma,
-          
-          # plot.margin = margin(-2,0,-2,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
-      
-      if (rv$pll > 1) {
-        plot3 = plot3 + 
-          geom_text(data=da,
-                    aes(x=mil, y=103), label = paste0("Max"),
-                    col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
-          geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-                    size=si(2.0), hjust=0, fontface="bold") 
-      }
-      
-      if (rv$lang =="eng") {
-    
-        plot3 = plot3 +
-         
-          
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99)  
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot3 = plot3 +
-          
-        
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          
-          
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-        
+      if (rv$pll < 2) {
+        plotma = margin(-5*input$dim[1]/1000,-15*input$dim[1]/1000,-12*input$dim[1]/1000,-15*input$dim[1]/1000, unit = "pt")
+      } else {
+        plotma = margin(-2*input$dim[1]/1000,-5*input$dim[1]/1000,-1*input$dim[1]/1000,-7*input$dim[1]/1000, unit = "pt")
         
       }
+      ma = 141
+      
+      mix = rv$ffyear
+      max = 2143
+      bgc = rv$bgc
+      teksvari = rv$teksvari
+      obsvari = rv$obsvari
       
       
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+      if (rv$plot2 == "plot2")
+      {
         
-        plot3 = plot3 +
+        
+        inplot= c("fossil", "land", "net", "dummy", "ghg","nonco2")
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        # if (input$is_mobile_device=="TRUE") {
+        #
+        #   si =
+        #     function(per) {
+        #       per*session$clientData$output_plot_width*session$clientData$pixelratio/2000
+        #     }
+        # }
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.18,-18)
+        
+        
+        # hi = ma - mi
+        hi = ma-mi
+        
+        
+        
+        
+        
+        ly = 1991
+        ala = .3
+        dis = 16.8
+        seg = .3
+        scas = 2.5
+        lines = .7
+        lines2 =.2
+        points=1.1
+        segalfa=.7
+        lee = 0
+        fam = fam
+        
+        
+        
+        
+        
+        
+        plot2=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mix, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          
+          
+          
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+.05, y=136, color=col, label = labbi),
+                    hjust= 0, vjust=0, size = si(4), fontface="bold") + 
+          
+          
+          
           # geom_text(data=da,
-          #           aes(x=mil, y=103), label = paste0("Max"),
-          #           col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-          geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(2.2), fontface="bold", hjust=1,
-                           family = fam,
-                           fill=bgc,
-                           # segment.size =NA,
-                           segment.size =NA,
-                           direction = "y",
-                           label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
-                           xlim=c(mil,2177),
-                           label.size=0,
-                           max.iter=5000,
-                           force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
-          )
-        # }
-        
-        if (rv$lang =="eng") {
-          plot3 = plot3 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold", lineheight=1 ,  
+          #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
           
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=-3, label=c(year)),
+                    color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
           
-        }  else if (rv$lang=="fin") {
-          plot3 = plot3 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-        }
-        
-      }
-        
-    
-      
-      
-    
-      gplot3= ggplotGrob(plot3)
-      li3 = list(gplot3)
-      
-      if (exists("plotlist")) {
-        plotlist = c(plotlist,li3)
-        
-      } else {        plotlist = c(li3)
-
-      }
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    if (rv$plot4 == "plot4")
-    {
-      
-      
-      inplot= c("userfossil", "avgfossil", "dummy", "countryfossil")
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      
-      
-      
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
-      # hi = ma - mi
-      
-      hi = ma-mi
-      
-      
-      # mix = mil+3
-      # max = 2130
-      
-      
-      ly = 1991
-      ala = .3
-      dis = 16.8
-      seg = .3
-      scas = 2.5
-      lines = .7
-      lines2 =.2
-      points=1.1
-      segalfa=.7
-      lee = 0
-      fam = fam
-      
-      
-      
-      plot4=   ggplot(datsf)+
-        
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mix, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+.05, y=136, color=col, label = labbi),
-                  hjust= 0, vjust=0, size = si(4), fontface="bold") + 
-        
-        # geom_text(data=da,
-        #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold", lineheight=1.0 ,  
-        #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
-        
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=-3, label=c(year)),
-                  color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
-        
-        
-        # vertical lines
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
- 
-        # horizontal lines
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
-              # yearc labels
-        
-        # geom_text(data=da,
-        #           aes(x=mil, y=103), label = paste0("Max"),
-        #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
-        # geom_text(data=datsss[, .SD[which.max(yy)]],
-        #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-        #           size=si(2.1), hjust=0, fontface="bold") +
-        
-        geom_label_repel(data=datsc,
-                         aes(x=year+3, y=tyy,
-                             label=labu,
-                             color=col, alpha=ala*100),
-                         fill=bgc,
-                         hjust=0, size=si(2.4), fontface="bold",
-                         family = fam,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5) +
-        
-      
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = plotma,
-          
-          # plot.margin = margin(-2,0,-2,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
-      
-      if (rv$pll > 1) {
-        plot4 = plot4 + 
-          geom_text(data=da,
-                    aes(x=mil, y=103), label = paste0("Max"),
-                    col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
-          geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-                    size=si(2.0), hjust=0, fontface="bold") 
-      }
-      
-      if (rv$lang =="eng") {
-        
-        plot4 = plot4 +
-          
-          
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99)  
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot4 = plot4 +
-          
-          
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
           
           
           
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-        
-      }
-      
-      
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-        
-        plot4 = plot4 +
-                geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(2.2), fontface="bold", hjust=1,
-                           family = fam,
-                           fill=bgc,
-                           # segment.size =NA,
-                           segment.size =NA,
-                           direction = "y",
-                           label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
-                           xlim=c(mil,2177),
-                           label.size=0,
-                           max.iter=5000,
-                           force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
-          )
-        # }
-        
-        if (rv$lang =="eng") {
-          plot4 = plot4 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-          
-          
-        }  else if (rv$lang=="fin") {
-          plot4 = plot4 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-        }
-
-        
-        
-      }
-      
-      
-      
-      gplot4= ggplotGrob(plot4)
-      li4 = list(gplot4)
-      
-
-      if (exists("plotlist")) {
-        plotlist = c(plotlist,li4)
-        
-      } else {        plotlist = c(li4)
-      
-      }
-      
-      
-    }
-    
-    
-    
-    
-    if (rv$plot5 == "plot5")
-    {
-      
-      
-      inplot= c("price", "dummy")
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      
-      
-      
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
-      # hi = ma - mi
-      hi = ma-mi
-      
-      
-      
-      # mix = mil+3
-      # max = 2130
-      # 
-      
-      ly = 1991
-      ala = .3
-      dis = 16.8
-      seg = .3
-      scas = 2.5
-      lines = .7
-      lines2 =.2
-      points=1.1
-      segalfa=.7
-      lee = 0
-      fam = fam
-      
-      
-      
-      plot5=   ggplot(datsf)+
-        
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mix, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+.05, y=136, color=col, label = labbi),
-                  hjust= 0, vjust=0, size = si(4), fontface="bold") + 
-        
-        # geom_text(data=da,
-        #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold", lineheight=1.0 ,  
-        #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
-        
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=-3, label=c(year)),
-                  color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
-        
-        
-        # vertical lines
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-        
-   
-        # horizontal lines
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-        
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
-             # yearc labels
-        # geom_text(data=da,
-        #           aes(x=mil, y=103), label = paste0("Max"),
-        #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
-        # geom_text(data=datsss[, .SD[which.max(yy)]],
-        #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-        #           size=si(2.1), hjust=0, fontface="bold") +
-       
-            geom_label_repel(data=datsc,
-                         aes(x=year+3, y=tyy,
-                             label=labu,
-                             color=col, alpha=ala*100),
-                         fill=bgc,
-                         hjust=0, size=si(2.4), fontface="bold",
-                         family = fam,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5) +
-        
-        
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = plotma,
-          
-          # plot.margin = margin(-2,0,-2,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
-      
-      if (rv$pll > 1) {
-        plot5 = plot5 + 
-          geom_text(data=da,
-                    aes(x=mil, y=103), label = paste0("Max"),
-                    col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
-          geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-                    size=si(2.0), hjust=0, fontface="bold") 
-      }
-      
-      if (rv$lang =="eng") {
-        
-        plot5 = plot5 +
-          
-          
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99)  
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot5 = plot5 +
-          
-          
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+          # vertical lines
           
           
           
+          # horizontal lines
           
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-        
-        
-      }
-      
-      
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-        
-        plot5 = plot5 +
-         
-          geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(2.2), fontface="bold", hjust=1,
-                           family = fam,
-                           fill=bgc,
-                           # segment.size =NA,
-                           segment.size =NA,
-                           direction = "y",
-                           label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
-                           xlim=c(mil,2177),
-                           label.size=0,
-                           max.iter=5000,
-                           force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
-          )
-        # }
-        
-        if (rv$lang =="eng") {
-          plot5 = plot5 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
           
           
-        }  else if (rv$lang=="fin") {
-          plot5 = plot5 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-        }
-        
-        
-   
-      }
-      
-      
-      
-      gplot5= ggplotGrob(plot5)
-      li5 = list(gplot5)
-      
-
-            
-            if (exists("plotlist")) {
-              plotlist = c(plotlist,li5)
-              
-            } else {        plotlist = c(li5)
-            
-            }
-            
-      
-    }
-    
-    
-    
-    
-    
-    if (rv$plot6 == "plot6")
-    {
-      
-      
-      inplot= c("dummy", "averagedividend", "countrydividend", "avgcost",
-                "netcost","usercost","dividend","avgnetcost","countrynetcost",
-                "countrycost")
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      
-      
-      
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
-      hi = ma - mi
-      
-      
-      
-      # mix = mil+3
-      # max = 2130
-      
-      
-      ly = 1991
-      ala = .3
-      dis = 16.8
-      seg = .3
-      scas = 2.5
-      lines = .7
-      lines2 =.2
-      points=1.1
-      segalfa=.7
-      lee = 0
-      fam = fam
-      
-      
-      
-      plot6=   ggplot(datsf)+
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mix, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+.05, y=136, color=col, label = labbi),
-                  hjust= 0, vjust=0, size = si(4), fontface="bold") + 
-        
-        # geom_text(data=da,
-        #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold", lineheight=1.0 ,  
-        #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
-        
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=-3, label=c(year)),
-                  color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
-        
-        # vertical lines
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-
-        # horizontal lines
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-      
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-
-        
-        
-        
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        
-        
-        
-        
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          # geom_area(data=datsl, 
+          #           aes(y=tyy, x=year, group=sec,  fill=col),
+          #           size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=sec,  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=sec,  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+          
           # yearc labels
-        # geom_text(data=da,
-        #           aes(x=mil, y=103), label = paste0("Max"),
-        #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
-        # geom_text(data=datsss[, .SD[which.max(yy)]],
-        #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-        #           size=si(2.1), hjust=0, fontface="bold") +
-    
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
+                           fill=bgc,
+                           hjust=0, 
+                           size=si(2.4),
+                           # size=si(2.4), 
+                           
+                           fontface="bold",
+                           family = fam,
+                           segment.size =NA,
+                           direction = "y",
+                           label.padding =0,
+                           xlim=c(mil,2177),
+                           label.size=0,
+                           max.iter=5000,
+                           force=.01, force_pull=10,box.padding=.1 ,
+                           seed=5) +
+          
+          
+          
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            # plot.margin = margin(-5,-4,-5,-4),
+            
+            # plot.margin = margin(-2,-4,-2,-4),
+            plot.margin = plotma,
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc,  color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
+          )
         
+        
+        if (rv$pll > 1) {
+          plot2 = plot2 + 
+            geom_text(data=da,
+                      aes(x=mil, y=103), label = paste0("Max"),
+                      col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
+            geom_text(data=datsss[, .SD[which.max(yy)]],
+                      aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+                      size=si(2.0), hjust=0, fontface="bold") 
+        }
+        
+        
+        if (rv$lang =="eng") {
+          
+          
+          
+          if (rv$yearc > rv$fyear) {
+            plot2 = plot2 +
+              geom_text(data=da,
+                        aes(x=rv$yearc, y= 123),  label = paste0(
+                          format(round(rv$rvtotal,1), nsmall=1), " Gt used ", rv$fyear, "-" , rv$yearc
+                        )
+                        ,
+                        size=si(1.7), color=net, hjust=1, fontface="bold") 
+            
+          }
+          plot2 = plot2 +
+            
+            # headline 
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=2005, y= 131),
+                      label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
+                      size=si(1.7), color=net, hjust=0, fontface="bold") +
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y= 127),
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used 2020-", rv$fyear-1
+                      ),
+                      size=si(1.7), color=net, hjust=0, fontface="bold") +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=lihh) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=lihh)  
+          
+          
+          
+        }
+        
+        if (rv$lang == "fin") {
+          
+          if (rv$yearc > rv$fyear) {
+            plot2 = plot2 +
+              geom_text(data=da,
+                        aes(x=rv$yearc, y= 123),
+                        label = paste0(
+                          format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty ", rv$fyear, "-" , rv$yearc
+                        ),
+                        size=si(1.7), color=net, hjust=1, fontface="bold")
+            
+          }
+          
+          plot2 = plot2 +
+            
+            
+            geom_text(data=da,
+                      aes(x=2005, y= 131),
+                      label = paste0(rv$budget, " Gt: Nettopäästöjen budjetti 2020 lähtien, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
+                      size=si(1.7), color=net, hjust=0, fontface="bold") +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y= 127),
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty 2020-", rv$fyear
+                      ),
+                      size=si(1.7), color=net, hjust=0, fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+          
+          # if (rv$pll < 2) {
+          
+          plot2 = plot2 +
+            
+            
+            
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(2.2), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          # }
+          
+          if (rv$lang =="eng") {
+            plot2 = plot2 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot2 = plot2 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+          
+        } 
+        
+        
+        
+        gplot2= ggplotGrob(plot2)
+        li2 = list(gplot2)
+        # li2 = list(plot2)
+        # plotlist = append(plotlist, li2)
+        plotlist = c(li2)
+        
+        # plot1
+        
+      } 
+      
+      
+      
+      
+      
+      if (rv$plot3 == "plot3")
+      {
+        
+        
+        inplot= c("pop", "dummy", "countrypop")
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
+        # hi = ma - mi
+        hi = ma-mi
+        
+        
+        
+        # mix = rv$ffyear
+        # max = 2130
+        
+        
+        ly = 1991
+        ala = .3
+        dis = 16.8
+        seg = .3
+        scas = 2.5
+        lines = .7
+        lines2 =.2
+        points=1.1
+        segalfa=.7
+        lee = 0
+        fam = fam
+        
+        
+        
+        plot3=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mix, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+.05, y=136, color=col, label = labbi),
+                    hjust= 0, vjust=0, size = si(4), fontface="bold") + 
+          
+          # geom_text(data=da,
+          #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold", lineheight=1 ,  
+          #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
+          
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=-3, label=c(year)),
+                    color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
+          
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+          
+          
+          # horizontal lines
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          
+          
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+          
+          # yearc labels
+          
+          
+          # geom_text(data=da,
+          #           aes(x=mil, y=103), label = paste0("Max"),
+          #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
+          # geom_text(data=datsss[, .SD[which.max(yy)]],
+          #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+          #           size=si(2.1), hjust=0, fontface="bold") +
+          
         geom_label_repel(data=datsc,
                          aes(x=year+3, y=tyy,
                              label=labu,
@@ -8861,312 +8041,1311 @@ rv$lek == FALSE
                          max.iter=5000,
                          force=.01, force_pull=10,box.padding=.1 ,
                          seed=5) +
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = plotma,
+            
+            # plot.margin = margin(-2,0,-2,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
+          )
+        
+        if (rv$pll > 1) {
+          plot3 = plot3 + 
+            geom_text(data=da,
+                      aes(x=mil, y=103), label = paste0("Max"),
+                      col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
+            geom_text(data=datsss[, .SD[which.max(yy)]],
+                      aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+                      size=si(2.0), hjust=0, fontface="bold") 
+        }
+        
+        if (rv$lang =="eng") {
+          
+          plot3 = plot3 +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99)  
+        }
+        
+        if (rv$lang == "fin") {
+          
+          plot3 = plot3 +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+        }
         
         
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = plotma,
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
           
-          # plot.margin = margin(-2,0,-2,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
-      
-      if (rv$pll > 1) {
-        plot6 = plot6 + 
-          geom_text(data=da,
-                    aes(x=mil, y=100+.03*hi), label = paste0("Max"),
-                    col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
-          geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=100-.03*hi, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
-                    size=si(2.0), hjust=0, fontface="bold") 
-      }
-      
-      if (rv$lang =="eng") {
-        
-        plot6 = plot6 +
+          plot3 = plot3 +
+            # geom_text(data=da,
+            #           aes(x=mil, y=103), label = paste0("Max"),
+            #           col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(2.2), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          # }
           
-    
-          
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+.09*hi, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99)  
-          
+          if (rv$lang =="eng") {
+            plot3 = plot3 +
               
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot6 = plot6 +
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot3 = plot3 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
           
-          
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          
-          
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+.09*hi, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-          
-    
+        }
         
         
+        
+        
+        
+        gplot3= ggplotGrob(plot3)
+        li3 = list(gplot3)
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li3)
+          
+        } else {        plotlist = c(li3)
+        
+        }
       }
       
       
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+      
+      
+      
+      
+      
+      
+      
+      
+      if (rv$plot4 == "plot4")
+      {
         
-        plot6 = plot6 +
+        
+        inplot= c("userfossil", "avgfossil", "dummy", "countryfossil")
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
+        # hi = ma - mi
+        
+        hi = ma-mi
+        
+        
+        # mix = mil+3
+        # max = 2130
+        
+        
+        ly = 1991
+        ala = .3
+        dis = 16.8
+        seg = .3
+        scas = 2.5
+        lines = .7
+        lines2 =.2
+        points=1.1
+        segalfa=.7
+        lee = 0
+        fam = fam
+        
+        
+        
+        plot4=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mix, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+.05, y=136, color=col, label = labbi),
+                    hjust= 0, vjust=0, size = si(4), fontface="bold") + 
+          
+          # geom_text(data=da,
+          #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold", lineheight=1.0 ,  
+          #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
+          
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=-3, label=c(year)),
+                    color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
+          
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+          
+          # horizontal lines
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+          
+          # yearc labels
+          
           # geom_text(data=da,
           #           aes(x=mil, y=103), label = paste0("Max"),
-          #           col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-          geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(2.2), fontface="bold", hjust=1,
-                           family = fam,
+          #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
+          # geom_text(data=datsss[, .SD[which.max(yy)]],
+          #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+          #           size=si(2.1), hjust=0, fontface="bold") +
+          
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
                            fill=bgc,
-                           # segment.size =NA,
+                           hjust=0, size=si(2.4), fontface="bold",
+                           family = fam,
                            segment.size =NA,
                            direction = "y",
                            label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
                            xlim=c(mil,2177),
                            label.size=0,
                            max.iter=5000,
                            force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = plotma,
+            
+            # plot.margin = margin(-2,0,-2,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
           )
-        # }
         
-        if (rv$lang =="eng") {
-          plot6 = plot6 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+.09*hi, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-          
-          
-        }  else if (rv$lang=="fin") {
-          plot6 = plot6 +
-            
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+.09*hi, label=paste0(year, ":")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+        if (rv$pll > 1) {
+          plot4 = plot4 + 
+            geom_text(data=da,
+                      aes(x=mil, y=103), label = paste0("Max"),
+                      col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
+            geom_text(data=datsss[, .SD[which.max(yy)]],
+                      aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+                      size=si(2.0), hjust=0, fontface="bold") 
         }
         
-    
+        if (rv$lang =="eng") {
+          
+          plot4 = plot4 +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99)  
+        }
+        
+        if (rv$lang == "fin") {
+          
+          plot4 = plot4 +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+          
+          plot4 = plot4 +
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(2.2), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          # }
+          
+          if (rv$lang =="eng") {
+            plot4 = plot4 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot4 = plot4 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+          
+          
+        }
+        
+        
+        
+        gplot4= ggplotGrob(plot4)
+        li4 = list(gplot4)
+        
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li4)
+          
+        } else {        plotlist = c(li4)
+        
+        }
+        
         
       }
       
       
       
-      gplot6= ggplotGrob(plot6)
-      li6 = list(gplot6)
       
-
+      if (rv$plot5 == "plot5")
+      {
+        
+        
+        inplot= c("price", "dummy")
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
+        # hi = ma - mi
+        hi = ma-mi
+        
+        
+        
+        # mix = mil+3
+        # max = 2130
+        # 
+        
+        ly = 1991
+        ala = .3
+        dis = 16.8
+        seg = .3
+        scas = 2.5
+        lines = .7
+        lines2 =.2
+        points=1.1
+        segalfa=.7
+        lee = 0
+        fam = fam
+        
+        
+        
+        plot5=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mix, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+.05, y=136, color=col, label = labbi),
+                    hjust= 0, vjust=0, size = si(4), fontface="bold") + 
+          
+          # geom_text(data=da,
+          #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold", lineheight=1.0 ,  
+          #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
+          
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=-3, label=c(year)),
+                    color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
+          
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+          
+          
+          # horizontal lines
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=sec,  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=sec,  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+          
+          # yearc labels
+          # geom_text(data=da,
+          #           aes(x=mil, y=103), label = paste0("Max"),
+          #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
+          # geom_text(data=datsss[, .SD[which.max(yy)]],
+          #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+          #           size=si(2.1), hjust=0, fontface="bold") +
+          
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
+                           fill=bgc,
+                           hjust=0, size=si(2.4), fontface="bold",
+                           family = fam,
+                           segment.size =NA,
+                           direction = "y",
+                           label.padding =0,
+                           xlim=c(mil,2177),
+                           label.size=0,
+                           max.iter=5000,
+                           force=.01, force_pull=10,box.padding=.1 ,
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = plotma,
+            
+            # plot.margin = margin(-2,0,-2,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
+          )
+        
+        if (rv$pll > 1) {
+          plot5 = plot5 + 
+            geom_text(data=da,
+                      aes(x=mil, y=103), label = paste0("Max"),
+                      col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
+            geom_text(data=datsss[, .SD[which.max(yy)]],
+                      aes(x=mil, y=97, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+                      size=si(2.0), hjust=0, fontface="bold") 
+        }
+        
+        if (rv$lang =="eng") {
+          
+          plot5 = plot5 +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99)  
+        }
+        
+        if (rv$lang == "fin") {
+          
+          plot5 = plot5 +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+          
+          plot5 = plot5 +
+            
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(2.2), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          # }
+          
+          if (rv$lang =="eng") {
+            plot5 = plot5 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot5 = plot5 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+9, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+          
+          
+        }
+        
+        
+        
+        gplot5= ggplotGrob(plot5)
+        li5 = list(gplot5)
+        
+        
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li5)
+          
+        } else {        plotlist = c(li5)
+        
+        }
+        
+        
+      }
+      
+      
+      
+      
+      
+      if (rv$plot6 == "plot6")
+      {
+        
+        
+        inplot= c("dummy", "averagedividend", "countrydividend", "avgcost",
+                  "netcost","usercost","dividend","avgnetcost","countrynetcost",
+                  "countrycost")
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
+        hi = ma - mi
+        
+        
+        
+        # mix = mil+3
+        # max = 2130
+        
+        
+        ly = 1991
+        ala = .3
+        dis = 16.8
+        seg = .3
+        scas = 2.5
+        lines = .7
+        lines2 =.2
+        points=1.1
+        segalfa=.7
+        lee = 0
+        fam = fam
+        
+        
+        
+        plot6=   ggplot(datsf)+
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mix, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+.05, y=136, color=col, label = labbi),
+                    hjust= 0, vjust=0, size = si(4), fontface="bold") + 
+          
+          # geom_text(data=da,
+          #           aes(x=mix+(max-mix)*.95, y=136), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold", lineheight=1.0 ,  
+          #           size =si(1.6), hjust =1, vjust=0, angle=c(0), alpha=.6) +       
+          
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=-3, label=c(year)),
+                    color=teksvari, angle=0,size =si(2), alpha=.50, vjust=1) +
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+          
+          # horizontal lines
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          
+          
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+          
+          # yearc labels
+          # geom_text(data=da,
+          #           aes(x=mil, y=103), label = paste0("Max"),
+          #           col=teksvari, fontface="bold" ,  size =si(2.1), hjust =0, vjust=0.5, angle=c(0)) +
+          # geom_text(data=datsss[, .SD[which.max(yy)]],
+          #           aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+          #           size=si(2.1), hjust=0, fontface="bold") +
+          
+          
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
+                           fill=bgc,
+                           hjust=0, size=si(2.4), fontface="bold",
+                           family = fam,
+                           segment.size =NA,
+                           direction = "y",
+                           label.padding =0,
+                           xlim=c(mil,2177),
+                           label.size=0,
+                           max.iter=5000,
+                           force=.01, force_pull=10,box.padding=.1 ,
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = plotma,
+            
+            # plot.margin = margin(-2,0,-2,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
+          )
+        
+        if (rv$pll > 1) {
+          plot6 = plot6 + 
+            geom_text(data=da,
+                      aes(x=mil, y=100+.03*hi), label = paste0("Max"),
+                      col=teksvari, fontface="bold" ,  size =si(2.0), hjust =0, vjust=0.5, angle=c(0)) +
+            geom_text(data=datsss[, .SD[which.max(yy)]],
+                      aes(x=mil, y=100-.03*hi, label=paste0(round(max(yy, na.rm=TRUE), le)), color=col), 
+                      size=si(2.0), hjust=0, fontface="bold") 
+        }
+        
+        if (rv$lang =="eng") {
+          
+          plot6 = plot6 +
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+.09*hi, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99)  
+          
+          
+        }
+        
+        if (rv$lang == "fin") {
+          
+          plot6 = plot6 +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+.09*hi, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=max(-8,mi*.6)), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=1, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=max(-8,mi*.6)), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=1,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+          
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+          
+          plot6 = plot6 +
+            # geom_text(data=da,
+            #           aes(x=mil, y=103), label = paste0("Max"),
+            #           col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(2.2), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          # }
+          
+          if (rv$lang =="eng") {
+            plot6 = plot6 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+.09*hi, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot6 = plot6 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-2, y=max(tyy)+.09*hi, label=paste0(year, ":")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+          
+          
+        }
+        
+        
+        
+        gplot6= ggplotGrob(plot6)
+        li6 = list(gplot6)
+        
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li6)
+          
+        } else {        plotlist = c(li6)
+        
+        }
+        
+        
+      }
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      eplot = ggplot(NULL, aes(color = ""))+
+        geom_blank()+
+        scale_color_manual(values = "black", labels = "Something")+
+        guides(color = guide_legend())+
+        theme(
+          plot.background = element_rect(fill =bgc, color=NA),
+          panel.background = element_rect(fill = bgc ,  color=NA)
+        )
+      geplot = ggplotGrob(eplot)
+      
       if (exists("plotlist")) {
-        plotlist = c(plotlist,li6)
+        plotlist = plotlist
         
-      } else {        plotlist = c(li6)
-      
-      }
-      
-      
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    eplot = ggplot(NULL, aes(color = ""))+
-      geom_blank()+
-      scale_color_manual(values = "black", labels = "Something")+
-      guides(color = guide_legend())+
-      theme(
-        plot.background = element_rect(fill =bgc, color=NA),
-        panel.background = element_rect(fill = bgc ,  color=NA)
-      )
-    geplot = ggplotGrob(eplot)
-    
-    if (exists("plotlist")) {
-      plotlist = plotlist
-      
-    } else {       
-      
-      lgeplot = list(geplot)
-      plotlist = c(lgeplot)
-    
-    }
-    
-    
-    lig = list(geplot)
-    
-    # pll = length(plotlist)
-    pll = rv$pll
-    
-    #
-    count = 1
-    
-    # if (pll >= 3) {
-    if (input$view==2) {
-      
-      if (pll==1){
-        lay=rbind(c(1))
-        plotlist = c(plotlist)
+      } else {       
         
-      } else if (pll ==2) {
-        lay = rbind(c(1,2))
-        plotlist = c(plotlist)
-      } else if (pll==3) {
-        lay = rbind(c(1,2), c(3,4))
-        plotlist = c(plotlist, lig)
-        
-      } else if (pll==4) {
-        lay = rbind(c(1,2), c(3,4))
-      } else if (pll==5) {
-        lay = rbind(c(1,2), c(3,4), c(5,6))
-        plotlist = c(plotlist, lig)
-        
-      }
-    } else if (input$view==3) {
-      
-      if (pll==1){
-        lay=rbind(c(1))
-        plotlist = c(plotlist)
-        count = 1
-        
-      } else if (pll ==2) {
-        lay = rbind(c(1), c(2))
-        plotlist = c(plotlist)
-        count = 2
-        
-      } else if (pll==3) {
-        lay = rbind(c(1), c(2), c(3))
-        # plotlist = c(plotlist, lig)
-        plotlist = c(plotlist)
-        count = 3
-        
-        
-      } else if (pll==4) {
-        lay = rbind(c(1), c(2), c(3), c(4))
-        plotlist = c(plotlist)
-        count = 4
-        
-        
-      } else if (pll==5) {
-        lay = rbind(c(1), c(2), c(3), c(4), c(5))
-        plotlist = c(plotlist)
-        count = 5
-        
-        
-      }
-    } else if (input$view==4) {
-      
-      if (pll==1){
-        lay=rbind(c(1))
-        plotlist = c(plotlist)
-        count = 1
-        
-      } else if (pll ==2) {
-        lay = rbind(c(1,2))
-        plotlist = c(plotlist)
-        count = 2
-        
-      } else if (pll==3) {
-        lay =  rbind(c(1,2,3))
-        # plotlist = c(plotlist, lig)
-        plotlist = c(plotlist)
-        count = 3
-        
-        
-      } else if (pll==4) {
-        lay =  rbind(c(1,2,3,4))
-        plotlist = c(plotlist)
-        count = 4
-        
-        
-      } else if (pll==5) {
-        lay =  rbind(c(1,2,3,4,5))
-        plotlist = c(plotlist)
-        count = 5
-        
+        lgeplot = list(geplot)
+        plotlist = c(lgeplot)
         
       }
       
-    }
-    
- 
-    plotx = grid.arrange(grobs=plotlist, layout_matrix=lay)
-    
-    plotx
+      
+      lig = list(geplot)
+      
+      # pll = length(plotlist)
+      pll = rv$pll
+      
+      #
+      count = 1
+      
+      # if (pll >= 3) {
+      if (input$view==2) {
+        
+        if (pll==1){
+          lay=rbind(c(1))
+          plotlist = c(plotlist)
+          
+        } else if (pll ==2) {
+          lay = rbind(c(1,2))
+          plotlist = c(plotlist)
+        } else if (pll==3) {
+          lay = rbind(c(1,2), c(3,4))
+          plotlist = c(plotlist, lig)
+          
+        } else if (pll==4) {
+          lay = rbind(c(1,2), c(3,4))
+        } else if (pll==5) {
+          lay = rbind(c(1,2), c(3,4), c(5,6))
+          plotlist = c(plotlist, lig)
+          
+        }
+      } else if (input$view==3) {
+        
+        if (pll==1){
+          lay=rbind(c(1))
+          plotlist = c(plotlist)
+          count = 1
+          
+        } else if (pll ==2) {
+          lay = rbind(c(1), c(2))
+          plotlist = c(plotlist)
+          count = 2
+          
+        } else if (pll==3) {
+          lay = rbind(c(1), c(2), c(3))
+          # plotlist = c(plotlist, lig)
+          plotlist = c(plotlist)
+          count = 3
+          
+          
+        } else if (pll==4) {
+          lay = rbind(c(1), c(2), c(3), c(4))
+          plotlist = c(plotlist)
+          count = 4
+          
+          
+        } else if (pll==5) {
+          lay = rbind(c(1), c(2), c(3), c(4), c(5))
+          plotlist = c(plotlist)
+          count = 5
+          
+          
+        }
+      } else if (input$view==4) {
+        
+        if (pll==1){
+          lay=rbind(c(1))
+          plotlist = c(plotlist)
+          count = 1
+          
+        } else if (pll ==2) {
+          lay = rbind(c(1,2))
+          plotlist = c(plotlist)
+          count = 2
+          
+        } else if (pll==3) {
+          lay =  rbind(c(1,2,3))
+          # plotlist = c(plotlist, lig)
+          plotlist = c(plotlist)
+          count = 3
+          
+          
+        } else if (pll==4) {
+          lay =  rbind(c(1,2,3,4))
+          plotlist = c(plotlist)
+          count = 4
+          
+          
+        } else if (pll==5) {
+          lay =  rbind(c(1,2,3,4,5))
+          plotlist = c(plotlist)
+          count = 5
+          
+          
+        }
+        
+      }
+      
+      
+      plotx = grid.arrange(grobs=plotlist, layout_matrix=lay)
+      
+      plotx
     }) 
   })
   
   
-
   
   
   
@@ -9175,6 +9354,11 @@ rv$lek == FALSE
   
   
   
+  
+  
+  
+  
+  # 
   
   
   
@@ -9198,38 +9382,38 @@ rv$lek == FALSE
     }
     withProgress( message="Drawing graph, please wait",{
       
-       if (input$view ==3) {
-    
-
-    if (rv$pll <7) {
-    si = 
-      function(per) {
-        per*session$clientData$output_plotk_width*session$clientData$pixelratio/.8/
-          (570+.15*session$clientData$output_plotk_width)
-      }
-    # }
-    if (input$isMobile=="FALSE") {
-      
-      lsi = 
-        function(per) {
-          per*session$clientData$output_plotk_width*session$clientData$pixelratio/500
+      if (input$view ==3) {
+        
+        
+        if (rv$pll <7) {
+          si = 
+            function(per) {
+              per*session$clientData$output_plotk_width*session$clientData$pixelratio/.8/
+                (570+.15*session$clientData$output_plotk_width)
+            }
+          # }
+          if (input$isMobile=="FALSE") {
+            
+            lsi = 
+              function(per) {
+                per*session$clientData$output_plotk_width*session$clientData$pixelratio/500
+              }
+          }
+          
+          if (input$isMobile=="TRUE") {
+            
+            lsi = 
+              function(per) {
+                per*session$clientData$output_plotk_width*session$clientData$pixelratio/1500
+              }
+          }
         }
-    }
-    
-    if (input$isMobile=="TRUE") {
-      
-      lsi = 
-        function(per) {
-          per*session$clientData$output_plotk_width*session$clientData$pixelratio/1500
-        }
-    }
-     }
-    } 
+      } 
       
       if (input$view ==4) {
-
-
-
+        
+        
+        
         if (rv$pll <7) {
           si =
             function(per) {
@@ -9238,15 +9422,15 @@ rv$lek == FALSE
             }
           # }
           if (input$isMobile=="FALSE") {
-
+            
             lsi =
               function(per) {
                 per*session$clientData$output_plotl_height*session$clientData$pixelratio/250
               }
           }
-
+          
           if (input$isMobile=="TRUE") {
-
+            
             lsi =
               function(per) {
                 per*session$clientData$output_plotl_height*session$clientData$pixelratio/750
@@ -9254,3456 +9438,3952 @@ rv$lek == FALSE
           }
         }
       }
-        
-        
-        # if (rv$pll <7) {
-        #   si = 
-        #     function(per) {
-        #       per*session$clientData$output_plotl_width*session$clientData$pixelratio/.8/
-        #         (570+.15*session$clientData$output_plotl_width)
-        #     }
-        #   # }
-        #   if (input$isMobile=="FALSE") {
-        #     
-        #     lsi = 
-        #       function(per) {
-        #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/500
-        #       }
-        #   }
-        #   
-        #   if (input$isMobile=="TRUE") {
-        #     
-        #     lsi = 
-        #       function(per) {
-        #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/1500
-        #       }
-        #   }
-        # }
-        
-        
-        
-        
-        
-    ma = 141
-    # hi = ma - mi
-    
-    
-    mil =rv$ffyear
-    
-    
- 
-    
-    mix = mil
-    max = 2135
-    
-    bgc = rv$bgc
-    teksvari = rv$teksvari
-    obsvari = rv$obsvari
-    
-    
-    ly = 1991
-    ala = .3
-    dis = 16.8
-    seg = .3
-    scas = 2.5
-    lines = .7
-    lines2 =.2
-    points=1.1
-    segalfa=.7
-    lee = 0
-    fam = fam
-    labsize= 2.3
-    
-    if (rv$plot2 == "plot2")
-    {
+      
+      
+      # if (rv$pll <7) {
+      #   si = 
+      #     function(per) {
+      #       per*session$clientData$output_plotl_width*session$clientData$pixelratio/.8/
+      #         (570+.15*session$clientData$output_plotl_width)
+      #     }
+      #   # }
+      #   if (input$isMobile=="FALSE") {
+      #     
+      #     lsi = 
+      #       function(per) {
+      #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/500
+      #       }
+      #   }
+      #   
+      #   if (input$isMobile=="TRUE") {
+      #     
+      #     lsi = 
+      #       function(per) {
+      #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/1500
+      #       }
+      #   }
+      # }
       
       
       
-    inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2")
-    
-    datsl = datsl()[sec %in% inplot & year >= mil,]
-    datsss = datsss()[sec %in% inplot & year >= mil,]
-    datsc =datsc()[sec %in% inplot,]
-    datsf =datsf()[sec %in% inplot,]
-    
-    
-    
-    mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-25)
-    hi = ma-mi
-    
-    plot2=   ggplot(datsf)+
       
       
-      # graph limits
-      geom_segment(data=da,
-                   aes(x=mil, xend=2100, y=0, yend=0), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-      
-      geom_point(data=da,
-                 aes(x=2140,  y=100),
-                 color=teksvari, alpha=0, size=si(2))+
-      #bottom years
-      geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                aes(x=year, y=.76*mi, label=c(year)),
-                color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-      
-      # vertical lines
-      geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                   (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                   color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-      
-      geom_text(data=da,
-                aes(x=mil, y=-4), label = paste0("0"),
-                col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-      # horizontal lines
-      geom_text(data = datsss[, .SD[which.max(yy)]], 
-                aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
+      ma = 141
+      # hi = ma - mi
       
       
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-      
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      geom_segment(data=datsc[sec=="dummy",],
-                   aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                   color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-      
-      geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-      
-      # blue line for yearc      
-      geom_segment(data=da,
-                   aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                   color=blu, alpha=.4, linewidth=lsi(1.4))+
-      
-
-      
-      geom_point(data=datsc, 
-                 aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                 size=lsi(points*2), color=blu) + 
-      
-      # graphs for fyear to yearc
-      geom_area(data=datsl[year < rv$fyear+1,], 
-                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-      geom_area(data=datsl[year > rv$fyear-1,], 
-                aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-      
-      geom_line(data=datsl,
-                aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                linewidth=lsi(lines)) + 
-      geom_point(data=datsl, 
-                 aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                 size=lsi(points)) + 
-      
-      
-      # graphs for first year to lyear 
-      geom_line(data=datsss, 
-                aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                linewidth=lsi(lines), alpha=.1) + 
-      geom_point(data=datsss, 
-                 aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                 size=lsi(points), alpha=.1) + 
-      
-      
-      # pricing and neutrality vertical lines
-      geom_segment(data=da,
-                   aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                   color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-      geom_segment(data=da, 
-                   aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                   color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-      
-      # observed and simulated vertical line
-      geom_segment(data=da,
-                   aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                   color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-      
-      geom_text(data=da,
-                aes(x=mil, y=103), label = paste0("Max"),
-                col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-      
-      geom_text(data=datsss[, .SD[which.max(yy)]],
-aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
-size=si(2.2), hjust=0, fontface="bold") +
-      # yearc labels
-      geom_label_repel(data=datsc,
-                       aes(x=year+3, y=tyy,
-                           label=labu,
-                           color=col, alpha=ala*100),
-                       fill=bgc,
-                       hjust=0, size=si(labsize), 
-                        fontface="bold",
-                       family = fam,
-                       segment.size =NA,
-                       direction = "y",
-                       label.padding =0,
-                       xlim=c(mil,2177),
-                       label.size=0,
-                       max.iter=5000,
-                       force=.01, force_pull=10,box.padding=.1 ,
-                       seed=5) +
+      mil =rv$ffyear
       
       
       
-      scale_color_identity() + 
-      scale_alpha_identity() + 
       
-      scale_fill_identity() + 
+      mix = mil
+      max = 2135
       
-      scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-      coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+      bgc = rv$bgc
+      teksvari = rv$teksvari
+      obsvari = rv$obsvari
       
       
-      theme(
-        axis.title.x=element_blank(),
-        plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-        plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-        axis.text.x=element_blank(),
-         plot.margin = margin(-5,0,-5,0),
-        panel.border = element_blank(), 
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(), 
-        axis.title.y=element_blank(),
-        axis.text.y=element_blank(),
-        plot.background = element_rect(fill =bgc, color="grey"), 
-        panel.background = element_rect(fill = bgc ,  color=NA)
-      )
-    
-    
-    
-    if (rv$lang =="eng") {
+      ly = 1991
+      ala = .3
+      dis = 16.8
+      seg = .3
+      scas = 2.5
+      lines = .7
+      lines2 =.2
+      points=1.1
+      segalfa=.7
+      lee = 0
+      fam = fam
+      labsize= 2.3
       
-      plot2 = plot2 +
-        geom_text(data=da,
-                  aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        geom_text(data=da,
-                  aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      if (rv$plot2 == "plot2")
+      {
         
         
         
+        inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2")
+        
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
         
         
         
-        geom_text(data=da,
-                  aes(x=mil, y= 131),
-                  label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-25)
+        hi = ma-mi
         
-        
-        geom_text(data=da,
-                  aes(x=rv$fyear, y= 127),
-                  label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
-                  ),
-                  size=si(1.7), color=net, hjust=1, fontface="bold") +
-        
-
-        
-        
-        geom_text(data=datsc[, .SD[which.max(tyy)]],
-                  aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                  color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-        
-        
-        
-        # geom_text(data=da,
-        #           aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
-        #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-        #           alpha=.5, lineheight=.99) +
-        # 
-        # geom_text(data=da,
-        #           aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
-        #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-        #           angle=c(0), alpha=.5, lineheight=.99) 
-      
-      
-      geom_label(data=da,
-                aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
-                col= alpha(obsvari, .4), fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                alpha=.5, lineheight=.99, fill = bgc) +
-        
-        geom_label(data=da,
-                  aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
-                  col= alpha(obsvari,.4), fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                  angle=c(0), alpha=.7, lineheight=.99, fill = bgc) 
-        
-        # geom_text(data=da,
-        #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold", lineheight=1.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
-      
-      if (rv$yearc >= rv$fyear) {
-        plot2 = plot2 + 
-          geom_text(data=da,
-                    aes(x=rv$yearc, y= 123),  label = paste0(
-                      format(round(rv$rvtotal,1), nsmall=1), " Gt used from ", rv$fyear, " to " , rv$yearc
-                    )
-                    ,
-                    size=si(1.7), color=net, hjust=1, fontface="bold")
-      }     
-      
-    }
-    
-    if (rv$lang == "fin") {
-      
-      plot2 = plot2 +
-        geom_text(data=da,
-                  aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        geom_text(data=da,
-                  aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-                  color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-        
-        
-        
-        
-        geom_text(data=da,
-                  aes(x=mil, y= 131),
-                  label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
-                  size=si(1.7), color=net, hjust=0, fontface="bold") +
-        
-        
-        geom_text(data=da,
-                  aes(x=rv$fyear, y= 127),
-                  label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
-                  ),
-                  size=si(1.7), color=net, hjust=1, fontface="bold") +
-
-        
-        geom_text(data=datsc[, .SD[which.max(tyy)]],
-                  aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                  color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-        
-        geom_text(data=da,
-                  aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                  alpha=.5, lineheight=.99) +
-        
-        geom_text(data=da,
-                  aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-                  col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                  angle=c(0), alpha=.5, lineheight=.99) 
-        
-        # geom_text(data=da,
-        #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
-      
-      if (rv$yearc >= rv$fyear) {
-        plot2 = plot2 + 
+        plot2=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mil, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=.76*mi, label=c(year)),
+                    color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
           
           geom_text(data=da,
-                    aes(x=rv$yearc, y= 123),
-                    label = paste0(
-                      format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty vuodesta ", rv$fyear, " ja vuoteen " , rv$yearc
-                    ),
-                    size=si(1.7), color=net, hjust=1, fontface="bold") 
-      }     
-      
-    }
-    
-    
-    if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-      plot2 = plot2 +
-        
-        geom_label_repel(data=datsf,
-                         aes(x=year-2, y=tyy, label=paste0(labuf),
-                             color=col, group =sec, alpha=ala),
-                         size=si(labsize), fontface="bold", hjust=1,
-                         family = fam,
-                         fill=bgc,
-                         # segment.size =NA,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         # box.padding=.1,
-                         # nudge_x=18,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5
-        )
-      
-      if (rv$lang =="eng") {
-        plot2 = plot2 +
+                    aes(x=mil, y=-4), label = paste0("0"),
+                    col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+          # horizontal lines
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
           
-        
           
-          geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
-                    color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-        
-        
-      }  else if (rv$lang=="fin") {
-        plot2 = plot2 +
-      
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
           
-          geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
-                    color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
-      }
-
-    }
-    
-    gplot2 = ggplotGrob(plot2)
-    li2 = list(gplot2)
-    
-    # plotlist = c(li2)
-    
-    if (exists("plotlist")) {
-      plotlist = c(plotlist,li2)
-      
-    } else {        plotlist = c(li2)
-    
-    }
-    
-    
-    }
-    
-    
-    
-    
-    if (rv$plot3 == "plot3")
-    {
-      
-      inplot= c("pop", "dummy", "countrypop")
-      
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      
-      
-      
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-      hi = ma-mi
-      
-      plot3=   ggplot(datsf)+
-        
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mil, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=.76*mi, label=c(year)),
-                  color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-        
-        # vertical lines
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=-4), label = paste0("0"),
-                  col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-        # horizontal lines
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-        
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=103), label = paste0("Max"),
-                  col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-        
-        geom_text(data=datsss[, .SD[which.max(yy)]],
-                  aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
-                  size=si(2.2), hjust=0, fontface="bold") +
-        # yearc labels
-        # geom_text(data=da,
-        #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-        
-        geom_label_repel(data=datsc,
-                         aes(x=year+3, y=tyy,
-                             label=labu,
-                             color=col, alpha=ala*100),
-                         fill=bgc,
-                         hjust=0, size=si(labsize), fontface="bold",
-                         family = fam,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5) +
-        
-        
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
-      
-      
-      
-      if (rv$lang =="eng") {
-        
-        plot3 = plot3 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
           
           geom_text(data=da,
-                    aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+                    aes(x=mil, y=103), label = paste0("Max"),
+                    col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
-          
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-          
-         
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot3 = plot3 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-             geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-          
-        
-      
-      }
-      
-      
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-        plot3 = plot3 +
-          
-          geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(labsize), fontface="bold", hjust=1,
-                           family = fam,
+          geom_text(data=datsss[, .SD[which.max(yy)]],
+                    aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    size=si(2.2), hjust=0, fontface="bold") +
+          # yearc labels
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
                            fill=bgc,
-                           # segment.size =NA,
+                           hjust=0, size=si(labsize), 
+                           fontface="bold",
+                           family = fam,
                            segment.size =NA,
                            direction = "y",
                            label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
                            xlim=c(mil,2177),
                            label.size=0,
                            max.iter=5000,
                            force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = margin(-5,0,-5,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color="grey"), 
+            panel.background = element_rect(fill = bgc ,  color=NA)
           )
         
+        
+        
         if (rv$lang =="eng") {
-          plot3 = plot3 +
+          
+          plot2 = plot2 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
             
             
             
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=mil, y= 131),
+                      label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
+                      size=si(1.7), color=net, hjust=0, fontface="bold") +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y= 127),
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
+                      ),
+                      size=si(1.7), color=net, hjust=1, fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            
+            # geom_text(data=da,
+            #           aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
+            #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+            #           alpha=.5, lineheight=.99) +
+            # 
+            # geom_text(data=da,
+            #           aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
+            #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+          #           angle=c(0), alpha=.5, lineheight=.99) 
           
           
-        }  else if (rv$lang=="fin") {
-          plot3 = plot3 +
+          geom_label(data=da,
+                     aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
+                     col= alpha(obsvari, .4), fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                     alpha=.5, lineheight=.99, fill = bgc) +
             
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            geom_label(data=da,
+                       aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
+                       col= alpha(obsvari,.4), fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                       angle=c(0), alpha=.7, lineheight=.99, fill = bgc) 
+          
+          # geom_text(data=da,
+          #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold", lineheight=1.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
+          
+          if (rv$yearc >= rv$fyear) {
+            plot2 = plot2 + 
+              geom_text(data=da,
+                        aes(x=rv$yearc, y= 123),  label = paste0(
+                          format(round(rv$rvtotal,1), nsmall=1), " Gt used from ", rv$fyear, " to " , rv$yearc
+                        )
+                        ,
+                        size=si(1.7), color=net, hjust=1, fontface="bold")
+          }     
+          
         }
         
+        if (rv$lang == "fin") {
+          
+          plot2 = plot2 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=mil, y= 131),
+                      label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
+                      size=si(1.7), color=net, hjust=0, fontface="bold") +
+            
+            
+            geom_text(data=da,
+                      aes(x=rv$fyear, y= 127),
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
+                      ),
+                      size=si(1.7), color=net, hjust=1, fontface="bold") +
+            
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          # geom_text(data=da,
+          #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
+          
+          if (rv$yearc >= rv$fyear) {
+            plot2 = plot2 + 
+              
+              geom_text(data=da,
+                        aes(x=rv$yearc, y= 123),
+                        label = paste0(
+                          format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty vuodesta ", rv$fyear, " ja vuoteen " , rv$yearc
+                        ),
+                        size=si(1.7), color=net, hjust=1, fontface="bold") 
+          }     
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+          plot2 = plot2 +
+            
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(labsize), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          
+          if (rv$lang =="eng") {
+            plot2 = plot2 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot2 = plot2 +
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+        }
+        
+        gplot2 = ggplotGrob(plot2)
+        li2 = list(gplot2)
+        
+        # plotlist = c(li2)
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li2)
+          
+        } else {        plotlist = c(li2)
+        
+        }
+        
+        
       }
       
-      gplot3 = ggplotGrob(plot3)
-      li3 = list(gplot3)
       
-      if (exists("plotlist")) {
-        plotlist = c(plotlist,li3)
+      
+      
+      if (rv$plot3 == "plot3")
+      {
         
-      } else {        plotlist = c(li3)
-      
+        inplot= c("pop", "dummy", "countrypop")
+        
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+        hi = ma-mi
+        
+        plot3=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mil, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=.76*mi, label=c(year)),
+                    color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+          
+          geom_text(data=da,
+                    aes(x=mil, y=-4), label = paste0("0"),
+                    col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+          # horizontal lines
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+          
+          geom_text(data=da,
+                    aes(x=mil, y=103), label = paste0("Max"),
+                    col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+          
+          geom_text(data=datsss[, .SD[which.max(yy)]],
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    size=si(2.2), hjust=0, fontface="bold") +
+          # yearc labels
+          # geom_text(data=da,
+          #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+          
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
+                           fill=bgc,
+                           hjust=0, size=si(labsize), fontface="bold",
+                           family = fam,
+                           segment.size =NA,
+                           direction = "y",
+                           label.padding =0,
+                           xlim=c(mil,2177),
+                           label.size=0,
+                           max.iter=5000,
+                           force=.01, force_pull=10,box.padding=.1 ,
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = margin(-5,0,-5,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
+          )
+        
+        
+        
+        if (rv$lang =="eng") {
+          
+          plot3 = plot3 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+        }
+        
+        if (rv$lang == "fin") {
+          
+          plot3 = plot3 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+          plot3 = plot3 +
+            
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(labsize), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          
+          if (rv$lang =="eng") {
+            plot3 = plot3 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot3 = plot3 +
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+        }
+        
+        gplot3 = ggplotGrob(plot3)
+        li3 = list(gplot3)
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li3)
+          
+        } else {        plotlist = c(li3)
+        
+        }
+        
+        
       }
       
-
-    }
-    
-    
-    
-    
-    
-    
-    if (rv$plot4 == "plot4")
-    {
-      
-      inplot= c("avgfossil", "userfossil", "dummy", "countryfossil")
-      
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
       
       
       
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-      hi = ma-mi
-      
-      plot4=   ggplot(datsf)+
-        
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mil, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=.76*mi, label=c(year)),
-                  color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-        
-        # vertical lines
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=-4), label = paste0("0"),
-                  col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-        # horizontal lines
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-        
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=103), label = paste0("Max"),
-                  col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-        
-        geom_text(data=datsss[, .SD[which.max(yy)]],
-                  aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
-                  size=si(2.2), hjust=0, fontface="bold") +
-        # yearc labels
-        # geom_text(data=da,
-        #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-        
-        geom_label_repel(data=datsc,
-                         aes(x=year+3, y=tyy,
-                             label=labu,
-                             color=col, alpha=ala*100),
-                         fill=bgc,
-                         hjust=0, size=si(labsize), fontface="bold",
-                         family = fam,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5) +
-        
-        
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
       
       
-      
-      if (rv$lang =="eng") {
+      if (rv$plot4 == "plot4")
+      {
         
-        plot4 = plot4 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+        inplot= c("avgfossil", "userfossil", "dummy", "countryfossil")
+        
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+        hi = ma-mi
+        
+        plot4=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mil, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=.76*mi, label=c(year)),
+                    color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
           
           geom_text(data=da,
-                    aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+                    aes(x=mil, y=-4), label = paste0("0"),
+                    col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+          # horizontal lines
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
           
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                     size=lsi(points)) + 
           
           
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
           
           geom_text(data=da,
-                    aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
+                    aes(x=mil, y=103), label = paste0("Max"),
+                    col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
-          geom_text(data=da,
-                    aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
+          geom_text(data=datsss[, .SD[which.max(yy)]],
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    size=si(2.2), hjust=0, fontface="bold") +
+          # yearc labels
+          # geom_text(data=da,
+          #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+          
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
+                           fill=bgc,
+                           hjust=0, size=si(labsize), fontface="bold",
+                           family = fam,
+                           segment.size =NA,
+                           direction = "y",
+                           label.padding =0,
+                           xlim=c(mil,2177),
+                           label.size=0,
+                           max.iter=5000,
+                           force=.01, force_pull=10,box.padding=.1 ,
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = margin(-5,0,-5,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
+          )
+        
+        
+        
+        if (rv$lang =="eng") {
+          
+          plot4 = plot4 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
           
           # geom_text(data=da, aes(x=rv$lyear, y=122), 
           #           label = paste0(rv$lyear, " mean emissions: ", format(round(rv$fossil, 1), nsmall=1),"/",format(round(rv$pop, 1), nsmall=1),
           #                          " = ",format(round(rv$avgfossil, 1), nsmall=1)), 
           #           hjust=1, color=fpop, size= 2.1 )
-        
-        # , format(round(yy,le), decimal.mark=",", nsmall=le
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot4 = plot4 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
           
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+          # , format(round(yy,le), decimal.mark=",", nsmall=le
+        }
+        
+        if (rv$lang == "fin") {
           
-          geom_text(data=da,
-                    aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
+          plot4 = plot4 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
           
-          geom_text(data=da,
-                    aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-        
-        
-        
-      }
-      
-      
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-        plot4 = plot4 +
           
-          geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(labsize), fontface="bold", hjust=1,
-                           family = fam,
-                           fill=bgc,
-                           # segment.size =NA,
-                           segment.size =NA,
-                           direction = "y",
-                           label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
-                           xlim=c(mil,2177),
-                           label.size=0,
-                           max.iter=5000,
-                           force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
-          )
+          
+        }
         
-        if (rv$lang =="eng") {
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
           plot4 = plot4 +
             
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(labsize), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
           
+          if (rv$lang =="eng") {
+            plot4 = plot4 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot4 = plot4 +
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
           
-        }  else if (rv$lang=="fin") {
-          plot4 = plot4 +
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
         }
         
-      }
-      
-      gplot4 = ggplotGrob(plot4)
-      li4 = list(gplot4)
-      
-      if (exists("plotlist")) {
-        plotlist = c(plotlist,li4)
+        gplot4 = ggplotGrob(plot4)
+        li4 = list(gplot4)
         
-      } else {        plotlist = c(li4)
-      
-      }      
-    }
-    
-    
-    
-    
-    if (rv$plot5 == "plot5")
-    {
-      
-      inplot= c("price", "dummy")
-      
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      
-      
-      
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-      hi = ma-mi
-      
-      plot5=   ggplot(datsf)+
-        
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mil, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=.76*mi, label=c(year)),
-                  color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-        
-        # vertical lines
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=-4), label = paste0("0"),
-                  col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-        # horizontal lines
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-        
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=sec,  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        
-        
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=sec,  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=103), label = paste0("Max"),
-                  col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-        
-        geom_text(data=datsss[, .SD[which.max(yy)]],
-                  aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
-                  size=si(2.2), hjust=0, fontface="bold") +
-        # yearc labels
-        # geom_text(data=da,
-        #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-        
-        geom_label_repel(data=datsc,
-                         aes(x=year+3, y=tyy,
-                             label=labu,
-                             color=col, alpha=ala*100),
-                         fill=bgc,
-                         hjust=0, size=si(labsize), fontface="bold",
-                         family = fam,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5) +
-        
-        
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
-      
-      
-      
-      if (rv$lang =="eng") {
-        
-        plot5 = plot5 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li4)
           
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
+        } else {        plotlist = c(li4)
         
-        
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot5 = plot5 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-        
-        
-        
+        }      
       }
       
       
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-        plot5 = plot5 +
+      
+      
+      if (rv$plot5 == "plot5")
+      {
+        
+        inplot= c("price", "dummy")
+        
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        
+        
+        
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+        hi = ma-mi
+        
+        plot5=   ggplot(datsf)+
           
-          geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(labsize), fontface="bold", hjust=1,
-                           family = fam,
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mil, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=.76*mi, label=c(year)),
+                    color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+          
+          geom_text(data=da,
+                    aes(x=mil, y=-4), label = paste0("0"),
+                    col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+          # horizontal lines
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=sec,  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          
+          
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=sec,  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=sec,  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=sec, color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+          
+          geom_text(data=da,
+                    aes(x=mil, y=103), label = paste0("Max"),
+                    col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+          
+          geom_text(data=datsss[, .SD[which.max(yy)]],
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    size=si(2.2), hjust=0, fontface="bold") +
+          # yearc labels
+          # geom_text(data=da,
+          #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+          
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
                            fill=bgc,
-                           # segment.size =NA,
+                           hjust=0, size=si(labsize), fontface="bold",
+                           family = fam,
                            segment.size =NA,
                            direction = "y",
                            label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
                            xlim=c(mil,2177),
                            label.size=0,
                            max.iter=5000,
                            force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = margin(-5,0,-5,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
           )
         
+        
+        
         if (rv$lang =="eng") {
+          
           plot5 = plot5 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
             
             
             
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            geom_text(data=da,
+                      aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
           
           
-        }  else if (rv$lang=="fin") {
-          plot5 = plot5 +
-            
-            
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
         }
         
+        if (rv$lang == "fin") {
+          
+          plot5 = plot5 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+          plot5 = plot5 +
+            
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(labsize), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          
+          if (rv$lang =="eng") {
+            plot5 = plot5 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+            
+          }  else if (rv$lang=="fin") {
+            plot5 = plot5 +
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+        }
+        
+        gplot5 = ggplotGrob(plot5)
+        li5 = list(gplot5)
+        
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li5)
+          
+        } else {        plotlist = c(li5)
+        
+        }
+        
+        
       }
       
-      gplot5 = ggplotGrob(plot5)
-      li5 = list(gplot5)
-      
-
-      if (exists("plotlist")) {
-        plotlist = c(plotlist,li5)
-        
-      } else {        plotlist = c(li5)
-      
-      }
-      
-      
-    }
-    
-    
-    
-    
-    
-    if (rv$plot6 == "plot6")
-    {
-      
-      inplot= c( "averagedividend", "countrydividend", "avgcost", "netcost",
-                 "usercost","dividend","avgnetcost","countrynetcost","countrycost", "dummy")
-      
-      datsl = datsl()[sec %in% inplot & year >= mil,]
-      datsss = datsss()[sec %in% inplot & year >= mil,]
-      datsc =datsc()[sec %in% inplot,]
-      datsf =datsf()[sec %in% inplot,]
-      # ma = 141
-      mi = min(min((datsss[,tyy]), na.rm=T)*1.18,-18)
-
-      
-      
-      # mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-      hi = ma-mi
-      
-      plot6=   ggplot(datsf)+
-        
-        
-        # graph limits
-        geom_segment(data=da,
-                     aes(x=mil, xend=2100, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-        
-        geom_point(data=da,
-                   aes(x=2140,  y=100),
-                   color=teksvari, alpha=0, size=si(2))+
-        #bottom years
-        geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
-                  aes(x=year, y=.76*mi, label=c(year)),
-                  color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-        
-        # vertical lines
-        geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-                     (aes(x=year, xend = year, y=100, yend=.72*mi)), 
-                     color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=-4), label = paste0("0"),
-                  col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-        # horizontal lines
-        geom_text(data = datsss[, .SD[which.max(yy)]], 
-                  aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
-        
-             
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=75, yend=75), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=50, yend=50), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        geom_segment(data=datsc[sec=="dummy",],
-                     aes(x=mil, xend=rv$lyear, y=25, yend=25), 
-                     color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-        
-        geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-        
-        # blue line for yearc      
-        geom_segment(data=da,
-                     aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
-                     color=blu, alpha=.4, linewidth=lsi(1.4))+
-        
-        geom_point(data=datsc, 
-                   aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
-                   size=lsi(points*2), color=blu) + 
-        
-        # graphs for fyear to yearc
-        geom_area(data=datsl[year < rv$fyear+1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
-        geom_area(data=datsl[year > rv$fyear-1,], 
-                  aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-                  size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
-        
-        geom_line(data=datsl,
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
-                  linewidth=lsi(lines)) + 
-        geom_point(data=datsl, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-                   size=lsi(points)) + 
-        
-        
-        # graphs for first year to lyear 
-        geom_line(data=datsss, 
-                  aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
-                  linewidth=lsi(lines), alpha=.1) + 
-        geom_point(data=datsss, 
-                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-                   size=lsi(points), alpha=.1) + 
-        
-        # pricing and neutrality vertical lines
-        geom_segment(data=da,
-                     aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-        geom_segment(data=da, 
-                     aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-                     color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
-        
-        # observed and simulated vertical line
-        geom_segment(data=da,
-                     aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
-                     color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-        
-        geom_text(data=da,
-                  aes(x=mil, y=103), label = paste0("Max"),
-                  col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-        
-        geom_text(data=datsss[, .SD[which.max(yy)]],
-                  aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
-                  size=si(2.2), hjust=0, fontface="bold") +
-        # yearc labels
-        # geom_text(data=da,
-        #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-        #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-        
-        geom_label_repel(data=datsc,
-                         aes(x=year+3, y=tyy,
-                             label=labu,
-                             color=col, alpha=ala*100),
-                         fill=bgc,
-                         hjust=0, size=si(2.5), fontface="bold",
-                         family = fam,
-                         segment.size =NA,
-                         direction = "y",
-                         label.padding =0,
-                         xlim=c(mil,2177),
-                         label.size=0,
-                         max.iter=5000,
-                         force=.01, force_pull=10,box.padding=.1 ,
-                         seed=5) +
-        
-        
-        
-        scale_color_identity() + 
-        scale_alpha_identity() + 
-        
-        scale_fill_identity() + 
-        
-        scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-        coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-        
-        
-        theme(
-          axis.title.x=element_blank(),
-          plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-          plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-          axis.text.x=element_blank(),
-          plot.margin = margin(-5,0,-5,0),
-          panel.border = element_blank(), 
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(), 
-          axis.title.y=element_blank(),
-          axis.text.y=element_blank(),
-          plot.background = element_rect(fill =bgc, color=NA), 
-          panel.background = element_rect(fill = bgc ,  color="grey")
-        )
       
       
       
-      if (rv$lang =="eng") {
+      
+      if (rv$plot6 == "plot6")
+      {
         
-        plot6 = plot6 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+        inplot= c( "averagedividend", "countrydividend", "avgcost", "netcost",
+                   "usercost","dividend","avgnetcost","countrynetcost","countrycost", "dummy")
+        
+        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsss = datsss()[sec %in% inplot & year >= mil,]
+        datsc =datsc()[sec %in% inplot,]
+        datsf =datsf()[sec %in% inplot,]
+        # ma = 141
+        mi = min(min((datsss[,tyy]), na.rm=T)*1.18,-18)
+        
+        
+        
+        # mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+        hi = ma-mi
+        
+        plot6=   ggplot(datsf)+
+          
+          
+          # graph limits
+          geom_segment(data=da,
+                       aes(x=mil, xend=2100, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+          
+          geom_point(data=da,
+                     aes(x=2140,  y=100),
+                     color=teksvari, alpha=0, size=si(2))+
+          #bottom years
+          geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",], 
+                    aes(x=year, y=.76*mi, label=c(year)),
+                    color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+          
+          # vertical lines
+          geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+                       (aes(x=year, xend = year, y=100, yend=.72*mi)), 
+                       color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
           
           geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=max(tyy)+.09*hi, label=paste0("Year ",year, " values:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
+                    aes(x=mil, y=-4), label = paste0("0"),
+                    col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+          # horizontal lines
           geom_text(data = datsss[, .SD[which.max(yy)]], 
-                    aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
-                    label = "(Does not include costs from land use change)",  size = si(2.0), fontface="bold") + 
+                    aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") + 
           
+          
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=0, yend=0), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=100, yend=100),
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=75, yend=75), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=50, yend=50), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          geom_segment(data=datsc[sec=="dummy",],
+                       aes(x=mil, xend=rv$lyear, y=25, yend=25), 
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+          
+          geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+          
+          # blue line for yearc      
+          geom_segment(data=da,
+                       aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi), 
+                       color=blu, alpha=.4, linewidth=lsi(1.4))+
+          
+          geom_point(data=datsc, 
+                     aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala), 
+                     size=lsi(points*2), color=blu) + 
+          
+          # graphs for fyear to yearc
+          geom_area(data=datsl[year < rv$fyear+1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.15/nrow(datsc), position = 'identity') + 
+          geom_area(data=datsl[year > rv$fyear-1,], 
+                    aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+                    size=si(points), alpha=.35/nrow(datsc), position = 'identity') + 
+          
+          geom_line(data=datsl,
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala), 
+                    linewidth=lsi(lines)) + 
+          geom_point(data=datsl, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+                     size=lsi(points)) + 
+          
+          
+          # graphs for first year to lyear 
+          geom_line(data=datsss, 
+                    aes(y=tyy, x=year, group=interaction(sec, country), color=col), 
+                    linewidth=lsi(lines), alpha=.1) + 
+          geom_point(data=datsss, 
+                     aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+                     size=lsi(points), alpha=.1) + 
+          
+          # pricing and neutrality vertical lines
+          geom_segment(data=da,
+                       aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+          geom_segment(data=da, 
+                       aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+                       color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +  
+          
+          # observed and simulated vertical line
+          geom_segment(data=da,
+                       aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
+                       color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
           
           geom_text(data=da,
-                    aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
+                    aes(x=mil, y=103), label = paste0("Max"),
+                    col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
-          geom_text(data=da,
-                    aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-        
-        
-      }
-      
-      if (rv$lang == "fin") {
-        
-        plot6 = plot6 +
-          geom_text(data=da,
-                    aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+          geom_text(data=datsss[, .SD[which.max(yy)]],
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    size=si(2.2), hjust=0, fontface="bold") +
+          # yearc labels
+          # geom_text(data=da,
+          #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+          #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
           
-          geom_text(data=da,
-                    aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
-                    color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-          geom_text(data=datsc[, .SD[which.max(tyy)]],
-                    aes(x=year+2, y=  max(tyy)+.09*hi, label=paste0("Vuoden ",year, " arvot:")),
-                    color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-          
-          geom_text(data = datsss[, .SD[which.max(yy)]], 
-                    aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
-                    label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.0), fontface="bold") + 
-          
-          
-          geom_text(data=da,
-                    aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-                    alpha=.5, lineheight=.99) +
-          
-          geom_text(data=da,
-                    aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-                    col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-                    angle=c(0), alpha=.5, lineheight=.99) 
-        
-        
-        
-        
-      }
-      
-      
-      if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-        plot6 = plot6 +
-          
-          geom_label_repel(data=datsf,
-                           aes(x=year-2, y=tyy, label=paste0(labuf),
-                               color=col, group =sec, alpha=ala),
-                           size=si(2.5), fontface="bold", hjust=1,
-                           family = fam,
+          geom_label_repel(data=datsc,
+                           aes(x=year+3, y=tyy,
+                               label=labu,
+                               color=col, alpha=ala*100),
                            fill=bgc,
-                           # segment.size =NA,
+                           hjust=0, size=si(2.5), fontface="bold",
+                           family = fam,
                            segment.size =NA,
                            direction = "y",
                            label.padding =0,
-                           # box.padding=.1,
-                           # nudge_x=18,
                            xlim=c(mil,2177),
                            label.size=0,
                            max.iter=5000,
                            force=.01, force_pull=10,box.padding=.1 ,
-                           seed=5
+                           seed=5) +
+          
+          
+          
+          scale_color_identity() + 
+          scale_alpha_identity() + 
+          
+          scale_fill_identity() + 
+          
+          scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+          coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+          
+          
+          theme(
+            axis.title.x=element_blank(),
+            plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+            plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+            axis.text.x=element_blank(),
+            plot.margin = margin(-5,0,-5,0),
+            panel.border = element_blank(), 
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(), 
+            axis.title.y=element_blank(),
+            axis.text.y=element_blank(),
+            plot.background = element_rect(fill =bgc, color=NA), 
+            panel.background = element_rect(fill = bgc ,  color="grey")
           )
         
+        
+        
         if (rv$lang =="eng") {
+          
           plot6 = plot6 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Pricing starts: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutrality: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=max(tyy)+.09*hi, label=paste0("Year ",year, " values:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data = datsss[, .SD[which.max(yy)]], 
+                      aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
+                      label = "(Does not include costs from land use change)",  size = si(2.0), fontface="bold") + 
             
             
+            geom_text(data=da,
+                      aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
             
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+.09*hi, label=paste0("Year ",year, " values:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            geom_text(data=da,
+                      aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
           
           
-        }  else if (rv$lang=="fin") {
+        }
+        
+        if (rv$lang == "fin") {
+          
+          plot6 = plot6 +
+            geom_text(data=da,
+                      aes(x=rv$fyear, y=prinet), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            
+            geom_text(data=da,
+                      aes(x=rv$lyear, y=prinet), label =paste0("Neutraalius: ", rv$lyear),
+                      color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+            geom_text(data=datsc[, .SD[which.max(tyy)]],
+                      aes(x=year+2, y=  max(tyy)+.09*hi, label=paste0("Vuoden ",year, " arvot:")),
+                      color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+            
+            geom_text(data = datsss[, .SD[which.max(yy)]], 
+                      aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
+                      label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.0), fontface="bold") + 
+            
+            
+            geom_text(data=da,
+                      aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+                      alpha=.5, lineheight=.99) +
+            
+            geom_text(data=da,
+                      aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+                      col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+                      angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+          
+          
+        }
+        
+        
+        if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
           plot6 = plot6 +
             
+            geom_label_repel(data=datsf,
+                             aes(x=year-2, y=tyy, label=paste0(labuf),
+                                 color=col, group =sec, alpha=ala),
+                             size=si(2.5), fontface="bold", hjust=1,
+                             family = fam,
+                             fill=bgc,
+                             # segment.size =NA,
+                             segment.size =NA,
+                             direction = "y",
+                             label.padding =0,
+                             # box.padding=.1,
+                             # nudge_x=18,
+                             xlim=c(mil,2177),
+                             label.size=0,
+                             max.iter=5000,
+                             force=.01, force_pull=10,box.padding=.1 ,
+                             seed=5
+            )
+          
+          if (rv$lang =="eng") {
+            plot6 = plot6 +
+              
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+.09*hi, label=paste0("Year ",year, " values:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
             
-            geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+.09*hi, label=paste0("Vuoden ",year, " arvot:")), 
-                      color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+            
+          }  else if (rv$lang=="fin") {
+            plot6 = plot6 +
+              
+              
+              geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+.09*hi, label=paste0("Vuoden ",year, " arvot:")), 
+                        color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam) 
+          }
+          
+        }
+        
+        gplot6 = ggplotGrob(plot6)
+        li6 = list(gplot6)
+        
+        if (exists("plotlist")) {
+          plotlist = c(plotlist,li6)
+          
+        } else {        plotlist = c(li6)
+        
+        }
+        
+        
+      }
+      
+      
+      
+      
+      
+      eplot = ggplot(NULL, aes(color = ""))+
+        geom_blank()+
+        scale_color_manual(values = "black", labels = "Something")+
+        guides(color = guide_legend())+
+        theme(
+          plot.background = element_rect(fill =bgc, color=NA),
+          panel.background = element_rect(fill = bgc ,  color="grey")
+        )
+      geplot = ggplotGrob(eplot)
+      lig = list(geplot)
+      
+      if (exists("plotlist")) {
+        plotlist = plotlist
+        
+      } else {        plotlist = c(lig)
+      
+      }
+      
+      
+      pll = length(plotlist)
+      #
+      count = 1
+      # if (pll >= 3) {
+      if (input$view==2) {
+        
+        if (pll==1){
+          lay=rbind(c(1))
+          plotlist = c(plotlist)
+          
+        } else if (pll ==2) {
+          lay = rbind(c(1,2))
+          plotlist = c(plotlist)
+        } else if (pll==3) {
+          lay = rbind(c(1,2), c(3,4))
+          plotlist = c(plotlist, lig)
+          
+        } else if (pll==4) {
+          lay = rbind(c(1,2), c(3,4))
+        } else if (pll==5) {
+          lay = rbind(c(1,2), c(3,4), c(5,6))
+          plotlist = c(plotlist, lig)
+          
+        }
+      } else if (input$view==3) {
+        
+        if (pll==1){
+          lay=rbind(c(1))
+          plotlist = c(plotlist)
+          count = 1
+          
+        } else if (pll ==2) {
+          lay = rbind(c(1), c(2))
+          plotlist = c(plotlist)
+          count = 2
+          
+        } else if (pll==3) {
+          lay = rbind(c(1), c(2), c(3))
+          # plotlist = c(plotlist, lig)
+          plotlist = c(plotlist)
+          count = 3
+          
+          
+        } else if (pll==4) {
+          lay = rbind(c(1), c(2), c(3), c(4))
+          plotlist = c(plotlist)
+          count = 4
+          
+          
+        } else if (pll==5) {
+          lay = rbind(c(1), c(2), c(3), c(4), c(5))
+          plotlist = c(plotlist)
+          count = 5
+          
+          
+        }
+      } else if (input$view==4) {
+        
+        if (pll==1){
+          lay=rbind(c(1))
+          plotlist = c(plotlist)
+          count = 1
+          
+        } else if (pll ==2) {
+          lay = rbind(c(1,2))
+          plotlist = c(plotlist)
+          count = 2
+          
+        } else if (pll==3) {
+          lay =  rbind(c(1,2,3))
+          # plotlist = c(plotlist, lig)
+          plotlist = c(plotlist)
+          count = 3
+          
+          
+        } else if (pll==4) {
+          lay =  rbind(c(1,2,3,4))
+          plotlist = c(plotlist)
+          count = 4
+          
+          
+        } else if (pll==5) {
+          lay =  rbind(c(1,2,3,4,5))
+          plotlist = c(plotlist)
+          count = 5
+          
+          
         }
         
       }
       
-      gplot6 = ggplotGrob(plot6)
-      li6 = list(gplot6)
+      # rv$pll =pll
+      # }
       
-      if (exists("plotlist")) {
-        plotlist = c(plotlist,li6)
-        
-      } else {        plotlist = c(li6)
+      plotx = grid.arrange(grobs=plotlist, layout_matrix=lay)
       
-      }
+      plotx
       
-      
-    }
-    
-  
-    
-    
-    
-    eplot = ggplot(NULL, aes(color = ""))+
-      geom_blank()+
-      scale_color_manual(values = "black", labels = "Something")+
-      guides(color = guide_legend())+
-      theme(
-        plot.background = element_rect(fill =bgc, color=NA),
-        panel.background = element_rect(fill = bgc ,  color="grey")
-      )
-    geplot = ggplotGrob(eplot)
-    lig = list(geplot)
-    
-    if (exists("plotlist")) {
-      plotlist = plotlist
-      
-    } else {        plotlist = c(lig)
-    
-    }
-    
-    
-    pll = length(plotlist)
-    #
-    count = 1
-    # if (pll >= 3) {
-    if (input$view==2) {
-      
-      if (pll==1){
-        lay=rbind(c(1))
-        plotlist = c(plotlist)
-        
-      } else if (pll ==2) {
-        lay = rbind(c(1,2))
-        plotlist = c(plotlist)
-      } else if (pll==3) {
-        lay = rbind(c(1,2), c(3,4))
-        plotlist = c(plotlist, lig)
-        
-      } else if (pll==4) {
-        lay = rbind(c(1,2), c(3,4))
-      } else if (pll==5) {
-        lay = rbind(c(1,2), c(3,4), c(5,6))
-        plotlist = c(plotlist, lig)
-        
-      }
-    } else if (input$view==3) {
-      
-      if (pll==1){
-        lay=rbind(c(1))
-        plotlist = c(plotlist)
-        count = 1
-        
-      } else if (pll ==2) {
-        lay = rbind(c(1), c(2))
-        plotlist = c(plotlist)
-        count = 2
-        
-      } else if (pll==3) {
-        lay = rbind(c(1), c(2), c(3))
-        # plotlist = c(plotlist, lig)
-        plotlist = c(plotlist)
-        count = 3
-        
-        
-      } else if (pll==4) {
-        lay = rbind(c(1), c(2), c(3), c(4))
-        plotlist = c(plotlist)
-        count = 4
-        
-        
-      } else if (pll==5) {
-        lay = rbind(c(1), c(2), c(3), c(4), c(5))
-        plotlist = c(plotlist)
-        count = 5
-        
-        
-      }
-    } else if (input$view==4) {
-      
-      if (pll==1){
-        lay=rbind(c(1))
-        plotlist = c(plotlist)
-        count = 1
-        
-      } else if (pll ==2) {
-        lay = rbind(c(1,2))
-        plotlist = c(plotlist)
-        count = 2
-        
-      } else if (pll==3) {
-        lay =  rbind(c(1,2,3))
-        # plotlist = c(plotlist, lig)
-        plotlist = c(plotlist)
-        count = 3
-        
-        
-      } else if (pll==4) {
-        lay =  rbind(c(1,2,3,4))
-        plotlist = c(plotlist)
-        count = 4
-        
-        
-      } else if (pll==5) {
-        lay =  rbind(c(1,2,3,4,5))
-        plotlist = c(plotlist)
-        count = 5
-        
-        
-      }
-      
-    }
-    
-    # rv$pll =pll
-    # }
-   
-    plotx = grid.arrange(grobs=plotlist, layout_matrix=lay)
-    
-    plotx
+    })
     
   })
-  
-  })
-  
-{
   
   {
-  #   sec4 = reactive({
-  #   # rv$pll = length(unique(datsss()$labbi))
-  #    
-  #    # rv$trig
-  #   if (input$autodraw==TRUE) {
-  #     rv$pll = length(unique(datsl()$labbi))
-  #   } else
-  #   {
-  #     eventReactive(input$go==TRUE, {
-  #       req(datsss())
-  #       
-  #       rv$pll = length(unique(datsl()$labbi))
-  #       rv$plll = length(unique(datsl()$labbi))
-  #       # rv$plll = rv$pll
-  # 
-  #     })
-  # 
-  #   }
-  #   withProgress( message="Drawing graph, please wait",{
-  # 
-  #     if (input$view ==3) {
-  # 
-  # 
-  #       if (rv$pll <7) {
-  #         si =
-  #           function(per) {
-  #             per*session$clientData$output_plotk_width*session$clientData$pixelratio/.8/
-  #               (570+.15*session$clientData$output_plotk_width)
-  #           }
-  #         # }
-  #         if (input$isMobile=="FALSE") {
-  # 
-  #           lsi =
-  #             function(per) {
-  #               per*session$clientData$output_plotk_width*session$clientData$pixelratio/500
-  #             }
-  #         }
-  # 
-  #         if (input$isMobile=="TRUE") {
-  # 
-  #           lsi =
-  #             function(per) {
-  #               per*session$clientData$output_plotk_width*session$clientData$pixelratio/1500
-  #             }
-  #         }
-  #       }}
-  # 
-  #     if (input$view ==4) {
-  # 
-  # 
-  # 
-  #       if (rv$pll <7) {
-  #         si =
-  #           function(per) {
-  #             per*session$clientData$output_plotl_height*session$clientData$pixelratio/.5/
-  #               (570+.15*session$clientData$output_plotl_height)
-  #           }
-  #         # }
-  #         if (input$isMobile=="FALSE") {
-  # 
-  #           lsi =
-  #             function(per) {
-  #               per*session$clientData$output_plotl_height*session$clientData$pixelratio/250
-  #             }
-  #         }
-  # 
-  #         if (input$isMobile=="TRUE") {
-  # 
-  #           lsi =
-  #             function(per) {
-  #               per*session$clientData$output_plotl_height*session$clientData$pixelratio/750
-  #             }
-  #         }
-  #       }
-  #     }
-  # 
-  # 
-  #     # if (rv$pll <7) {
-  #     #   si =
-  #     #     function(per) {
-  #     #       per*session$clientData$output_plotl_width*session$clientData$pixelratio/.8/
-  #     #         (570+.15*session$clientData$output_plotl_width)
-  #     #     }
-  #     #   # }
-  #     #   if (input$isMobile=="FALSE") {
-  #     #
-  #     #     lsi =
-  #     #       function(per) {
-  #     #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/500
-  #     #       }
-  #     #   }
-  #     #
-  #     #   if (input$isMobile=="TRUE") {
-  #     #
-  #     #     lsi =
-  #     #       function(per) {
-  #     #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/1500
-  #     #       }
-  #     #   }
-  #     # }
-  # 
-  # 
-  # 
-  # 
-  # 
-  #     ma = 141
-  #     # hi = ma - mi
-  # 
-  # 
-  #     mil =rv$ffyear
-  # 
-  # 
-  # 
-  # 
-  #     mix = mil
-  #     max = 2135
-  # 
-  #     bgc = rv$bgc
-  #     teksvari = rv$teksvari
-  #     obsvari = rv$obsvari
-  # 
-  # 
-  #     ly = 1991
-  #     ala = .3
-  #     dis = 16.8
-  #     seg = .3
-  #     scas = 2.5
-  #     lines = .7
-  #     lines2 =.2
-  #     points=1.1
-  #     segalfa=.7
-  #     lee = 0
-  #     fam = fam
-  #     labsize= 2.3
-  # 
-  #     if (rv$plot2 == "plot2")
-  #     {
-  # 
-  # 
-  # 
-  #       inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2")
-  # 
-  #       datsl = datsl()[sec %in% inplot & year >= mil,]
-  #       datsss = datsss()[sec %in% inplot & year >= mil,]
-  #       datsc =datsc()[sec %in% inplot,]
-  #       datsf =datsf()[sec %in% inplot,]
-  # 
-  # 
-  # 
-  #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-25)
-  #       hi = ma-mi
-  #       
-  #       plot2=   ggplot(datsf)+
-  # 
-  # 
-  #         # graph limits
-  #         geom_segment(data=da,
-  #                      aes(x=mil, xend=2100, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-  # 
-  #         geom_point(data=da,
-  #                    aes(x=2140,  y=100),
-  #                    color=teksvari, alpha=0, size=si(2))+
-  #         #bottom years
-  #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
-  #                   aes(x=year, y=.76*mi, label=c(year)),
-  #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-  # 
-  #         # vertical lines
-  #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-  #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
-  #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=-4), label = paste0("0"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-  #         # horizontal lines
-  #         geom_text(data = datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
-  # 
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  # 
-  #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-  # 
-  #         # blue line for yearc
-  #         geom_segment(data=da,
-  #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
-  #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
-  # 
-  # 
-  # 
-  #         geom_point(data=datsc,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
-  #                    size=lsi(points*2), color=blu) +
-  # 
-  #         # graphs for fyear to yearc
-  #         geom_area(data=datsl[year < rv$fyear+1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
-  #         geom_area(data=datsl[year > rv$fyear-1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
-  # 
-  #         geom_line(data=datsl,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                   linewidth=lsi(lines)) +
-  #         geom_point(data=datsl,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-  #                    size=lsi(points)) +
-  # 
-  # 
-  #         # graphs for first year to lyear
-  #         geom_line(data=datsss,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
-  #                   linewidth=lsi(lines), alpha=.1) +
-  #         geom_point(data=datsss,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                    size=lsi(points), alpha=.1) +
-  # 
-  # 
-  #         # pricing and neutrality vertical lines
-  #         geom_segment(data=da,
-  #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  #         geom_segment(data=da,
-  #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  # 
-  #         # observed and simulated vertical line
-  #         geom_segment(data=da,
-  #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
-  #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=103), label = paste0("Max"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-  # 
-  #         geom_text(data=datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
-  #                   size=si(2.2), hjust=0, fontface="bold") +
-  #         # yearc labels
-  #         geom_label_repel(data=datsc,
-  #                          aes(x=year+3, y=tyy,
-  #                              label=labu,
-  #                              color=col, alpha=ala*100),
-  #                          fill=bgc,
-  #                          hjust=0, size=si(labsize),
-  #                          fontface="bold",
-  #                          family = fam,
-  #                          segment.size =NA,
-  #                          direction = "y",
-  #                          label.padding =0,
-  #                          xlim=c(mil,2177),
-  #                          label.size=0,
-  #                          max.iter=5000,
-  #                          force=.01, force_pull=10,box.padding=.1 ,
-  #                          seed=5) +
-  # 
-  # 
-  # 
-  #         scale_color_identity() +
-  #         scale_alpha_identity() +
-  # 
-  #         scale_fill_identity() +
-  # 
-  #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-  #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-  # 
-  # 
-  #         theme(
-  #           axis.title.x=element_blank(),
-  #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-  #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-  #           axis.text.x=element_blank(),
-  #           plot.margin = margin(-5,0,-5,0),
-  #           panel.border = element_blank(),
-  #           panel.grid.major = element_blank(),
-  #           panel.grid.minor = element_blank(),
-  #           axis.title.y=element_blank(),
-  #           axis.text.y=element_blank(),
-  #           plot.background = element_rect(fill =bgc, color="grey"),
-  #           panel.background = element_rect(fill = bgc ,  color=NA)
-  #         )
-  # 
-  # 
-  # 
-  #       if (rv$lang =="eng") {
-  # 
-  #         plot2 = plot2 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=mil, y= 131),
-  #                     label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
-  #                     size=si(1.7), color=net, hjust=0, fontface="bold") +
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y= 127),
-  #                     label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
-  #                     ),
-  #                     size=si(1.7), color=net, hjust=1, fontface="bold") +
-  # 
-  # 
-  # 
-  # 
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  # 
-  # 
-  #           # geom_text(data=da,
-  #           #           aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
-  #           #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #           #           alpha=.5, lineheight=.99) +
-  #           #
-  #           # geom_text(data=da,
-  #           #           aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
-  #           #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #         #           angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  #         geom_label(data=da,
-  #                    aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
-  #                    col= alpha(obsvari, .4), fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                    alpha=.5, lineheight=.99, fill = bgc) +
-  # 
-  #           geom_label(data=da,
-  #                      aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
-  #                      col= alpha(obsvari,.4), fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                      angle=c(0), alpha=.7, lineheight=.99, fill = bgc)
-  # 
-  #         # geom_text(data=da,
-  #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-  #         #           col=teksvari, fontface="bold", lineheight=1.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
-  # 
-  #         if (rv$yearc >= rv$fyear) {
-  #           plot2 = plot2 +
-  #             geom_text(data=da,
-  #                       aes(x=rv$yearc, y= 123),  label = paste0(
-  #                         format(round(rv$rvtotal,1), nsmall=1), " Gt used from ", rv$fyear, " to " , rv$yearc
-  #                       )
-  #                       ,
-  #                       size=si(1.7), color=net, hjust=1, fontface="bold")
-  #         }
-  # 
-  #       }
-  # 
-  #       if (rv$lang == "fin") {
-  # 
-  #         plot2 = plot2 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  # 
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=mil, y= 131),
-  #                     label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
-  #                     size=si(1.7), color=net, hjust=0, fontface="bold") +
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y= 127),
-  #                     label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
-  #                     ),
-  #                     size=si(1.7), color=net, hjust=1, fontface="bold") +
-  # 
-  # 
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  #         # geom_text(data=da,
-  #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-  #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
-  # 
-  #         if (rv$yearc >= rv$fyear) {
-  #           plot2 = plot2 +
-  # 
-  #             geom_text(data=da,
-  #                       aes(x=rv$yearc, y= 123),
-  #                       label = paste0(
-  #                         format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty vuodesta ", rv$fyear, " ja vuoteen " , rv$yearc
-  #                       ),
-  #                       size=si(1.7), color=net, hjust=1, fontface="bold")
-  #         }
-  # 
-  #       }
-  # 
-  # 
-  #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-  #         plot2 = plot2 +
-  # 
-  #           geom_label_repel(data=datsf,
-  #                            aes(x=year-2, y=tyy, label=paste0(labuf),
-  #                                color=col, group =sec, alpha=ala),
-  #                            size=si(labsize), fontface="bold", hjust=1,
-  #                            family = fam,
-  #                            fill=bgc,
-  #                            # segment.size =NA,
-  #                            segment.size =NA,
-  #                            direction = "y",
-  #                            label.padding =0,
-  #                            # box.padding=.1,
-  #                            # nudge_x=18,
-  #                            xlim=c(mil,2177),
-  #                            label.size=0,
-  #                            max.iter=5000,
-  #                            force=.01, force_pull=10,box.padding=.1 ,
-  #                            seed=5
-  #           )
-  # 
-  #         if (rv$lang =="eng") {
-  #           plot2 = plot2 +
-  # 
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  # 
-  # 
-  #         }  else if (rv$lang=="fin") {
-  #           plot2 = plot2 +
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  #         }
-  # 
-  #       }
-  # 
-  #       gplot2 = ggplotGrob(plot2)
-  #       li2 = list(gplot2)
-  # 
-  #       # plotlist = c(li2)
-  # 
-  #       if (exists("plotlist")) {
-  #         plotlist = c(plotlist,li2)
-  # 
-  #       } else {        plotlist = c(li2)
-  # 
-  #       }
-  # 
-  # 
-  #     }
-  # 
-  # 
-  # 
-  # 
-  #     if (rv$plot3 == "plot3")
-  #     {
-  # 
-  #       inplot= c("pop", "dummy", "countrypop")
-  # 
-  #       datsl = datsl()[sec %in% inplot & year >= mil,]
-  #       datsss = datsss()[sec %in% inplot & year >= mil,]
-  #       datsc =datsc()[sec %in% inplot,]
-  #       datsf =datsf()[sec %in% inplot,]
-  # 
-  # 
-  # 
-  #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-  #       hi = ma-mi
-  #       
-  #       plot3=   ggplot(datsf)+
-  # 
-  # 
-  #         # graph limits
-  #         geom_segment(data=da,
-  #                      aes(x=mil, xend=2100, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-  # 
-  #         geom_point(data=da,
-  #                    aes(x=2140,  y=100),
-  #                    color=teksvari, alpha=0, size=si(2))+
-  #         #bottom years
-  #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
-  #                   aes(x=year, y=.76*mi, label=c(year)),
-  #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-  # 
-  #         # vertical lines
-  #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-  #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
-  #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=-4), label = paste0("0"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-  #         # horizontal lines
-  #         geom_text(data = datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  # 
-  #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-  # 
-  #         # blue line for yearc
-  #         geom_segment(data=da,
-  #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
-  #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
-  # 
-  #         geom_point(data=datsc,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
-  #                    size=lsi(points*2), color=blu) +
-  # 
-  #         # graphs for fyear to yearc
-  #         geom_area(data=datsl[year < rv$fyear+1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
-  #         geom_area(data=datsl[year > rv$fyear-1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
-  # 
-  #         geom_line(data=datsl,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                   linewidth=lsi(lines)) +
-  #         geom_point(data=datsl,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-  #                    size=lsi(points)) +
-  # 
-  # 
-  #         # graphs for first year to lyear
-  #         geom_line(data=datsss,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
-  #                   linewidth=lsi(lines), alpha=.1) +
-  #         geom_point(data=datsss,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                    size=lsi(points), alpha=.1) +
-  # 
-  # 
-  #         # pricing and neutrality vertical lines
-  #         geom_segment(data=da,
-  #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  #         geom_segment(data=da,
-  #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  # 
-  #         # observed and simulated vertical line
-  #         geom_segment(data=da,
-  #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
-  #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=103), label = paste0("Max"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-  # 
-  #         geom_text(data=datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
-  #                   size=si(2.2), hjust=0, fontface="bold") +
-  #         # yearc labels
-  #         # geom_text(data=da,
-  #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-  #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-  # 
-  #         geom_label_repel(data=datsc,
-  #                          aes(x=year+3, y=tyy,
-  #                              label=labu,
-  #                              color=col, alpha=ala*100),
-  #                          fill=bgc,
-  #                          hjust=0, size=si(labsize), fontface="bold",
-  #                          family = fam,
-  #                          segment.size =NA,
-  #                          direction = "y",
-  #                          label.padding =0,
-  #                          xlim=c(mil,2177),
-  #                          label.size=0,
-  #                          max.iter=5000,
-  #                          force=.01, force_pull=10,box.padding=.1 ,
-  #                          seed=5) +
-  # 
-  # 
-  # 
-  #         scale_color_identity() +
-  #         scale_alpha_identity() +
-  # 
-  #         scale_fill_identity() +
-  # 
-  #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-  #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-  # 
-  # 
-  #         theme(
-  #           axis.title.x=element_blank(),
-  #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-  #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-  #           axis.text.x=element_blank(),
-  #           plot.margin = margin(-5,0,-5,0),
-  #           panel.border = element_blank(),
-  #           panel.grid.major = element_blank(),
-  #           panel.grid.minor = element_blank(),
-  #           axis.title.y=element_blank(),
-  #           axis.text.y=element_blank(),
-  #           plot.background = element_rect(fill =bgc, color=NA),
-  #           panel.background = element_rect(fill = bgc ,  color="grey")
-  #         )
-  # 
-  # 
-  # 
-  #       if (rv$lang =="eng") {
-  # 
-  #         plot3 = plot3 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  #       }
-  # 
-  #       if (rv$lang == "fin") {
-  # 
-  #         plot3 = plot3 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  # 
-  #       }
-  # 
-  # 
-  #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-  #         plot3 = plot3 +
-  # 
-  #           geom_label_repel(data=datsf,
-  #                            aes(x=year-2, y=tyy, label=paste0(labuf),
-  #                                color=col, group =sec, alpha=ala),
-  #                            size=si(labsize), fontface="bold", hjust=1,
-  #                            family = fam,
-  #                            fill=bgc,
-  #                            # segment.size =NA,
-  #                            segment.size =NA,
-  #                            direction = "y",
-  #                            label.padding =0,
-  #                            # box.padding=.1,
-  #                            # nudge_x=18,
-  #                            xlim=c(mil,2177),
-  #                            label.size=0,
-  #                            max.iter=5000,
-  #                            force=.01, force_pull=10,box.padding=.1 ,
-  #                            seed=5
-  #           )
-  # 
-  #         if (rv$lang =="eng") {
-  #           plot3 = plot3 +
-  # 
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  # 
-  # 
-  #         }  else if (rv$lang=="fin") {
-  #           plot3 = plot3 +
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  #         }
-  # 
-  #       }
-  # 
-  #       gplot3 = ggplotGrob(plot3)
-  #       li3 = list(gplot3)
-  # 
-  #       if (exists("plotlist")) {
-  #         plotlist = c(plotlist,li3)
-  # 
-  #       } else {        plotlist = c(li3)
-  # 
-  #       }
-  # 
-  # 
-  #     }
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  #     if (rv$plot4 == "plot4")
-  #     {
-  # 
-  #       inplot= c("avgfossil", "userfossil", "dummy", "countryfossil")
-  # 
-  #       datsl = datsl()[sec %in% inplot & year >= mil,]
-  #       datsss = datsss()[sec %in% inplot & year >= mil,]
-  #       datsc =datsc()[sec %in% inplot,]
-  #       datsf =datsf()[sec %in% inplot,]
-  # 
-  # 
-  # 
-  #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-  #       hi = ma-mi
-  #       
-  #       plot4=   ggplot(datsf)+
-  # 
-  # 
-  #         # graph limits
-  #         geom_segment(data=da,
-  #                      aes(x=mil, xend=2100, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-  # 
-  #         geom_point(data=da,
-  #                    aes(x=2140,  y=100),
-  #                    color=teksvari, alpha=0, size=si(2))+
-  #         #bottom years
-  #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
-  #                   aes(x=year, y=.76*mi, label=c(year)),
-  #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-  # 
-  #         # vertical lines
-  #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-  #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
-  #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=-4), label = paste0("0"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-  #         # horizontal lines
-  #         geom_text(data = datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  # 
-  #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-  # 
-  #         # blue line for yearc
-  #         geom_segment(data=da,
-  #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
-  #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
-  # 
-  #         geom_point(data=datsc,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
-  #                    size=lsi(points*2), color=blu) +
-  # 
-  #         # graphs for fyear to yearc
-  #         geom_area(data=datsl[year < rv$fyear+1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
-  #         geom_area(data=datsl[year > rv$fyear-1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
-  # 
-  #         geom_line(data=datsl,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                   linewidth=lsi(lines)) +
-  #         geom_point(data=datsl,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-  #                    size=lsi(points)) +
-  # 
-  # 
-  #         # graphs for first year to lyear
-  #         geom_line(data=datsss,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
-  #                   linewidth=lsi(lines), alpha=.1) +
-  #         geom_point(data=datsss,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                    size=lsi(points), alpha=.1) +
-  # 
-  # 
-  #         # pricing and neutrality vertical lines
-  #         geom_segment(data=da,
-  #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  #         geom_segment(data=da,
-  #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  # 
-  #         # observed and simulated vertical line
-  #         geom_segment(data=da,
-  #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
-  #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=103), label = paste0("Max"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-  # 
-  #         geom_text(data=datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
-  #                   size=si(2.2), hjust=0, fontface="bold") +
-  #         # yearc labels
-  #         # geom_text(data=da,
-  #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-  #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-  # 
-  #         geom_label_repel(data=datsc,
-  #                          aes(x=year+3, y=tyy,
-  #                              label=labu,
-  #                              color=col, alpha=ala*100),
-  #                          fill=bgc,
-  #                          hjust=0, size=si(labsize), fontface="bold",
-  #                          family = fam,
-  #                          segment.size =NA,
-  #                          direction = "y",
-  #                          label.padding =0,
-  #                          xlim=c(mil,2177),
-  #                          label.size=0,
-  #                          max.iter=5000,
-  #                          force=.01, force_pull=10,box.padding=.1 ,
-  #                          seed=5) +
-  # 
-  # 
-  # 
-  #         scale_color_identity() +
-  #         scale_alpha_identity() +
-  # 
-  #         scale_fill_identity() +
-  # 
-  #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-  #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-  # 
-  # 
-  #         theme(
-  #           axis.title.x=element_blank(),
-  #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-  #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-  #           axis.text.x=element_blank(),
-  #           plot.margin = margin(-5,0,-5,0),
-  #           panel.border = element_blank(),
-  #           panel.grid.major = element_blank(),
-  #           panel.grid.minor = element_blank(),
-  #           axis.title.y=element_blank(),
-  #           axis.text.y=element_blank(),
-  #           plot.background = element_rect(fill =bgc, color=NA),
-  #           panel.background = element_rect(fill = bgc ,  color="grey")
-  #         )
-  # 
-  # 
-  # 
-  #       if (rv$lang =="eng") {
-  # 
-  #         plot4 = plot4 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da, aes(x=rv$lyear, y=122),
-  #                     label = paste0(rv$lyear, " mean emissions: ", format(round(rv$fossil, 1), nsmall=1),"/",format(round(rv$pop, 1), nsmall=1),
-  #                                    " = ",format(round(rv$avgfossil, 1), nsmall=1)),
-  #                     hjust=1, color=fpop, size= 2.1 )
-  # 
-  #         # , format(round(yy,le), decimal.mark=",", nsmall=le
-  #       }
-  # 
-  #       if (rv$lang == "fin") {
-  # 
-  #         plot4 = plot4 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  # 
-  #       }
-  # 
-  # 
-  #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-  #         plot4 = plot4 +
-  # 
-  #           geom_label_repel(data=datsf,
-  #                            aes(x=year-2, y=tyy, label=paste0(labuf),
-  #                                color=col, group =sec, alpha=ala),
-  #                            size=si(labsize), fontface="bold", hjust=1,
-  #                            family = fam,
-  #                            fill=bgc,
-  #                            # segment.size =NA,
-  #                            segment.size =NA,
-  #                            direction = "y",
-  #                            label.padding =0,
-  #                            # box.padding=.1,
-  #                            # nudge_x=18,
-  #                            xlim=c(mil,2177),
-  #                            label.size=0,
-  #                            max.iter=5000,
-  #                            force=.01, force_pull=10,box.padding=.1 ,
-  #                            seed=5
-  #           )
-  # 
-  #         if (rv$lang =="eng") {
-  #           plot4 = plot4 +
-  # 
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  # 
-  # 
-  #         }  else if (rv$lang=="fin") {
-  #           plot4 = plot4 +
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  #         }
-  # 
-  #       }
-  # 
-  #       gplot4 = ggplotGrob(plot4)
-  #       li4 = list(gplot4)
-  # 
-  #       if (exists("plotlist")) {
-  #         plotlist = c(plotlist,li4)
-  # 
-  #       } else {        plotlist = c(li4)
-  # 
-  #       }
-  #     }
-  # 
-  # 
-  # 
-  # 
-  #     if (rv$plot5 == "plot5")
-  #     {
-  # 
-  #       inplot= c("price", "dummy")
-  # 
-  #       datsl = datsl()[sec %in% inplot & year >= mil,]
-  #       datsss = datsss()[sec %in% inplot & year >= mil,]
-  #       datsc =datsc()[sec %in% inplot,]
-  #       datsf =datsf()[sec %in% inplot,]
-  # 
-  # 
-  # 
-  #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-  #       hi = ma-mi
-  #       
-  #       plot5=   ggplot(datsf)+
-  # 
-  # 
-  #         # graph limits
-  #         geom_segment(data=da,
-  #                      aes(x=mil, xend=2100, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-  # 
-  #         geom_point(data=da,
-  #                    aes(x=2140,  y=100),
-  #                    color=teksvari, alpha=0, size=si(2))+
-  #         #bottom years
-  #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
-  #                   aes(x=year, y=.76*mi, label=c(year)),
-  #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-  # 
-  #         # vertical lines
-  #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-  #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
-  #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=-4), label = paste0("0"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-  #         # horizontal lines
-  #         geom_text(data = datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  # 
-  #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-  # 
-  #         # blue line for yearc
-  #         geom_segment(data=da,
-  #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
-  #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
-  # 
-  #         geom_point(data=datsc,
-  #                    aes(y=tyy, x=year, group=sec,  alpha=ala),
-  #                    size=lsi(points*2), color=blu) +
-  # 
-  #         # graphs for fyear to yearc
-  # 
-  # 
-  #         geom_area(data=datsl[year < rv$fyear+1,],
-  #                   aes(y=tyy, x=year, group=sec,  fill=col),
-  #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
-  #         geom_area(data=datsl[year > rv$fyear-1,],
-  #                   aes(y=tyy, x=year, group=sec,  fill=col),
-  #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
-  # 
-  #         geom_line(data=datsl,
-  #                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
-  #                   linewidth=lsi(lines)) +
-  #         geom_point(data=datsl,
-  #                    aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
-  #                    size=lsi(points)) +
-  # 
-  # 
-  #         # graphs for first year to lyear
-  #         geom_line(data=datsss,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
-  #                   linewidth=lsi(lines), alpha=.1) +
-  #         geom_point(data=datsss,
-  #                    aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
-  #                    size=lsi(points), alpha=.1) +
-  # 
-  # 
-  #         # pricing and neutrality vertical lines
-  #         geom_segment(data=da,
-  #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  #         geom_segment(data=da,
-  #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  # 
-  #         # observed and simulated vertical line
-  #         geom_segment(data=da,
-  #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
-  #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=103), label = paste0("Max"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-  # 
-  #         geom_text(data=datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
-  #                   size=si(2.2), hjust=0, fontface="bold") +
-  #         # yearc labels
-  #         # geom_text(data=da,
-  #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-  #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-  # 
-  #         geom_label_repel(data=datsc,
-  #                          aes(x=year+3, y=tyy,
-  #                              label=labu,
-  #                              color=col, alpha=ala*100),
-  #                          fill=bgc,
-  #                          hjust=0, size=si(labsize), fontface="bold",
-  #                          family = fam,
-  #                          segment.size =NA,
-  #                          direction = "y",
-  #                          label.padding =0,
-  #                          xlim=c(mil,2177),
-  #                          label.size=0,
-  #                          max.iter=5000,
-  #                          force=.01, force_pull=10,box.padding=.1 ,
-  #                          seed=5) +
-  # 
-  # 
-  # 
-  #         scale_color_identity() +
-  #         scale_alpha_identity() +
-  # 
-  #         scale_fill_identity() +
-  # 
-  #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-  #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-  # 
-  # 
-  #         theme(
-  #           axis.title.x=element_blank(),
-  #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-  #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-  #           axis.text.x=element_blank(),
-  #           plot.margin = margin(-5,0,-5,0),
-  #           panel.border = element_blank(),
-  #           panel.grid.major = element_blank(),
-  #           panel.grid.minor = element_blank(),
-  #           axis.title.y=element_blank(),
-  #           axis.text.y=element_blank(),
-  #           plot.background = element_rect(fill =bgc, color=NA),
-  #           panel.background = element_rect(fill = bgc ,  color="grey")
-  #         )
-  # 
-  # 
-  # 
-  #       if (rv$lang =="eng") {
-  # 
-  #         plot5 = plot5 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  #       }
-  # 
-  #       if (rv$lang == "fin") {
-  # 
-  #         plot5 = plot5 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  # 
-  #       }
-  # 
-  # 
-  #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-  #         plot5 = plot5 +
-  # 
-  #           geom_label_repel(data=datsf,
-  #                            aes(x=year-2, y=tyy, label=paste0(labuf),
-  #                                color=col, group =sec, alpha=ala),
-  #                            size=si(labsize), fontface="bold", hjust=1,
-  #                            family = fam,
-  #                            fill=bgc,
-  #                            # segment.size =NA,
-  #                            segment.size =NA,
-  #                            direction = "y",
-  #                            label.padding =0,
-  #                            # box.padding=.1,
-  #                            # nudge_x=18,
-  #                            xlim=c(mil,2177),
-  #                            label.size=0,
-  #                            max.iter=5000,
-  #                            force=.01, force_pull=10,box.padding=.1 ,
-  #                            seed=5
-  #           )
-  # 
-  #         if (rv$lang =="eng") {
-  #           plot5 = plot5 +
-  # 
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  # 
-  # 
-  #         }  else if (rv$lang=="fin") {
-  #           plot5 = plot5 +
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  #         }
-  # 
-  #       }
-  # 
-  #       gplot5 = ggplotGrob(plot5)
-  #       li5 = list(gplot5)
-  # 
-  # 
-  #       if (exists("plotlist")) {
-  #         plotlist = c(plotlist,li5)
-  # 
-  #       } else {        plotlist = c(li5)
-  # 
-  #       }
-  # 
-  # 
-  #     }
-  # 
-  # 
-  # 
-  # 
-  # 
-  #     if (rv$plot6 == "plot6")
-  #     {
-  # 
-  #       inplot= c( "averagedividend", "countrydividend", "avgcost", "netcost",
-  #                  "usercost","dividend","avgnetcost","countrynetcost","countrycost", "dummy")
-  # 
-  #       datsl = datsl()[sec %in% inplot & year >= mil,]
-  #       datsss = datsss()[sec %in% inplot & year >= mil,]
-  #       datsc =datsc()[sec %in% inplot,]
-  #       datsf =datsf()[sec %in% inplot,]
-  #       
-  # 
-  # 
-  #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
-  #       hi = ma-mi
-  #       
-  #       plot6=   ggplot(datsf)+
-  # 
-  # 
-  #         # graph limits
-  #         geom_segment(data=da,
-  #                      aes(x=mil, xend=2100, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
-  # 
-  #         geom_point(data=da,
-  #                    aes(x=2140,  y=100),
-  #                    color=teksvari, alpha=0, size=si(2))+
-  #         #bottom years
-  #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
-  #                   aes(x=year, y=.76*mi, label=c(year)),
-  #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
-  # 
-  #         # vertical lines
-  #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
-  #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
-  #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=-4), label = paste0("0"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
-  #         # horizontal lines
-  #         geom_text(data = datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
-  # 
-  # 
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  # 
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  #         geom_segment(data=datsc[sec=="dummy",],
-  #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
-  #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
-  # 
-  #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
-  # 
-  #         # blue line for yearc
-  #         geom_segment(data=da,
-  #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
-  #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
-  # 
-  #         geom_point(data=datsc,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
-  #                    size=lsi(points*2), color=blu) +
-  # 
-  #         # graphs for fyear to yearc
-  #         geom_area(data=datsl[year < rv$fyear+1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
-  #         geom_area(data=datsl[year > rv$fyear-1,],
-  #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
-  #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
-  # 
-  #         geom_line(data=datsl,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                   linewidth=lsi(lines)) +
-  #         geom_point(data=datsl,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
-  #                    size=lsi(points)) +
-  # 
-  # 
-  #         # graphs for first year to lyear
-  #         geom_line(data=datsss,
-  #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
-  #                   linewidth=lsi(lines), alpha=.1) +
-  #         geom_point(data=datsss,
-  #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
-  #                    size=lsi(points), alpha=.1) +
-  # 
-  #         # pricing and neutrality vertical lines
-  #         geom_segment(data=da,
-  #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  #         geom_segment(data=da,
-  #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
-  #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
-  # 
-  #         # observed and simulated vertical line
-  #         geom_segment(data=da,
-  #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
-  #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
-  # 
-  #         geom_text(data=da,
-  #                   aes(x=mil, y=100+.03*hi), label = paste0("Max"),
-  #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
-  # 
-  #         geom_text(data=datsss[, .SD[which.max(yy)]],
-  #                   aes(x=mil, y=100-.03*hi, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
-  #                   size=si(2.2), hjust=0, fontface="bold") +
-  #         # yearc labels
-  #         # geom_text(data=da,
-  #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
-  #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
-  # 
-  #         geom_label_repel(data=datsc,
-  #                          aes(x=year+3, y=tyy,
-  #                              label=labu,
-  #                              color=col, alpha=ala*100),
-  #                          fill=bgc,
-  #                          hjust=0, size=si(2.5), fontface="bold",
-  #                          family = fam,
-  #                          segment.size =NA,
-  #                          direction = "y",
-  #                          label.padding =0,
-  #                          xlim=c(mil,2177),
-  #                          label.size=0,
-  #                          max.iter=5000,
-  #                          force=.01, force_pull=10,box.padding=.1 ,
-  #                          seed=5) +
-  # 
-  # 
-  # 
-  #         scale_color_identity() +
-  #         scale_alpha_identity() +
-  # 
-  #         scale_fill_identity() +
-  # 
-  #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
-  #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
-  # 
-  # 
-  #         theme(
-  #           axis.title.x=element_blank(),
-  #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
-  #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
-  #           axis.text.x=element_blank(),
-  #           plot.margin = margin(-5,0,-5,0),
-  #           panel.border = element_blank(),
-  #           panel.grid.major = element_blank(),
-  #           panel.grid.minor = element_blank(),
-  #           axis.title.y=element_blank(),
-  #           axis.text.y=element_blank(),
-  #           plot.background = element_rect(fill =bgc, color=NA),
-  #           panel.background = element_rect(fill = bgc ,  color="grey")
-  #         )
-  # 
-  # 
-  # 
-  #       if (rv$lang =="eng") {
-  # 
-  #         plot6 = plot6 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+10, label=paste0("Year ",year, " values:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  #           geom_text(data = datsss[, .SD[which.max(yy)]],
-  #                     aes(x=mix+(max-mix)*.5, y=130), color=teksvari,
-  #                     label = "(Does not include costs from land use change)",  size = si(2.3), fontface="bold") +
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  #       }
-  # 
-  #       if (rv$lang == "fin") {
-  # 
-  #         plot6 = plot6 +
-  #           geom_text(data=da,
-  #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
-  #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
-  #           geom_text(data=datsc[, .SD[which.max(tyy)]],
-  #                     aes(x=year+2, y=max(tyy)+10, label=paste0("Vuoden ",year, " arvot:")),
-  #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
-  # 
-  #           geom_text(data = datsss[, .SD[which.max(yy)]],
-  #                     aes(x=mix+(max-mix)*.5, y=130), color=teksvari,
-  #                     label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.3), fontface="bold") +
-  # 
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
-  #                     alpha=.5, lineheight=.99) +
-  # 
-  #           geom_text(data=da,
-  #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
-  #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
-  #                     angle=c(0), alpha=.5, lineheight=.99)
-  # 
-  # 
-  # 
-  #       }
-  # 
-  # 
-  #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
-  #         plot6 = plot6 +
-  # 
-  #           geom_label_repel(data=datsf,
-  #                            aes(x=year-2, y=tyy, label=paste0(labuf),
-  #                                color=col, group =sec, alpha=ala),
-  #                            size=si(2.5), fontface="bold", hjust=1,
-  #                            family = fam,
-  #                            fill=bgc,
-  #                            # segment.size =NA,
-  #                            segment.size =NA,
-  #                            direction = "y",
-  #                            label.padding =0,
-  #                            # box.padding=.1,
-  #                            # nudge_x=18,
-  #                            xlim=c(mil,2177),
-  #                            label.size=0,
-  #                            max.iter=5000,
-  #                            force=.01, force_pull=10,box.padding=.1 ,
-  #                            seed=5
-  #           )
-  # 
-  #         if (rv$lang =="eng") {
-  #           plot6 = plot6 +
-  # 
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  # 
-  # 
-  #         }  else if (rv$lang=="fin") {
-  #           plot6 = plot6 +
-  # 
-  # 
-  #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
-  #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
-  #         }
-  # 
-  #       }
-  # 
-  #       gplot6 = ggplotGrob(plot6)
-  #       li6 = list(gplot6)
-  # 
-  #       if (exists("plotlist")) {
-  #         plotlist = c(plotlist,li6)
-  # 
-  #       } else {        plotlist = c(li6)
-  # 
-  #       }
-  # 
-  # 
-  #     }
-  # 
-  # 
-  # 
-  # 
-  # 
-  #     eplot = ggplot(NULL, aes(color = ""))+
-  #       geom_blank()+
-  #       scale_color_manual(values = "black", labels = "Something")+
-  #       guides(color = guide_legend())+
-  #       theme(
-  #         plot.background = element_rect(fill =bgc, color=NA),
-  #         panel.background = element_rect(fill = bgc ,  color="grey")
-  #       )
-  #     geplot = ggplotGrob(eplot)
-  #     lig = list(geplot)
-  # 
-  #     if (exists("plotlist")) {
-  #       plotlist = plotlist
-  # 
-  #     } else {        plotlist = c(lig)
-  # 
-  #     }
-  # 
-  # 
-  #     pll = length(plotlist)
-  #     #
-  #     count = 1
-  #     # if (pll >= 3) {
-  #     if (input$view==2) {
-  # 
-  #       if (pll==1){
-  #         lay=rbind(c(1))
-  #         plotlist = c(plotlist)
-  # 
-  #       } else if (pll ==2) {
-  #         lay = rbind(c(1,2))
-  #         plotlist = c(plotlist)
-  #       } else if (pll==3) {
-  #         lay = rbind(c(1,2), c(3,4))
-  #         plotlist = c(plotlist, lig)
-  # 
-  #       } else if (pll==4) {
-  #         lay = rbind(c(1,2), c(3,4))
-  #       } else if (pll==5) {
-  #         lay = rbind(c(1,2), c(3,4), c(5,6))
-  #         plotlist = c(plotlist, lig)
-  # 
-  #       }
-  #     } else if (input$view==3) {
-  # 
-  #       if (pll==1){
-  #         lay=rbind(c(1))
-  #         plotlist = c(plotlist)
-  #         count = 1
-  # 
-  #       } else if (pll ==2) {
-  #         lay = rbind(c(1), c(2))
-  #         plotlist = c(plotlist)
-  #         count = 2
-  # 
-  #       } else if (pll==3) {
-  #         lay = rbind(c(1), c(2), c(3))
-  #         # plotlist = c(plotlist, lig)
-  #         plotlist = c(plotlist)
-  #         count = 3
-  # 
-  # 
-  #       } else if (pll==4) {
-  #         lay = rbind(c(1), c(2), c(3), c(4))
-  #         plotlist = c(plotlist)
-  #         count = 4
-  # 
-  # 
-  #       } else if (pll==5) {
-  #         lay = rbind(c(1), c(2), c(3), c(4), c(5))
-  #         plotlist = c(plotlist)
-  #         count = 5
-  # 
-  # 
-  #       }
-  #     } else if (input$view==4) {
-  # 
-  #       if (pll==1){
-  #         lay=rbind(c(1))
-  #         plotlist = c(plotlist)
-  #         count = 1
-  # 
-  #       } else if (pll ==2) {
-  #         lay = rbind(c(1,2))
-  #         plotlist = c(plotlist)
-  #         count = 2
-  # 
-  #       } else if (pll==3) {
-  #         lay =  rbind(c(1,2,3))
-  #         # plotlist = c(plotlist, lig)
-  #         plotlist = c(plotlist)
-  #         count = 3
-  # 
-  # 
-  #       } else if (pll==4) {
-  #         lay =  rbind(c(1,2,3,4))
-  #         plotlist = c(plotlist)
-  #         count = 4
-  # 
-  # 
-  #       } else if (pll==5) {
-  #         lay =  rbind(c(1,2,3,4,5))
-  #         plotlist = c(plotlist)
-  #         count = 5
-  # 
-  # 
-  #       }
-  # 
-  #     }
-  # 
-  #     # rv$pll =pll
-  #     # }
-  # 
-  #     plotx = grid.arrange(grobs=plotlist, layout_matrix=lay)
-  # 
-  #     plotx
-  # 
-  #   })
-  # 
-  # })
+    
+    {
+      #   sec4 = reactive({
+      #   # rv$pll = length(unique(datsss()$labbi))
+      #    
+      #    # rv$trig
+      #   if (input$autodraw==TRUE) {
+      #     rv$pll = length(unique(datsl()$labbi))
+      #   } else
+      #   {
+      #     eventReactive(input$go==TRUE, {
+      #       req(datsss())
+      #       
+      #       rv$pll = length(unique(datsl()$labbi))
+      #       rv$plll = length(unique(datsl()$labbi))
+      #       # rv$plll = rv$pll
+      # 
+      #     })
+      # 
+      #   }
+      #   withProgress( message="Drawing graph, please wait",{
+      # 
+      #     if (input$view ==3) {
+      # 
+      # 
+      #       if (rv$pll <7) {
+      #         si =
+      #           function(per) {
+      #             per*session$clientData$output_plotk_width*session$clientData$pixelratio/.8/
+      #               (570+.15*session$clientData$output_plotk_width)
+      #           }
+      #         # }
+      #         if (input$isMobile=="FALSE") {
+      # 
+      #           lsi =
+      #             function(per) {
+      #               per*session$clientData$output_plotk_width*session$clientData$pixelratio/500
+      #             }
+      #         }
+      # 
+      #         if (input$isMobile=="TRUE") {
+      # 
+      #           lsi =
+      #             function(per) {
+      #               per*session$clientData$output_plotk_width*session$clientData$pixelratio/1500
+      #             }
+      #         }
+      #       }}
+      # 
+      #     if (input$view ==4) {
+      # 
+      # 
+      # 
+      #       if (rv$pll <7) {
+      #         si =
+      #           function(per) {
+      #             per*session$clientData$output_plotl_height*session$clientData$pixelratio/.5/
+      #               (570+.15*session$clientData$output_plotl_height)
+      #           }
+      #         # }
+      #         if (input$isMobile=="FALSE") {
+      # 
+      #           lsi =
+      #             function(per) {
+      #               per*session$clientData$output_plotl_height*session$clientData$pixelratio/250
+      #             }
+      #         }
+      # 
+      #         if (input$isMobile=="TRUE") {
+      # 
+      #           lsi =
+      #             function(per) {
+      #               per*session$clientData$output_plotl_height*session$clientData$pixelratio/750
+      #             }
+      #         }
+      #       }
+      #     }
+      # 
+      # 
+      #     # if (rv$pll <7) {
+      #     #   si =
+      #     #     function(per) {
+      #     #       per*session$clientData$output_plotl_width*session$clientData$pixelratio/.8/
+      #     #         (570+.15*session$clientData$output_plotl_width)
+      #     #     }
+      #     #   # }
+      #     #   if (input$isMobile=="FALSE") {
+      #     #
+      #     #     lsi =
+      #     #       function(per) {
+      #     #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/500
+      #     #       }
+      #     #   }
+      #     #
+      #     #   if (input$isMobile=="TRUE") {
+      #     #
+      #     #     lsi =
+      #     #       function(per) {
+      #     #         per*session$clientData$output_plotl_width*session$clientData$pixelratio/1500
+      #     #       }
+      #     #   }
+      #     # }
+      # 
+      # 
+      # 
+      # 
+      # 
+      #     ma = 141
+      #     # hi = ma - mi
+      # 
+      # 
+      #     mil =rv$ffyear
+      # 
+      # 
+      # 
+      # 
+      #     mix = mil
+      #     max = 2135
+      # 
+      #     bgc = rv$bgc
+      #     teksvari = rv$teksvari
+      #     obsvari = rv$obsvari
+      # 
+      # 
+      #     ly = 1991
+      #     ala = .3
+      #     dis = 16.8
+      #     seg = .3
+      #     scas = 2.5
+      #     lines = .7
+      #     lines2 =.2
+      #     points=1.1
+      #     segalfa=.7
+      #     lee = 0
+      #     fam = fam
+      #     labsize= 2.3
+      # 
+      #     if (rv$plot2 == "plot2")
+      #     {
+      # 
+      # 
+      # 
+      #       inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2")
+      # 
+      #       datsl = datsl()[sec %in% inplot & year >= mil,]
+      #       datsss = datsss()[sec %in% inplot & year >= mil,]
+      #       datsc =datsc()[sec %in% inplot,]
+      #       datsf =datsf()[sec %in% inplot,]
+      # 
+      # 
+      # 
+      #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-25)
+      #       hi = ma-mi
+      #       
+      #       plot2=   ggplot(datsf)+
+      # 
+      # 
+      #         # graph limits
+      #         geom_segment(data=da,
+      #                      aes(x=mil, xend=2100, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+      # 
+      #         geom_point(data=da,
+      #                    aes(x=2140,  y=100),
+      #                    color=teksvari, alpha=0, size=si(2))+
+      #         #bottom years
+      #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
+      #                   aes(x=year, y=.76*mi, label=c(year)),
+      #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+      # 
+      #         # vertical lines
+      #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+      #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
+      #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=-4), label = paste0("0"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+      #         # horizontal lines
+      #         geom_text(data = datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
+      # 
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      # 
+      #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+      # 
+      #         # blue line for yearc
+      #         geom_segment(data=da,
+      #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
+      #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
+      # 
+      # 
+      # 
+      #         geom_point(data=datsc,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
+      #                    size=lsi(points*2), color=blu) +
+      # 
+      #         # graphs for fyear to yearc
+      #         geom_area(data=datsl[year < rv$fyear+1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
+      #         geom_area(data=datsl[year > rv$fyear-1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
+      # 
+      #         geom_line(data=datsl,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                   linewidth=lsi(lines)) +
+      #         geom_point(data=datsl,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+      #                    size=lsi(points)) +
+      # 
+      # 
+      #         # graphs for first year to lyear
+      #         geom_line(data=datsss,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
+      #                   linewidth=lsi(lines), alpha=.1) +
+      #         geom_point(data=datsss,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                    size=lsi(points), alpha=.1) +
+      # 
+      # 
+      #         # pricing and neutrality vertical lines
+      #         geom_segment(data=da,
+      #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      #         geom_segment(data=da,
+      #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      # 
+      #         # observed and simulated vertical line
+      #         geom_segment(data=da,
+      #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
+      #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=103), label = paste0("Max"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+      # 
+      #         geom_text(data=datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
+      #                   size=si(2.2), hjust=0, fontface="bold") +
+      #         # yearc labels
+      #         geom_label_repel(data=datsc,
+      #                          aes(x=year+3, y=tyy,
+      #                              label=labu,
+      #                              color=col, alpha=ala*100),
+      #                          fill=bgc,
+      #                          hjust=0, size=si(labsize),
+      #                          fontface="bold",
+      #                          family = fam,
+      #                          segment.size =NA,
+      #                          direction = "y",
+      #                          label.padding =0,
+      #                          xlim=c(mil,2177),
+      #                          label.size=0,
+      #                          max.iter=5000,
+      #                          force=.01, force_pull=10,box.padding=.1 ,
+      #                          seed=5) +
+      # 
+      # 
+      # 
+      #         scale_color_identity() +
+      #         scale_alpha_identity() +
+      # 
+      #         scale_fill_identity() +
+      # 
+      #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+      #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+      # 
+      # 
+      #         theme(
+      #           axis.title.x=element_blank(),
+      #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+      #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+      #           axis.text.x=element_blank(),
+      #           plot.margin = margin(-5,0,-5,0),
+      #           panel.border = element_blank(),
+      #           panel.grid.major = element_blank(),
+      #           panel.grid.minor = element_blank(),
+      #           axis.title.y=element_blank(),
+      #           axis.text.y=element_blank(),
+      #           plot.background = element_rect(fill =bgc, color="grey"),
+      #           panel.background = element_rect(fill = bgc ,  color=NA)
+      #         )
+      # 
+      # 
+      # 
+      #       if (rv$lang =="eng") {
+      # 
+      #         plot2 = plot2 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      # 
+      # 
+      # 
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=mil, y= 131),
+      #                     label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
+      #                     size=si(1.7), color=net, hjust=0, fontface="bold") +
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y= 127),
+      #                     label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
+      #                     ),
+      #                     size=si(1.7), color=net, hjust=1, fontface="bold") +
+      # 
+      # 
+      # 
+      # 
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      # 
+      # 
+      #           # geom_text(data=da,
+      #           #           aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
+      #           #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #           #           alpha=.5, lineheight=.99) +
+      #           #
+      #           # geom_text(data=da,
+      #           #           aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
+      #           #           col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #         #           angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      #         geom_label(data=da,
+      #                    aes(x=2020.5, y=-10), label = paste0("Historical\n <=2021"),
+      #                    col= alpha(obsvari, .4), fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                    alpha=.5, lineheight=.99, fill = bgc) +
+      # 
+      #           geom_label(data=da,
+      #                      aes(x=2022.5, y=-10), label = paste0("Simulated\n2022=>"),
+      #                      col= alpha(obsvari,.4), fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                      angle=c(0), alpha=.7, lineheight=.99, fill = bgc)
+      # 
+      #         # geom_text(data=da,
+      #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+      #         #           col=teksvari, fontface="bold", lineheight=1.2 ,  size =si(1.5), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
+      # 
+      #         if (rv$yearc >= rv$fyear) {
+      #           plot2 = plot2 +
+      #             geom_text(data=da,
+      #                       aes(x=rv$yearc, y= 123),  label = paste0(
+      #                         format(round(rv$rvtotal,1), nsmall=1), " Gt used from ", rv$fyear, " to " , rv$yearc
+      #                       )
+      #                       ,
+      #                       size=si(1.7), color=net, hjust=1, fontface="bold")
+      #         }
+      # 
+      #       }
+      # 
+      #       if (rv$lang == "fin") {
+      # 
+      #         plot2 = plot2 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      # 
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=mil, y= 131),
+      #                     label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
+      #                     size=si(1.7), color=net, hjust=0, fontface="bold") +
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y= 127),
+      #                     label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
+      #                     ),
+      #                     size=si(1.7), color=net, hjust=1, fontface="bold") +
+      # 
+      # 
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      #         # geom_text(data=da,
+      #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+      #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)
+      # 
+      #         if (rv$yearc >= rv$fyear) {
+      #           plot2 = plot2 +
+      # 
+      #             geom_text(data=da,
+      #                       aes(x=rv$yearc, y= 123),
+      #                       label = paste0(
+      #                         format(round(rv$rvtotal,1), nsmall=1), " Gt käytetty vuodesta ", rv$fyear, " ja vuoteen " , rv$yearc
+      #                       ),
+      #                       size=si(1.7), color=net, hjust=1, fontface="bold")
+      #         }
+      # 
+      #       }
+      # 
+      # 
+      #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+      #         plot2 = plot2 +
+      # 
+      #           geom_label_repel(data=datsf,
+      #                            aes(x=year-2, y=tyy, label=paste0(labuf),
+      #                                color=col, group =sec, alpha=ala),
+      #                            size=si(labsize), fontface="bold", hjust=1,
+      #                            family = fam,
+      #                            fill=bgc,
+      #                            # segment.size =NA,
+      #                            segment.size =NA,
+      #                            direction = "y",
+      #                            label.padding =0,
+      #                            # box.padding=.1,
+      #                            # nudge_x=18,
+      #                            xlim=c(mil,2177),
+      #                            label.size=0,
+      #                            max.iter=5000,
+      #                            force=.01, force_pull=10,box.padding=.1 ,
+      #                            seed=5
+      #           )
+      # 
+      #         if (rv$lang =="eng") {
+      #           plot2 = plot2 +
+      # 
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      # 
+      # 
+      #         }  else if (rv$lang=="fin") {
+      #           plot2 = plot2 +
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      #         }
+      # 
+      #       }
+      # 
+      #       gplot2 = ggplotGrob(plot2)
+      #       li2 = list(gplot2)
+      # 
+      #       # plotlist = c(li2)
+      # 
+      #       if (exists("plotlist")) {
+      #         plotlist = c(plotlist,li2)
+      # 
+      #       } else {        plotlist = c(li2)
+      # 
+      #       }
+      # 
+      # 
+      #     }
+      # 
+      # 
+      # 
+      # 
+      #     if (rv$plot3 == "plot3")
+      #     {
+      # 
+      #       inplot= c("pop", "dummy", "countrypop")
+      # 
+      #       datsl = datsl()[sec %in% inplot & year >= mil,]
+      #       datsss = datsss()[sec %in% inplot & year >= mil,]
+      #       datsc =datsc()[sec %in% inplot,]
+      #       datsf =datsf()[sec %in% inplot,]
+      # 
+      # 
+      # 
+      #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+      #       hi = ma-mi
+      #       
+      #       plot3=   ggplot(datsf)+
+      # 
+      # 
+      #         # graph limits
+      #         geom_segment(data=da,
+      #                      aes(x=mil, xend=2100, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+      # 
+      #         geom_point(data=da,
+      #                    aes(x=2140,  y=100),
+      #                    color=teksvari, alpha=0, size=si(2))+
+      #         #bottom years
+      #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
+      #                   aes(x=year, y=.76*mi, label=c(year)),
+      #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+      # 
+      #         # vertical lines
+      #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+      #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
+      #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=-4), label = paste0("0"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+      #         # horizontal lines
+      #         geom_text(data = datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      # 
+      #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+      # 
+      #         # blue line for yearc
+      #         geom_segment(data=da,
+      #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
+      #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
+      # 
+      #         geom_point(data=datsc,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
+      #                    size=lsi(points*2), color=blu) +
+      # 
+      #         # graphs for fyear to yearc
+      #         geom_area(data=datsl[year < rv$fyear+1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
+      #         geom_area(data=datsl[year > rv$fyear-1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
+      # 
+      #         geom_line(data=datsl,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                   linewidth=lsi(lines)) +
+      #         geom_point(data=datsl,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+      #                    size=lsi(points)) +
+      # 
+      # 
+      #         # graphs for first year to lyear
+      #         geom_line(data=datsss,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
+      #                   linewidth=lsi(lines), alpha=.1) +
+      #         geom_point(data=datsss,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                    size=lsi(points), alpha=.1) +
+      # 
+      # 
+      #         # pricing and neutrality vertical lines
+      #         geom_segment(data=da,
+      #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      #         geom_segment(data=da,
+      #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      # 
+      #         # observed and simulated vertical line
+      #         geom_segment(data=da,
+      #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
+      #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=103), label = paste0("Max"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+      # 
+      #         geom_text(data=datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
+      #                   size=si(2.2), hjust=0, fontface="bold") +
+      #         # yearc labels
+      #         # geom_text(data=da,
+      #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+      #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+      # 
+      #         geom_label_repel(data=datsc,
+      #                          aes(x=year+3, y=tyy,
+      #                              label=labu,
+      #                              color=col, alpha=ala*100),
+      #                          fill=bgc,
+      #                          hjust=0, size=si(labsize), fontface="bold",
+      #                          family = fam,
+      #                          segment.size =NA,
+      #                          direction = "y",
+      #                          label.padding =0,
+      #                          xlim=c(mil,2177),
+      #                          label.size=0,
+      #                          max.iter=5000,
+      #                          force=.01, force_pull=10,box.padding=.1 ,
+      #                          seed=5) +
+      # 
+      # 
+      # 
+      #         scale_color_identity() +
+      #         scale_alpha_identity() +
+      # 
+      #         scale_fill_identity() +
+      # 
+      #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+      #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+      # 
+      # 
+      #         theme(
+      #           axis.title.x=element_blank(),
+      #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+      #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+      #           axis.text.x=element_blank(),
+      #           plot.margin = margin(-5,0,-5,0),
+      #           panel.border = element_blank(),
+      #           panel.grid.major = element_blank(),
+      #           panel.grid.minor = element_blank(),
+      #           axis.title.y=element_blank(),
+      #           axis.text.y=element_blank(),
+      #           plot.background = element_rect(fill =bgc, color=NA),
+      #           panel.background = element_rect(fill = bgc ,  color="grey")
+      #         )
+      # 
+      # 
+      # 
+      #       if (rv$lang =="eng") {
+      # 
+      #         plot3 = plot3 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      #       }
+      # 
+      #       if (rv$lang == "fin") {
+      # 
+      #         plot3 = plot3 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      # 
+      #       }
+      # 
+      # 
+      #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+      #         plot3 = plot3 +
+      # 
+      #           geom_label_repel(data=datsf,
+      #                            aes(x=year-2, y=tyy, label=paste0(labuf),
+      #                                color=col, group =sec, alpha=ala),
+      #                            size=si(labsize), fontface="bold", hjust=1,
+      #                            family = fam,
+      #                            fill=bgc,
+      #                            # segment.size =NA,
+      #                            segment.size =NA,
+      #                            direction = "y",
+      #                            label.padding =0,
+      #                            # box.padding=.1,
+      #                            # nudge_x=18,
+      #                            xlim=c(mil,2177),
+      #                            label.size=0,
+      #                            max.iter=5000,
+      #                            force=.01, force_pull=10,box.padding=.1 ,
+      #                            seed=5
+      #           )
+      # 
+      #         if (rv$lang =="eng") {
+      #           plot3 = plot3 +
+      # 
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      # 
+      # 
+      #         }  else if (rv$lang=="fin") {
+      #           plot3 = plot3 +
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      #         }
+      # 
+      #       }
+      # 
+      #       gplot3 = ggplotGrob(plot3)
+      #       li3 = list(gplot3)
+      # 
+      #       if (exists("plotlist")) {
+      #         plotlist = c(plotlist,li3)
+      # 
+      #       } else {        plotlist = c(li3)
+      # 
+      #       }
+      # 
+      # 
+      #     }
+      # 
+      # 
+      # 
+      # 
+      # 
+      # 
+      #     if (rv$plot4 == "plot4")
+      #     {
+      # 
+      #       inplot= c("avgfossil", "userfossil", "dummy", "countryfossil")
+      # 
+      #       datsl = datsl()[sec %in% inplot & year >= mil,]
+      #       datsss = datsss()[sec %in% inplot & year >= mil,]
+      #       datsc =datsc()[sec %in% inplot,]
+      #       datsf =datsf()[sec %in% inplot,]
+      # 
+      # 
+      # 
+      #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+      #       hi = ma-mi
+      #       
+      #       plot4=   ggplot(datsf)+
+      # 
+      # 
+      #         # graph limits
+      #         geom_segment(data=da,
+      #                      aes(x=mil, xend=2100, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+      # 
+      #         geom_point(data=da,
+      #                    aes(x=2140,  y=100),
+      #                    color=teksvari, alpha=0, size=si(2))+
+      #         #bottom years
+      #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
+      #                   aes(x=year, y=.76*mi, label=c(year)),
+      #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+      # 
+      #         # vertical lines
+      #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+      #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
+      #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=-4), label = paste0("0"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+      #         # horizontal lines
+      #         geom_text(data = datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      # 
+      #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+      # 
+      #         # blue line for yearc
+      #         geom_segment(data=da,
+      #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
+      #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
+      # 
+      #         geom_point(data=datsc,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
+      #                    size=lsi(points*2), color=blu) +
+      # 
+      #         # graphs for fyear to yearc
+      #         geom_area(data=datsl[year < rv$fyear+1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
+      #         geom_area(data=datsl[year > rv$fyear-1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
+      # 
+      #         geom_line(data=datsl,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                   linewidth=lsi(lines)) +
+      #         geom_point(data=datsl,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+      #                    size=lsi(points)) +
+      # 
+      # 
+      #         # graphs for first year to lyear
+      #         geom_line(data=datsss,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
+      #                   linewidth=lsi(lines), alpha=.1) +
+      #         geom_point(data=datsss,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                    size=lsi(points), alpha=.1) +
+      # 
+      # 
+      #         # pricing and neutrality vertical lines
+      #         geom_segment(data=da,
+      #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      #         geom_segment(data=da,
+      #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      # 
+      #         # observed and simulated vertical line
+      #         geom_segment(data=da,
+      #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
+      #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=103), label = paste0("Max"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+      # 
+      #         geom_text(data=datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
+      #                   size=si(2.2), hjust=0, fontface="bold") +
+      #         # yearc labels
+      #         # geom_text(data=da,
+      #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+      #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+      # 
+      #         geom_label_repel(data=datsc,
+      #                          aes(x=year+3, y=tyy,
+      #                              label=labu,
+      #                              color=col, alpha=ala*100),
+      #                          fill=bgc,
+      #                          hjust=0, size=si(labsize), fontface="bold",
+      #                          family = fam,
+      #                          segment.size =NA,
+      #                          direction = "y",
+      #                          label.padding =0,
+      #                          xlim=c(mil,2177),
+      #                          label.size=0,
+      #                          max.iter=5000,
+      #                          force=.01, force_pull=10,box.padding=.1 ,
+      #                          seed=5) +
+      # 
+      # 
+      # 
+      #         scale_color_identity() +
+      #         scale_alpha_identity() +
+      # 
+      #         scale_fill_identity() +
+      # 
+      #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+      #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+      # 
+      # 
+      #         theme(
+      #           axis.title.x=element_blank(),
+      #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+      #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+      #           axis.text.x=element_blank(),
+      #           plot.margin = margin(-5,0,-5,0),
+      #           panel.border = element_blank(),
+      #           panel.grid.major = element_blank(),
+      #           panel.grid.minor = element_blank(),
+      #           axis.title.y=element_blank(),
+      #           axis.text.y=element_blank(),
+      #           plot.background = element_rect(fill =bgc, color=NA),
+      #           panel.background = element_rect(fill = bgc ,  color="grey")
+      #         )
+      # 
+      # 
+      # 
+      #       if (rv$lang =="eng") {
+      # 
+      #         plot4 = plot4 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da, aes(x=rv$lyear, y=122),
+      #                     label = paste0(rv$lyear, " mean emissions: ", format(round(rv$fossil, 1), nsmall=1),"/",format(round(rv$pop, 1), nsmall=1),
+      #                                    " = ",format(round(rv$avgfossil, 1), nsmall=1)),
+      #                     hjust=1, color=fpop, size= 2.1 )
+      # 
+      #         # , format(round(yy,le), decimal.mark=",", nsmall=le
+      #       }
+      # 
+      #       if (rv$lang == "fin") {
+      # 
+      #         plot4 = plot4 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      # 
+      #       }
+      # 
+      # 
+      #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+      #         plot4 = plot4 +
+      # 
+      #           geom_label_repel(data=datsf,
+      #                            aes(x=year-2, y=tyy, label=paste0(labuf),
+      #                                color=col, group =sec, alpha=ala),
+      #                            size=si(labsize), fontface="bold", hjust=1,
+      #                            family = fam,
+      #                            fill=bgc,
+      #                            # segment.size =NA,
+      #                            segment.size =NA,
+      #                            direction = "y",
+      #                            label.padding =0,
+      #                            # box.padding=.1,
+      #                            # nudge_x=18,
+      #                            xlim=c(mil,2177),
+      #                            label.size=0,
+      #                            max.iter=5000,
+      #                            force=.01, force_pull=10,box.padding=.1 ,
+      #                            seed=5
+      #           )
+      # 
+      #         if (rv$lang =="eng") {
+      #           plot4 = plot4 +
+      # 
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      # 
+      # 
+      #         }  else if (rv$lang=="fin") {
+      #           plot4 = plot4 +
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      #         }
+      # 
+      #       }
+      # 
+      #       gplot4 = ggplotGrob(plot4)
+      #       li4 = list(gplot4)
+      # 
+      #       if (exists("plotlist")) {
+      #         plotlist = c(plotlist,li4)
+      # 
+      #       } else {        plotlist = c(li4)
+      # 
+      #       }
+      #     }
+      # 
+      # 
+      # 
+      # 
+      #     if (rv$plot5 == "plot5")
+      #     {
+      # 
+      #       inplot= c("price", "dummy")
+      # 
+      #       datsl = datsl()[sec %in% inplot & year >= mil,]
+      #       datsss = datsss()[sec %in% inplot & year >= mil,]
+      #       datsc =datsc()[sec %in% inplot,]
+      #       datsf =datsf()[sec %in% inplot,]
+      # 
+      # 
+      # 
+      #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+      #       hi = ma-mi
+      #       
+      #       plot5=   ggplot(datsf)+
+      # 
+      # 
+      #         # graph limits
+      #         geom_segment(data=da,
+      #                      aes(x=mil, xend=2100, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+      # 
+      #         geom_point(data=da,
+      #                    aes(x=2140,  y=100),
+      #                    color=teksvari, alpha=0, size=si(2))+
+      #         #bottom years
+      #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
+      #                   aes(x=year, y=.76*mi, label=c(year)),
+      #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+      # 
+      #         # vertical lines
+      #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+      #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
+      #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=-4), label = paste0("0"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+      #         # horizontal lines
+      #         geom_text(data = datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      # 
+      #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+      # 
+      #         # blue line for yearc
+      #         geom_segment(data=da,
+      #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
+      #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
+      # 
+      #         geom_point(data=datsc,
+      #                    aes(y=tyy, x=year, group=sec,  alpha=ala),
+      #                    size=lsi(points*2), color=blu) +
+      # 
+      #         # graphs for fyear to yearc
+      # 
+      # 
+      #         geom_area(data=datsl[year < rv$fyear+1,],
+      #                   aes(y=tyy, x=year, group=sec,  fill=col),
+      #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
+      #         geom_area(data=datsl[year > rv$fyear-1,],
+      #                   aes(y=tyy, x=year, group=sec,  fill=col),
+      #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
+      # 
+      #         geom_line(data=datsl,
+      #                   aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+      #                   linewidth=lsi(lines)) +
+      #         geom_point(data=datsl,
+      #                    aes(y=tyy, x=year, group=sec, color=col,  alpha=ala),
+      #                    size=lsi(points)) +
+      # 
+      # 
+      #         # graphs for first year to lyear
+      #         geom_line(data=datsss,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
+      #                   linewidth=lsi(lines), alpha=.1) +
+      #         geom_point(data=datsss,
+      #                    aes(y=tyy, x=year, group=sec, color=col, alpha=ala),
+      #                    size=lsi(points), alpha=.1) +
+      # 
+      # 
+      #         # pricing and neutrality vertical lines
+      #         geom_segment(data=da,
+      #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      #         geom_segment(data=da,
+      #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      # 
+      #         # observed and simulated vertical line
+      #         geom_segment(data=da,
+      #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
+      #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=103), label = paste0("Max"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+      # 
+      #         geom_text(data=datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
+      #                   size=si(2.2), hjust=0, fontface="bold") +
+      #         # yearc labels
+      #         # geom_text(data=da,
+      #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+      #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+      # 
+      #         geom_label_repel(data=datsc,
+      #                          aes(x=year+3, y=tyy,
+      #                              label=labu,
+      #                              color=col, alpha=ala*100),
+      #                          fill=bgc,
+      #                          hjust=0, size=si(labsize), fontface="bold",
+      #                          family = fam,
+      #                          segment.size =NA,
+      #                          direction = "y",
+      #                          label.padding =0,
+      #                          xlim=c(mil,2177),
+      #                          label.size=0,
+      #                          max.iter=5000,
+      #                          force=.01, force_pull=10,box.padding=.1 ,
+      #                          seed=5) +
+      # 
+      # 
+      # 
+      #         scale_color_identity() +
+      #         scale_alpha_identity() +
+      # 
+      #         scale_fill_identity() +
+      # 
+      #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+      #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+      # 
+      # 
+      #         theme(
+      #           axis.title.x=element_blank(),
+      #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+      #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+      #           axis.text.x=element_blank(),
+      #           plot.margin = margin(-5,0,-5,0),
+      #           panel.border = element_blank(),
+      #           panel.grid.major = element_blank(),
+      #           panel.grid.minor = element_blank(),
+      #           axis.title.y=element_blank(),
+      #           axis.text.y=element_blank(),
+      #           plot.background = element_rect(fill =bgc, color=NA),
+      #           panel.background = element_rect(fill = bgc ,  color="grey")
+      #         )
+      # 
+      # 
+      # 
+      #       if (rv$lang =="eng") {
+      # 
+      #         plot5 = plot5 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      #       }
+      # 
+      #       if (rv$lang == "fin") {
+      # 
+      #         plot5 = plot5 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      # 
+      #       }
+      # 
+      # 
+      #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+      #         plot5 = plot5 +
+      # 
+      #           geom_label_repel(data=datsf,
+      #                            aes(x=year-2, y=tyy, label=paste0(labuf),
+      #                                color=col, group =sec, alpha=ala),
+      #                            size=si(labsize), fontface="bold", hjust=1,
+      #                            family = fam,
+      #                            fill=bgc,
+      #                            # segment.size =NA,
+      #                            segment.size =NA,
+      #                            direction = "y",
+      #                            label.padding =0,
+      #                            # box.padding=.1,
+      #                            # nudge_x=18,
+      #                            xlim=c(mil,2177),
+      #                            label.size=0,
+      #                            max.iter=5000,
+      #                            force=.01, force_pull=10,box.padding=.1 ,
+      #                            seed=5
+      #           )
+      # 
+      #         if (rv$lang =="eng") {
+      #           plot5 = plot5 +
+      # 
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      # 
+      # 
+      #         }  else if (rv$lang=="fin") {
+      #           plot5 = plot5 +
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      #         }
+      # 
+      #       }
+      # 
+      #       gplot5 = ggplotGrob(plot5)
+      #       li5 = list(gplot5)
+      # 
+      # 
+      #       if (exists("plotlist")) {
+      #         plotlist = c(plotlist,li5)
+      # 
+      #       } else {        plotlist = c(li5)
+      # 
+      #       }
+      # 
+      # 
+      #     }
+      # 
+      # 
+      # 
+      # 
+      # 
+      #     if (rv$plot6 == "plot6")
+      #     {
+      # 
+      #       inplot= c( "averagedividend", "countrydividend", "avgcost", "netcost",
+      #                  "usercost","dividend","avgnetcost","countrynetcost","countrycost", "dummy")
+      # 
+      #       datsl = datsl()[sec %in% inplot & year >= mil,]
+      #       datsss = datsss()[sec %in% inplot & year >= mil,]
+      #       datsc =datsc()[sec %in% inplot,]
+      #       datsf =datsf()[sec %in% inplot,]
+      #       
+      # 
+      # 
+      #       mi = min(min((datsss[,tyy]), na.rm=T)*1.1,-20)
+      #       hi = ma-mi
+      #       
+      #       plot6=   ggplot(datsf)+
+      # 
+      # 
+      #         # graph limits
+      #         geom_segment(data=da,
+      #                      aes(x=mil, xend=2100, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=0) +
+      # 
+      #         geom_point(data=da,
+      #                    aes(x=2140,  y=100),
+      #                    color=teksvari, alpha=0, size=si(2))+
+      #         #bottom years
+      #         geom_text(data = datsss[year %in% c(seq(mil, 2100, 10)) & sec =="dummy",],
+      #                   aes(x=year, y=.76*mi, label=c(year)),
+      #                   color=teksvari, angle=0,size =si(2.4), alpha=.6) +
+      # 
+      #         # vertical lines
+      #         geom_segment(data = datsss[year %in% seq(mil, 2100, 10) & sec =="dummy",],
+      #                      (aes(x=year, xend = year, y=100, yend=.72*mi)),
+      #                      color=teksvari, linetype="dashed", linewidth=lsi(.4), alpha=.08) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=-4), label = paste0("0"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.3), hjust =0, vjust=0, angle=c(0)) +
+      #         # horizontal lines
+      #         geom_text(data = datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mix+(max-mix)*.5, y=138, color=col, label = labbi),  size = si(4), fontface="bold") +
+      # 
+      # 
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      # 
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=50, yend=50),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      #         geom_segment(data=datsc[sec=="dummy",],
+      #                      aes(x=mil, xend=rv$lyear, y=25, yend=25),
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
+      # 
+      #         geom_point(data=da, aes(x=2030, y=124), alpha=0) +
+      # 
+      #         # blue line for yearc
+      #         geom_segment(data=da,
+      #                      aes(x=rv$yearc, xend=rv$yearc, y=123, yend = mi),
+      #                      color=blu, alpha=.4, linewidth=lsi(1.4))+
+      # 
+      #         geom_point(data=datsc,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country),  alpha=ala),
+      #                    size=lsi(points*2), color=blu) +
+      # 
+      #         # graphs for fyear to yearc
+      #         geom_area(data=datsl[year < rv$fyear+1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.15/nrow(datsc), position = 'identity') +
+      #         geom_area(data=datsl[year > rv$fyear-1,],
+      #                   aes(y=tyy, x=year, group=interaction(sec, country),  fill=col),
+      #                   size=si(points), alpha=.35/nrow(datsc), position = 'identity') +
+      # 
+      #         geom_line(data=datsl,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                   linewidth=lsi(lines)) +
+      #         geom_point(data=datsl,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col,  alpha=ala),
+      #                    size=lsi(points)) +
+      # 
+      # 
+      #         # graphs for first year to lyear
+      #         geom_line(data=datsss,
+      #                   aes(y=tyy, x=year, group=interaction(sec, country), color=col),
+      #                   linewidth=lsi(lines), alpha=.1) +
+      #         geom_point(data=datsss,
+      #                    aes(y=tyy, x=year, group=interaction(sec, country), color=col, alpha=ala),
+      #                    size=lsi(points), alpha=.1) +
+      # 
+      #         # pricing and neutrality vertical lines
+      #         geom_segment(data=da,
+      #                      aes(x=rv$fyear, xend=rv$fyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      #         geom_segment(data=da,
+      #                      aes(x=rv$lyear, xend=rv$lyear, y=110, yend = mi),
+      #                      color=teksvari, linewidth=lsi(.4), linetype = "dashed", alpha=.4 ) +
+      # 
+      #         # observed and simulated vertical line
+      #         geom_segment(data=da,
+      #                      aes(x=2021.5, y=100, xend=2021.5, yend=mi),
+      #                      color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
+      # 
+      #         geom_text(data=da,
+      #                   aes(x=mil, y=100+.03*hi), label = paste0("Max"),
+      #                   col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
+      # 
+      #         geom_text(data=datsss[, .SD[which.max(yy)]],
+      #                   aes(x=mil, y=100-.03*hi, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col),
+      #                   size=si(2.2), hjust=0, fontface="bold") +
+      #         # yearc labels
+      #         # geom_text(data=da,
+      #         #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
+      #         #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+      # 
+      #         geom_label_repel(data=datsc,
+      #                          aes(x=year+3, y=tyy,
+      #                              label=labu,
+      #                              color=col, alpha=ala*100),
+      #                          fill=bgc,
+      #                          hjust=0, size=si(2.5), fontface="bold",
+      #                          family = fam,
+      #                          segment.size =NA,
+      #                          direction = "y",
+      #                          label.padding =0,
+      #                          xlim=c(mil,2177),
+      #                          label.size=0,
+      #                          max.iter=5000,
+      #                          force=.01, force_pull=10,box.padding=.1 ,
+      #                          seed=5) +
+      # 
+      # 
+      # 
+      #         scale_color_identity() +
+      #         scale_alpha_identity() +
+      # 
+      #         scale_fill_identity() +
+      # 
+      #         scale_x_continuous(breaks = seq(mil, 2100, 10)) +
+      #         coord_cartesian( ylim=c(mi, ma), xlim = c(mix, max),clip ="off") +
+      # 
+      # 
+      #         theme(
+      #           axis.title.x=element_blank(),
+      #           plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+      #           plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+      #           axis.text.x=element_blank(),
+      #           plot.margin = margin(-5,0,-5,0),
+      #           panel.border = element_blank(),
+      #           panel.grid.major = element_blank(),
+      #           panel.grid.minor = element_blank(),
+      #           axis.title.y=element_blank(),
+      #           axis.text.y=element_blank(),
+      #           plot.background = element_rect(fill =bgc, color=NA),
+      #           panel.background = element_rect(fill = bgc ,  color="grey")
+      #         )
+      # 
+      # 
+      # 
+      #       if (rv$lang =="eng") {
+      # 
+      #         plot6 = plot6 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Pricing starts: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutrality: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+10, label=paste0("Year ",year, " values:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      #           geom_text(data = datsss[, .SD[which.max(yy)]],
+      #                     aes(x=mix+(max-mix)*.5, y=130), color=teksvari,
+      #                     label = "(Does not include costs from land use change)",  size = si(2.3), fontface="bold") +
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      #       }
+      # 
+      #       if (rv$lang == "fin") {
+      # 
+      #         plot6 = plot6 +
+      #           geom_text(data=da,
+      #                     aes(x=rv$fyear, y=116), label =paste0("Hinnoittelu alkaa: ", rv$fyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=rv$lyear, y=116), label =paste0("Neutraalius: ", rv$lyear),
+      #                     color=teksvari, hjust=.5, size=si(2.2), fontface="bold") +
+      #           geom_text(data=datsc[, .SD[which.max(tyy)]],
+      #                     aes(x=year+2, y=max(tyy)+10, label=paste0("Vuoden ",year, " arvot:")),
+      #                     color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
+      # 
+      #           geom_text(data = datsss[, .SD[which.max(yy)]],
+      #                     aes(x=mix+(max-mix)*.5, y=130), color=teksvari,
+      #                     label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.3), fontface="bold") +
+      # 
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
+      #                     alpha=.5, lineheight=.99) +
+      # 
+      #           geom_text(data=da,
+      #                     aes(x=2022.5, y=-10), label = paste0("Simuloitu\n2022=>"),
+      #                     col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
+      #                     angle=c(0), alpha=.5, lineheight=.99)
+      # 
+      # 
+      # 
+      #       }
+      # 
+      # 
+      #       if (input$startvalue ==TRUE & rv$yearc > rv$fyear) {
+      #         plot6 = plot6 +
+      # 
+      #           geom_label_repel(data=datsf,
+      #                            aes(x=year-2, y=tyy, label=paste0(labuf),
+      #                                color=col, group =sec, alpha=ala),
+      #                            size=si(2.5), fontface="bold", hjust=1,
+      #                            family = fam,
+      #                            fill=bgc,
+      #                            # segment.size =NA,
+      #                            segment.size =NA,
+      #                            direction = "y",
+      #                            label.padding =0,
+      #                            # box.padding=.1,
+      #                            # nudge_x=18,
+      #                            xlim=c(mil,2177),
+      #                            label.size=0,
+      #                            max.iter=5000,
+      #                            force=.01, force_pull=10,box.padding=.1 ,
+      #                            seed=5
+      #           )
+      # 
+      #         if (rv$lang =="eng") {
+      #           plot6 = plot6 +
+      # 
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Year ",year, " values:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      # 
+      # 
+      #         }  else if (rv$lang=="fin") {
+      #           plot6 = plot6 +
+      # 
+      # 
+      #             geom_text(data=datsf[, .SD[which.max(tyy)]], aes(x=year-3, y=max(tyy)+9, label=paste0("Vuoden ",year, " arvot:")),
+      #                       color=teksvari, hjust=1, size=si(2.2), fontface="bold",  family = fam)
+      #         }
+      # 
+      #       }
+      # 
+      #       gplot6 = ggplotGrob(plot6)
+      #       li6 = list(gplot6)
+      # 
+      #       if (exists("plotlist")) {
+      #         plotlist = c(plotlist,li6)
+      # 
+      #       } else {        plotlist = c(li6)
+      # 
+      #       }
+      # 
+      # 
+      #     }
+      # 
+      # 
+      # 
+      # 
+      # 
+      #     eplot = ggplot(NULL, aes(color = ""))+
+      #       geom_blank()+
+      #       scale_color_manual(values = "black", labels = "Something")+
+      #       guides(color = guide_legend())+
+      #       theme(
+      #         plot.background = element_rect(fill =bgc, color=NA),
+      #         panel.background = element_rect(fill = bgc ,  color="grey")
+      #       )
+      #     geplot = ggplotGrob(eplot)
+      #     lig = list(geplot)
+      # 
+      #     if (exists("plotlist")) {
+      #       plotlist = plotlist
+      # 
+      #     } else {        plotlist = c(lig)
+      # 
+      #     }
+      # 
+      # 
+      #     pll = length(plotlist)
+      #     #
+      #     count = 1
+      #     # if (pll >= 3) {
+      #     if (input$view==2) {
+      # 
+      #       if (pll==1){
+      #         lay=rbind(c(1))
+      #         plotlist = c(plotlist)
+      # 
+      #       } else if (pll ==2) {
+      #         lay = rbind(c(1,2))
+      #         plotlist = c(plotlist)
+      #       } else if (pll==3) {
+      #         lay = rbind(c(1,2), c(3,4))
+      #         plotlist = c(plotlist, lig)
+      # 
+      #       } else if (pll==4) {
+      #         lay = rbind(c(1,2), c(3,4))
+      #       } else if (pll==5) {
+      #         lay = rbind(c(1,2), c(3,4), c(5,6))
+      #         plotlist = c(plotlist, lig)
+      # 
+      #       }
+      #     } else if (input$view==3) {
+      # 
+      #       if (pll==1){
+      #         lay=rbind(c(1))
+      #         plotlist = c(plotlist)
+      #         count = 1
+      # 
+      #       } else if (pll ==2) {
+      #         lay = rbind(c(1), c(2))
+      #         plotlist = c(plotlist)
+      #         count = 2
+      # 
+      #       } else if (pll==3) {
+      #         lay = rbind(c(1), c(2), c(3))
+      #         # plotlist = c(plotlist, lig)
+      #         plotlist = c(plotlist)
+      #         count = 3
+      # 
+      # 
+      #       } else if (pll==4) {
+      #         lay = rbind(c(1), c(2), c(3), c(4))
+      #         plotlist = c(plotlist)
+      #         count = 4
+      # 
+      # 
+      #       } else if (pll==5) {
+      #         lay = rbind(c(1), c(2), c(3), c(4), c(5))
+      #         plotlist = c(plotlist)
+      #         count = 5
+      # 
+      # 
+      #       }
+      #     } else if (input$view==4) {
+      # 
+      #       if (pll==1){
+      #         lay=rbind(c(1))
+      #         plotlist = c(plotlist)
+      #         count = 1
+      # 
+      #       } else if (pll ==2) {
+      #         lay = rbind(c(1,2))
+      #         plotlist = c(plotlist)
+      #         count = 2
+      # 
+      #       } else if (pll==3) {
+      #         lay =  rbind(c(1,2,3))
+      #         # plotlist = c(plotlist, lig)
+      #         plotlist = c(plotlist)
+      #         count = 3
+      # 
+      # 
+      #       } else if (pll==4) {
+      #         lay =  rbind(c(1,2,3,4))
+      #         plotlist = c(plotlist)
+      #         count = 4
+      # 
+      # 
+      #       } else if (pll==5) {
+      #         lay =  rbind(c(1,2,3,4,5))
+      #         plotlist = c(plotlist)
+      #         count = 5
+      # 
+      # 
+      #       }
+      # 
+      #     }
+      # 
+      #     # rv$pll =pll
+      #     # }
+      # 
+      #     plotx = grid.arrange(grobs=plotlist, layout_matrix=lay)
+      # 
+      #     plotx
+      # 
+      #   })
+      # 
+      # })
+    }
   }
-  }
+  
+  
+ 
+  
+  
+  # observeEvent(input$colplot_hover, {
+  #   rv$x = input$colplot_hover$x
+  #   rv$y = input$colplot_hover$y
+  # }) 
+  
+  
+  observeEvent(input$colplot_click, {
+    if (input$colplot_click$x >0 & input$colplot_click$x <300) {
+    rv$x = input$colplot_click$x
+    summ = round(as.numeric(rv$x), 0)
+    
+    }
+    rv$y = input$colplot_click$y
+    
+  }) 
+  
+  
+  
+  observe({
+  output$colplot = renderPlot({
+    req(pacu())
+     # summ=0
+    
+    si =
+      function(per) {
+        per*session$clientData$output_colplot_width*session$clientData$pixelratio/1.1/
+          (700+.10*session$clientData$output_colplot_width)
+        # per*session$clientData$output_plotj_width*session$clientData$pixelratio/.8/
+        #   (570+.15*session$clientData$output_plotj_width)
+      }
+    # }
+    if (input$isMobile=="FALSE") {
+      
+      lsi =
+        function(per) {
+          per*session$clientData$output_colplot_width*session$clientData$pixelratio/800
+        }
+    }
+    
+    if (input$isMobile=="TRUE") {
+      
+      lsi =
+        function(per) {
+          per*session$clientData$output_colplot_width*session$clientData$pixelratio/2000
+        }
+    }
+    
+    bgc = rv$bgc
+    teksvari = rv$teksvari
+    sep =20
+    
+    ffor = as.data.table(pacu())
+    
+    ffor= ffor[country %in% c(ll2) ,]
+    
+    # xcen = input$xcen
+    
+    if (input$xvar == "gdpcap") {
+    xcen = 197
+    } else {
+    xcen = 218
+    }
+    
+    
+    
+    ffoa = ffor[year ==2021 & country %in% c(ll2) ,]
+    if (input$xvar=="gdpcap") {
+      ffoa = ffoa[gdpcap >0,]
+    }
+    
+    ffoa <- ffoa[order(ffoa[[input$xvar]])]
+
+    ffoa[, place:= seq_len(.N)]
+
+    ffoa$cats <- cut(ffoa$place, breaks=xcen)
+    
+    
+    ffo = ffor[ffoa, cats := i.cats, on=c("country") ]
+    ffo = ffo[ffoa, place := i.place, on=c("country") ]
+    ffo = ffo[place >=0, ]
+    # ffo = ffo[ffoa, an := i.an, on=c("country") ]
+    
+    
+    if (input$yvar =="countryfossil") {
+      ffo[,meanyy:=mean(countryfossil, na.rm=TRUE) ,by=.(cats, year)]
+    }
+    if (input$yvar =="countrycost") {
+      ffo[,meanyy:=mean(countrycost, na.rm=TRUE) ,by=.(cats, year)]
+    }
+    if (input$yvar =="countrynetcost") {
+      ffo[,meanyy:=mean(countrynetcost, na.rm=TRUE) ,by=.(cats, year)]
+    }
+  
+    ffo[year >=rv$fyear,maxyy:=max(meanyy, na.rm=TRUE) ,by=.(cats)]
+    ffo = ffo[ffo[year >=rv$fyear & meanyy==maxyy], mayear :=i.year, on=c("cats")] 
+
+    ffo[year >=rv$fyear,minyy:=min(meanyy, na.rm=TRUE) ,by=.(cats)]
+    ffo = ffo[ffo[year >=rv$fyear & meanyy==minyy], miyear :=i.year, on=c("cats")] 
+    
+
+    ffo = distinct(ffo, year, cats, .keep_all = TRUE)
+    
+    ffo[meanyy <=0, cols :="#3d9448"]
+    ffo[meanyy >=0, cols :="#b84d71"]
+    
+    dats =ffo[year ==input$xyear,]
+    dats$zero =0
+    
+    # datsk = as.data.frame(dats)
+    # 
+    # hover <- input$colplot_click
+    # 
+    # hover <- input$colplot_click
+    # 
+    # point <- nearPoints(datsk, hover, xvar= "place", yvar="zero", 
+    #                     # threshold =7000,
+    #                     maxpoints = 1, 
+    #                     addDist = TRUE)
+    # 
+    # point=as.data.table(point)
+    
+    # if (nrow(point) == 0) return(NULL)
+    
+    maxy = max(dats$maxyy)
+    miny = min(dats$minyy)
+    tall = maxy-miny
+    hi = function(he) {
+      miny+tall*he/100
+    }
+    
+    maxx = max(dats$place)
+    minx = min(dats$place)
+    wide = maxx-minx
+    wi = function(we) {
+      minx+wide*we/100
+    }
+    
+  
+    
+    # dats = dats[lux(), label:=i.label ,on=c("sec")]
+
+    ylab = lux()[sec==input$yvar, label]
+    
+    lek = " t"
+    
+    if (input$yvar == "countrynetcost") {
+      lek = " $"
+      roy = 0
+      if (rv$lang =="fin") {
+        ylab = "Nettokustannukset henkeä kohden"
+      }
+      if (rv$lang =="eng") {
+        ylab = "Net costs per capita"
+      }
+    }
+    
+    if (input$yvar == "countrycost") {
+      lek = " $"
+      roy = 0
+      
+      if (rv$lang =="fin") {
+        ylab = "Päästökustannukset henkeä kohden"
+      }
+      if (rv$lang =="eng") {
+        ylab = "Carbon costs per capita"
+      }
+    }
+    
+    
+    if (input$yvar == "countryfossil") {
+      lek = " t"
+      roy = 2
+      
+      if (rv$lang =="fin") {
+        ylab = "Päästöt henkeä kohden"
+      }
+      if (rv$lang =="eng") {
+        ylab = "Emissions per capita"
+      }
+    }
+    
+    
+    if (input$xvar == "gdpcap") {
+      dats$xval =ffo[year ==2021, gdpcap]
+      lekx = " $"
+      rox = 0
+      if (rv$lang =="fin") {
+        xlab = "BKT henkeä kohden"
+      }
+      if (rv$lang =="eng") {
+        xlab = "GDP per capita"
+      }
+    }
+    
+    if (input$xvar == "countryfossil") {
+     dats$xval = ffo[year ==2021, countryfossil]
+      # dats[dats[year ==2021, ], xval := i.countryfossil, 
+      lekx = " t"
+      rox = 2
+      
+      if (rv$lang =="fin") {
+        xlab = "Päästöt henkeä kohden"
+      }
+      if (rv$lang =="eng") {
+        xlab = "Emissions per capita"
+      }
+    }
+    
+    # datspla = dats[place %in% summ, ]
+    if (rv$lurk==0) {
+    datspla = dats[place %in% round(as.numeric(rv$x), 0), ]
+    }
+    
+    if (rv$lurk==1){
+      datspla = dats[country==input$comcou,]
+     }
+    
+
+      
+    # xlab = "gfgg"
+    # hae vuodet jotka oli min ja max
+    #  merkkaa nykyisen vuoden, max-vuoden ja min-vuoden arvot 
+    # eri teksti riippuen ett' onko net benefit vai net cost
+    # suomen tiedot, jos kielen' on suomi
+    # ability to close and open comparisons
+    # x-akselille populaatio 
+    # yk 
+    
+    
+    if (rv$lang=="fin") {
+      prom = "Klikkaa kuvaa nähdäksesi tietyn maan arvoja"
+      yea = " vuonna "
+      datsfin = dats[country=="Finland",]
+    } else if (rv$lang=="eng") {
+      prom = "Click the image to see details for certain country"
+      
+      yea = " in "
+      
+    }
+    
+    gencol ="orange"
+    fincol ="lightblue"
+    sis=2.7
+    
+    # datspla[]
+    
+    plotcol = ggplot(dats) +
+      
+      geom_col(aes(x=cats, y=meanyy, group=cats, fill=cols)) +
+      
+      geom_point(aes(x=cats, y=maxyy, group=cats), color=teksvari) +
+      
+      geom_point(aes(x=cats, y=minyy, group=cats), color=teksvari) +
+      
+     
+      
+      # coord_flip() +
+      scale_color_identity() + 
+      scale_alpha_identity() + 
+      
+      scale_fill_identity() + 
+      
+      scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+      
+      
+      theme(
+        # axis.title.x=element_blank(),
+        plot.title=element_text(lineheight = 0.8, hjust=0.5, size=33, family="Alegreya Sans Bold"),
+        plot.subtitle=element_text(lineheight = 0.8, size=20, hjust=0.5),
+        # axis.text.x=element_blank(),
+        # plot.margin = margin(-5*input$dim[1]/2990,-5*input$dim[1]/90,-5*input$dim[1]/290,-5*input$dim[1]/200, unit = "pt"),
+        panel.border = element_blank(), 
+        panel.grid.major.y = element_line(linetype="dashed"),
+        
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor = element_blank(), 
+        axis.title.y=element_blank(),
+        axis.text.y=element_text(color="grey"),
+        axis.text.x=element_blank(),
+        axis.title.x=element_blank(),
+        plot.background = element_rect(fill =bgc, color=NA), 
+        panel.background = element_rect(fill = bgc ,  color=NA)
+      )
+    
+    
+   
+    
+     # if (exists("summ")) {
+           if (round(as.numeric(rv$x), 0) > 0) {
+        
+      
+      plotcol = plotcol + 
+        
+        geom_vline(data=datspla, aes(xintercept=place),
+                   color=gencol, linewidth = lsi(1), alpha=.6) +
+        
+         annotate("rect",xmin=wi(1), xmax=wi(55), ymin=hi(68),ymax=hi(97), alpha=0.6, fill=bgc)  +
+        
+        annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68),ymax=hi(86), alpha=0.5,color=gencol, fill=bgc)  +
+        
+        
+        geom_text(data=dats[country=="Finland",],
+                  aes(x=wi(10), y=hi(95), 
+                      label = paste0(ylab, yea, year)),
+                  hjust=0, size=si(4), color=teksvari) +
+        
+        geom_text(data=dats[country=="Finland",],
+                  aes(x=wi(10), y=hi(90), 
+                      label = paste0("Ordered by ", xlab, yea, " 2021")),
+                  hjust=0, size=si(4), color=teksvari) +
+        
+        
+        
+        geom_text(data=datspla,
+                  aes(x=wi(30), y=hi(83.5), 
+                      label = paste0(country, ":")),
+                  hjust=1, size=si(3), color=teksvari) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(30), y=hi(80), 
+                      label = paste0(ylab, yea, year, ": ")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(31), y=hi(80), color=cols, 
+                      label = paste0(round(meanyy,roy), lek)),
+                  hjust=0, size=si(sis)) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(30), y=hi(77), 
+                      label = paste0(ylab, " max (",mayear, "): ")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(31), y=hi(77), color=cols, 
+                      label = paste0(round(maxyy,roy), lek)),
+                  hjust=0, size=si(sis)) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(30), y=hi(74),
+                      label = paste0(ylab, " min (",miyear, "): ")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(31), y=hi(74), color=cols,
+                      label = paste0(round(minyy,roy), lek)),
+                  hjust=0, size=si(sis)) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(30), y=hi(71), 
+                      label = paste0(xlab,yea,"2021:")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datspla,
+                  aes(x=wi(31), y=hi(71), 
+                      label = paste0( round(xval,rox),lekx, "  (",place, "./", xcen,")"  )),
+                  hjust=0, size=si(sis), color=teksvari) 
+      
+      
+           } else {
+             
+             plotcol = plotcol + 
+               
+               annotate("rect",xmin=wi(1), xmax=wi(55), ymin=hi(68),ymax=hi(97), alpha=0.6, fill=bgc)  +
+               
+               
+               geom_text(data=dats[country=="Finland",],
+                         aes(x=wi(10), y=hi(95), 
+                             label = paste0(ylab, yea, year)),
+                         hjust=0, size=si(4), color=teksvari) +
+               
+               geom_text(data=dats[country=="Finland",],
+                         aes(x=wi(10), y=hi(90), 
+                             label = paste0("Ordered by ", xlab, yea, " 2021")),
+                         hjust=0, size=si(4), color=teksvari) +
+               
+               
+               
+             geom_label(data=dats[country=="Finland",],
+                       aes(x=wi(5), y=hi(83.5), 
+                           label = prom),
+                       hjust=0, size=si(5), fill="white")  
+             
+     }
+    
+    
+    if (rv$lang=="fin") {
+      plotcol = plotcol +
+        
+        geom_vline(data=datsfin, aes(xintercept=place),
+                   color=fincol, linewidth = lsi(1), alpha=.5) +
+        
+        annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68-sep),
+                 ymax=hi(86-sep), alpha=0.6,color=fincol, fill=bgc)  +
+        
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(30), y=hi(83.5-sep), 
+                      label = paste0(country, ":")),
+                  hjust=1, size=si(3), color=teksvari) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(30), y=hi(80-sep), 
+                      label = paste0(ylab, yea, year, ": ")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(31), y=hi(80-sep), color=cols, 
+                      label = paste0(round(meanyy,roy), lek)),
+                  hjust=0, size=si(sis)) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(30), y=hi(77-sep), 
+                      label = paste0(ylab, " max (",mayear, "): ")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(31), y=hi(77-sep), color=cols, 
+                      label = paste0(round(maxyy,roy), lek)),
+                  hjust=0, size=si(sis)) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(30), y=hi(74-sep),
+                      label = paste0(ylab, " min (",miyear, "): ")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(31), y=hi(74-sep), color=cols,
+                      label = paste0(round(minyy,roy), lek)),
+                  hjust=0, size=si(sis)) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(30), y=hi(71-sep), 
+                      label = paste0(xlab,yea,"2021:")),
+                  hjust=1, size=si(sis), color=teksvari) +
+        
+        geom_text(data=datsfin,
+                  aes(x=wi(31), y=hi(71-sep), 
+                      label = paste0( round(xval,rox),lekx, "  (",place, "./", xcen,")"  )),
+                  hjust=0, size=si(sis), color=teksvari) 
+      
+    }
+    
+
+    
+    plotcol
+    
+    
+    # cols()
+    
+    
+  }, 
+  width ="auto", 
+  height=input$dim[2]/1.6
+  # ,hover = "colplot_hover"
+  
+  
+  
+  
+  )
+  })
+  # output$colsplot <- renderUI({
+  #   # req(input$accordion3)
+  #   
+  #   # req(input$alert)
+  #   # hhh = ht()
+  #   # hhh = as.numeric(reactive(session$clientData$output_plot_width*.7))
+  #   # hhh = as.numeric(session$clientData$output_plot_width*.7)
+  #   # huh =  function() {
+  #   #   session$clientData$output_plot_width*.7
+  #   # }
+  #   # huhu = huh()
+  #   plotOutput("colplot" 
+  #              # ,height=paste0(huhu)
+  #              # ht()
+  #              # ,height=session$clientData[["output_plot1_width"]]
+  #              # ,height=ht()
+  #              # 
+  #              ,hover = "colplot_hover"
+  #              
+  #   )
+  #   
+  #   
+  # }
+  # 
+  # )
+  # 
+  
+  
+  
+  
   
   
   output$plot<-renderPlot({
@@ -12711,7 +13391,7 @@ size=si(2.2), hjust=0, fontface="bold") +
   } 
   ,height=
     function() {
-    session$clientData$output_plot_width*.52
+      session$clientData$output_plot_width*.52
     }
   )
   
@@ -12761,7 +13441,7 @@ size=si(2.2), hjust=0, fontface="bold") +
       )
     }  else if (rv$autodraw == FALSE & input$view==2) {
       
-
+      
       # req(sec2b(), cancelOutput = TRUE)
       # if(!is.null(sec2b())) {
       # rv$plll = length(unique(datsl()$labbi))
@@ -12820,15 +13500,15 @@ size=si(2.2), hjust=0, fontface="bold") +
   #   
   # } else
   # {
-    eventReactive(input$go==TRUE, {
-      # rv$trig = 1
-      
-# req(datsss())
-      # rv$plll = length(unique(datsl()$labbi))
-      rv$plll = rv$pll
-      
-    })
-
+  eventReactive(input$go==TRUE, {
+    # rv$trig = 1
+    
+    # req(datsss())
+    # rv$plll = length(unique(datsl()$labbi))
+    rv$plll = rv$pll
+    
+  })
+  
   # } 
   #   })
   
@@ -12838,7 +13518,7 @@ size=si(2.2), hjust=0, fontface="bold") +
     
     
     # eventReactive(input$go, { 
-  
+    
     if  (rv$autodraw == TRUE & input$view==2)  {
       output$plotjj <- renderUI({ 
         
@@ -12922,48 +13602,48 @@ size=si(2.2), hjust=0, fontface="bold") +
     
     else  if (rv$autodraw == FALSE & input$view==2)  {
       
-
-        output$plotjj <- renderUI({ 
-          # if(!is.null(sec2b())) {
-            
+      
+      output$plotjj <- renderUI({ 
+        # if(!is.null(sec2b())) {
+        
+        
+        {  
+          if (rv$plll ==1) {
+            heeh = "auto"
+            # session$clientData[["output_plotk_width"]]
+          }
           
-          {  
-            if (rv$plll ==1) {
-              heeh = "auto"
-              # session$clientData[["output_plotk_width"]]
+          else if
+          (rv$plll ==2 ){
+            
+            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih/2) {
+              
+              heeh =   session$clientData$output_plotj_width*hih/2
+              # heeh =  c(session$clientData$output_plotj_height)/.91
+            } else  {
+              heeh =  input$dim[2]/rats
             }
             
-            else if
-            (rv$plll ==2 ){
+            
+          } else if (rv$plll ==3) {
+            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
               
-              if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih/2) {
-                
-                heeh =   session$clientData$output_plotj_width*hih/2
-                # heeh =  c(session$clientData$output_plotj_height)/.91
-              } else  {
-                heeh =  input$dim[2]/rats
-              }
+              heeh =  session$clientData$output_plotj_width*hih
+              # heeh =  c(session$clientData$output_plotj_height)/.91
+            } else  {
+              heeh =  input$dim[2]/rats
+            }
+            
+            
+          } else if (rv$plll==5) {
+            if (input$dim[2]/rats >  session$clientData$output_plotj_width) {
               
-              
-            } else if (rv$plll ==3) {
-              if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
-                
-                heeh =  session$clientData$output_plotj_width*hih
-                # heeh =  c(session$clientData$output_plotj_height)/.91
-              } else  {
-                heeh =  input$dim[2]/rats
-              }
-              
-              
-            } else if (rv$plll==5) {
-              if (input$dim[2]/rats >  session$clientData$output_plotj_width) {
-                
-                heeh =  session$clientData$output_plotj_width
-                # heeh =  c(session$clientData$output_plotj_height)/.91
-              } else  {
-                heeh =  input$dim[2]/rats
-              }
-              
+              heeh =  session$clientData$output_plotj_width
+              # heeh =  c(session$clientData$output_plotj_height)/.91
+            } else  {
+              heeh =  input$dim[2]/rats
+            }
+            
             # } else if (rv$plll==1) {
             #   
             #   if (input$dim[2]/rats >  session$clientData$output_plotj_width*(hih-.15)) {
@@ -12973,47 +13653,47 @@ size=si(2.2), hjust=0, fontface="bold") +
             #   } else  {
             #     heeh =  input$dim[2]/rats
             #   }
-              
-            } else if (rv$plll==4) {
-              
-              if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
-                heeh =   session$clientData$output_plotj_width*hih
-                # heeh =  c(session$clientData$output_plotj_height)/.91
-              } else  {
-                heeh =  input$dim[2]/rats
-              }
-              
+            
+          } else if (rv$plll==4) {
+            
+            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
+              heeh =   session$clientData$output_plotj_width*hih
+              # heeh =  c(session$clientData$output_plotj_height)/.91
+            } else  {
+              heeh =  input$dim[2]/rats
             }
             
-            
-            div(        
-              
-              plotOutput("plotj"
-                         ,width = "auto"
-                          # ,height = "auto"
-                         ,height=heeh
-                         # ,height="100%"
-                         
-                         ,hover = "plot_hover"
-                         ,click = "plotj_click"
-                         
-              ) 
-            )
-            
-            
           }
-          # }
-        }  ) 
-       # }  ) 
-       
+          
+          
+          div(        
+            
+            plotOutput("plotj"
+                       ,width = "auto"
+                       # ,height = "auto"
+                       ,height=heeh
+                       # ,height="100%"
+                       
+                       ,hover = "plot_hover"
+                       ,click = "plotj_click"
+                       
+            ) 
+          )
+          
+          
+        }
+        # }
+      }  ) 
+      # }  ) 
+      
     }
-     # }  ) 
+    # }  ) 
   }  ) 
   
   
-
   
-
+  
+  
   
   
   
@@ -13033,19 +13713,19 @@ size=si(2.2), hjust=0, fontface="bold") +
     sec3()
   })
   
-   # sec4 =  reactive(sec3())
+  # sec4 =  reactive(sec3())
   sec4b =  eventReactive(input$go, {
     
     # req(datsss())
     
     sec3()
   })
-
+  
   sec4a =   reactive( {
     # req(datsss())
     
     sec3()})
-    
+  
   
   
   
@@ -13053,24 +13733,24 @@ size=si(2.2), hjust=0, fontface="bold") +
   
   
   
- 
   
-
   
-
+  
+  
+  
   
   
   observe({
     if  (rv$autodraw == TRUE & input$view==3)  {
       
-    output$plotk<-renderPlot({
-      sec3()
-    }
-    ,height=
-      function() {
-        session$clientData$output_plotk_width*.5*rv$pll
+      output$plotk<-renderPlot({
+        sec3()
       }
-    )
+      ,height=
+        function() {
+          session$clientData$output_plotk_width*.5*rv$pll
+        }
+      )
     } 
     else if (rv$autodraw == FALSE & input$view==3) 
     {
@@ -13093,10 +13773,10 @@ size=si(2.2), hjust=0, fontface="bold") +
     # eventReactive(input$go, { 
     
     # if  (rv$autodraw == TRUE & input$view==3)  {  
-  
-  
-  output$plotkk <- renderUI({
-    rats = 1.25
+    
+    
+    output$plotkk <- renderUI({
+      rats = 1.25
       # if (rv$pll ==1) {
       #    heeh = "auto"
       # 
@@ -13113,7 +13793,7 @@ size=si(2.2), hjust=0, fontface="bold") +
       div(        
         plotOutput("plotk"
                    ,width = "auto"
-                    # ,height=heeh
+                   # ,height=heeh
                    ,height="auto"
                    
                    ,hover = "plot_hover"
@@ -13122,10 +13802,10 @@ size=si(2.2), hjust=0, fontface="bold") +
       )
     }  
     )
-  
+    
   })
   
-
+  
   
   observe({
     if (rv$autodraw == TRUE & input$view==4)  {
@@ -13154,13 +13834,13 @@ size=si(2.2), hjust=0, fontface="bold") +
   
   observe({
     
-  output$plotll <- renderUI({
-    # rv$trig
-    rats = 1.25
-    # if (rv$pll ==1) {
-    #   heeh = "auto"
-    #   
-    # }   else    {
+    output$plotll <- renderUI({
+      # rv$trig
+      rats = 1.25
+      # if (rv$pll ==1) {
+      #   heeh = "auto"
+      #   
+      # }   else    {
       
       
       
@@ -13172,22 +13852,22 @@ size=si(2.2), hjust=0, fontface="bold") +
       # } else  {
       #   heeh =  input$dim[1]/rats
       # }
-    # }
-    div(        
-      plotOutput("plotl"
-                 ,width = heeh
-                 ,height= min(input$dim[2], (input$dim[1])*.8)*.60
-                 
-                 ,hover = "plot_hover"
-                 # ,click = "plotl_click"
-      ) 
+      # }
+      div(        
+        plotOutput("plotl"
+                   ,width = heeh
+                   ,height= min(input$dim[2], (input$dim[1])*.8)*.60
+                   
+                   ,hover = "plot_hover"
+                   # ,click = "plotl_click"
+        ) 
+      )
+      
+      #
+      
+    }  
     )
     
-    #
-    
-  }  
-  )
-  
   })
   
   # 
@@ -13253,69 +13933,204 @@ size=si(2.2), hjust=0, fontface="bold") +
   #   
   
   
-#   
-#   
-#   output$yearcuic = renderUI({
-#     
-#     if (input$view ==1) {
-#       fluidRow(
-#         style =  "margin-left: 0vw;
-#               margin-top: 0vw; ",
-#         sliderTextInput("yearcl", label="Observation year",choices= seq(minyy, maxyy, 1),
-#                         from_min = rv$ffyear, from_max = rv$lyear
-#                         ,selected=c(2100),
-#                         width="100%"
-#                         , animate=TRUE
-#                         ,grid=TRUE
-#         )
-#       )
-#     }  else if (input$view ==2) {
-#       minyy = mminyy
-#       maxyy = mmaxyy 
-#       fluidRow(
-#         style =  "margin-left: 0vw;
-#               margin-top: -1vw;
-#                       margin-bottom: -1vw;
-# ",
-# 
-# sliderTextInput("yearcl", label="Observation year", choices= seq(minyy, maxyy, 1),
-#                 from_min = rv$ffyear, from_max = rv$lyear
-#                 ,selected=c(2100)
-#                 ,grid=TRUE
-#                 
-#                 ,width="100%"
-#                 , animate=TRUE
-#                 
-# )   )    }
-#     else if (input$view ==3) {
-#       fluidRow(
-#         style =  "margin-left: 0vw;
-#               margin-top: -1vw;
-#                       margin-bottom: -1vw;",
-#         sliderTextInput("yearcl", label="Observation year",choices= seq(mmminyy, mmmaxyy, 1)
-#                         ,from_min = rv$ffyear, from_max = rv$lyear
-#                         
-#                         ,selected=c(2100),
-#                         width="100%"
-#                         , animate=TRUE
-#                         ,grid=TRUE
-#         )
-#       )
-#       
-#     }
-#     
-#     
-#     
-#   })
+  #   
+  #   
+  #   output$yearcuic = renderUI({
+  #     
+  #     if (input$view ==1) {
+  #       fluidRow(
+  #         style =  "margin-left: 0vw;
+  #               margin-top: 0vw; ",
+  #         sliderTextInput("yearcl", label="Observation year",choices= seq(minyy, maxyy, 1),
+  #                         from_min = rv$ffyear, from_max = rv$lyear
+  #                         ,selected=c(2100),
+  #                         width="100%"
+  #                         , animate=TRUE
+  #                         ,grid=TRUE
+  #         )
+  #       )
+  #     }  else if (input$view ==2) {
+  #       minyy = mminyy
+  #       maxyy = mmaxyy 
+  #       fluidRow(
+  #         style =  "margin-left: 0vw;
+  #               margin-top: -1vw;
+  #                       margin-bottom: -1vw;
+  # ",
+  # 
+  # sliderTextInput("yearcl", label="Observation year", choices= seq(minyy, maxyy, 1),
+  #                 from_min = rv$ffyear, from_max = rv$lyear
+  #                 ,selected=c(2100)
+  #                 ,grid=TRUE
+  #                 
+  #                 ,width="100%"
+  #                 , animate=TRUE
+  #                 
+  # )   )    }
+  #     else if (input$view ==3) {
+  #       fluidRow(
+  #         style =  "margin-left: 0vw;
+  #               margin-top: -1vw;
+  #                       margin-bottom: -1vw;",
+  #         sliderTextInput("yearcl", label="Observation year",choices= seq(mmminyy, mmmaxyy, 1)
+  #                         ,from_min = rv$ffyear, from_max = rv$lyear
+  #                         
+  #                         ,selected=c(2100),
+  #                         width="100%"
+  #                         , animate=TRUE
+  #                         ,grid=TRUE
+  #         )
+  #       )
+  #       
+  #     }
+  #     
+  #     
+  #     
+  #   })
+
+  # sliderInput("concc",
+  #             inf("Convergence of countries emissions", "infoconvergence2"), 
+  #             min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
   
   
   
   
-  
-  
+  output$buddd =renderUI({
+    
+    if (rv$lang =="eng") {
+    
+    div(id="sla",
+    selectInput(
+      "bud",
+      inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
+      c("400Gt (67% likelihood to stay below 1,5C)" = 400,
+        "500Gt (50% likelihood to stay below 1,5C)" = 500,
+        "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
+        "1350Gt (50% likelihood to stay below 2,0C)" = 1350
         
-    output$yearcui = renderUI({
-      req(rv$ffyear)
+      ),selected=1150,
+      multiple = FALSE,
+      selectize = FALSE,
+      width = NULL,
+      size = NULL
+    ))
+    
+
+    }  else if (rv$lang =="fin") {
+      div(id="sla",
+      selectInput(
+        "bud",
+        inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
+
+
+        c("400Gt (67% todennäköisyys pysyä alle 1,5C)" = 400,
+          "500Gt (50% todennäköisyys pysyä alle 1,5C)" = 500,
+          "1150Gt (67% todennäköisyys pysyä alle 2,0C)" = 1150,
+          "1350Gt (50% todennäköisyys pysyä alle 2,0C)" = 1350
+        ),selected=1150,
+        multiple = FALSE,
+        selectize = FALSE,
+        width = NULL,
+        size = NULL
+      )
+      )
+
+
+    }
+    
+  } )
+  
+  
+  
+  
+  
+  
+  output$concc = renderUI({
+    req(rv$fyear)
+    req(rv$lyear)
+    if (rv$lang=="eng") {
+      
+      word ="Convergence of countries emissions:" } else {
+        word="Päästöjen yhdentymisen aste:"
+      }
+    
+    # if (input$view ==1) {
+    # fluidRow(
+
+      sliderInput("conc",
+                  inf(word, "infoconvergence2"), 
+                  min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
+      
+    # )
+    
+    
+    
+    
+    
+    
+  })
+  
+  
+  
+  output$xxyear = renderUI({
+    req(rv$fyear)
+    req(rv$lyear)
+    if (rv$lang=="eng") {
+      
+      word ="Show year:" } else {
+        word="Näytä tiedot vuodelle:"
+      }
+
+    # if (input$view ==1) {
+    fluidRow(
+      style =  "margin-left: 0vw;
+              margin-top: -1vw;
+                      margin-bottom: -1vw; ",
+      sliderTextInput("xyear", label=word,choices= seq(rv$fyear, rv$lyear, 1),
+                      
+                      # sliderTextInput("yearc", label=NULL,choices= seq(minyy, maxyy, 1),
+                      # from_min = rv$ffyear, from_max = rv$lyear
+                      
+                      selected=c(2040),
+                      width="100%"
+                      , animate=TRUE
+                      ,grid=FALSE
+                      # ticks=FALSE
+                      )
+    )
+    
+
+      
+      
+   
+      
+  })
+  
+  
+  
+  # 
+  # output$xxcen = renderUI({
+  #   # if (input$view ==1) {
+  #   fluidRow(
+  #     style =  "margin-left: 0vw;
+  #             margin-top: -1vw;
+  #                     margin-bottom: -1vw; ",
+  #     
+  #      sliderInput("xcen",
+  #                   inf("Number of segments", "infopricing"),
+  #                   min = 2, max = 218, value = c(218),
+  #                  dragRange=FALSE, ticks = FALSE)
+  #   )
+  # })
+  # 
+  
+  
+  
+  
+  
+  
+  output$yearcui = renderUI({
+    req(rv$ffyear)
     req(rv$lyear)
     if (input$view ==1) {
       fluidRow(
@@ -13324,14 +14139,16 @@ size=si(2.2), hjust=0, fontface="bold") +
                       margin-bottom: -1vw; ",
         sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1),
                         
-        # sliderTextInput("yearc", label=NULL,choices= seq(minyy, maxyy, 1),
+                        # sliderTextInput("yearc", label=NULL,choices= seq(minyy, maxyy, 1),
                         from_min = rv$ffyear, from_max = rv$lyear
                         
                         ,selected=c(rv$lyear),
-                    width="100%"
-                    , animate=FALSE
-                    ,grid=TRUE
-            
+                        width="100%"
+                        , animate=FALSE
+                        #
+                        ,grid=FALSE
+                        # ,ticks=FALSE
+                        
         )
       )
     }  else if (input$view ==2) {
@@ -13345,20 +14162,20 @@ size=si(2.2), hjust=0, fontface="bold") +
                       margin-bottom: -1vw;
 ",
 sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1),
-
-# sliderTextInput("yearc", label=NULL, choices= seq(minyy, maxyy, 1),
+                
+                # sliderTextInput("yearc", label=NULL, choices= seq(minyy, maxyy, 1),
                 from_min = rv$ffyear, from_max = rv$lyear
                 # ,step=1
                 ,selected=c(rv$lyear)
-                 ,grid=TRUE
-           
-            ,width="100%"
-            , animate=FALSE
-            
+                 ,grid=FALSE
+                # ,ticks=FALSE
+                ,width="100%"
+                , animate=FALSE
+                
 )
 
       )
-     
+      
     }
     else if (input$view %in% c(3,4)) {
       fluidRow(
@@ -13371,7 +14188,8 @@ sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1),
                         ,selected=c(rv$lyear),
                         width="100%"
                         , animate=FALSE
-                        ,grid=TRUE
+                         ,grid=FALSE
+                        # ticks=FALSE
         )
       )
       

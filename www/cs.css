@@ -39,6 +39,8 @@
 --colcheck: #5ABAE0;
 
 --collinea: #41644A;
+--collinea: #D3DDE0;
+
 --collineb: #41644A;
 
 }  
@@ -46,14 +48,16 @@
 .dark-mode {
 --colb: #5E5D5E; 
 --colb: #35473F;
---colb: #2E2E2E;
 --colb: #484B4D;
+--colb: #2f3c44;
 
 --colbcard: #2E2E2E;
 --colbcard: #2f4238;
 --colbcard: #316051;
+--colbcard: #2f3c44;
+--colbcard: #265558;
 
---colbtable: #565656;
+--colbtable: #2f3a3b;
 
 
 
@@ -69,6 +73,8 @@
 --colcheck:  #237c85;
 
 --collinea: #9f8e71;
+--collinea: #2f3a3b;
+
 --collineb: #F0EBCE;
 }
 
@@ -159,9 +165,6 @@ border-block: .2vw solid yellow !important;
 .tabbable[data-value='1. Global emissions'] {border-block: 2px solid white !important;
                              border-inline: 2px solid white !important;}
 
-.nav-tabs > li > .nav-link.active {
-   border-color: green !important;
-}
 
 
 
@@ -170,6 +173,9 @@ border-block: .2vw solid yellow !important;
 
 /*
 
+.nav-tabs > li > .nav-link.active {
+   border-color: green !important;
+}
 .tabbable > .nav > li > a[data-value='3. Carbon price'] { color:lightgreen !important}
 .tabbable > .nav > li > a[data-value='4. User emissions'] { color:pink !important}
 .tabbable > .nav > li > a[data-value='EXTRA: Countries'] { color:yellow !important}
@@ -308,10 +314,7 @@ input[type="radio"]{
     line-height: 1.333;
 }
 
-.irs--shiny .irs-min, .irs--shiny .irs-max {
-  
-  visibility: hidden !important;
-}
+
 
 .checkbox-primary input[type="checkbox"]:checked+label::before, .checkbox-primary input[type="radio"]:checked+label::before {
     background-color: var(--colcheck);
@@ -332,6 +335,7 @@ input[type="radio"]{
 
 .irs-grid-pol.small {height: 0px;}
 
+.irs-grid-text {height: 0px;}
 
 
 .dark-mode .card {
@@ -354,7 +358,10 @@ background-color: rgb(45, 36, 36);
   scrollbar-color: red yellow;
 }
   scrollbar-color: pink lightblue;
-
+.irs--shiny .irs-min, .irs--shiny .irs-max {
+  
+  visibility: hidden !important;
+}
 } */
 
 
@@ -418,7 +425,7 @@ color: var(--colt);
     box-shadow: none;
 }
  .dark-mode .custom-control-label, .dark-mode .custom-file-label, .dark-mode .custom-file-label::after, .dark-mode .custom-select, .dark-mode .form-control, .dark-mode .input-group-text {
-    background-color: var(--colbcard) !important;
+    background-color: var(--colb) !important;
 color: var(--colt);
     padding: 0.1rem;
     font-size: calc(.5rem + .5vw);
@@ -426,7 +433,7 @@ color: var(--colt);
 }
 
  .custom-control-label, .custom-file-label,  .custom-file-label::after, .custom-select, .form-control,  .input-group-text {
-    background-color: var(--colbcard) !important;
+    background-color: var(--colb) !important;
 color: var(--colt);
     padding: 0.1rem;
     font-size: calc(.5rem + .5vw);
@@ -522,7 +529,7 @@ input[type=awesome-checkbox] {
 
 #tablu {
 color: red;
-font-family: Roboto !important;
+font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
@@ -537,7 +544,7 @@ overflow: auto;
 
 #tablu p {
 color: blue;
-font-family: Roboto !important;
+font-family: trebuchet MS !important;
 font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
@@ -548,7 +555,7 @@ line-height: 1.1;
 
 #tablu2 {
 color: blue;
-font-family: Roboto !important;
+font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
@@ -560,7 +567,7 @@ overflow: auto;
 
 #tablu2 p {
 color: blue;
-font-family: Roboto !important;
+font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
@@ -570,7 +577,7 @@ line-height: 1.1;
 
 #tablu3 {
 color: blue;
-font-family: Roboto !important;
+font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
@@ -582,7 +589,7 @@ overflow: auto;
 
 #tablu3 p {
 color: blue;
-font-family: Roboto !important;
+font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
@@ -591,7 +598,7 @@ line-height: 1.1;
 }
 #tablu4 {
 color: blue;
-font-family: Roboto !important;
+font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .25rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
@@ -603,7 +610,7 @@ overflow: auto;
 
 #tablu4 p {
 color: blue;
-font-family: Roboto !important;
+font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .25rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
@@ -834,7 +841,7 @@ border-bottom-color: none;
   border-radius: 5px;
 padding: .5vw !important;
 padding-top: .1vw !important;
-padding-bottom: .2vw !important;
+padding-bottom: .5vw !important;
 
 
 }
@@ -1103,7 +1110,7 @@ font-weight: 500 !important;
   
     background-color: var(--colbtable);
                margin-left: 0.5vw;
-                              margin-right: 0.3vw;
+                              margin-right: 0.5vw;
                               margin-top: 0.2vw;
 
 padding: .6vw;
@@ -1116,6 +1123,26 @@ font-weight: 100 !important;
 
 
 }
+
+#panes {
+  
+    background-color: var(--colb);
+               margin-left: 0.0vw;
+                              margin-right: 0.0vw;
+                              margin-top: 0.0vw;
+
+padding: .6vw;
+padding-right: 1.3vw;
+padding-top: .6vw;
+padding-bottom: .2vw;
+
+font-size: calc(.45vw + .47rem) !important;
+font-weight: 100 !important;
+
+
+}
+
+
 
 #view {
 
@@ -1260,7 +1287,7 @@ top: 5px !important;
 font-size: calc(.6vw + .6rem);
 z-index: 2;
 top: 5px !important;
-margin-top: 20px;
+margin-top: 5px;
 
  }
 

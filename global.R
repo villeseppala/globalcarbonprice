@@ -29,16 +29,18 @@ library(bs4Dash)
 # library(ggfx)
 library(sass)
 library(shinyjs)
-
-
  library(showtext)
 library(slickR)
+
+library(dplyr)
+
 # library(reactlog)
 
 # reactlog::reactlog_enable()
 setDTthreads(2)
 # shiny::reactlogShow()
 
+# summ =0  
 
 lihh =.99
 
@@ -70,7 +72,7 @@ net = hsv(0.10,0.88,0.85)
 tot = hsv(0.08,0.8,0.78)
 non = hsv(0.11,0.93,0.71)
 
-pop =hsv(0.73,0.52,1)
+pop =hsv(0.7,0.47,1)
 
 
 tax = hsv(0.3,0.93,0.78)
@@ -562,6 +564,8 @@ da = data.frame(l,r)
 # population projections
 paac = as.data.table(paac)
 
+paac[country =="China, Taiwan Province of China", country:="Taiwan"]
+
 pack = copy(paac)
 # pack = paac[year >=pastyear, ]
 
@@ -569,6 +573,7 @@ pack = copy(paac)
 
 paaco = paac[year==2021 & var ==3,]
 paaco = paaco[order(country)]
+# paaco = paaco[order(gdpcap)]
 
 ll = as.character(paaco$country)
 
