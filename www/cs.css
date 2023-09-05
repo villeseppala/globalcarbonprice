@@ -351,12 +351,12 @@ rota.scroller {
   height: 100px;
   overflow-y: scroll;
 } 
+
+
 /*
 .dark-mode .card {
 background-color: rgb(45, 36, 36);
-.rota {
-  scrollbar-color: red yellow;
-}
+
   scrollbar-color: pink lightblue;
 .irs--shiny .irs-min, .irs--shiny .irs-max {
   
@@ -365,7 +365,9 @@ background-color: rgb(45, 36, 36);
 } */
 
 
-
+.dark-mode .rota {
+  scrollbar-color: #2f3c44  grey;
+}
 
 .navbar-gray-dark {
     background-color: var(--colb);
@@ -530,7 +532,7 @@ input[type=awesome-checkbox] {
 #tablu {
 color: red;
 font-family: trebuchet MS  !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -545,7 +547,7 @@ overflow: auto;
 #tablu p {
 color: blue;
 font-family: trebuchet MS !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
@@ -556,7 +558,7 @@ line-height: 1.1;
 #tablu2 {
 color: blue;
 font-family: trebuchet MS  !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -568,7 +570,7 @@ overflow: auto;
 #tablu2 p {
 color: blue;
 font-family: trebuchet MS  !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
@@ -578,7 +580,7 @@ line-height: 1.1;
 #tablu3 {
 color: blue;
 font-family: trebuchet MS  !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -590,7 +592,7 @@ overflow: auto;
 #tablu3 p {
 color: blue;
 font-family: trebuchet MS  !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
@@ -599,7 +601,7 @@ line-height: 1.1;
 #tablu4 {
 color: blue;
 font-family: trebuchet MS  !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
 line-height: 1.1;
@@ -611,7 +613,7 @@ overflow: auto;
 #tablu4 p {
 color: blue;
 font-family: trebuchet MS  !important;
-font-size: calc(.7vw + .25rem) !important;
+font-size: calc(.7vw + .23rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
@@ -1480,6 +1482,15 @@ color: var(--colo);
     padding: .6vw;
         margin-right: .3vw;
 }
+
+#ress2 .btn {
+    font-size: calc(.99vw + .49rem);
+    line-height: .4 !important;
+    text-align: right;
+    padding: .6vw;
+        margin-right: .3vw;
+}
+
 
 .card-title {
 float: center !important;

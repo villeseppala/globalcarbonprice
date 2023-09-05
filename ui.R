@@ -131,7 +131,10 @@ dashboardBody(
     )
     # through to here
   ),
-  
+  tags$style(type="text/css",
+             ".shiny-output-error { visibility: hidden; }",
+             ".shiny-output-error:before { visibility: hidden; }"
+  ),
   
   
   tags$script(HTML("
@@ -695,10 +698,7 @@ div(
   id="tablu2",
   class="noku",
   # width ="50%",
-  
-  
-  
-  
+
   bs4Dash::bs4Table(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
@@ -779,12 +779,12 @@ div(style="display:inline-block;",id="sla",
                       ),
 
 
-div(
-  
-  
-  uiOutput("cou")
-  # ) )
-)
+# div(
+#   
+#   
+#   uiOutput("cou")
+#   # ) )
+# )
 
                )
 
@@ -837,7 +837,7 @@ column(10,style = " padding: .2vw;",
                     div(
                       # style="flex-wrap:wrap;",
                         id="sla",
-                    checkboxInput("showmainplot", "Main plots", value =TRUE)
+                    checkboxInput("showmainplot", "Main results", value =TRUE)
                     ,checkboxInput("showcolplot", "Compare countries (slows page)", value =FALSE)
                     # )
                   ) 
@@ -859,7 +859,7 @@ column(6,
                   div(
                     
                     # p(style = 'text-align: right',"Observe specific year:")
-                    tagList(uiOutput(style = 'font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right;', "obsyear")
+                    tagList(uiOutput(style = 'padding-top: 0.4vw; font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right; line-height: .85 !important;', "obsyear")
                     )  
                   )
            )
@@ -880,7 +880,7 @@ column(6,
                        column(3,
     
                               div(style="display:inline-block;",
-                                  div(style="margin-left: 3vw; display:inline-block; margin-top: -10.6vw !important;",id="ress", 
+                                  div(style="margin-left: 3vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
                                       actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
                                   # ),
                                   # column(1,
@@ -1003,10 +1003,8 @@ div(
                                   , plotOutput("colplot", height="auto"
                                                ,click = "colplot_click"
                                                # ,click = "colplot_click"
-                                               
                                   )
-                                ,div(style = " background-color:var(--colb)!important; font-size: 1.2vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2022:"))
-                                
+                                ,div(style = " background-color:var(--colb)!important; font-size: 1.2vw", p("www.globalcarbonprice.com _____  Data: UN, World Bank, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2022:"))
                                   ,
                                   
                                   fluidRow(
@@ -1095,7 +1093,7 @@ div(
 
 
 
-textOutput("pul"),
+# textOutput("pul"),
 
 conditionalPanel(
   

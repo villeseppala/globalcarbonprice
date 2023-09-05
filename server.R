@@ -824,7 +824,7 @@ server <- function(input,output, session) {
       updateTabsetPanel(session,  "nok", selected = "1. Global emissions")
       
       
-      updateCheckboxInput("showmainplot", "Main plots", session=session)
+      updateCheckboxInput("showmainplot", "Main results", session=session)
       updateCheckboxInput("showcolplot", "Compare countries (slows page)", session=session)
       
 
@@ -1048,7 +1048,7 @@ server <- function(input,output, session) {
       output$showall = renderText({  c("Näytä kaikki")  })  
       output$shownone = renderText({  c("Piilota kaikki")  })  
       output$automatic = renderText({  c("Automattinen")  })  
-      output$redraw = renderText({  c("Piirrä uudestaan")  })  
+      output$redraw = renderText({  c("Uusi piirto")  })  
       output$autoredraw = renderText({  c("Autom. piirto")  })  
       
       output$startlabel = renderText({  c("Lähtövuoden arvot")  })  
@@ -1075,9 +1075,9 @@ server <- function(input,output, session) {
       
       updateSelectInput("view",label = "Graafien erittely",
                          c("Yksi graafi kaikille asteikoille" = 1,
-                           "Vierekkäiset graafit eri asteikoille" = 2,
+                           "Vierekkäiset graafit eri asteikoille, kaksi per rivi" = 2,
                            "Peräkkäiset graafit eri asteikoille" = 3,
-                           "Vierekkäiset, kaikki samalla asteikoilla" = 4), 
+                           "Vierekkäiset graafit eri asteikoille, yksi rivi" = 4), 
                          
                          selected = rv$view,
                          # selected =3,
@@ -1085,7 +1085,7 @@ server <- function(input,output, session) {
       
       
       
-      output$viewtext =  renderText( "TULOSMUUTTUJAT")
+      output$viewtext =  renderText( "TULOS-MUUTTUJAT")
       
       output$simuset =  renderText( "VALINNAT")
       
@@ -1203,35 +1203,39 @@ server <- function(input,output, session) {
       rv$tutotext = HTML("
        <b>What is this page?</b> 
        <br>
-Global carbon price would be an efficient tool for stopping global warming. If the revenue from carbon price was distributed as a global carbon dividend, it would also reduce global income inequality significantly. 
+Global carbon price would be an efficient tool for stopping global warming. If the revenue from carbon pricing was distributed evenly as a global carbon dividend, it would also reduce global income inequality significantly. 
 
-On this page, you can simulate CO2 emission and CO2 price pathways for reaching carbon neutrality and thus stopping global warming. Simulation choices have major implications on your personal carbon costs and the global income distribution. 
+On this page, you can simulate emission and emission price pathways for reaching carbon neutrality and thus stopping global warming. Simulation choices have major implications on your personal carbon costs and the global income distribution. 
 <br><br>
 
 
 <b>Page structure</b>
 <br>
-SIMULATION RESULTS are shown at the graph section in the bottom right of the page. You can also choose to show the results in a table. 
+RESULTS are shown at the graph section in the bottom right of the page. In addition to main result graph, you can compare country averages in a separate graph. You can also choose to show the results in a table. 
 <br>
 
- RESULT VISIBILITY settings at the left side control what variable are shown in the results graph. 
-By default, indicators are added to the graphs based on your phase in the simulation inputs selection (Automatic). However, you can also select them on or off manually. 
+ RESULT INDICATORS section at the left side show the yearly results and control what variables are shown in the main results graph. 
 
 <br>
-GRAPH VIEW settings control whether the results are shown in one or more graphs. 
-<br>
-Results depend on your choices in SIMULATION INPUTS section at the top of the page. 
-Simulation inputs are divided to 4 thematic phases + an extra phase for country specific inputs. All inputs have predetermined sensible default values so that you can focus on changing the inputs you are most interested in.
-<br><br>
-<b>Carbon budget</b>
+INPUTS section is at the top of the page and its choices determine the results outcomes. 
+Simulation inputs are divided to 4 thematic phases + an extra phase for country specific inputs. All inputs have predetermined sensible default values related to the chosen carbon budget so that you can focus on changing the inputs you are most interested in.
 <br>
 First input choice is the carbon budget. With this choice, you define the ambition level of the simulation. Carbon budget is a special type of input, which also changes some of the other inputs to their carbon budget specific defaults in phases 1 and 3. 
 <br>
-Next inputs, together with the budget, define the CO2 emissions for each year. Land use emissions and net emissions react to those choices and to the budget so that the cumulative net emissions equal to the carbon budget in the carbon neutrality year, when the warming stops. 
-<br><br>
+
+<br>
+<b>Global emissions</b>
+<br>
+<br>
+Global emissions inputs, together with the chosen budget, define the CO2 emissions for each year. Land use emissions and net emissions react to those choices and to the budget so that the cumulative net emissions equal to the carbon budget in the carbon neutrality year, when the warming stops. 
+<br>
+You can also choose to include non-CO2 emissions to the system so that they are included when calculatig individual specific emissions and pricing costs.
+<br>
+
+<br>
 <b>Population projection</b>
 <br>
-Population projection choice defines how the world population will evolve. Mean CO2 emissions are the results of dividing the CO2 emission by the population. 
+Population projection choice defines how the world population will evolve. Mean emissions are the results of dividing the emission by the population. 
 <br>
 By default, the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10%  chance that the population is smaller than in the chosen projection. And so on.
 <br><br>
@@ -1249,7 +1253,7 @@ In this phase, you can try out different paths for your own emissions and explor
 
 <br
 If you are using an online carbon footprint calculator to estimate your current emissions for the starting year, please take into account
-if they consider all greenhouse gas emissions, including non-CO2. If they do, you should also have them set on in the Carbon budget phase. 
+if they consider all greenhouse gas emissions, including non-CO2. If they do, you should also have them set on in the global emissions phase. 
 <br
 By choosing the country level emissions from the ALTERNATIVE selection you can use the predicted per capita emission path of a specific country as your own emissions. 
 
@@ -1276,7 +1280,7 @@ Click the info buttons across the UI to receive more information on various inpu
 <br>
 Achieving the necessary carbon sinks will also cause costs, which, however, are not modeled in the simulation. Sinks can be achieved through the carbon price as well.
 <br
-Please give feedback if you have ideas on how to involve sinks in the model. 
+Please give feedback by clicking the feedback button in the top of the page if you have ideas on how to involve sinks in the model. 
 
 
 ")
@@ -1465,7 +1469,7 @@ the carbon neutrality year carbon price")
       rv$infostartusertextt = c("User start year emissions")
       rv$infoendusertext = c("Set estimate of your emissions at the carbon neutrality year. Estimate how greatly the chosen carbon price path affects your emissions.
                              Notice that if in the carbon budget section you left out other gases than CO2, you should leave them out from this estimate as well. ")
-      rv$infoendusertextt = c("Neutrality year carbon price")
+      rv$infoendusertextt = c("User end year emissions")
       
       
       
@@ -1508,6 +1512,17 @@ the carbon neutrality year carbon price")
                              equal the annual global emissions")
       rv$infoconvergence2textt = c("Convergence of countries' emissions")
       
+      rv$infoconvergence3text = c("It is assumed that countries' per capita CO2 emissions converge to global average over time from their 2021 historical value. 
+                             <br/>
+                             Convergence factor denotes how much the emissions converge by the carbon neutrality year.
+                             
+                             
+                             Intermediate emissions between pricing start year and carbon neutrality year are calculated 
+                             as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
+                             A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
+                             equal the annual global emissions")
+      rv$infoconvergence3textt = c("Convergence of countries' emissions")
+      
       
       
       rv$infodatatext = HTML("CO2 emission data: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
@@ -1536,6 +1551,10 @@ IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Wor
 For default carbon price values, figure 3.32 in page 360 of AR6 WG1 chapter 3 has been used as a loose reference point. \n
 <br>
 IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [P.R. Shukla, J. Skea, R. Slade, A. Al Khourdajie, R. van Diemen, D. McCollum, M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, J. Malley, (eds.)]. Cambridge University Press, Cambridge, UK and New York, NY, USA. doi: 10.1017/9781009157926
+<br>
+<br>
+GDP data for 2021 from World Bank, in 2015 US dollars:
+https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
 ")
       
       rv$infodatatextt = c("Data sources")
@@ -1576,38 +1595,42 @@ Globaali hiilen hinta olisi tehokas tapa ilmastonmuutoksen pysäyttämiseen. Mik
 
 <b>Rakenne</b>
 <br>
-SIMULAATION TULOKSET näkyvät graafiosiossa oikeassa alakulmassa. Voit näyttää tulokset myös taulukkomuodossa. 
+TULOKSET näkyvät graafiosiossa oikeassa alakulmassa. Päätulosten lisäksi voit myös vertailla maakohtaisia päätuloksia tai näyttää päätulokset myös taulukkomuodossa. 
 <br>
 
- TULOSTEN NÄKYVYYS -asetuksissa vasemmassa reunassa voit säätää minkä muuttujien tuloksia haluat näyttää. Oletusarvoisesti indikaattoreita lisätään graafinäkymään simulaatiovalintojen vaiheen mukaan (Automaattinen). Voit kuitenkin valita niitä näkymään tai pois näkymästä myös manuaalisesti.
+ TULOSMUUTTUJAT -asetuksissa vasemmassa reunassa näet tuloksia tiivistetysti ja voit säätää minkä muuttujien tuloksia haluat näyttää päätulosten graafeissa. 
 <br>
-GRAAFINÄKYMÄ-asetuksista oikeassa yläreunassa voit säätää miten eri skaaloilla olevia indikaattoreita näytetään 
+
+Tulokset riippuvat  valinnoistasi VALINNAT-osiossa graafiosion yläpuolella. Simulaatiovalinnoissa on budjettivalinnan lisäksi neljä vaihetta + lisävaihe maakohtaisille valinnoille. Kaikissa valinnoissa on esitäytetyt oletusarvot, joten voit myös keskittyä muuttamaan tai kokeilemaan vain niitä valintoja, joista olet eniten kiinnostunut. 
 <br>
-Tulokset riippuvat  valinnoistasi SIMULAATIOVALINNAT-osiossa graafiosion yläpuolella. Simulaatiovalinnoissa on neljä vaihetta + lisävaihe maakohtaisille valinnoille. Kaikissa valinnoissa on esitäytetyt oletusarvot, joten voit myös keskittyä muuttamaan tai kokeilemaan vain niitä valintoja, joista olet eniten kiinnostunut. 
+Ensin valitaan hiilibudjetti. Tämä määrittää simulaation lämpötilatavoitteen eli kunnianhimon tason. Budjettivalinta on siitä erityinen, että että se muuttaa joitain muita valintoja niiden budjettikohtaisiin oletusarvoihiin vaiheissa 1 ja 3.  
+<br>
+
+<br>
+<b>Globaalit päästöt</b>
+<br>
+<br>
+Tämän osion valinnat, yhdessä hiilibudjetin kanssa, määrittävät hiilidioksidipäästöt kullekin vuodelle. Käyttäjänä kontrolloit fossiilipäästöjen käyrän muotoa, ja maankäytön päästöt ja nielu, ja edellisten summana laskettavat nettopäästöt, reagoivat valintoihisi, niin että kumulatiiviset nettopäästöt vastaavat valittua hiilibudjettia hiilineutraaliusvuonna, kun lämpeneminen pysähtyy.  
+<br>
+Voit myös sisällyttää muut kasvihuonekaasut kuin hiilidioksidin mukaan järjestelmään. Mikäli teet niin, ne näkyvät yksilökohtaisissa päästöissä ja järjestelmän kustannuksissa. 
 <br><br>
-<b>Hiilibudjetti</b>
+<b>Maailman väestö</b>
 <br>
-Ensimmäisenä simulaationäkymän valintanäkymässä on hiilibudjetti. Tämä määrittää simulaation lämpötilatavoitteen eli kunnianhimon tason. Budjettivalinta on siitä erityinen, että että se muuttaa joitain muita valintoja niiden budjettikohtaisiin oletusarvoihiin vaiheissa 1 ja 3.  
-<br>
-Seuraavat valinnat, yhdessä hiilibudjetin kanssa, määrittävät hiilidioksidipäästöt kullekin vuodelle. Käyttäjänä kontrolloit fossiilipäästöjen käyrän muotoa, ja maankäytön päästöt ja nielu, ja edellisten summana laskettavat nettopäästöt, reagoivat valintoihisi, niin että kumulatiiviset nettopäästöt vastaavat valittua hiilibudjettia hiilineutraaliusvuonna, kun lämpeneminen pysähtyy.  
-<br><br>
-<b>Väestön määrä</b>
-<br>
-Väestön määrä -valinnassa valitset jonkun YK:N väestön määrä -projektioista määrität miten maailman väestö tulee kehittymään yli ajan simulaatiossasi. Yhdessä globaalien CO2-päästöjen kanssa väestömäärä määrittää CO2-keskipäästöt kaikkien maailman ihmisten keskuudessa.
+Maailman väestö -valinnassa valitset jonkun YK:N väestön määrä -projektioista määrität miten maailman väestö tulee kehittymään yli ajan simulaatiossasi. Yhdessä globaalien CO2-päästöjen kanssa väestömäärä määrittää keskipäästöt kaikkien maailman ihmisten keskuudessa.
 <br>
 Oletuksena on valittu mediaaniskenaario. On siis 50% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi ja 50% todennäköisyys, että se on skenaarion arvoja pienempi. 
 Valitsemalla projektion “jakauman ylin 20%” on 20% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi. Valitsemalla “jakauman alin 5%” on 5% todennäköisyys, että väestömäärä on projektion arvoja suurempi. Jne. 
 <br><br>
-<b>Hiilen hinnan valinta</b>
+<b>Hiilen hinta</b>
 <br>
 On hyvin vaikea arvioida, että mikä hiilen hinnan taso on riittävä saavuttamaan tietyn lämpötilatavoitteen. Kannattaakin tutkailla erilaisia hiilen hintoja ja niiden vaikutusta päästömenoihin. Mikäli globaali hiilen hinta otettaisiin käyttöön, niin sitä säädettäisiin aiottua polkua tiukemmaksi tai löysemmäksi riippuen siitä, miten päästöt kehittyvät odotettuun nähden. 
 <br>
 <br>
-<b>Käyttäjäpäästöt</b>
+<b>Käyttäjän päästöt</b>
 <br>
 Tässä osiossa pääset asettamaan itsellesi henkilökohtaisia päästövähennyspolkuja ja tutkailemaan millaisia vuosittaisia päästökustannuksia niistä sinulle syntyisi. 
 
-Valitsemalla maakohtaiset päästöt VAIHTOEHTO-kohdasta voit käyttää jonkin maan kansalaisten keskimääräistä estimoitua päästövähennyspolkua omana päästövähennyspolkunasi. Voit käyttää päästöjen arvioinnissa hyödyksi myös netin hiilijalanjälkilaskureita. Tällöin on tärkeä huomioida, että sisältääkö laskuri kaikki kasvihuonekaasupäästöt vai pelkän hiilidioksidin. 
+Valitsemalla maakohtaiset päästöt VAIHTOEHTO-kohdasta voit käyttää jonkin maan kansalaisten keskimääräistä estimoitua päästövähennyspolkua omana päästövähennyspolkunasi. Voit käyttää päästöjen arvioinnissa hyödyksi myös netin hiilijalanjälkilaskureita. Tällöin on tärkeä huomioida, että sisältääkö laskuri kaikki kasvihuonekaasupäästöt vai pelkän hiilidioksidin. Mikäli olet laskenut Globaalit päästöt osiossa mukaan muut päästöt, niin sinun tulee laskea ne mukaan tässäkin.
 <br><br>
 <b>EXTRA: Maat</b>
 <br>
@@ -1628,7 +1651,7 @@ Klikkaamalla käyttöliittymän infonäppäimiä saat lisätietoa eri indikaatto
 <br>
 Hiilineutraaliuuteen riittävien hiilinielujen saavuttamisesta koituu myös kustannuksia, joita ei kuitenkaan ole simulaatiossa mallinnettu. Nieluihin voidaan myös kannustaa hiilen hinnoittelun kautta, niin että sillä voimistetaan olemassa olevaa metsittymiskehitystä ja vähennetään metsäkatoa.
 <br>
-Annathan palautetta, mikäli sinulle on ideoita, että miten sisällyttää maankäytön muutoksen päästöt ja nielut malliin
+Annathan palautetta sivun yläreunan feedback-linkistä, mikäli sinulle on ideoita, että miten sisällyttää maankäytön muutoksen päästöt ja nielut malliin
 
 ")
       # rv$labelfossil = "Fossiilipäästöt"
@@ -1788,6 +1811,12 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
                                  Kansallisiin tuloksiin sovelletaan korjauskerrointa, jotta kansallisten tulosten summa vastaa globaaleja päästöjä")
       rv$infoconvergence2textt = c("Maiden päästöjen yhteneminen")
       
+      rv$infoconvergence3text = c("Oletetaan, että maiden keskipäästöt yhtenevät ajan yli kohti globaalia keskiarvoa vuosien 2021 historiallisia arvoistaan. 
+                                 Yhtenevyyskerroin kuvaa kuinka paljon maiden päästöt yhtenevät hiilineutraaliusvuoteen mennessä.
+                                 
+                                 Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan lineaarisena tai prosentuaalisena jatkumona, riippuen päästöpolun muodon valinnasta vaiheessa 1. 
+                                 Kansallisiin tuloksiin sovelletaan korjauskerrointa, jotta kansallisten tulosten summa vastaa globaaleja päästöjä")
+      rv$infoconvergence3textt = c("Maiden päästöjen yhteneminen")
       
       rv$infodatatext = HTML("CO2-päästöt: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
                       https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2022 \n
@@ -1809,6 +1838,11 @@ IPCC:N raportteja on käytety hiilibudjettien valitsemiseen ja hiilen hinnan ja 
 <br><br>
 IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille \n
 <br>IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [P.R. Shukla, J. Skea, R. Slade, A. Al Khourdajie, R. van Diemen, D. McCollum, M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, J. Malley, (eds.)]. Cambridge University Press, Cambridge, UK and New York, NY, USA. doi: 10.1017/9781009157926
+<br>
+<br>
+BKT-data vuodelle 2021 Maaimanpankilta, vuoden 2015 dollareissa:
+https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
+
 ")
       
       rv$infodatatextt = c("Data-lähteet")      
@@ -1863,9 +1897,22 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                                
                                tabPanel("1. Global emissions",
                                         
+                                        p(" Specify the CO2 emission trajectory corresponding to the chosen carbon budget"),
+                                        
+                                        
+                                        # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
+                                        # Määritä hiilibudjettia vastaavien CO2-päästöjen polku
+                                        # 
+                                        # Estimate your emission progression, GIVEN the chosen carbon price
+                                        # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen
+                                        
                                         
                                         fluidRow(   class="sox",  
                                                     
+                                                    # column(8, id = "luu",
+                                                           
+                                                           
+                                                           # fluidRow(
                                                     column(4
                                                            , 
                                                            id = "luu",
@@ -1891,7 +1938,8 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                                                            # p("Note: Changing the budget will reset many other values")
                                                            
                                                     ),
-                                                    column(4, id = "luu",
+                                                    column(4, 
+                                                            id = "luu",
                                                            
                                                                                                                 # hr(),
                                                            tags$div(id="sla",numericInput("paa", 
@@ -1915,6 +1963,8 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                                                            
                                                            
                                                            
+                                                    # ) 
+                                                    # )
                                                     ),
                                                     
                                                     column(4,  
@@ -1982,7 +2032,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                                ),
                                
                                tabPanel("3. Carbon price",
-                                        p("Carbon price should be set high enough to achieve the emission target set in phase 1"),
+                                        p("Carbon price should be set high enough to achieve the chosen emission targets"),
                                         
                                         fluidRow(
                                           column(6, id = "luu",
@@ -2026,15 +2076,20 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                                         
                                ),
                                
-                               
+                        # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
+                        # Määritä hiilibudjettia vastaavien CO2-päästöjen polku
+                        # 
+                        # Estimate your emission progression, GIVEN the chosen carbon price
+                        # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
                                
                                tabPanel("4. User emissions", 
+                                        # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
                                         
-                                        
+                                     p("Estimate your emission progression, GIVEN the chosen carbon price"),   
                                         fluidRow(
                                           
                                           column(4, id = "luu",
-                                                 tags$div(id="sla",numericInput("indi1", label=inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
+                                                 tags$div(id="sla",numericInput("indi1", inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
                                                  hr(),
                                                  tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
                                                  
@@ -2136,15 +2191,20 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                         
                         
 
+  
                         
                         
                         selected = "1. Globaalit päästöt",
                         
                         tabPanel("1. Globaalit päästöt",
+                                 p("Määritä hiilibudjettia vastaavien CO2-päästöjen polku"),
                                  
                                  
                                  fluidRow(   class="sox",  
-                                             
+                                             # column(8,  
+                                                    # id = "luu",
+                                                 
+                                                    # fluidRow(  
                                              column(4
                                                     , 
                                                     id = "luu",
@@ -2170,9 +2230,10 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                                                     # p("Huom: Budjetin muuttaminen resetoi monia muita valintoja")
                                                     
                                              ),
-                                             column(4, id = "luu",
+                                             column(4, 
                                                     
-                                                                                                     # hr(),
+                                                    id = "luu",
+                                                    # hr(),
                                                     
                                                     tags$div(id="sla",numericInput("paa", 
                                                                                    inf("CO2-päästöt/nielu loppuvuonna", "infoemissionsink"), 
@@ -2194,6 +2255,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                                                     
                                                     
                                                     
+                                             # )) 
                                              ),
                                              
                                              
@@ -2266,7 +2328,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                         
                         tabPanel("3. Hiilen hinta",
                                  
-                                 p("Hiilen hinta tulisi asettaa tarpeeksi korkeaksi, että sen avulla saavutetaan vaiheessa 1. asetettu päästötavoite"),
+                                 p("Hiilen hinta tulisi asettaa tarpeeksi korkeaksi, että sen avulla saavutetaan valitut päästötavoitteet"),
                                  
                                  
                                  fluidRow(
@@ -2305,6 +2367,9 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
                         
                         tabPanel("4. Käyttäjän päästöt",
                                  
+                                 # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
+                                 
+                                 p("Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen"),   
                                  
                                  fluidRow(
                                    
@@ -2440,10 +2505,10 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
   
   infolist = c("info3", "info4", "infofossil", "infolul", "infonet", "infoghg", "infononco2","infononco2u", "infopop",
                "infoavgfossil","infoprice", "infoavgcost","infodividend",
-               "infoavgnetcost", "infouserfossil", "infousercost", "infonetcost", "infoaveragedividend", "infocountrydividend", "infocountryfossil",
+               "infoavgnetcost", "infouserfossil", "infousercost","infostartuser","infoenduser", "infonetcost", "infoaveragedividend", "infocountrydividend", "infocountryfossil",
                "infocountrypop","infocountrycost","infocountrynetcost",
                "infodata", "infobudget","infoemissionsink","infostartprice","infoendprice",
-               "infopricing", "infopopu", "infoconvergence", "infoconvergence1", "infoconvergence2", "infonationaldiv")
+               "infopricing", "infopopu", "infoconvergence", "infoconvergence1", "infoconvergence2","infoconvergence3", "infonationaldiv")
   
   
   
@@ -2664,12 +2729,16 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       rv$bgc = "#2f3c44"
       rv$teksvari = "white"
       rv$obsvari = "lightgreen"
+
+      rv$green ="lightgreen"
+      rv$red ="#db8aa7"
       
     } else {
       rv$bgc = "#D3DDE0"
       rv$teksvari = "#707070"
       rv$obsvari = "darkgreen"
-      
+      rv$green ="#3d9448"
+      rv$red ="#b32758"
     }
     
   })
@@ -3750,7 +3819,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       rv[[paste0(i)]] = FALSE
     } )
   
-  showlistb = c("showfossil","showland", "shownet", "showprice" , "showavgcost",
+  showlistb = c("showfossil","showland", "shownet",  "showghg", "shownonco2","showprice" , "showavgcost",
                 "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost", "showpop", "showavgfossil")
   lapply(
     X = showlistb,
@@ -6785,7 +6854,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
     paste0(rv$y,"  ", rv$x)
   })
   output$mobileuser = renderText({
-    c("If you are mobile user, landscape rotation is recommended")
+    c("Mobile use is not recommended, but if done, please use landscape rotation")
   })
   
   
@@ -7389,7 +7458,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
         si =
           function(per) {
             per*session$clientData$output_plotj_width*session$clientData$pixelratio/1.1/
-              (670+.05*session$clientData$output_plotj_width)
+              (870+.05*session$clientData$output_plotj_width)
             # per*session$clientData$output_plotj_width*session$clientData$pixelratio/.8/
             #   (570+.15*session$clientData$output_plotj_width)
           }
@@ -7549,13 +7618,13 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.35) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
@@ -7943,13 +8012,13 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
@@ -8285,13 +8354,13 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
@@ -8614,13 +8683,13 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
@@ -8945,12 +9014,12 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
@@ -9492,7 +9561,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       scas = 2.5
       lines = .7
       lines2 =.2
-      points=1.1
+      points=.8
       segalfa=.7
       lee = 0
       fam = fam
@@ -9546,11 +9615,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
                        color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -9902,11 +9971,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
                        color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -10185,11 +10254,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
                        color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -10469,11 +10538,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
                        color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -10759,11 +10828,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=100, yend=100),
-                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+                       color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=75, yend=75), 
                        color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -11311,11 +11380,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
       #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -11667,11 +11736,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
       #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -11950,11 +12019,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
       #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -12234,11 +12303,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
       #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -12522,11 +12591,11 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=0, yend=0),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       # 
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=100, yend=100),
-      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*2, alpha=.5) +
+      #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
       #         geom_segment(data=datsc[sec=="dummy",],
       #                      aes(x=mil, xend=rv$lyear, y=75, yend=75),
       #                      color=teksvari, linetype ="dashed",linewidth=lsi(seg), alpha=.2) +
@@ -12995,8 +13064,9 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
 
     ffo = distinct(ffo, year, cats, .keep_all = TRUE)
     
-    ffo[meanyy <=0, cols :="#3d9448"]
-    ffo[meanyy >=0, cols :="#b84d71"]
+
+    ffo[meanyy <=0, cols :=rv$green]
+    ffo[meanyy >=0, cols :=rv$red]
     
     dats =ffo[year ==input$xyear,]
     dats$zero =0
@@ -13123,20 +13193,24 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
     
     
     if (rv$lang=="fin") {
-      prom = "Klikkaa kuvaa nähdäksesi tietyn maan arvoja"
+     rara = "Raha-arvot v. 2015 dollareissa\nKustannukset eivät sisällä maankäytön muutoksen hinnoittelun kustannuksia"
+      ord = "Järjestys: "
+      prom = "Klikkaa kuvaa nähdäksesi tietyn maan arvoja  "
       yea = " vuonna "
       datsfin = dats[country=="Finland",]
     } else if (rv$lang=="eng") {
-      prom = "Click the image to see details for certain country"
+      rara = "Monetary values in 2015 US dollars\nCosts don't include costs from land use change pricing"
+      ord = "Ordered by: "
+      
+      prom = "Click the image to see details for certain country  "
       
       yea = " in "
       
     }
     
     gencol ="orange"
-    fincol ="lightblue"
+    fincol ="#70a8c2"
     sis=2.7
-    
     # datspla[]
     
     plotcol = ggplot(dats) +
@@ -13147,7 +13221,14 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       
       geom_point(aes(x=cats, y=minyy, group=cats), color=teksvari) +
       
-     
+      
+      geom_hline(aes(yintercept=0), color=teksvari) + 
+      
+      geom_text(data=datspla,
+                aes(x=wi(98), y=hi(-1), 
+                    label = rara),
+                hjust=1, size=si(3), color=teksvari) +
+      
       
       # coord_flip() +
       scale_color_identity() + 
@@ -13170,7 +13251,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
         panel.grid.major.x = element_blank(),
         panel.grid.minor = element_blank(), 
         axis.title.y=element_blank(),
-        axis.text.y=element_text(color="grey"),
+        axis.text.y=element_text(color="grey", size= si(10)),
         axis.text.x=element_blank(),
         axis.title.x=element_blank(),
         plot.background = element_rect(fill =bgc, color=NA), 
@@ -13178,8 +13259,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
       )
     
     
-   
-    
+
      # if (exists("summ")) {
            if (round(as.numeric(rv$x), 0) > 0) {
         
@@ -13189,19 +13269,19 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
         geom_vline(data=datspla, aes(xintercept=place),
                    color=gencol, linewidth = lsi(1), alpha=.6) +
         
-         annotate("rect",xmin=wi(1), xmax=wi(55), ymin=hi(68),ymax=hi(97), alpha=0.6, fill=bgc)  +
+         annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68),ymax=hi(97), alpha=0.6, fill=bgc)  +
         
         annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68),ymax=hi(86), alpha=0.5,color=gencol, fill=bgc)  +
         
         
         geom_text(data=dats[country=="Finland",],
                   aes(x=wi(10), y=hi(95), 
-                      label = paste0(ylab, yea, year)),
+                      label = paste0(ylab, yea, year, ",", lekx)),
                   hjust=0, size=si(4), color=teksvari) +
         
         geom_text(data=dats[country=="Finland",],
                   aes(x=wi(10), y=hi(90), 
-                      label = paste0("Ordered by ", xlab, yea, " 2021")),
+                      label = paste0(ord, xlab, yea, " 2021")),
                   hjust=0, size=si(4), color=teksvari) +
         
         
@@ -13218,7 +13298,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
         
         geom_text(data=datspla,
                   aes(x=wi(31), y=hi(80), color=cols, 
-                      label = paste0(round(meanyy,roy), lek)),
+                      label = paste0(round(meanyy,roy), lekx)),
                   hjust=0, size=si(sis)) +
         
         geom_text(data=datspla,
@@ -13256,17 +13336,17 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
              
              plotcol = plotcol + 
                
-               annotate("rect",xmin=wi(1), xmax=wi(55), ymin=hi(68),ymax=hi(97), alpha=0.6, fill=bgc)  +
+               annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68),ymax=hi(97), alpha=0.6, fill=bgc)  +
                
                
                geom_text(data=dats[country=="Finland",],
                          aes(x=wi(10), y=hi(95), 
-                             label = paste0(ylab, yea, year)),
+                             label = paste0(ylab, yea, year, ",",lek)),
                          hjust=0, size=si(4), color=teksvari) +
                
                geom_text(data=dats[country=="Finland",],
                          aes(x=wi(10), y=hi(90), 
-                             label = paste0("Ordered by ", xlab, yea, " 2021")),
+                             label = paste0(ord, xlab, yea, " 2021")),
                          hjust=0, size=si(4), color=teksvari) +
                
                
@@ -13287,8 +13367,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
         
         annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68-sep),
                  ymax=hi(86-sep), alpha=0.6,color=fincol, fill=bgc)  +
-        
-        
+
         geom_text(data=datsfin,
                   aes(x=wi(30), y=hi(83.5-sep), 
                       label = paste0(country, ":")),
@@ -14003,10 +14082,10 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
     selectInput(
       "bud",
       inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
-      c("400Gt (67% likelihood to stay below 1,5C)" = 400,
-        "500Gt (50% likelihood to stay below 1,5C)" = 500,
-        "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
-        "1350Gt (50% likelihood to stay below 2,0C)" = 1350
+      c("400Gt (67% likelihood to stay below 1.5°C)" = 400,
+        "500Gt (50% likelihood to stay below 1.5°C)" = 500,
+        "1150Gt (67% likelihood to stay below 2.0°C)" = 1150,
+        "1350Gt (50% likelihood to stay below 2.0°C)" = 1350
         
       ),selected=1150,
       multiple = FALSE,
@@ -14023,10 +14102,10 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
         inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
 
 
-        c("400Gt (67% todennäköisyys pysyä alle 1,5C)" = 400,
-          "500Gt (50% todennäköisyys pysyä alle 1,5C)" = 500,
-          "1150Gt (67% todennäköisyys pysyä alle 2,0C)" = 1150,
-          "1350Gt (50% todennäköisyys pysyä alle 2,0C)" = 1350
+        c("400Gt (67% todennäköisyys pysyä alle 1,5°C)" = 400,
+          "500Gt (50% todennäköisyys pysyä alle 1,5°C)" = 500,
+          "1150Gt (67% todennäköisyys pysyä alle 2,0°C)" = 1150,
+          "1350Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1350
         ),selected=1150,
         multiple = FALSE,
         selectize = FALSE,
@@ -14058,7 +14137,7 @@ IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana 
     # fluidRow(
 
       sliderInput("conc",
-                  inf(word, "infoconvergence2"), 
+                  inf(word, "infoconvergence3"), 
                   min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
       
     # )
