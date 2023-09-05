@@ -25,7 +25,7 @@
 
 --colb: #D3DDE0;
 
---colt: #426f83;;
+--colt: #426f83;
 --colm: #67CEC4;
 --colo: #AA8B56;
 --colbtable:#e7e7e7;
@@ -366,7 +366,7 @@ background-color: rgb(45, 36, 36);
 
 
 .dark-mode .rota {
-  scrollbar-color: #2f3c44  grey;
+  scrollbar-color:  #426f83  grey;
 }
 
 .navbar-gray-dark {
@@ -1157,7 +1157,8 @@ font-weight: 100 !important;
  /*
  width: 40px !important; 
  */
- font-size: calc(.61vw + .41rem) !important;} 
+ font-size: calc(.61vw + .41rem) !important;
+} 
 
 #sla .form-group { display: table-row; 
 horizontal-align: right;

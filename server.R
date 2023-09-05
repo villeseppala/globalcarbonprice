@@ -1897,7 +1897,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                
                                tabPanel("1. Global emissions",
                                         
-                                        p(" Specify the CO2 emission trajectory corresponding to the chosen carbon budget"),
+                                        p("Change details to the CO2 emission trajectory corresponding to the chosen carbon budget"),
                                         
                                         
                                         # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
@@ -2197,7 +2197,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                         selected = "1. Globaalit päästöt",
                         
                         tabPanel("1. Globaalit päästöt",
-                                 p("Määritä hiilibudjettia vastaavien CO2-päästöjen polku"),
+                                 p("Aseta yksityiskohtia hiilibudjettia vastaavien CO2-päästöjen polulle"),
                                  
                                  
                                  fluidRow(   class="sox",  
@@ -7564,7 +7564,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         scas = 2.5
         lines = .7
         lines2 =.2
-        points=1.1
+        points=1.05
         segalfa=.7
         lee = 0
         fam = fam
@@ -9561,7 +9561,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       scas = 2.5
       lines = .7
       lines2 =.2
-      points=.8
+      points=.95
       segalfa=.7
       lee = 0
       fam = fam

@@ -859,14 +859,14 @@ column(6,
                   div(
                     
                     # p(style = 'text-align: right',"Observe specific year:")
-                    tagList(uiOutput(style = 'padding-top: 0.4vw; font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right; line-height: .85 !important;', "obsyear")
+                    tagList(uiOutput(style = 'padding-top: 0.6vw; font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right; line-height: .85 !important;', "obsyear")
                     )  
                   )
            )
            ,
            column(9,
                   div(
-                    style="padding-top: 0.4vw; padding-right: 0.4vw; margin-bottom: 0.9rem;",
+                    style="padding-top: 0.8vw; padding-right: 0.4vw; margin-bottom: 0.4rem;",
                     uiOutput("yearcui", width="auto")),
                   
            )
