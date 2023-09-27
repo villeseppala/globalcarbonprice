@@ -5527,6 +5527,9 @@ rv$triggo=0
     # rv$afterbudget = dats[year==rv$lyear, budget]
     # rv$rvtotal =dats[year==rv$lyear, budget]
     
+    rv$triggo = 1
+    
+    
     dats
     
     
@@ -5757,6 +5760,9 @@ rv$triggo=0
     ppaa$landcost=NA
     
     dats = rbind(ppaa, ppax, dats, fill=TRUE)
+    
+    rv$triggo = 1
+    
     
     dats = as.data.table(dats)
     dats = dats[lux(), col:=i.col ,on=c("sec")]

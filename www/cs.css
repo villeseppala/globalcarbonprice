@@ -80,8 +80,11 @@
 
 .tabbable > .nav > li > a[data-value='1. Global emissions'] { color:#D98C1A !important; }
 
-.tabbable > .nav > li > a.active[data-value='1. Global emissions'] {  border-top: .2vw solid #D98C1A !important;
-                             border-inline: .2vw solid #D98C1A !important;}
+.tabbable > .nav > li > a.active[data-value='1. Global emissions'] { 
+  border-top: .2vw solid #D98C1A !important;
+                 border-inline: .2vw solid #D98C1A !important;
+    border-bottom: .1vw solid var(--colbtable) !important;
+}
 
 .tab-pane.active[data-value='1. Global emissions'] {
 border-block: .2vw solid #D98C1A !important;
@@ -90,7 +93,10 @@ border-block: .2vw solid #D98C1A !important;
 
 .tabbable > .nav > li > a[data-value='2. Population projection'] { color:#AD7AFF !important }
 .tabbable > .nav > li > a.active[data-value='2. Population projection'] {  border-top: .2vw solid #AD7AFF !important;
-                             border-inline: .2vw solid #AD7AFF !important;}
+                             border-inline: .2vw solid #AD7AFF !important;
+      border-bottom: .1vw solid var(--colbtable) !important;
+
+}
                              .tab-pane.active[data-value='2. Population projection'] {
 border-block: .2vw solid #AD7AFF !important;
                              border-inline: .2vw solid #AD7AFF !important;
@@ -99,7 +105,10 @@ border-block: .2vw solid #AD7AFF !important;
 
 .tabbable > .nav > li > a[data-value='3. Carbon price'] { color:#33C70E !important }
 .tabbable > .nav > li > a.active[data-value='3. Carbon price'] {  border-top: .2vw solid #33C70E !important;
-                             border-inline: .2vw solid #33C70E !important;}
+                             border-inline: .2vw solid #33C70E !important;
+      border-bottom: .1vw solid var(--colbtable) !important;
+
+}
                              .tab-pane.active[data-value='3. Carbon price'] {
 border-block: .2vw solid #33C70E!important;
                              border-inline: .2vw solid #33C70E !important;
@@ -107,10 +116,15 @@ border-block: .2vw solid #33C70E!important;
                              
                              .tabbable > .nav > li > a[data-value='4. User emissions'] { color:#24B0FF !important }
 .tabbable > .nav > li > a.active[data-value='4. User emissions'] {  border-top: .2vw solid #24B0FF !important;
-                             border-inline: .2vw solid #24B0FF !important;}
+                             border-inline: .2vw solid #24B0FF !important;
+      border-bottom: .1vw solid var(--colbtable) !important;
+
+}
                              .tab-pane.active[data-value='4. User emissions'] {
 border-block: .2vw solid #24B0FF !important;
                              border-inline: .2vw solid #24B0FF !important;
+                                 border-bottom: .1vw solid var(--colbtable) !important;
+
 }
                              .tabbable > .nav > li > a[data-value='EXTRA: Countries'] { color:yellow !important }
 .tabbable > .nav > li > a.active[data-value='EXTRA: Countries'] {  border-top: .2vw solid yellow !important;
@@ -118,6 +132,8 @@ border-block: .2vw solid #24B0FF !important;
                              .tab-pane.active[data-value='EXTRA: Countries'] {
 border-block: .2vw solid yellow !important;
                              border-inline: .2vw solid yellow !important;
+                                 border-bottom: .1vw solid var(--colbtable) !important;
+
 }
 
 .tabbable > .nav > li > a[data-value='1. Globaalit päästöt'] { color:#D98C1A !important; }
@@ -128,6 +144,8 @@ border-block: .2vw solid yellow !important;
 .tab-pane.active[data-value='1. Globaalit päästöt'] {
 border-block: .2vw solid #D98C1A !important;
                              border-inline: .2vw solid #D98C1A !important;
+                                 border-bottom: .1vw solid var(--colbtable) !important;
+
 }
 
 .tabbable > .nav > li > a[data-value='2. Maailman väestö'] { color:#AD7AFF !important }
@@ -136,6 +154,8 @@ border-block: .2vw solid #D98C1A !important;
                              .tab-pane.active[data-value='2. Maailman väestö'] {
 border-block: .2vw solid #AD7AFF !important;
                              border-inline: .2vw solid #AD7AFF !important;
+                                 border-bottom: .1vw solid var(--colbtable) !important;
+
 }
 
 
@@ -145,6 +165,8 @@ border-block: .2vw solid #AD7AFF !important;
                              .tab-pane.active[data-value='3. Hiilen hinta'] {
 border-block: .2vw solid #33C70E!important;
                              border-inline: .2vw solid #33C70E !important;
+                                 border-bottom: .1vw solid var(--colbtable) !important;
+
 }
                              
                              .tabbable > .nav > li > a[data-value='4. Käyttäjän päästöt'] { color:#24B0FF !important }
@@ -153,6 +175,8 @@ border-block: .2vw solid #33C70E!important;
                              .tab-pane.active[data-value='4. Käyttäjän päästöt'] {
 border-block: .2vw solid #24B0FF !important;
                              border-inline: .2vw solid #24B0FF !important;
+                                 border-bottom: .1vw solid var(--colbtable) !important;
+
 }
                              .tabbable > .nav > li > a[data-value='EXTRA: Maat'] { color:yellow !important }
 .tabbable > .nav > li > a.active[data-value='EXTRA: Maat'] {  border-top: .2vw solid yellow !important;
@@ -160,6 +184,8 @@ border-block: .2vw solid #24B0FF !important;
                              .tab-pane.active[data-value='EXTRA: Maat'] {
 border-block: .2vw solid yellow !important;
                              border-inline: .2vw solid yellow !important;
+                                 border-bottom: .1vw solid var(--colbtable) !important;
+
 }
 
 .tabbable[data-value='1. Global emissions'] {border-block: 2px solid white !important;
