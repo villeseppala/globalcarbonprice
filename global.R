@@ -29,7 +29,7 @@ library(bs4Dash)
 # library(ggfx)
 library(sass)
 library(shinyjs)
- library(showtext)
+library(showtext)
 library(slickR)
 
 library(dplyr)
@@ -68,6 +68,12 @@ vv = .8
 
 fos = hsv(0.08,0.93,0.89)
 lul = hsv(	0.13,1,0.78)
+
+sink = hsv(	0.13,1,0.78)
+source = hsv(	0.13,1,0.78)
+newsink = hsv(	0.13,1,0.78)
+
+
 net = hsv(0.10,0.88,0.85)
 tot = hsv(0.08,0.8,0.78)
 non = hsv(0.11,0.93,0.71)
@@ -90,6 +96,7 @@ dividend =  hsv(0.87,0.639,0.89)
 avgnetcost =hsv(0.9,0.6,0.89)
 taxfosindi =hsv(0.95,0.59,0.8)
 netcost = hsv(	0.91,0.58,0.83)
+landcost = hsv(	0.82,0.58,0.83)
 
 averagedividend =hsv(0.86,0.63,0.79)
 countrydividend = hsv(0.88,0.73,0.81)
@@ -222,7 +229,7 @@ llist =c("paa", "muo", "sprice", "eprice","pri" ,"indi1" , "indi2", "muoindi", "
 
 
 
-sec=c("fossil", "land", "net", "ghg","nonco2","price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
+sec=c("fossil", "land", "net", "ghg","nonco2","source", "sink", "newsink",  "price", "avgcost","landcost", "avgfossil", "userfossil", "netcost","usercost",
       "pop","dividend", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost", "averagedividend", "countrydividend")
 
 lu = data.frame(sec)
@@ -250,6 +257,11 @@ lu[sec == "countrydividend", pos:=17]
 lu[sec == "averagedividend", pos:=18]
 lu[sec == "ghg", pos:=19]
 lu[sec == "nonco2", pos:=20]
+lu[sec == "source", pos:=21]
+lu[sec == "sink", pos:=22]
+lu[sec == "newsink", pos:=23]
+lu[sec == "landcost", pos:=24]
+
 
 # decimals in numbers
 lu$le = 0
@@ -273,6 +285,11 @@ lu[sec == "countrynetcost", le:=0]
 lu[sec == "countrypop", le:=0]
 lu[sec == "countrydividend", le:=0]
 lu[sec == "averagedividend", le:=0]
+lu[sec == "source",le:=1]
+lu[sec == "sink",le:=1]
+lu[sec == "newsink",le:=1]
+lu[sec == "landcost",le:=0]
+
 # marks
 lu$mark = "t"
 lu[sec == "fossil", mark:="Gt"]
@@ -295,6 +312,10 @@ lu[sec == "countryfossil", mark:="t"]
 lu[sec == "countrypop", mark:="M"]
 lu[sec == "countrydividend", mark:="$"]
 lu[sec == "averagedividend", mark:="$"]
+lu[sec == "source", mark:="Gt"]
+lu[sec == "sink", mark:="Gt"]
+lu[sec == "newsink", mark:="Gt"]
+lu[sec == "landcost", mark:="$"]
 
 # labels, English
 # lu[sec == "fossil", label:="Total emissions"]
@@ -341,6 +362,10 @@ lu[sec == "countryfossil", col:=countryfossil]
 lu[sec == "countrypop", col:=countrypop]
 lu[sec == "countrydividend", col:=dividend]
 lu[sec == "averagedividend", col:=dividend]
+lu[sec == "source",col:=source]
+lu[sec == "sink", col:=sink]
+lu[sec == "newsink", col:=newsink]
+lu[sec == "landcost", col:=landcost]
 
 #  alpha?
 alas=.9
@@ -366,13 +391,17 @@ lu[sec == "countryfossil",  ala:=alas]
 lu[sec == "countrypop",  ala:=alas]
 lu[sec == "countrydividend", ala:=alas]
 lu[sec == "averagedividend", ala:=alas]
+lu[sec == "source", ala:=alas]
+lu[sec == "sink", ala:=alas]
+lu[sec == "newsink", ala:=alas]
+lu[sec == "landcost", ala:=alas]
 
 lu$visi = 1
 lu[sec =="pop", visi :=0]
 
 
 lu[sec == "fossil", label:="CO2 emissions"]
-lu[sec == "land", label:="Land use change"]
+lu[sec == "land", label:="Land+CCS CO2"]
 lu[sec == "net", label:="Net CO2 emissions"]
 lu[sec == "ghg", label:="Total emissions"]
 lu[sec == "nonco2", label:="Non-CO2 emissions"]
@@ -392,7 +421,10 @@ lu[sec == "countryfossil", label:="Country emissions"]
 lu[sec == "countrypop", label:="Country population"]
 lu[sec == "countrydividend", label:="National dividend"]
 lu[sec == "averagedividend", label:="Mean dividend"]
-
+lu[sec == "source", label:="Land emissions"]
+lu[sec == "sink", label:="Land sinks + CCS"]
+lu[sec == "newsink", label:="New land sinks + CCS"]
+lu[sec == "landcost", label:="New sink+CCS costs"]
 
 
 lu[sec == "fossil", labbi:="Global emissions"]
@@ -416,7 +448,10 @@ lu[sec == "countryfossil", labbi:="Individual emissions"]
 lu[sec == "countrypop", labbi:="Population projection"]
 lu[sec == "countrydividend", labbi:="Emissions costs and benefits"]
 lu[sec == "averagedividend", labbi:="Emissions costs and benefits"]
-
+lu[sec == "source", labbi:="Global emissions"]
+lu[sec == "sink", labbi:="Global emissions"]
+lu[sec == "newsink", labbi:="Global emissions"]
+lu[sec == "landcost", labbi:="Emissions costs and benefits"]
 
 
 # lalist = c("Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
@@ -447,14 +482,20 @@ lu2[sec == "countryfossil", labbi:="Yksilökohtaiset päästöt"]
 lu2[sec == "countrypop", labbi:="Väestökehitys"]
 lu2[sec == "countrydividend", labbi:="Menot ja tulot päästöistä"]
 lu2[sec == "averagedividend", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "source", labbi:="Globaalit päästöt"]
+lu2[sec == "sink", labbi:="Globaalit päästöt"]
+lu2[sec == "newsink",labbi:= "Globaalit päästöt"]
+lu2[sec == "landcost",labbi:= "Menot ja tulot päästöistä"]
+
+
+
 
 
 lu2[sec == "fossil", label:="CO2-päästöt"]
-lu2[sec == "land", label:="Maankäytön muutos"]
+lu2[sec == "land", label:="Maankäyttö+CCS CO2"]
 lu2[sec == "net", label:="CO2-nettopäästöt"]
 lu2[sec == "ghg", label:="Kokonaispäästöt"]
 lu2[sec == "nonco2", label:="Muut päästöt"]
-
 lu2[sec == "price", label:="Hiilen hinta"]
 lu2[sec == "avgcost", label:="Keskipäästömenot"]
 lu2[sec == "avgfossil", label:="Keskipäästöt"]
@@ -470,7 +511,10 @@ lu2[sec == "countryfossil", label:="Maan keskipäästöt"]
 lu2[sec == "countrypop", label:="Maan väestö"]
 lu2[sec == "countrydividend", label:="Kansallinen osinko"]
 lu2[sec == "averagedividend", label:="Keskiosinko"]
-
+lu2[sec == "source", label:="Maankäytön päästöt"]
+lu2[sec == "sink", label:="Maanielu + CCS"]
+lu2[sec == "newsink", label:="Uusi maanielu + CCS"]
+lu2[sec == "landcost", label:="Uuden nielun + CCS menot"]
 
 
 ## function for calculating country per capita emissions to match world per capita emissions

@@ -17,18 +17,20 @@ library(wbstats)
 # click Download bulk data from top right corner and choose ghg emissions
 # put the PIK file on your file location
 
-emu<-read.csv(file="primap2023march.csv", header=T,  sep="," )[,]
-emu = as.data.table(emu)
-emu[area..ISO3.=="FIN" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
-
-
-
-emu<-read.csv(file="primapnor.csv", header=T,  sep="," )[,]
-emu = as.data.table(emu)
-emu[area..ISO3.=="EARTH" & entity =="KYOTOGHG (AR4GWP100)"  & category..IPCC2006_PRIMAP.=="M.LULUCF" & scenario..PRIMAP.hist. == "HISTCR",X2019]
-
-emu[area..ISO3.=="FIN" & entity =="CO2"  & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP",X2021]
-
+# emu<-read.csv(file="primap2023march.csv", header=T,  sep="," )[,]
+# emu = as.data.table(emu)
+# emu[area..ISO3.=="FIN" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
+# 
+# 
+# 
+# emu<-read.csv(file="primapnor.csv", header=T,  sep="," )[,]
+# emu = as.data.table(emu)
+# emu[area..ISO3.=="EARTH" & entity =="KYOTOGHG (AR4GWP100)"  & category..IPCC2006_PRIMAP.=="M.LULUCF" & scenario..PRIMAP.hist. == "HISTCR",X2019]
+# emu[area..ISO3.=="EARTH" & entity =="KYOTOGHG (AR4GWP100)"  & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR",X2019]
+# emu[area..ISO3.=="EARTH" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP",X2019]
+# 
+# emu[area..ISO3.=="QAT" & entity =="KYOTOGHG (AR4GWP100)"  & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP",X2021]
+# 
 
 
 
@@ -356,11 +358,45 @@ ppaa$avgfossil = ppaa$fossil/ppaa$pop
 ppaa$avgghg= ppaa$ghg/ppaa$pop
 
 
+
+
+tempdl <- tempfile()
+download.file("https://data.icos-cp.eu/licence_accept?ids=%5B%221umMtgeUlhS2Y1YW_Qp94bu3%22%5D",tempdl, mode="wb") 
+
+tempfile()
+min <- read_excel(tempdl, sheet = "Land-Use Change Emissions", skip=29)
+
+paasi1 = copy(min)
+setnames(paasi1, 1, "year")
+
+paa = as.data.table(paasi1)
+
+
+setnames(paa, 3, "sink")
+setnames(paa, 4, "source")
+
+
+paa$sink = paa$sink*3.664
+paa$source = paa$source*3.664
+
+paa = paa[,c(1,3,4)]
+
+paa = paa[year >=pastyear,]
+
+ppaa$sink =paa$sink
+ppaa$source = paa$source
+
+# paa$net = paa$fossil + paa$lulucf
+
+# here new 
+
+
 # year, lyear, budget, lbudget,rate, end, lend, fossil, land,  pop, total, price, userfossil, totalindi
 # net, avgfossil, avgcost, usercost, netcost, zero
 #  
 
 
+ppaa$newsink = NA
 
 ppaa$budget = NA
 ppaa$rate=NA

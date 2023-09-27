@@ -262,6 +262,8 @@ tags$head(
 uiOutput("css_style"),
 uiOutput("css_style2"),
 uiOutput("css_style3"),
+uiOutput("css_style4"),
+
 uiOutput("stylerota"),
 
 # uiOutput("cssroot"),
@@ -364,7 +366,6 @@ div(  id = "bor",
                         ),
                         
                         
-                        uiOutput("buddd"),
                         
                         
                         div(id="ress",
@@ -374,6 +375,13 @@ div(  id = "bor",
                             
                         )
                         # )
+                      ),
+                      
+                      
+                      fluidRow(
+                        style = 'margin-left: .6vw',
+                        uiOutput("buddd"),
+
                       ),
                       
                       fluidRow(
@@ -558,8 +566,33 @@ div(
     )
     ,   list(uiOutput("ghgl") )
     )  )
+
+  
+
   
 ), 
+
+
+div(
+  #table joka näkyy jos averagedividend tai countrydividend relevantteja
+  id="tablu5",
+  class="noku",
+  # width ="50%",
+ 
+  
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(tot, textOutput("labelnewsink"),  "infonewsink", "shownewsink", NULL, FALSE)
+    )
+    ,   list(uiOutput("newsinkl") )
+    )  )
+  
+), 
+
+
+
 
 p(" "),
 div(
@@ -652,7 +685,27 @@ div(
       cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE)
     )
     ,   list(uiOutput("avgcostl") )
-    )  ), 
+    )  )),
+
+
+
+div(
+  id="tablu5",
+  class="noku",   
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(netcost,textOutput("labellandcost"),  "infolandcost", "showlandcost", NULL, FALSE)
+    )
+    ,   list(uiOutput("landcostl") )
+    
+    )  )),
+
+
+
+div(
+  id="tablu",
+  class="noku",   
   bs4Dash::bs4Table(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
@@ -684,7 +737,9 @@ div(
     )
     ,   list(uiOutput("netcostl") )
     
-    )  )),
+    )  ),
+
+),
 
 
 

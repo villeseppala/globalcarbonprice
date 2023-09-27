@@ -56,14 +56,14 @@
 --colbcard: #316051;
 --colbcard: #2f3c44;
 --colbcard: #265558;
-
+--colbcard: #006d74;
 --colbtable: #2f3a3b;
 
 
 
 --colt: #F0EBCE;
 --colm: #305C36;
---colo: #F0EBCE;
+--colo: #2f3a3b;;
 
 --colslide:#4995B3;
 
@@ -621,10 +621,32 @@ margin-top: .1rem !important;
 line-height: 1.1;
 }
 
+#tablu5 {
+color: blue;
+font-family: trebuchet MS  !important;
+font-size: calc(.7vw + .23rem) !important;
+margin-left: -.4vw; 
+margin-right: -.4vw;
+line-height: 1.1;
+margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
+border-collapse: collapse;
+overflow: auto;
+}
+
+#tablu5 p {
+color: blue;
+font-family: trebuchet MS  !important;
+font-size: calc(.7vw + .23rem) !important;
+text-decoration: none !important;
+margin-bottom: .2rem !important;
+margin-top: .1rem !important;
+
+line-height: 1.1;
+}
 
 
 
-#tablu .col-sm-12, #tablu2 .col-sm-12, #tablu3 .col-sm-12, #tablu4 .col-sm-12 {
+#tablu .col-sm-12, #tablu2 .col-sm-12, #tablu3 .col-sm-12, #tablu4 .col-sm-12, #tablu5 .col-sm-12 {
       padding-right: 0.1vw !important;
     padding-left: 0.1vw !important;
 }

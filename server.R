@@ -66,7 +66,7 @@ server <- function(input,output, session) {
   #         
   #         # input[[paste0(j)]] <- state$input[[paste0(j)]]
   #       })
-  #       
+  #       %>% 
   #       
   #     }
   #     )
@@ -157,6 +157,11 @@ server <- function(input,output, session) {
   # rv$usercost= datsc[sec =="usercost", yy]
   # rv$usernetcost= datsc[sec =="netcost", yy]
   # rv <- reactiveValues(trig =0)
+  rv <- reactiveValues(trigu =0)
+  rv <- reactiveValues(triggo =0)
+  rv <- reactiveValues(triggor =0)
+  
+  
   rv <- reactiveValues(disctext =0)
   rv <- reactiveValues(lihh =.99)
   rv <- reactiveValues(lok =NULL)
@@ -233,6 +238,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(alert4 = FALSE)
   rv <- reactiveValues(alert6 = FALSE)
   rv <- reactiveValues(alert8 = FALSE)
+  rv <- reactiveValues(alert10 = FALSE)
   
   rv <- reactiveValues(yearc = NULL)
   rv <- reactiveValues(lastyear = NULL)
@@ -252,6 +258,9 @@ server <- function(input,output, session) {
   
   rv <- reactiveValues(showghg = FALSE)
   rv <- reactiveValues(shownonco2 = FALSE)
+  rv <- reactiveValues(shownewsink = FALSE)
+  rv <- reactiveValues(showlandcost = FALSE)
+  
   rv <- reactiveValues(showavgfossil = TRUE)
   rv <- reactiveValues(showcountryfossil = FALSE)
   rv <- reactiveValues(showcountrycost = FALSE)
@@ -301,7 +310,13 @@ server <- function(input,output, session) {
   rv = reactiveValues(view= NULL)
   
   rv = reactiveValues(pressed=TRUE)
+  
+  rv =   reactiveValues(skip=1)
+
+  # skip <- reactiveValues(1)
+  
   rv$lurk =0
+  rv$triggor=1
   
   rv$x =0
   rv$lek = FALSE
@@ -365,8 +380,8 @@ server <- function(input,output, session) {
     rv$lurk=0
   })
   # secc = c("fossil", "land", "net", "pop", "averagedividend", "countrycost")
-  secc=c("fossil", "land", "net", "ghg","nonco2","price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
-         "pop","dividend", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost", "averagedividend", "countrydividend")
+  secc=c("fossil", "land", "net", "ghg","nonco2","source", "sink", "newsink","price", "avgcost", "avgfossil", "userfossil", "netcost","usercost",
+         "pop","dividend", "landcost", "avgnetcost", "countryfossil", "countrypop", "countrycost", "countrynetcost", "averagedividend", "countrydividend")
   
   observeEvent(input$autodraw, { 
     rv$autodraw=input$autodraw
@@ -503,6 +518,9 @@ server <- function(input,output, session) {
   
   
   output$dividendl = renderText(
+    
+    if (input$luls==0) {
+    
     if (input$national == 0) {
       
       paste(
@@ -533,7 +551,51 @@ server <- function(input,output, session) {
             sep = "") 
           
           
-        }
+        }}
+    else {
+      
+      if (input$national == 0) {
+        
+        paste(
+          # rv$yearc,": ",
+          
+          '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
+          
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+          
+          '<span style=\"color:',landcost,'\"><b>',  rv$landcostl," $", '</b></span>',
+          
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+          '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+          
+          sep = "") } else {
+            paste(
+              # rv$yearc,": ",
+              '<span style=\"color:',rv$teksvari,'\"><b>',  "(1-",rv$nationall,  ") * ", '</b></span>',
+              
+              
+              '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
+              
+              
+              '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+              
+              '<span style=\"color:',landcost,'\"><b>',  rv$landcostl," $", '</b></span>',
+              
+              
+              '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+              '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+              
+              
+              sep = "") 
+            
+            
+          }
+      
+      
+    }
+    
   )
   
   output$avgnetcostl = renderText(
@@ -629,6 +691,8 @@ server <- function(input,output, session) {
     }
   )
   
+  
+
   
   
   
@@ -733,72 +797,75 @@ server <- function(input,output, session) {
       sep = "")
   )
   
+  output$newsinkl = renderText(
+    paste(
+      '<span style=\"color:',newsink,'\"><b>',  rv$newsinkl," Gt", '</b></span>',
+      
+      # rv$yearc,": ",
+      # '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
+      
+
+      
+      sep = "")
+  )
   
   
-  # rv <- reactiveValues(countryfossill = NULL)
-  # rv <- reactiveValues(countrycostl = NULL)
-  # rv <- reactiveValues(countynetcostl = NULL)
-  # rv <- reactiveValues(countrypopl = NULL)
-  # rv <- reactiveValues(countrydividendl = NULL)
-  # rv <- reactiveValues(averagedividendl = NULL)
-  
-  # output$countrycostl = renderText(
-  #   paste(rv$yearc,": ",
-  #         '<span style=\"color:',countryfossil,'\">',  rv$countryfossil,"t", '</span>',
-  #         '<span style=\"color:',rv$teksvari,'\">',  "-", '</span>',
-  #         '<span style=\"color:',dividend,'\">',  rv$dividendl,"$", '</span>',
-  #         if( ) {}
-  #         '<span style=\"color:',"white",'\">', "=",'</span>',
-  #         '<span style=\"color:',taxfosindi,'\">',  rv$countrycostl,"$", '</span>',
-  #         sep = "")
-  # )
-  # 
-  # 
-  # if (input$nonco2 ==0) {
-  #   rv$totall =rv$fossill
-  #   
-  #   rv$totalcolor =fos
-  # } else {
-  #   rv$totall =rv$ghgl
-  #   
-  #   rv$totalcolor =ghg
-  #   
-  # }
-  # 
-  
+  output$landcostl = renderText(
+    paste(
+      # rv$yearc,": ",
+      # '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
+      '<span style=\"color:',newsink,'\"><b>',  rv$newsinkl,"Gt", '</b></span>',
+      
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', "*",'</b></span>',
+      '<span style=\"color:',tax,'\"><b>',  rv$pricel,"$", '</b></span>',
+      '<span style=\"color:',rv$teksvari,'\"><b>', "/",'</b></span>',
+      '<span style=\"color:',pop,'\"><b>',  rv$popl,"B", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+      
+      '<span style=\"color:',landcost,'\"><b>',  rv$landcostl,"$", '</b></span>',
+      
+      sep = "")
+  )
   
   
   
-  # 
-  # rv <- reactiveValues(ghgl = NULL)
-  # rv <- reactiveValues(nonco2l = NULL)
-  # rv <- reactiveValues(popl = NULL)
-  # rv <- reactiveValues(avgfossill = NULL)
-  # rv <- reactiveValues(pricel = NULL)
-  # rv <- reactiveValues(avgcostl = NULL)
-  # rv <- reactiveValues(dividendl = NULL)
-  # rv <- reactiveValues(avgnetcostl = NULL)
-  # rv <- reactiveValues(userfossill = NULL)
-  # rv <- reactiveValues(usercostl = NULL)
-  # rv <- reactiveValues(netcostl = NULL)
-  # rv <- reactiveValues(countryfossill = NULL)
-  # rv <- reactiveValues(countrycostl = NULL)
-  # rv <- reactiveValues(countynetcostl = NULL)
-  # rv <- reactiveValues(countrypopl = NULL)
-  # rv <- reactiveValues(countrydividendl = NULL)
-  # rv <- reactiveValues(averagedividendl = NULL)
+  output$land1 = renderText(
+    paste(
+    rv$yearc, " need for net land sink: ", input$lstart, "Gt + ", abs(as.numeric(rv$landl)), "Gt = ", rv$landneed, "Gt",
+      sep = "")
+  )
   
-  # output$landl = renderText(
-  #   # div(style="color: orange;",
-  #   rv$landl
-  # )
-  # )
+  output$land2 = renderText(
+    paste(
+      rv$yearc, " land emissions: ", input$sourcestart, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ", rv$sourcel, "Gt",
+      sep = "")
+  )
   
+  output$land3 = renderText(
+    paste(
+      2021, " old sinks+CCS: ", input$sinkstart, "Gt",
+      sep = "")
+  )
   
-  # output$fossill = renderUI({
-  #   # rv$tutotext
-  #   "fff"
-  # })
+  output$land4 = renderText(
+    paste(
+      rv$yearc, " new sinks+CCS: ", rv$landneed, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ",  rv$newsinkl, "Gt",
+      sep = "")
+  )
+  output$land5 = renderText(
+    paste(
+      rv$yearc, " land+CCS CO2: ", rv$sourcel, "Gt ", input$sinkstart, "Gt", rv$newsinkl, "Gt = ",  rv$landl, "Gt",
+      sep = "")
+  )
+
+  output$land6 = renderText(
+    paste(
+      2021, " land emissions: ", input$sourcestart, "Gt",
+      sep = "")
+  )
+
   
   observeEvent(rv$lang, {   
     
@@ -870,7 +937,7 @@ server <- function(input,output, session) {
       # rv$infofossiltextt = c("Fossil CO2 emissions")
       # output$viewtext = renderText("  VIEWING SETTINGS")
       
-      output$titletext = renderText(" Global carbon price simulator")
+      output$titletext = renderText(" Global carbon price simulator (BETA)")
       # updateactionBttn("infodata", label="Data sources")
       updateActionButton("infodata", label="Data sources", session=session)
       updateActionButton("tutorial", label="Tutorial", session=session)
@@ -1057,7 +1124,7 @@ server <- function(input,output, session) {
       
       
       
-      output$titletext = renderText(" Globaali hiilivero -simulaattori")
+      output$titletext = renderText(" Globaali hiilen hinta -simulaattori (BETA)")
       updateActionButton("infodata", label="Data-lähteet", session=session)
       updateActionButton("tutorial", label="Tutoriaali", session=session)
       # updateBox("mobilebox",   title = "Jos käytät sivua puhelimella, suosittelemme vaakanäkymää")
@@ -1394,7 +1461,7 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       rv$infoavgfossiltextt =c("Mean fossil CO2 emissions")
       
       
-      rv$infopricetext =c("Global carbon price, $/t, in 2015 US dollars. Should be set high enough to achieve the chosen fossil emission reductions. For default carbon price values in different budgets, figure 3.32 in page 360 of IPCC AR6 WG1 chapter 3 has been used as a loose reference point.") 
+      rv$infopricetext =c("Global carbon price, $/t, in 2015 US dollars. Should be set high enough to achieve the chosen fossil emission reductions. For default carbon price values in different budgets, figure 3.32 in page 360 of IPCC AR6 WGIII chapter 3 has been used as a loose reference point.") 
       rv$infopricetextt =c("Carbon price") 
       
       rv$infoavgcosttext = c("Average carbon cost across all individuals. Product of average emissions and carbon price.")
@@ -1456,7 +1523,7 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
                             ")
       rv$infostartpricetextt = c("Start year carbon price")
       
-      rv$infoendpricetext = c("Sets the carbon price at the carbon neutrality year in 2015 US dollars. For default carbon price values in different budgets, figure 3.32 in page 360 of IPCC AR6 WG1 chapter 3 has been used as a loose reference point. 
+      rv$infoendpricetext = c("Sets the carbon price at the carbon neutrality year in 2015 US dollars. For default carbon price values in different budgets, figure 3.32 in page 360 of IPCC AR6 WG III chapter 3 has been used as a loose reference point. 
 The earlier the carbon neutrality year or the higher the population projection, the higher you should consider setting
 the carbon neutrality year carbon price")
       rv$infoendpricetextt = c("Neutrality year carbon price")
@@ -1548,7 +1615,7 @@ IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Wor
 \n
 <br>
 <br>
-For default carbon price values, figure 3.32 in page 360 of AR6 WG1 chapter 3 has been used as a loose reference point. \n
+For default carbon price values, figure 3.32 in page 360 of AR6 WG III chapter 3 has been used as a loose reference point. \n
 <br>
 IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [P.R. Shukla, J. Skea, R. Slade, A. Al Khourdajie, R. van Diemen, D. McCollum, M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, J. Malley, (eds.)]. Cambridge University Press, Cambridge, UK and New York, NY, USA. doi: 10.1017/9781009157926
 <br>
@@ -1699,7 +1766,7 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       rv$infoavgfossiltextt =c("Keskimääräiset hiilidioksidipäästöt")
       
       
-      rv$infopricetext =c("Globaali hiilen hinta, $/t, vuoden 2015 dollareina. Hinta tulee asettaa riittävän korkeaksi, jotta saavutetaan valittu päästövähennyspolku. IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille") 
+      rv$infopricetext =c("Globaali hiilen hinta, $/t, vuoden 2015 dollareina. Hinta tulee asettaa riittävän korkeaksi, jotta saavutetaan valittu päästövähennyspolku. IPCC AR6 WG III raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille") 
       rv$infopricetextt =c("Hiilen hinta") 
       
       
@@ -1761,11 +1828,11 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
                                   jotta hiilineutraalius saaavutetaan ja lämpeneminen loppuu. Aseta päästöjen ja nielujen määrä samanaikaisesti")  
       rv$infoemissionsinktextt = c("Päästöt/nielu hiilineutraaliusvuonna")   
       
-      rv$infostartpricetext = c("Asettaa hiilen hinnan hinnoittelujärjestelmän ensimmäisenä vuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG1 -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille")
+      rv$infostartpricetext = c("Asettaa hiilen hinnan hinnoittelujärjestelmän ensimmäisenä vuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG III -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille")
       rv$infostartpricetextt = c("Alkuvuoden hiilen hinta")
       
       
-      rv$infoendpricetext = c("Asettaa hiilen hinnan hiilineutraaliusvuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG1 -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille
+      rv$infoendpricetext = c("Asettaa hiilen hinnan hiilineutraaliusvuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG III -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille
                               Mitä aikaisemmin hiilineutraalius saavutetaan tai mitä korkeampi väestön määrä on, sitä korkeammaksi kannattaa asettaa neutraaliusvuoden hiilen hinta.
                               ")
       rv$infoendpricetextt = c("Neutraaliusvuoden hiilen hinta")      
@@ -1836,7 +1903,7 @@ IPCC:N raportteja on käytety hiilibudjettien valitsemiseen ja hiilen hinnan ja 
 <br>IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change[Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, In press, doi:10.1017/9781009157896.
 \n
 <br><br>
-IPCC AR6 WG1 raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille \n
+IPCC AR6 WG III raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille \n
 <br>IPCC, 2022: Climate Change 2022: Mitigation of Climate Change. Contribution of Working Group III to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change [P.R. Shukla, J. Skea, R. Slade, A. Al Khourdajie, R. van Diemen, D. McCollum, M. Pathak, S. Some, P. Vyas, R. Fradera, M. Belkacemi, A. Hasija, G. Lisboa, S. Luz, J. Malley, (eds.)]. Cambridge University Press, Cambridge, UK and New York, NY, USA. doi: 10.1017/9781009157926
 <br>
 <br>
@@ -1938,7 +2005,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                            # p("Note: Changing the budget will reset many other values")
                                                            
                                                     ),
-                                                    column(4, 
+                                                    column(3, 
                                                             id = "luu",
                                                            
                                                                                                                 # hr(),
@@ -1946,8 +2013,6 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                                           inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink"), 
                                                                                           min = 0.1, max = 30,step=.1,value=c(6))),
                                                            hr(),
-                                                           
-                                                           
                                                            radioButtons("muo", "Shape of the fossil emission curve",
                                                                         choiceNames=   list(
                                                                           "Linear" ,
@@ -1967,7 +2032,9 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                     # )
                                                     ),
                                                     
-                                                    column(4,  
+                                                    column(5,  #luu { 
+                                                         style=c("margin-right: .5vw;"),
+
                                                            tags$div(id="sla",
                                                                     checkboxInput("nonco2", 
                                                                                   label = "Include other greenhouse gases than just CO2 (recommended)",
@@ -1981,14 +2048,15 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                  
                                                                  condition="input.nonco2 == 1",
                                                                  tags$div(id="sla", class="slug",  numericInput("nonco2end",
-                                                                                                                p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year", 
-                                                                                                                                                                          "infononco2u")),
+                                                                                    p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year", 
+                                                                                                                        "infononco2u")),
                                                                                                                 
                                                                                                                 min = 5, max = 10,step=.1,value=c(7.5)))
                                                                  
                                                                  
                                                                )),
                                                            
+
                                                            hr(),
                                                            
                                                            tags$div(id="sla",
@@ -2007,8 +2075,50 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                  conditionalPanel(
                                                                    condition="input.nonco2 == 1",
                                                                    tags$div(id="sla",numericInput("nonco2start", label=p("Non-CO2 emissions"),min = 0.1, max = 20,step=.1,value=c(12.3)))
-                                                                 )    )               
-                                                           )   )
+                                                                 ),    
+                                                                 conditionalPanel(
+                                                                   condition="input.luls == 1",
+                                                                   tags$div(id="sla",numericInput("sourcestart", label=p("Land source"),min = 0, max = 20,step=.1,value=c(13.6))),
+                                                                   tags$div(id="sla",numericInput("sinkstart", label=p("Land sink + CCS"),min = -20, max = 0,step=.1,value=c(-9.7)))
+                                                                   
+                                                                   
+                                                                 )            
+                                                                 
+                                                                 
+                                                                 ),  
+                                                               
+                                                               hr(),
+                                                               
+                                                               
+                                                               tags$div(id="sla",
+                                                                        checkboxInput("luls", "Advanced & experimental: Include costs from Land+CCS CO2", value = FALSE)),          
+                                                               
+                                                               
+                                                               div(class="rad",
+                                                                   conditionalPanel(
+                                                                     
+                                                                     condition="input.luls == 1",
+                                                                     # p("Note: "),
+                                                                     textOutput("land6"),
+                                                                     textOutput("land3"),
+                                                                     textOutput("land1"),
+                                                                     
+                                                                     sliderInput("lulls",
+                                                                                 ("Share of land emission reductions of Land+CCS net reduction, %"), 
+                                                                                 min = 0, max = 100, value = 70, step=1, ticks=FALSE),
+                                                                     
+                                                                     textOutput("land2"),
+                                                                     
+                                                                     textOutput("land4"),
+                                                                     textOutput("land5")
+                                                                     
+                                                                   )               
+                                                               ),
+                                                               
+                                                           )   
+                                                           
+                     
+                                                           )
                                                     
                                         ), 
                                         
@@ -2041,7 +2151,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                                                                                                           "infostartprice")),
                                                                                                 
                                                                                                 
-                                                                                                min = 1, max = 1000000,step=1,value=c(40))),
+                                                                                                min = 1, max = 1000000,step=1,value=c(50))),
                                                  hr(),
                                                  # 
                                                  # tags$div(id="sla", numericInput("sprice",
@@ -2055,7 +2165,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                                 inf("Neutrality year carbon price, $", "infoendprice"), 
                                                                                 
                                                                                 
-                                                                                min = 1, max = 1000000,step=1,value=c(400))),
+                                                                                min = 1, max = 1000000,step=1,value=c(500))),
                                                  
                                                  
                                           ),
@@ -2336,14 +2446,14 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                           tags$div(id="sla", numericInput("sprice",
                                                                           inf("Alkuvuoden hiilen hinta, $", "infostartprice"), 
                                                                           
-                                                                          min = 1, max = 1000000,step=1,value=c(40))),
+                                                                          min = 1, max = 1000000,step=1,value=c(50))),
                                           hr(),
                                           
                                           tags$div(id="sla",numericInput("eprice", 
                                                                          inf("Loppuvuoden hiilen hinta, $", "infoendprice"), 
                                                                          
                                                                          
-                                                                         min = 1, max = 1000000,step=1,value=c(400))),
+                                                                         min = 1, max = 1000000,step=1,value=c(500))),
                                           
                                           
                                    ),
@@ -2471,6 +2581,9 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
   })
   
+  
+  
+  # update user emissions based on whether non-co2 emissions are included or not
   observeEvent(input$nonco2, {
     if (input$nonco2 ==1 & rv$pressed ==FALSE) {
       updateNumericInput(
@@ -2583,7 +2696,18 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   })
   
   
+  ogger <- observeEvent( rv$triggor, {
+    if (rv$triggor==2) {
+
+      shinyjs::disable("go")
+rv$triggo=0
+      ogger$destroy()
+    } else { }
+    # }
+  }
+  )
   
+  #  
   # initially select carbon budget from left menu
   # o <- observe({
   #   # observeEvent(input[[paste0(i)]], {
@@ -2643,82 +2767,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   
   
   
-  # tags$div(id="sla", class="slug",  numericInput("nonco2end",
-  #                                                p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year",
-  #                                                                                                          "infononco2u")),
-  #                                                tags$div(id="sla", class="slug",  numericInput("nonco2end",
-  #                                                                                               p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year",
-  #                                                                                                                                                         "infononco2u")),
-  #                                                                                               tags$div(id="sla",numericInput("eprice",
-  #                                                                                                                              inf("Set neutrality year carbon price, $", "infoendprice"),
-  #                                                                                                                              tags$div(id="sla",numericInput("indi1", label=inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
-  #                                                                                                                              hr(),
-  # 
-  #                                                                                                                              tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-  #                        2f3c441                                                                                                      tags$div(id="sla", class="slug",  numericInput("nonco2end",
-  #                                                                                                                                                                             p(class="slug", style="font-weight: 500 !important;",
-  #                                                                                                                                                                               tags$div(id="sla", numericInput("sprice",
-  #                                                                                                                                                                                                               inf("Alkuvuoden hiilen hinta, $", "infostartprice"),
-  #                                                                                                                                                                                                               inf("Muut päästöt hiilineutraaliusvuonna",
-  #                                                                                                                                                                                                                   tags$div(id="sla",numericInput("eprice",
-  #                                                                                                                                                                                                                                                  inf("Loppuvuoden hiilen hinta, $", "infoendprice"),                                                                                                                                                                                                "infononco2u")),
-  # 
-  # 
-  #                                                                                                                                                                                                                   column(4, id = "luu",
-  #                                                                                                                                                                                                                          tags$div(id="sla",numericInput("indi1", label=inf("Alkuvuoden päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(7.77))),
-  #                                                                                                                                                                                                                          hr(),
-  # 
-  #                                                                                                                                                                                                                          tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-  # 
-  # 
-  # 
-  # 
-  # 
-  # 
-  
-  # observeEvent(rv$lyear, {
-  #   
-  #   
-  #   if (rv$lang == "eng") {
-  #     
-  #     updateNumericInput(session, "paa", label=paste0("CO2 emissions/sink at the carbon neutrality year (", rv$lyear,"), Gt"))
-  #     # rv$lok = paste0("Non-CO2 emissions at CO2 neutrality year (", rv$lyear,"), Gt")
-  #     # updateNumericInput(session, "nonco2end", label= p(class="slug", style="font-weight: 500 !important;", inf(rv$lok,
-  #     #                                                                                                           "infononco2u")))
-  #     # updateNumericInput(session, "indi2", label= inf(paste0("Neutrality year user emissions, t", rv$lyear),"infoenduser" ))
-  #     
-  #     
-  #     # tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(0.77)))
-  #     
-  #     
-  #   }
-  #   
-  #   
-  #   
-  #   else if (rv$lang =="fin")
-  #   {
-  #     
-  #     updateNumericInput(session, "paa", label=paste0("CO2-päästöt/nielu loppuvuonna (", rv$lyear,"), Gt"))
-  #     
-  #     
-  #   }
-  #   
-  # }) 
-  
-  
-  # ok <- observe({
-  #   # observeEvent(input[[paste0(i)]], {
-  #   if (session$clientData$output_plot_width > 1000){
-  #     
-  #     updateRadioButtons(session,  "view", selected = "2")
-  #   }
-  #   else {
-  #     
-  #     updateRadioButtons(session,  "view", selected = "3")
-  #     
-  #   }
-  #   # shinyjs::click("add")
-  #   ok$destroy() # destroy observer as it has no use after initial button click
+
   # })
   # 
   bgc = hsv(.13,.13,.93)
@@ -2853,6 +2902,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   #   
   # })
   
+  
   observeEvent(input$nationalcoun, {
     
     if (input$nationalcoun %in% c(ll2)) {
@@ -2901,21 +2951,24 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       rv$showghg=FALSE
       # orrb$destroy()
     }
-    
-    
   })
   
-  # observeEvent(input$nok,{
-  #   if (input$nok =="4. User emissions"){
-  #     rv$alert5 =TRUE
-  #     o$destroy()
-  #   }
-  # })
-  
-  # observeEvent(input$dataset, {
-  #   freezeReactiveValue(input, "column")
-  #   updateSelectInput(inputId = "column", choices = names(dataset()))
-  # })
+  orrbb = observeEvent(input$luls, {
+    if (input$luls == 1){
+      rv$alert10 =TRUE
+      rv$shownewsink=TRUE
+      rv$showlandcost=TRUE
+      # orrb$destroy()
+    }
+    
+    if (input$luls == 0){
+      rv$alert10 =FALSE
+      
+      rv$shownewsink=FALSE
+      rv$showlandcost=FALSE
+      # orrb$destroy()
+    }
+  })
   
   
   
@@ -3230,17 +3283,84 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     }
   })
   
-  observeEvent(input$last_btn, {
-    if (input$last_btn == 'go') {
+ #  ogger <- observe({
+ #    # updateBox("tutobox", action = "remove")
+ #    # shinyjs::click("add")
+ #    
+ #    if (isolate(skip()==1)) {
+ #      # skip first reactive sequence
+ #      skip(0)
+ #      # launch next reactive sequence
+ #      invalidateLater(1000,session)
+ #    } else {
+ #      # hypothetical expensive computation
+ #      # Sys.sleep(2)
+ #      # 
+ #      # # hypothetical plot
+ #      # hist(rnorm(20))
+ #      shinyjs::disable("go")
+ #      
+ #      ogger$destroy()
+ #      
+ #    }
+ #    
+ # # destroy observer as it has no use after initial button click
+ #  })
+  
+
+  
+  
+  observeEvent(input$go, {
+    
+    rv$triggo=0
+    
+  })
+  
+  observeEvent(rv$triggo, {
+    
+    if (rv$triggo==0) {
       shinyjs::disable("go")
       
     }
-    else if (input$last_btn != 'go'){
-      shinyjs::enable("go")
+    else if (rv$triggo==1){
       
+      if (input$autodraw==FALSE) {
+      
+      shinyjs::enable("go")
+      }
     }
   })
   
+  observeEvent(input$dim[1], {
+    
+    rv$triggo=1
+    # click("go")
+    
+  })
+  observeEvent( input$dim[2], {
+    
+    rv$triggo=1
+    # click("go")
+    
+    
+  })
+  
+  # input$dim[1], input$dim[2]
+  
+  
+  
+  
+  # observeEvent(input$last_btn, {
+  #   if (input$last_btn == 'go') {
+  #     shinyjs::disable("go")
+  #     
+  #   }
+  #   else if (input$last_btn != 'go'){
+  #     shinyjs::enable("go")
+  #     
+  #   }
+  # })
+  # 
   
   observeEvent(input$vuo,{
     
@@ -3295,6 +3415,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   # })
   
   # yearclist = c("yearc", "yearca")
+  
+  
   observeEvent(input$yearc, {
     
     if (
@@ -3812,14 +3934,17 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   showlista = c(
     "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop")
   
+  
+  
   lapply(
     X = c(
-      "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop","alert4", "alert6", "alert8" ),
+      "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "shownewsink", "showlandcost", "alert4", "alert6", "alert8", "alert10" ),
     FUN = function(i){
       rv[[paste0(i)]] = FALSE
     } )
   
-  showlistb = c("showfossil","showland", "shownet",  "showghg", "shownonco2","showprice" , "showavgcost",
+  #
+  showlistb = c("showfossil","showland", "shownet",  "showghg", "shownonco2", "showprice" , "showavgcost",
                 "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost", "showpop", "showavgfossil")
   lapply(
     X = showlistb,
@@ -3830,7 +3955,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   
   
   
-  showlist = c("showfossil","showland", "shownet", "showghg", "shownonco2", "showavgfossil","showprice" , "showavgcost",
+  showlist = c("showfossil","showland", "shownet", "showghg", "shownonco2","shownewsink", 
+               "showlandcost",   "showavgfossil","showprice" , "showavgcost",
                "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop",
                "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop", "showaveragedividend", "showcountrydividend")
   aat = showlist
@@ -3865,6 +3991,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                 "showdividend","showavgnetcost" , "showuserfossil","showusercost", "shownetcost","showpop"
   )
   showlistd = c( "showghg", "shownonco2")
+  showlistdd = c( "shownewsink", "showlandcost")
+  
   showliste = c(
     "showcountryfossil","showcountrycost", "showcountrynetcost","showcountrypop")
   
@@ -3983,7 +4111,21 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       
     })
   
-  
+  lapply(
+    X = showlistdd,
+    FUN = function(i){
+      observeEvent(input$showall, {
+        if (input$luls==TRUE) {
+          updateAwesomeCheckbox(
+            session=session,
+            inputId = i,
+            value = TRUE)
+        } 
+        
+        
+      })
+      
+    })
   # 
   # observeEvent(input$showall, {
   # 
@@ -4180,12 +4322,12 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   
   
   lapply(
-    X = c("showfossil", "showland", "shownet", "showghg","shownonco2"),
+    X = c("showfossil", "showland", "shownet", "showghg","shownonco2", "shownewsink"),
     FUN = function(i){
       
       observeEvent(input[[paste0(i)]], {
         
-        if (input$showfossil == TRUE || input$showland==TRUE || input$shownet ==TRUE || input$showghg==TRUE || input$shownonco2 ==TRUE) {
+        if (input$showfossil == TRUE || input$showland==TRUE || input$shownet ==TRUE || input$showghg==TRUE || input$shownonco2 ==TRUE || input$shownewsink ==TRUE) {
           rv$plot2 = "plot2"}
         else {
           rv$plot2 = ""}
@@ -4240,13 +4382,13 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   lapply(
     X = c("showdividend", "showavgnetcost", "showavgcost", "showusercost", 
           "shownetcost", "showcountrycost", "showaveragedividend", "showcountrydividend",
-          "showcountrynetcost"),
+          "showcountrynetcost", "landcost"),
     FUN = function(i){
       
       observeEvent(input[[paste0(i)]], {
         
         if (input$showavgcost == TRUE || input$showdividend ==TRUE || input$showavgnetcost==TRUE ||
-            input$showusercost==TRUE || input$shownetcost ==TRUE || input$showcountrycost ==TRUE
+            input$showusercost==TRUE || input$shownetcost ==TRUE || input$showcountrycost ==TRUE || input$showlandcost ==TRUE
             || input$showaveragedividend ==TRUE || input$showcountrydividend ==TRUE || input$showcountrynetcost ==TRUE)   {
           rv$plot6 = "plot6"}
         else {
@@ -4447,9 +4589,16 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     # AS of now, budget does not exclude emissions between 2020 and lastyear
     
     
+    
+    # create data from last observed year to year before pricing begins
     start=ppaa[year ==lastyear & sec =="fossil", yy]
     #land use emission start
     lstart = ppaa[year ==lastyear & sec =="land", yy]
+    
+    
+    sinkstart = ppaa[year ==lastyear & sec =="sink", yy]
+    sourcestart = ppaa[year ==lastyear & sec =="source", yy]
+    
     
     # years for calculation
     yearl = lastyear:(as.numeric(input$vuo[1]))
@@ -4463,20 +4612,38 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     fossil = seq(start, as.numeric(input$fstart), length.out= time)
     # [,-1]
     land = seq(lstart, as.numeric(input$lstart),length.out = time)
+    
+    sink = seq(sinkstart, as.numeric(input$sinkstart),length.out = time)
+    source = seq(sourcestart, as.numeric(input$sourcestart),length.out = time)
+    
     # [,-1]
+    # take out the calculation start and end point that will be in the data anyway
     fossil = fossil[-1]
     land = land[-1]
+    sink = sink[-1]
+    source = source[-1]
+    
     
     fossil = head(fossil,-1)
     land = head(land,-1)  
+    sink = head(sink,-1)  
+    source = head(source,-1)  
+    
     
     # emissions from 2020 to last observed year 
     historyfossil = ppaa[year %in% budgetyear:lastyear & sec =="fossil", yy]
     historyland = ppaa[year %in% budgetyear:lastyear & sec =="land",yy]
+    historysink = ppaa[year %in% budgetyear:lastyear & sec =="sink",yy]
+    historysource = ppaa[year %in% budgetyear:lastyear & sec =="source",yy]
+    
     historyyear = ppaa[year %in% budgetyear:lastyear & sec =="land",year]
     
+    # combine historical and intermediate simulated emissions
     fossil = c(historyfossil, fossil)
     land = c(historyland, land)
+    sink = c(historysink, sink)
+    source = c(historysource, source)
+    
     yearl2 = c(historyyear, yearl2)
     
     
@@ -4489,15 +4656,15 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     
     
+    #combine data frames to one
     
-    
-    inter = data.frame(yearl2, fossil, land)
+    inter = data.frame(yearl2, fossil, land, sink, source)
     inter$net = inter$fossil + inter$land
     inter=as.data.table(inter)
     
+    
+    # net emissions used before the observation year 
     sumnet = inter[,sum(net)]
-    
-    
     rv$sumnet = sumnet
     
     
@@ -4736,7 +4903,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       nonco2 = g(start, rate, 0:time)
       
       
-      
+      rv$trigu = rv$trigu+1
     }
     
     
@@ -5267,9 +5434,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     
     
-    
-    
-    
+
     
     
     
@@ -5297,6 +5462,29 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     dats = as.data.table(dats)
     
+  if (input$luls ==TRUE) {
+      
+      dats[, source := input$sourcestart+(land-input$lstart)*input$lulls/100]
+      # dats[, source := 5]
+      
+      dats[source <0, source :=0]
+      
+      dats[, sink := input$sinkstart+((land-input$lstart)+(input$sourcestart-source))]
+      
+      dats[, newsink := sink-input$sinkstart]
+      
+    } else {
+      dats[, source := 0]
+      # dats[, source := 5]
+      
+      dats[source <0, source :=0]
+      
+      dats[, sink :=0]
+      
+      dats[, newsink :=0]
+
+    }
+
     
     
     dats[, net := fossil+land]
@@ -5310,12 +5498,20 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       
     }
     
+    
+    
+    
+    
     dats[, avgcost :=price*avgfossil]
-    dats[, dividend :=avgcost]
-    dats[,avgnetcost :=0]
+    
+    dats[, landcost := price*newsink/pop*-1]
+    
+    dats[, dividend :=avgcost-landcost]
     
     dats[, usercost := price*userfossil]
-    dats[, netcost :=usercost-avgcost]
+    dats[,avgnetcost :=avgcost-dividend]
+    
+    dats[, netcost :=usercost-dividend]
     
     
     
@@ -5351,6 +5547,15 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     lux[sec =="land", visi := input$showland]
     lux[sec =="ghg", visi := input$showghg]
     lux[sec =="nonco2", visi := input$shownonco2]
+    lux[sec =="source", visi := input$shownewsink]
+    lux[sec =="sink", visi := input$shownewsink]
+    lux[sec =="newsink", visi := input$shownewsink]
+    lux[sec =="landcost", visi := input$shownewsink]
+    
+    # lux[sec =="source", visi := 1]
+    # lux[sec =="sink", visi := 1]
+    # lux[sec =="newsink", visi := 1]
+    # lux[sec =="landcost", visi := 1]
     
     lux[sec =="price", visi := input$showprice]
     lux[sec =="avgcost", visi := input$showavgcost]
@@ -5373,122 +5578,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     
     
-    # 
-    # if (input$dark_mode == TRUE) {
-    #   
-    #   
-    #   
-    #   tot = hsv(0.07,.785,.85)
-    #   non = hsv(0.06,.785,.75)
-    #   
-    #   fos = hsv(0.08,.99,.98)
-    #   lul = hsv(0.11,.99,.98)
-    #   net = hsv(0.09,.99,.985)
-    #   
-    #   pop =hsv(0.57,.7,.95)
-    #   
-    #   
-    #   tax = hsv(0.35,.65,vv)
-    #   
-    #   
-    #   fosindi =hsv(.96,.5,.85)  
-    #   fpop = fosindi
-    #   cpop = fosindi
-    #   countryfossil = fosindi 
-    #   
-    #   avgcost = hsv(0.57,.7,.9)
-    #   avgcost = hsv(0.75,.3,vv)
-    #   dividend =  hsv(0.81,.4,vv)
-    #   avgnetcost =hsv(0.77,.4,vv)
-    #   
-    #   averagedividend = dividend
-    #   countrydividend = dividend
-    #   
-    # } else {
-    #   
-    #   vv = .8
-    #   tot = hsv(0.08,.785,.65)
-    #   non = hsv(0.08,.585,.65)
-    #   
-    #   fos = hsv(0.06,.8,.88)
-    #   lul = hsv(0.12,.8,.78)
-    #   net = hsv(0.09,.8,.885)
-    #   
-    #   pop =hsv(0.57,.7,.8)
-    #   
-    #   
-    #   tax = hsv(0.35,.65,vv)
-    #   
-    #   
-    #   fosindi =hsv(.96,.5,.8)  
-    #   fpop = fosindi
-    #   cpop = fosindi
-    #   countryfossil = fosindi 
-    #   
-    #   avgcost = hsv(0.57,.7,.9)
-    #   avgcost = hsv(0.75,.3,vv)
-    #   dividend =  hsv(0.81,.4,vv)
-    #   avgnetcost =hsv(0.77,.4,vv)
-    #   
-    #   averagedividend = dividend
-    #   countrydividend = dividend
-    #   
-    #   
-    #   
-    #   tot = hsv(0.07,.785,.85)
-    #   non = hsv(0.06,.785,.75)
-    #   
-    #   fos = hsv(0.08,.99,.98)
-    #   lul = hsv(0.11,.99,.98)
-    #   net = hsv(0.09,.99,.985)
-    #   
-    #   pop =hsv(0.57,.7,.95)
-    #   
-    #   
-    #   tax = hsv(0.35,.65,vv)
-    #   
-    #   
-    #   fosindi =hsv(.96,.5,.85)  
-    #   fpop = fosindi
-    #   cpop = fosindi
-    #   countryfossil = fosindi 
-    #   
-    #   avgcost = hsv(0.57,.7,.9)
-    #   avgcost = hsv(0.75,.3,vv)
-    #   dividend =  hsv(0.81,.4,vv)
-    #   avgnetcost =hsv(0.77,.4,vv)
-    #   
-    #   averagedividend = dividend
-    #   countrydividend = dividend
-    #   
-    #   
-    # }
-    # 
-    # lux$col =fos
-    # lux[sec == "fossil", col:=fos]
-    # lux[sec == "land", col:=lul]
-    # lux[sec == "net", col:=net]
-    # lux[sec == "ghg", col:=tot]
-    # lux[sec == "nonco2", col:=non]
-    # 
-    # lux[sec == "price", col:=tax]
-    # lux[sec == "avgcost", col:=avgcost]
-    # lux[sec == "avgfossil", col:=fpop]
-    # lux[sec == "userfossil", col:=fosindi]
-    # lux[sec == "netcost", col:=netcost]
-    # lux[sec == "usercost", col:=taxfosindi]
-    # lux[sec == "pop", col:=pop]
-    # lux[sec == "dividend",col:=dividend]
-    # lux[sec == "avgnetcost", col:=avgnetcost]
-    # lux[sec == "countrycost", col:=countrycost]
-    # lux[sec == "countrynetcost", col:=countrynetcost]
-    # lux[sec == "countryfossil", col:=countryfossil]
-    # lux[sec == "countrypop", col:=countrypop]
-    # lux[sec == "countrydividend", col:=dividend]
-    # lux[sec == "averagedividend", col:=dividend]
-    # 
-    # 
-    # 
+  
     
     
     lux
@@ -5511,7 +5601,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   
   
   
-  # creating intermediate data and combining data from different periods
+  # creating intermediate data and combining data from different periods, need it for national stuff
   
   datss = reactive({
     budd = rv$budd
@@ -5552,11 +5642,20 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     ## making intermediate data
     
+   
+    
+    
+    
+    # create data from last observed year to year before pricing begins
     start=ppaa[year ==lastyear & sec =="fossil", yy]
     nstart=ppaa[year ==lastyear & sec =="nonco2", yy]
-    
     #land use emission start
     lstart = ppaa[year ==lastyear & sec =="land", yy]
+    
+    
+    sinkstart = ppaa[year ==lastyear & sec =="sink", yy]
+    sourcestart = ppaa[year ==lastyear & sec =="source", yy]
+    
     
     # years for calculation
     yearl = lastyear:(as.numeric(input$vuo[1]))
@@ -5570,18 +5669,27 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     fossil = seq(start, as.numeric(input$fstart), length.out= time)
     nonco2 = seq(nstart, as.numeric(input$nonco2start), length.out= time)
     
-    
     # [,-1]
     land = seq(lstart, as.numeric(input$lstart),length.out = time)
+    
+    sink = seq(sinkstart, as.numeric(input$sinkstart),length.out = time)
+    source = seq(sourcestart, as.numeric(input$sourcestart),length.out = time)
+    
     # [,-1]
-    # rmove observations that already included in data preceding and following the intermediate data
+    # take out the calculation start and end point that will be in the data anyway
     fossil = fossil[-1]
     land = land[-1]
+    sink = sink[-1]
+    source = source[-1]
     nonco2 = nonco2[-1]
     
     fossil = head(fossil,-1)
-    land = head(land,-1)
+    land = head(land,-1)  
     nonco2=head(nonco2,-1)
+    sink = head(sink,-1)  
+    source = head(source,-1)  
+    
+    
     # fossil = rep(start, ll)
     # land = rep(lstart, ll)
     net = fossil+land
@@ -5605,7 +5713,10 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     ppax$nonco2 = nonco2
     ppax$ghg = ghg
     
-    
+    ppax$source = source
+    ppax$sink = sink
+    ppax$newsink = NA
+    ppax$landcost = NA
     
     
     
@@ -5643,7 +5754,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       
       
     }
-    
+    ppaa$landcost=NA
     
     dats = rbind(ppaa, ppax, dats, fill=TRUE)
     
@@ -6073,12 +6184,14 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       # pacu = pacu[country %in% input$countr,]
       pacu[datso[sec=="dividend"], dividend :=i.yy, on=c("year")]
       pacu[datso[sec=="price"], price :=i.yy, on=c("year")]
-      pacu[,countrycost:=fossilcountry*price ]
+      pacu[datso[sec=="landcost"], landcost :=i.yy, on=c("year")]
+      
+      pacu[,countrycost:=fossilcountry*price+landcost ]
       pacu[, dividend:=(1-input$national/100)*dividend]
       pacu[, countrydividend:=input$national/100*countrycost]
       pacu[, averagedividend:=(input$national/100)*dividend]
       
-      pacu[,countrynetcost:=countrycost-dividend-countrydividend]
+      pacu[,countrynetcost:=countrycost-dividend-countrydividend+landcost]
       
       updateNumericInput(session, "dummy", value = 1)
       
@@ -6090,9 +6203,9 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   })
   
   # rv$pll = length(unique(datsss()$labbi))
-  
+  # observe({
   datsss= reactive ({
-    
+    rv$trigu
     
     req(input$indi1, cancelOutput = TRUE)
     req(input$indi2, cancelOutput = TRUE)
@@ -6106,7 +6219,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     dats$country = "t"
     
     
-    
+    withProgress( message="Calculating country trajectories, please wait",{
     
     if (input$indi %in% c(ll2)) {
       
@@ -6120,10 +6233,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       cour2  = pacu[country ==input$indi & year %in% rv$fyear:rv$lyear, countrynetcost]
       dats[year %in% rv$fyear:rv$lyear & sec =="usercost", yy:=cour1 ]
       dats[year %in% rv$fyear:rv$lyear & sec =="netcost", yy:=cour2 ]
-      
-      
-      
-    }
+          }
     
     if (input$national != 0) {
       datsk = copy(dats)
@@ -6304,6 +6414,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     dats = rbind(dats, dummy)
     
+    # numbers to use in result indicator sector and elsewhere
     rv$fossill= format(round(dats[sec=="fossil" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$landl = format(round(dats[sec=="land" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$netl = format(round(dats[sec=="net" & year ==rv$yearc, yy], 1), nsmall=1)
@@ -6325,6 +6436,13 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     rv$countrydividendl = format(round(dats[sec=="countrydividend" & year ==rv$yearc, yy], 0), nsmall=0)
     rv$averagedividendl = format(round(dats[sec=="averagedividend" & year ==rv$yearc, yy], 0), nsmall=0)
     
+    rv$sourcel = format(round(dats[sec=="source" & year ==rv$yearc, yy], 1), nsmall=1)
+    rv$sinkl = format(round(dats[sec=="sink" & year ==rv$yearc, yy], 1), nsmall=1)
+    rv$newsinkl = format(round(dats[sec=="newsink" & year ==rv$yearc, yy], 1), nsmall=1)
+    rv$landneed = format(round(input$lstart - dats[sec=="land" & year ==rv$yearc, yy], 1), nsmall=1)
+
+    rv$landcostl = format(round(dats[sec=="landcost" & year ==rv$yearc, yy], 0), nsmall=0)
+    
     
     
     if (input$nonco2 ==0) {
@@ -6345,6 +6463,11 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       rv$landplus = c("+")
     } else { rv$landplus = c("")}
     
+    # if (dats[sec=="land" & year ==rv$yearc, yy]>0) {
+    #   rv$landplus = c("+")
+    # } else { rv$landplus = c("")}
+    # 
+    
     dats = dats[visi==1,]
     
     
@@ -6352,8 +6475,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     
     # rv$pll = nrow(distinct(dats, labbi))
-    valus =as.numeric(unique(dats[sec %in% c("avgcost", "usercost", "netcost", "avgnetcost", "dividend",  "countrycost", "countrynetcost", "averagedividend", "countrydividend"),max(yy, na.rm=TRUE)]))
-    dats[sec %in% c("avgcost", "usercost", "netcost", "dividend", "avgnetcost", "countrycost", "countrynetcost", "averagedividend", "countrydividend"), tyy:= yy/(valus/100)]
+    valus =as.numeric(unique(dats[sec %in% c("avgcost", "usercost", "netcost", "avgnetcost", "dividend", "landcost", "countrycost", "countrynetcost", "averagedividend", "countrydividend"),max(yy, na.rm=TRUE)]))
+    dats[sec %in% c("avgcost", "usercost", "netcost", "dividend", "avgnetcost", "landcost", "countrycost", "countrynetcost", "averagedividend", "countrydividend"), tyy:= yy/(valus/100)]
     
     dats[sec %in% c("dividend", "averagedividend", "countrydividend"), tyy:=-1*tyy]
     dats$valuso = valus
@@ -6368,8 +6491,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     valus =as.numeric(unique(dats[sec %in% c("pop", "countrypop"),max(yy, na.rm=TRUE)]))
     dats[sec %in% c("pop", "countrypop"), tyy:= yy/(valus/100)]
     
-    valus = as.numeric(unique(dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2"),max(yy, na.rm=TRUE)]))
-    dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "dummy"), tyy:= yy/(valus/100)]
+    valus = as.numeric(unique(dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "source", "sink", "newsink"),max(yy, na.rm=TRUE)]))
+    dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "dummy", "source", "sink", "newsink"), tyy:= yy/(valus/100)]
     
     dats[sec =="countryfossil", visi:=1]
     
@@ -6384,9 +6507,9 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     
     xx=0
-    if (nrow(dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2"),]) >0) {
+    if (nrow(dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "source", "sink", "newsink"),]) >0) {
       xx=xx+1
-      dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), prio:=xx]
+      dats[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "source", "sink", "newsink"), prio:=xx]
     }
     if (nrow(dats[sec %in% c("pop"),]) >0) {
       xx=xx+1
@@ -6400,20 +6523,66 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       xx=xx+1
       dats[sec %in% c("price"), prio:=xx]
     }
-    if (nrow(dats[sec %in% c("avgcost", "dividend", "avgnetcost", "usercost", "netcost"),]) >0) {
+    if (nrow(dats[sec %in% c("avgcost", "dividend", "avgnetcost", "usercost","landcost", "netcost"),]) >0) {
       xx=xx+1
-      dats[sec %in% c("avgcost", "dividend", "avgnetcost", "usercost", "netcost"), prio:=xx]
+      dats[sec %in% c("avgcost", "dividend", "avgnetcost", "usercost", "landcost", "netcost"), prio:=xx]
     }
     pink =1
     
+    rv$triggo = 1
+    
+    
+    # ogger <- observe({
+    #   # updateBox("tutobox", action = "remove")
+    #   # shinyjs::click("add")
+    # 
+    #   # if (isolate(rv$skip==1)) {
+    #   if (rv$skip==1) {
+    # 
+    # 
+    #     # skip first reactive sequence
+    #     rv$skip=0
+    #     # launch next reactive sequence
+    #     invalidateLater(100,session)
+    #   } else {
+    #     # hypothetical expensive computation
+    #     # Sys.sleep(2)
+    # 
+    #     # hypothetical plot
+    #     # hist(rnorm(20))
+    #     shinyjs::disable("go")
+    # 
+    #     ogger$destroy()
+    # 
+    #   }
+    # }
+    # )
+    
+
+     rv$triggor=2
+    
+    })
     
     dats = as.data.table(dats)
     
   })
   
+  
 
   
   
+  # ogger <- observeEvent(rv$triggor, {
+  #   if (rv$triggor==2) {
+  #   
+  #   shinyjs::disable("go")
+  # 
+  #   ogger$destroy()
+  #   }
+  #   # }
+  # }
+  # )
+  # 
+
   
   
   datssst = reactive({
@@ -6421,8 +6590,9 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     tab = tab[order(pos)]
     
     seclist = c("fossil", "land", "net", "ghg", "nonco2", "pop", "avgfossil",
-                "price", "avgcost","dividend","avgnetcost","userfossil",
-                "usercost",  "netcost", "averagedividend", "nationaldividend")
+                "price", "avgcost","dividend","avgnetcost","userfossil","landcost",
+                "usercost",  "netcost", "averagedividend", "nationaldividend", "source", "sink",
+                "newsink")
     tab = tab[sec %in% seclist,]
     
     
@@ -6438,7 +6608,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     # tab = as.data.table(tab)
     lalist = c("year","Fossil emissions", "Land emissions/sinks", "Net emissions","Total emissions","Non-CO2 emissions", "World population",
                "Mean fossil emissions",  "Carbon price", "Mean carbon costs",
-               "Carbon dividend", "Mean national dividend", "Dividend for chosen coutnry", "Mean net costs", "User fossil emissions", "User carbon costs", "User net costs"
+               "Carbon dividend", "Mean national dividend", "Dividend for chosen coutnry", "Mean net costs", "User fossil emissions", "User carbon costs", "User net costs",
+               "Land emissions", "ggg", "ggggg"
     )
     
     
@@ -6700,6 +6871,23 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   )
   
   
+  
+  
+  style4 <- reactive({
+    # if (is.null(input$countr)) { 
+    if (rv$alert10 ==TRUE) {
+      # if (input$nok =="EXTRA: Country profiles") { 
+      "#tablu5 {visibility: visible}"
+      
+    }
+    else if (rv$alert10 ==FALSE) {
+      "#tablu5 {visibility: collapse}"
+      
+    }
+    
+  }
+  )
+  
   rootcss <- reactive({
     # if (is.null(input$countr)) { 
     # if (rv$alert6 ==TRUE) {
@@ -6814,6 +7002,16 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         )
       )
     )})
+  
+  output$css_style4 <- renderUI({
+    tags$head(
+      tags$style(
+        HTML(
+          paste0(c(style4()), collapse = "\n")
+        )
+      )
+    )})
+  
   output$cssroot <- renderUI({
     tags$head(
       tags$style(
@@ -7304,7 +7502,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         if (input$showfossil==TRUE || input$showland==TRUE  || input$shownet==TRUE) {
           
           plot1 = plot1+
-            geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2"), .SD[which.max(yy)]],
+            geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "newsink", "sink", "source"), .SD[which.max(yy)]],
                       aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
                       size=si(2.2), hjust=0, fontface="bold") 
           
@@ -7334,10 +7532,10 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
           
         }
         
-        if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE) {
+        if (input$showusercost==TRUE || input$shownetcost==TRUE  || input$showavgcost==TRUE || input$showdividend==TRUE ||  input$showavgnetcost==TRUE ||  input$showlandcost==TRUE) {
           
           plot1 = plot1+
-            geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost"), .SD[which.max(yy)]],
+            geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost", "landcost"), .SD[which.max(yy)]],
                       aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$"), color=col), 
                       size=si(2.2), hjust=0, fontface="bold") 
         }    
@@ -7531,7 +7729,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       {
         
         
-        inplot= c("fossil", "land", "net", "dummy", "ghg","nonco2")
+        inplot= c("fossil", "land", "net", "dummy", "ghg","nonco2", "source", "sink", "newsink")
         datsl = datsl()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
         datsc =datsc()[sec %in% inplot,]
@@ -8948,7 +9146,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         
         
         inplot= c("dummy", "averagedividend", "countrydividend", "avgcost",
-                  "netcost","usercost","dividend","avgnetcost","countrynetcost",
+                  "netcost","usercost","dividend","avgnetcost","countrynetcost", "landcost",
                   "countrycost")
         datsl = datsl()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
@@ -9572,7 +9770,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         
         
         
-        inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2")
+        inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2", "source", "sink", "newsink")
         
         datsl = datsl()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
@@ -10781,7 +10979,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       if (rv$plot6 == "plot6")
       {
         
-        inplot= c( "averagedividend", "countrydividend", "avgcost", "netcost",
+        inplot= c( "averagedividend", "countrydividend", "avgcost", "netcost", "landcost",
                    "usercost","dividend","avgnetcost","countrynetcost","countrycost", "dummy")
         
         datsl = datsl()[sec %in% inplot & year >= mil,]
@@ -12981,7 +13179,13 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   
   
   observe({
+    
+    
   output$colplot = renderPlot({
+    
+
+      
+    
     req(pacu())
      # summ=0
     
@@ -13032,6 +13236,11 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       ffoa = ffoa[gdpcap >0,]
     }
     
+    ffoa <- ffoa[order(ffoa[[input$xvar]],  decreasing = TRUE)]
+    ffoa[, placeb:= seq_len(.N)]
+    
+    
+    
     ffoa <- ffoa[order(ffoa[[input$xvar]])]
 
     ffoa[, place:= seq_len(.N)]
@@ -13041,6 +13250,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     ffo = ffor[ffoa, cats := i.cats, on=c("country") ]
     ffo = ffo[ffoa, place := i.place, on=c("country") ]
+    ffo = ffo[ffoa, placeb := i.placeb, on=c("country") ]
+    
     ffo = ffo[place >=0, ]
     # ffo = ffo[ffoa, an := i.an, on=c("country") ]
     
@@ -13261,7 +13472,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
 
      # if (exists("summ")) {
-           if (round(as.numeric(rv$x), 0) > 0) {
+           if (round(as.numeric(rv$x), 0) > 0 || input$comcou != "none") {
         
       
       plotcol = plotcol + 
@@ -13282,7 +13493,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         geom_text(data=dats[country=="Finland",],
                   aes(x=wi(10), y=hi(90), 
                       label = paste0(ord, xlab, yea, " 2021")),
-                  hjust=0, size=si(4), color=teksvari) +
+                  hjust=0, size=si(3.3), color=teksvari) +
         
         
         
@@ -13298,7 +13509,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         
         geom_text(data=datspla,
                   aes(x=wi(31), y=hi(80), color=cols, 
-                      label = paste0(round(meanyy,roy), lekx)),
+                      label = paste0(format(round(meanyy,roy), big.mark=" "), lek)),
                   hjust=0, size=si(sis)) +
         
         geom_text(data=datspla,
@@ -13308,7 +13519,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         
         geom_text(data=datspla,
                   aes(x=wi(31), y=hi(77), color=cols, 
-                      label = paste0(round(maxyy,roy), lek)),
+                      label = paste0(format(round(maxyy,roy),big.mark=" "), lek)),
                   hjust=0, size=si(sis)) +
         
         geom_text(data=datspla,
@@ -13318,7 +13529,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         
         geom_text(data=datspla,
                   aes(x=wi(31), y=hi(74), color=cols,
-                      label = paste0(round(minyy,roy), lek)),
+                      label = paste0(format(round(minyy,roy), big.mark=" "), lek)),
                   hjust=0, size=si(sis)) +
         
         geom_text(data=datspla,
@@ -13328,7 +13539,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         
         geom_text(data=datspla,
                   aes(x=wi(31), y=hi(71), 
-                      label = paste0( round(xval,rox),lekx, "  (",place, "./", xcen,")"  )),
+                      label = paste0( format(round(xval,rox), big.mark=" "),lekx, "  (",placeb, "./", xcen,")"  )),
                   hjust=0, size=si(sis), color=teksvari) 
       
       
@@ -13410,15 +13621,18 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
         
         geom_text(data=datsfin,
                   aes(x=wi(31), y=hi(71-sep), 
-                      label = paste0( round(xval,rox),lekx, "  (",place, "./", xcen,")"  )),
+                      label = paste0( format(round(xval,rox), big.mark=" "),lekx, "  (",placeb, "./", xcen,")"  )),
+                  
+                      # label = paste0( round(xval,rox),lekx, "  (",place, "./", xcen,")"  )),
                   hjust=0, size=si(sis), color=teksvari) 
       
     }
     
 
-    
+    withProgress( message="Drawing graph, please wait",{
+      
     plotcol
-    
+    })
     
     # cols()
     
@@ -13432,6 +13646,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   
   
   )
+
+    
   })
   # output$colsplot <- renderUI({
   #   # req(input$accordion3)
@@ -13668,8 +13884,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                        ,height=heeh
                        # ,height="100%"
                        
-                       ,hover = "plot_hover"
-                       ,click = "plotj_click"
+                       # ,hover = "plot_hover"
+                       # ,click = "plotj_click"
                        
             ) 
           )
@@ -13753,8 +13969,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                        ,height=heeh
                        # ,height="100%"
                        
-                       ,hover = "plot_hover"
-                       ,click = "plotj_click"
+                       # ,hover = "plot_hover"
+                       # ,click = "plotj_click"
                        
             ) 
           )
@@ -13937,7 +14153,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                    ,width = heeh
                    ,height= min(input$dim[2], (input$dim[1])*.8)*.60
                    
-                   ,hover = "plot_hover"
+                   # ,hover = "plot_hover"
                    # ,click = "plotl_click"
         ) 
       )
