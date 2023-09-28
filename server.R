@@ -2696,17 +2696,17 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   })
   
   
-#   ogger <- observeEvent( rv$triggor, {
-#     if (rv$triggor==2) {
-#       
-#   shinyjs::disable("go")
-# rv$triggo=0
-#   ogger$destroy()
-#       
-#     } else { }
-#     # }
-#   }
-#   )
+  ogger <- observeEvent( rv$triggor, {
+    if (rv$triggor==2) {
+
+  shinyjs::disable("go")
+rv$triggo=0
+  ogger$destroy()
+
+    } else { }
+    # }
+  }
+  )
   
   #  
   # initially select carbon budget from left menu
@@ -3325,20 +3325,20 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   # 
   # })
   
-  observeEvent(rv$triggo, {
-    
-    if (rv$triggo==0) {
-      shinyjs::disable("go")
-      
-    }
-    else if (rv$triggo==1){
-      
-      if (input$autodraw==FALSE) {
-      
-      shinyjs::enable("go")
-      }
-    }
-  })
+  # observeEvent(rv$triggo, {
+  #   
+  #   if (rv$triggo==0) {
+  #     shinyjs::disable("go")
+  #     
+  #   }
+  #   else if (rv$triggo==1){
+  #     
+  #     if (input$autodraw==FALSE) {
+  #     
+  #     shinyjs::enable("go")
+  #     }
+  #   }
+  # })
   
   observeEvent(input$dim[1], {
     
