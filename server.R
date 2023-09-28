@@ -2698,10 +2698,11 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   
   ogger <- observeEvent( rv$triggor, {
     if (rv$triggor==2) {
-
-      shinyjs::disable("go")
+      
+  shinyjs::disable("go")
 rv$triggo=0
-      ogger$destroy()
+  ogger$destroy()
+      
     } else { }
     # }
   }
@@ -3308,13 +3309,16 @@ rv$triggo=0
  #  })
   
 
-  
-  
-  observeEvent(input$go, {
-    
-    rv$triggo=0
-    
+   eventReactive(input$go, {
+
+     rv$triggo = 0
   })
+  
+  # observeEvent(input$go, {
+  # 
+  #   rv$triggo=0
+  # 
+  # })
   
   observeEvent(rv$triggo, {
     
@@ -9747,7 +9751,7 @@ rv$triggo=0
       
       mil =rv$ffyear
       
-      
+      rv$triggo
       
       
       mix = mil
