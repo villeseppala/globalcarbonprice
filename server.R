@@ -2695,18 +2695,18 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     o$destroy() # destroy observer as it has no use after initial button click
   })
   
-  
-  ogger <- observeEvent( rv$triggor, {
-    if (rv$triggor==2) {
 
-  shinyjs::disable("go")
-rv$triggo=0
-  ogger$destroy()
-
-    } else { }
-    # }
-  }
-  )
+#   ogger <- observeEvent( rv$triggor, {
+#     if (rv$triggor==2) {
+# 
+#   shinyjs::disable("go")
+# rv$triggo=0
+#   ogger$destroy()
+# 
+#     } else { }
+#     # }
+#   }
+#   )
   
   #  
   # initially select carbon budget from left menu
@@ -3309,36 +3309,36 @@ rv$triggo=0
  #  })
   
 # 
-   eventReactive(input$go, {
-
-     rv$triggo = 0
-  })
+  #  eventReactive(input$go, {
+  # 
+  #    rv$triggo = 0
+  # })
   
 # rv$triggo = eventReactive(input$go, {
 #      
 #      0
 #    })
 #    
-  # observeEvent(input$go, {
-  # 
-  #   rv$triggo=0
-  # 
-  # })
+  observeEvent(input$go, {
+
+    rv$triggo=0
+
+  })
   
-  # observeEvent(rv$triggo, {
-  #   
-  #   if (rv$triggo==0) {
-  #     shinyjs::disable("go")
-  #     
-  #   }
-  #   else if (rv$triggo==1){
-  #     
-  #     if (input$autodraw==FALSE) {
-  #     
-  #     shinyjs::enable("go")
-  #     }
-  #   }
-  # })
+  observeEvent(rv$triggo, {
+    
+    if (rv$triggo==0) {
+      shinyjs::disable("go")
+      
+    }
+    else if (rv$triggo==1){
+      
+      if (input$autodraw==FALSE) {
+      
+      shinyjs::enable("go")
+      }
+    }
+  })
   
   observeEvent(input$dim[1], {
     
@@ -3370,11 +3370,11 @@ rv$triggo=0
   #   }
   # })
   # 
-  observeEvent(rv$triggo,{
-    rv$yearc = rv$yearc
-  })
-  
-  
+  # observeEvent(rv$triggo,{
+  #   rv$yearc = rv$yearc
+  # })
+  # 
+  # 
   
   observeEvent(input$vuo,{
     
@@ -5541,7 +5541,7 @@ rv$triggo=0
     # rv$afterbudget = dats[year==rv$lyear, budget]
     # rv$rvtotal =dats[year==rv$lyear, budget]
     
-    rv$triggo = 1
+    # rv$triggo = 1
     
     
     dats
@@ -5775,7 +5775,7 @@ rv$triggo=0
     
     dats = rbind(ppaa, ppax, dats, fill=TRUE)
     
-    rv$triggo = 1
+    # rv$triggo = 1
     
     
     dats = as.data.table(dats)
@@ -9761,7 +9761,7 @@ rv$triggo=0
       
       mil =rv$ffyear
       
-      rv$triggo
+      # rv$triggo
       
       
       mix = mil
