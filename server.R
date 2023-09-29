@@ -3273,16 +3273,16 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     }
   })
   
-  observeEvent(input$autodraw, {
-    if (input$autodraw == TRUE) {
-      shinyjs::disable("go")
-      
-    }
-    else if (input$autodraw ==FALSE){
-      shinyjs::enable("go")
-      
-    }
-  })
+  # observeEvent(input$autodraw, {
+  #   if (input$autodraw == TRUE) {
+  #     shinyjs::disable("go")
+  #     
+  #   }
+  #   else if (input$autodraw ==FALSE){
+  #     shinyjs::enable("go")
+  #     
+  #   }
+  # })
   
  #  ogger <- observe({
  #    # updateBox("tutobox", action = "remove")
