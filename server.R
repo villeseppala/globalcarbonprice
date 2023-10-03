@@ -21,15 +21,45 @@ server <- function(input,output, session) {
   })
   
   
-  # observeEvent(rv$yearc, {
-  #   req(datsss())
-  #   
-  # })
-  
-  observeEvent(input$paa, {
+  observeEvent(rv$yearc, {
     req(datsss())
-    
   })
+  
+  
+  observeEvent(input$go, {
+    req(rv$yearc)
+  })
+  # observeEvent(input$paa, {
+  #   req(datsss())
+  # })
+  # 
+  
+  lapply(
+    X = c("paa", "muo", "nonco2", "nonco2end", "fstart", "lstart", "nonco2start", "lul", "lulls", "sourcestart", "sinkstart",  "popc", "sprice", "eprice",
+                   "pri", "indi1", "indi2", "muoindi", "indi", "con", "national", "nationalcoun", "countr", "conb"),
+    FUN = function(j){
+      
+      observeEvent(input[[paste0(j)]], {
+        req(rv$yearc)
+      }
+      )
+      
+    }
+  )
+  
+  
+  # lapply(
+  #   X = c( "paa", "muo", "nonco2", "nonco2end", "fstart", "lstart", "nonco2start", "lul", "lulls", "sourcestart", "sinkstart",  "popc", "sprice", "eprice",
+  #         "pri", "indi1", "indi2", "muoindi", "indi", "con", "national", "nationalcoun", "countr", "conb"),
+  #   FUN = function(j){
+  # 
+  #     observeEvent(input[[paste0(j)]], {
+  #       req(datsss())
+  #     }
+  #     )
+  # 
+  #   }
+  # )
   
   observeEvent(input$view, {
     if (input$view ==3) {
@@ -46,6 +76,12 @@ server <- function(input,output, session) {
       })   
     }
   )
+  
+
+  
+  
+  
+  
   
   
   # lapply(
@@ -2031,9 +2067,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                         
                                                            ) , 
                                                            
-                                                           
-                                                           
-                                                           
+                                               
                                                     # ) 
                                                     # )
                                                     ),
@@ -2095,6 +2129,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                
                                                                hr(),
                                                                
+                                          
                                                                
                                                                tags$div(id="sla",
                                                                         checkboxInput("luls", "Advanced & experimental: Include costs from Land+CCS CO2", value = FALSE)),          
@@ -2192,6 +2227,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                         
                                ),
                                
+                        
+          
                         # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
                         # Määritä hiilibudjettia vastaavien CO2-päästöjen polku
                         # 
@@ -2241,6 +2278,9 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                  )  ) )
                                )   
                                ,
+                        
+           
+                        
                                tabPanel("EXTRA: Countries",
                                         fluidRow(
                                           column(4, id = "luu",
