@@ -26,9 +26,9 @@ server <- function(input,output, session) {
   })
   
   
-  observeEvent(input$go, {
-    req(rv$yearc)
-  })
+  # observeEvent(input$go, {
+  #   req(rv$yearc)
+  # })
   # observeEvent(input$paa, {
   #   req(datsss())
   # })
@@ -40,7 +40,7 @@ server <- function(input,output, session) {
     FUN = function(j){
       
       observeEvent(input[[paste0(j)]], {
-        req(rv$yearc)
+        req(input$vuo)
       }
       )
       
