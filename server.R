@@ -20,7 +20,13 @@ server <- function(input,output, session) {
     paste(input$dim[1], input$dim[2], input$dim[2]/input$dim[1])
   })
   
-  observeEvent(rv$yearc, {
+  
+  # observeEvent(rv$yearc, {
+  #   req(datsss())
+  #   
+  # })
+  
+  observeEvent(input$paa, {
     req(datsss())
     
   })
