@@ -831,7 +831,7 @@ div(style="display:inline-block;",id="sla",
 
 
 
-                      ),
+                      )
 
 
 # div(
@@ -840,6 +840,8 @@ div(style="display:inline-block;",id="sla",
 #   uiOutput("cou")
 #   # ) )
 # )
+
+
 
                )
 
@@ -1161,6 +1163,9 @@ conditionalPanel(
 # ,textOutput("last")
 
  ,textOutput("ruukk")
+
+,fluidRow( DT::dataTableOutput("tablz", width="100%", height="10px")
+)
 
 # ,textOutput("lastButtonCliked")
 # ,

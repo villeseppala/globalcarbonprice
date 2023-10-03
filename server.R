@@ -216,7 +216,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(lastt =NULL)
    rv <- reactiveValues(x =NULL)
    rv <- reactiveValues(lurk =NULL)
-   rv <- reactiveValues(ruuk =NULL)
+   # rv <- reactiveValues(ruuk =NULL)
    
   rv <- reactiveValues(avgfossil = NULL)
   rv <- reactiveValues(pop = NULL)
@@ -6631,7 +6631,6 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
      rv$triggor=2
     
     })
-     rv$ruuk = dats[year ==rv$yearc,yy]
     
     dats = as.data.table(dats)
     # rv$ruuk = head(dats)
@@ -6653,7 +6652,12 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
   # }
   # )
   # 
-
+  datter = reactive({
+    datter = datsss()[year ==rv$yearc,yy]
+    datter
+  })
+    
+    # observe
   
   
   datssst = reactive({
@@ -6690,6 +6694,9 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     tab = as.data.table(tab)
     tab = tab[order(year, decreasing = TRUE)]
+    
+    
+    
     
     # tab =
     # tab =
@@ -7165,6 +7172,12 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       buttons = c('copy', 'csv', 'excel', 'pdf', 'print')
     )
   )
+  
+  output$tablz = DT::renderDataTable(server=FALSE,{
+    datter()}
+    )
+  # )
+  
   
   teksvari = "white"
   teksvari = "black"
