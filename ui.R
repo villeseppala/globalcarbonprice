@@ -56,7 +56,7 @@ tagList(a
         # , title=""
         # , class="dropdown"
 )
-
+# %>% 
 # )
 
 
@@ -1160,7 +1160,7 @@ conditionalPanel(
 )
 # ,textOutput("last")
 
-
+ ,textOutput("ruukk")
 
 # ,textOutput("lastButtonCliked")
 # ,

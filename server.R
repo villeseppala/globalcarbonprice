@@ -7,6 +7,8 @@ server <- function(input,output, session) {
   output$xx= renderText(rv$x)
   output$yy= renderText(rv$y)
    output$cor= renderText(rv$cor)
+   output$ruukk= renderText(rv$ruuk)
+   
    # output$couexp= renderText(rv$coux)
    
    output$couexp = renderUI({
@@ -34,19 +36,19 @@ server <- function(input,output, session) {
   # })
   # 
   
-  lapply(
-    X = c("paa", "muo", "nonco2", "nonco2end", "fstart", "lstart", "nonco2start", "lul", "lulls", "sourcestart", "sinkstart",  "popc", "sprice", "eprice",
-                   "pri", "indi1", "indi2", "muoindi", "indi", "con", "national", "nationalcoun", "countr", "conb"),
-    FUN = function(j){
-      
-      observeEvent(input[[paste0(j)]], {
-        req(input$vuo)
-      }
-      )
-      
-    }
-  )
-  
+  # lapply(
+  #   X = c("paa", "muo", "nonco2", "nonco2end", "fstart", "lstart", "nonco2start", "lul", "lulls", "sourcestart", "sinkstart",  "popc", "sprice", "eprice",
+  #                  "pri", "indi1", "indi2", "muoindi", "indi", "con", "national", "nationalcoun", "countr", "conb"),
+  #   FUN = function(j){
+  # 
+  #     observeEvent(input[[paste0(j)]], {
+  #       req(datss())
+  #     }
+  #     )
+  # 
+  #   }
+  # )
+  # 
   
   # lapply(
   #   X = c( "paa", "muo", "nonco2", "nonco2end", "fstart", "lstart", "nonco2start", "lul", "lulls", "sourcestart", "sinkstart",  "popc", "sprice", "eprice",
@@ -214,6 +216,7 @@ server <- function(input,output, session) {
   rv <- reactiveValues(lastt =NULL)
    rv <- reactiveValues(x =NULL)
    rv <- reactiveValues(lurk =NULL)
+   rv <- reactiveValues(ruuk =NULL)
    
   rv <- reactiveValues(avgfossil = NULL)
   rv <- reactiveValues(pop = NULL)
@@ -6628,9 +6631,11 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
      rv$triggor=2
     
     })
+     rv$ruuk = dats[year ==rv$yearc,yy]
     
     dats = as.data.table(dats)
-    
+    # rv$ruuk = head(dats)
+    # dats
   })
   
   
