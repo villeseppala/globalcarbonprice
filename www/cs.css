@@ -790,6 +790,12 @@ padding: .3vw !important;
 }
 
 
+#buddo {
+      background-color: var(--collinea)!important;
+  
+  
+}
+
 #bor4 .row {
     display: flex;
     flex-direction: row;
@@ -864,6 +870,15 @@ margin-top: -.3rem;
   
 }
 */
+
+
+#nok a {
+     background-color: #0202025e;
+     z-index: -1;
+  
+  
+}
+
 
 #bor5 .row {
     display: flex;
@@ -1014,7 +1029,6 @@ display: inline;
     
      #bor5  a {
 
-
 padding-left: .5vw;
 padding-right: .8vw;
 
@@ -1025,14 +1039,16 @@ padding-right: .8vw;
   margin-right: .5vw;
 }
 
+
+
    a.active {
 color: var(--colt);
-margin-top: .3vw;
+margin-top: .0vw;
     padding-top: 0.2vw !important;
 
     padding-bottom: 0.2vw !important;
 display: inline;
-
+margin-left: -.1vw;
     background-color: var(--colbtable) !important;
     display:block !important;
     } 
@@ -1063,9 +1079,15 @@ padding: .0vw;
 margin: .0vw;
 line-height: 1.2rem;
 
+.li {
+      background-color: #001f3f59;
+}
+  
+}
 }
 */
   // left panel general {}
+
 
 
 .content-wrapper .nav li {
@@ -1404,14 +1426,19 @@ color: white !important;
 }
 
 table.dataTable tbody tr {
-background-color: rgb(92, 61, 46) !important;
+background-color: var(--colcheck) !important;
 }
 
 table.dataTable.display tbody tr.odd {
-background-color: var(--colm) !important;
+background-color: var(--colb) !important;
 
 }
 
+
+tr {
+  
+  
+}
 
 table.dataTable.display tbody tr:hover {
 background-color: #1d89ff !important;
@@ -1523,7 +1550,7 @@ color: var(--colo);
 }
 
  .btn-default {
-    background-color: var(--colbut) !important;
+    background-color: var(--colbut);
     color: #fff;
     border-color: var(--colbut) !important;
 }
@@ -1537,6 +1564,7 @@ color: var(--colo);
 }
 
 #ress2 .btn {
+  background-color: #bd00a6;
     font-size: calc(.99vw + .49rem);
     line-height: .4 !important;
     text-align: right;

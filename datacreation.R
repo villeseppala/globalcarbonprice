@@ -102,7 +102,7 @@ emo = rbind(emo, emt)
 
 pik = copy(emo)
 
-
+(unique(pik$iso3c))
 
 
 

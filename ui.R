@@ -379,9 +379,12 @@ div(  id = "bor",
                       
                       
                       fluidRow(
-                        style = 'margin-left: .6vw',
-                        uiOutput("buddd"),
-
+                        # div(
+                        # id ="buddo",
+                        # style = 'margin-left: .6vw;  background-color:var(--colb)!important;',
+                        uiOutput(                        style = 'margin: .6vw; padding: .3vw;  background-color:var(--colb)!important;',
+"buddd"),
+                        # )
                       ),
                       
                       fluidRow(
@@ -1018,8 +1021,13 @@ column(6,
                                       div( style = 'overflow-y: scroll',
                                            # uiOutput("yearcui2", width="auto"),
                                            # uiOutput("ssplot2", width="auto"
-                                           uiOutput("plotkk"
+                                            uiOutput("plotkk"
+                                                    # plotOutput("plotk"
                                                     , width="auto"
+                                                     ,height="auto"
+                                                    
+                                                    # ,hover = "plot_hover"
+                                                    # ,click = "plotk_click"
                                            )
                                       )
                   )
@@ -1032,7 +1040,8 @@ column(6,
                                         # uiOutput("ssplot2", width="auto",
                                         
                                         uiOutput("plotll"
-                                                 # , width="100%"
+                                                 
+                                                  # , width="100%"
                                                  , height="auto"
                                                  # ,
                                                  # height =="auto"
