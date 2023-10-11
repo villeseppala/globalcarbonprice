@@ -41,8 +41,8 @@
 --collinea: #41644A;
 --collinea: #D3DDE0;
 
---collineb: #41644A;
-
+--collineb: #d7d7d7;
+--backs:  #ededed5e;
 }  
 :root 
 .dark-mode {
@@ -56,18 +56,18 @@
 --colbcard: #316051;
 --colbcard: #2f3c44;
 --colbcard: #265558;
---colbcard: #006d74;
 --colbtable: #2f3a3b;
 
-
+--colbcard: #00684b;
+--colbcard: #006d74;
 
 --colt: #F0EBCE;
 --colm: #305C36;
---colo: #2f3a3b;;
+--colo: #F0EBCE;;
 
 --colslide:#4995B3;
 
---colink: #2cd2eb;
+--colink: #31a6ad;
 --colbut:  #237c85;
 
 --colcheck:  #237c85;
@@ -75,7 +75,10 @@
 --collinea: #9f8e71;
 --collinea: #2f3a3b;
 
---collineb: #F0EBCE;
+--collineb: #0a5550;
+  
+--backs: #0202025e;  
+  
 }
 
 .tabbable > .nav > li > a[data-value='1. Global emissions'] { color:#D98C1A !important; }
@@ -138,15 +141,20 @@ border-block: .2vw solid yellow !important;
 
 .tabbable > .nav > li > a[data-value='1. Globaalit päästöt'] { color:#D98C1A !important; }
 
-.tabbable > .nav > li > a.active[data-value='1. Globaalit päästöt'] {  border-top: .2vw solid #D98C1A !important;
-                             border-inline: .2vw solid #D98C1A !important;}
+.tabbable > .nav > li > a.active[data-value='1. Globaalit päästöt'] { 
+  border-top: .2vw solid #D98C1A !important;
+                             border-inline: .2vw solid #D98C1A !important;
+      border-bottom: .1vw solid var(--colbtable) !important;
+  
+}
 
 .tab-pane.active[data-value='1. Globaalit päästöt'] {
 border-block: .2vw solid #D98C1A !important;
                              border-inline: .2vw solid #D98C1A !important;
-                                 border-bottom: .1vw solid var(--colbtable) !important;
 
 }
+
+
 
 .tabbable > .nav > li > a[data-value='2. Maailman väestö'] { color:#AD7AFF !important }
 .tabbable > .nav > li > a.active[data-value='2. Maailman väestö'] {  border-top: .2vw solid #AD7AFF !important;
@@ -234,9 +242,9 @@ border-block: .2vw solid yellow !important;
 .dark-mode .nav-tabs {
     border-color: transparent !important;
 }
-*/
+*/  
 .custom-control-input:checked~.custom-control-label::before {
-    color: #fff;
+    color: var(--colt);
     border-color: orange!important;
     background-color: orange!important;
 }
@@ -330,7 +338,7 @@ input[type="radio"]{
 }
 
 .irs--shiny .irs-from, .irs--shiny .irs-to, .irs--shiny .irs-single {
-    color: #fff;
+    color: #var(--colt);
     text-shadow: none;
     padding: 1px 3px;
     background-color: var(--colcheck) !important;
@@ -400,20 +408,20 @@ background-color: rgb(45, 36, 36);
 }
 
 .dark-mode  .content-wrapper {
-background-color: var(--colb);
+background-color: var(--collineb);
 color: var(--colt);
 padding: .1vw;
 margin: .1vw;
 
 }
 .div.content-wrapper {
-background-color: var(--colb);
+background-color: var(--collineb);
 color: var(--colt);
 padding: .1vw;
 }
 
  .content-wrapper {
-background-color: var(--colb);
+background-color: var(--collineb);
 color: var(--colt);
 padding: .1vw;
 margin: .1vw;
@@ -545,7 +553,7 @@ input[type=awesome-checkbox] {
            }
            
 .custom-control-input:checked~.custom-control-label::before {
-    color: #fff;
+    color: #var(--colt);
     border-color: red;
     background-color: red;
 }           
@@ -812,7 +820,7 @@ padding: .3vw !important;
    
 
   
- border-color: var(--collinea);
+ border-color: var(--colbcard);
 border-bottom-color: none;
             border-width: .2vw;
  border-style: solid; 
@@ -873,7 +881,7 @@ margin-top: -.3rem;
 
 
 #nok a {
-     background-color: #0202025e;
+     background-color: var(--backs);
      z-index: -1;
   
   
@@ -901,10 +909,10 @@ margin-top: -.3rem;
   
  border-color: var(--collinea);
 border-bottom-color: none;
-            border-width: .2vw;
+            border-width: .0vw;
  border-style: solid; 
   border-radius: 5px;
-padding: .5vw !important;
+padding: 10px !important;
 padding-top: .1vw !important;
 padding-bottom: .5vw !important;
 
@@ -1018,8 +1026,8 @@ color: var(--colink);
 padding-top: .2vw;
 padding-bottom: .2vw;
 
-padding-left: .0vw;
-margin-left: .5vw;
+padding-left: 2px;
+margin-left: .0vw;
 font-size: calc(.6vw + .54rem);
 line-height: 1.0rem;
 font-weight: 1000 !important;
@@ -1551,7 +1559,7 @@ color: var(--colo);
 
  .btn-default {
     background-color: var(--colbut);
-    color: #fff;
+    color: #var(--colt);
     border-color: var(--colbut) !important;
 }
 

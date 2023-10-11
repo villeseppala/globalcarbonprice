@@ -106,6 +106,7 @@ countrycost = hsv(0.94,0.63,0.79)
 countrynetcost = hsv(0.9,0.63,0.69)
 
 countrypop = hsv(0.75,0.52,.8)
+hyear = 2021
 # dividend = avgcost
 # avgnetcost = avgcost
 # taxfosindi = avgcost
@@ -536,28 +537,28 @@ arg = function(start, end, convergence, coustart) {
   
   nams = c("vuo", "vuo", "yearc", "paa", "muo", "pri", "sprice", "eprice")
   
-  vuo = c(2024, 2055)
-  yearc = 2055
-  paa = 3
-  muo = "percentual"
-  pri = "linear"
+  vuo = c(2024, 2037)
+  yearc = 2037
+  paa = 5
+  muo = "exponential"
+  pri = "logarithmic"
   sprice = 200
-  eprice = 1200
+  eprice = 1400
   
-  sken= rep(400,8)
+  sken= rep(150,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb1 = copy(skenb)
   
-  vuo = c(2024, 2060)
-  yearc= 2060
+  vuo = c(2024, 2050)
+  yearc= 2050
   paa = 4
-  muo = "percentual"
+  muo = "exponential"
   pri = "linear"
   sprice = 150
-  eprice = 1000
+  eprice = 1200
   
-  sken= rep(500,8)
+  sken= rep(250,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb2 = copy(skenb)
@@ -570,7 +571,7 @@ arg = function(start, end, convergence, coustart) {
   sprice = 50
   eprice = 500
   
-  sken= rep(1150,8)
+  sken= rep(950,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb3 = copy(skenb)
@@ -583,7 +584,7 @@ arg = function(start, end, convergence, coustart) {
   sprice = 40
   eprice = 400
   
-  sken= rep(1350,8)
+  sken= rep(1150,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb4 = copy(skenb)
@@ -646,7 +647,7 @@ ppaa = as.data.table(ppaa)
 
 lastyear = as.numeric(ppaa[, max(year)])
 
-budgetyear = 2020
+budgetyear = 2023
 # 
 
 # 

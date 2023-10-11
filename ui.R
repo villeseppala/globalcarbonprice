@@ -378,14 +378,14 @@ div(  id = "bor",
                       ),
                       
                       
-                      fluidRow(
-                        # div(
-                        # id ="buddo",
-                        # style = 'margin-left: .6vw;  background-color:var(--colb)!important;',
-                        uiOutput(                        style = 'margin: .6vw; padding: .3vw;  background-color:var(--colb)!important;',
-"buddd"),
-                        # )
-                      ),
+#                       fluidRow(
+#                         # div(
+#                         # id ="buddo",
+#                         # style = 'margin-left: .6vw;  background-color:var(--colb)!important;',
+#                         uiOutput(  style = 'margin: .6vw; padding: .3vw;  background-color:var(--colbcard)!important;',
+# "buddd"),
+#                         # )
+#                       ),
                       
                       fluidRow(
                         
@@ -889,7 +889,7 @@ column(10,style = " padding: .2vw;",
                 # style="display:inline-block;",
               fluidRow(
                   
-                  column(3,   p(uiOutput(style = "margin-left: 2vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: center;", "simuresults")
+                  column(3,   p(uiOutput(style = "margin-left: 2vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: left;", "simuresults")
                   )) 
                 
                   ,
@@ -911,9 +911,34 @@ column(10,style = " padding: .2vw;",
                                
               fluidRow(                                    id = "panes",
 style = "justify-content: flex-start;",
+
+column(3,
+       # style=" border: solid 1px white;", 
+       id = "luu",
+       fluidRow(
+       div(style="display:inline-block;",
+           div(style="margin-left: 3vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
+               actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
+           # ),
+           # column(1,
+           div(style="margin-top: .5vw; margin-left: .23vw; display:inline-block;",
+               checkboxInput("autodraw",  
+                             # label=textOutput(style="display:inline-block;","autoredraw"), 
+                             label="Auto", 
+                             
+                             value=FALSE)
+           ))
+       ), 
+       fluidRow(textOutput("redrawprompt") )
+),       
+
+# 
 column(6,
+       id = "luu",    
+       
+       # style=" border: solid 1px white;", 
        div(
-         # style="display:inline-block;",  
+ 
          fluidRow(
            column(3,
                   div(
@@ -925,6 +950,7 @@ column(6,
            )
            ,
            column(9,
+                  
                   div(
                     style="padding-top: 0.8vw; padding-right: 0.4vw; margin-bottom: 0.4rem;",
                     uiOutput("yearcui", width="auto")),
@@ -937,24 +963,11 @@ column(6,
 )
 ,
 
+
                        column(3,
-    
-                              div(style="display:inline-block;",
-                                  div(style="margin-left: 3vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
-                                      actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
-                                  # ),
-                                  # column(1,
-                                  div(style="margin-top: .5vw; margin-left: .23vw; display:inline-block;",
-                                      checkboxInput("autodraw",  
-                                                    # label=textOutput(style="display:inline-block;","autoredraw"), 
-                                                    label="Auto", 
-                                                    
-                                                    value=FALSE)
-                                  )
-                              ) 
-                       ),       
-                       
-                       column(3,
+                              
+                              # style=" border: solid 1px white;", 
+                              
                               tags$div(
                                 # id="sla",
                               
@@ -1051,7 +1064,7 @@ column(6,
                                       )
                   )
                    )
-,div(style = " background-color:var(--colb)!important; font-size: 1.2vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2022:"))
+,div(style = " background-color:var(--colb)!important; font-size: 1.2vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, IGCC 2023, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2022:"))
 
                   
               )

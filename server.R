@@ -70,84 +70,7 @@ server <- function(input,output, session) {
   # })
   # 
   
-  # lapply(
-  #   X = c("bud", "vuo", "paa", "muo", "nonco2", "nonco2end", "fstart", "lstart", "nonco2start", "popc", "sprice", "eprice",
-  #         "pri", "indi1", "indi2", "muoindi", "indi", "con", "national", "nationalcoun", "countr", "conb"),
-  #   FUN = function(j){
-  #     onBookmark(function(state) {
-  #       state$values[[paste0(j)]] <- input[[paste0(j)]]
-  #     })   
-  #   }
-  # )
-  # 
 
-  
-  
-  
-  
-  
-  
-  # lapply(
-  #   X = c("bud", "vuo", "paa", "muo", "nonco2", "nonco2end", "fstart", "lstart", "nonco2start", "popc", "sprice", "eprice",
-  #         "pri", "indi1", "indi2", "muoindi", "indi", "con", "national", "nationalcoun", "countr", "conb"),
-  #   FUN = function(j){
-  #     
-  #     
-  #     
-  #     onRestored(function(state) {
-  #       
-  #       
-  #       # tiem = state$values$tiem
-  #       
-  #       # lek[[paste0(j)]] =  state$values[[paste0(j)]]
-  #       shinyjs::delay(1000, {
-  #         updateSliderInput(
-  #           session = session,
-  #           inputId =j,
-  #           value = state$values[[paste0(j)]]
-  #           
-  #         )
-  #         
-  #         
-  #         # input[[paste0(j)]] <- state$input[[paste0(j)]]
-  #       })
-  #       %>% 
-  #       
-  #     }
-  #     )
-  #     # })
-  #   })
-  # 
-  # output$yearcc = renderUI({
-  #   
-  #   # sliderInput2 <- function(inputId, label, min, max, value, step=NULL, from_min, from_max){
-  #   #   
-  #   # sliderInput2("slider", "Slide:",
-  #   #              min = 0, max = 100, value = 50, step = 5, from_min = 20, from_max = 80
-  #   # )
-  #   
-  #   sliderInput2("yearc",
-  #               label = NULL, min=1970, max=2100, value = 2080, step=1, 
-  #               from_min=input$vuo[1], from_max=input$vuo[2], width="100%", animate=TRUE
-  #                  )
-  #   
-  #   
-  # })
-  # 
-  # 
-  # 
-  # output$yearcccc = renderUI({
-  #   
-  #   # sliderInput2 <- function(inputId, label, min, max, value, step=NULL, from_min, from_max){
-  #   #   
-  #   # sliderInput2("slider", "Slide:",
-  #   #              min = 0, max = 100, value = 50, step = 5, from_min = 20, from_max = 80
-  #   # )
-  #   
-  #   sliderInput("yearccc",
-  #                label = NULL, min=1970, max=2100, value = 2080, step=1, 
-  #               width="100%", animate=TRUE
-  
   
   output$lets <- renderUI({
     HTML("<p> Displaying greek letter delta as a symbol:<br> \u0394 
@@ -467,6 +390,14 @@ server <- function(input,output, session) {
   
   rv$triss = 1
   
+  observeEvent(rv$lang, {
+    
+    rv$triss = rv$triss+1
+    click("go")
+    
+    
+  })
+  
   observeEvent(input$view, { 
     
     
@@ -476,11 +407,11 @@ server <- function(input,output, session) {
     
     if (input$view ==1) {
       rv$view = 1
-      # rv$triss=rv$triss+1
+       rv$triss=rv$triss+1
       
     } else if (input$view ==2 ) {
       rv$view =2
-      # rv$triss=rv$triss+1
+       rv$triss=rv$triss+1
       
     } else if (input$view ==3) { 
       rv$view =3
@@ -700,11 +631,9 @@ server <- function(input,output, session) {
       # rv$yearc,": ",
       '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-      
       '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
       '<span style=\"color:',avgnetcost,'\"><b>',  rv$avgnetcostl," $", '</b></span>',
-      
       sep = "")
   )
   
@@ -712,20 +641,16 @@ server <- function(input,output, session) {
     paste(
       # rv$yearc,": ",
       '<span style=\"color:',fosindi,'\"><b>',  rv$userfossill," t", '</b></span>',
-      
       sep = "")
   )
   
   output$usercostl = renderText(
     paste(
       # rv$yearc,": ",
-      
       '<span style=\"color:',fosindi,'\"><b>',  rv$userfossill," t", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
-      
       '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-      
       '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
       
       sep = "")
@@ -738,7 +663,6 @@ server <- function(input,output, session) {
         # rv$yearc,": ",
         '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
         '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-        
         '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
         '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
         '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
@@ -755,11 +679,9 @@ server <- function(input,output, session) {
           # rv$yearc,": ",
           '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
           '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
-          
           '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
           '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
           '<span style=\"color:',dividend,'\"><b>',  rv$usernatl," $", '</b></span>',
-          
           '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
           '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
           
@@ -928,40 +850,62 @@ server <- function(input,output, session) {
   
   
   
+
+  
+
   output$land1 = renderText(
-    paste(
-    rv$yearc, " need for net land sink: ", input$lstart, "Gt + ", abs(as.numeric(rv$landl)), "Gt = ", rv$landneed, "Gt",
-      sep = "")
+    
+    if (rv$lang =="eng") {
+    paste(  2021, " Land+CCS: ", input$lstart,"Gt (land emissions: ",input$sourcestart, "Gt + old sinks+CCS: ", input$sinkstart, "Gt)",  sep = "")
+      } else {
+        paste(   2021, " Maankäyttö+CCS: ", input$lstart,"Gt (maan päästöt: ",  input$sourcestart, "Gt + vanhat nielut+CCS: ", input$sinkstart, "Gt)",  sep = "")     
+      }
   )
   
   output$land2 = renderText(
-    paste(
-      rv$yearc, " land emissions: ", input$sourcestart, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ", rv$sourcel, "Gt",
-      sep = "")
+    if (rv$lang =="eng") {
+    paste( rv$yearc, " Land+CCS target: ", rv$landl,"Gt", sep = "") } else {
+      paste( rv$yearc, " Maankäyttö+CCS tavoite: ", rv$landl,"Gt", sep = "")
+    }
   )
   
   output$land3 = renderText(
-    paste(
-      2021, " old sinks+CCS: ", input$sinkstart, "Gt",
-      sep = "")
+    if (rv$lang =="eng") {
+      
+    paste(   rv$yearc, " need for net land sink: ", input$lstart, "Gt + ", abs(as.numeric(rv$landl)), "Gt = ", rv$landneed, "Gt",   sep = "") } else {
+      paste(   rv$yearc, " tarve nettomaanielulle: ", input$lstart, "Gt + ", abs(as.numeric(rv$landl)), "Gt = ", rv$landneed, "Gt",   sep = "")
+    }
   )
   
   output$land4 = renderText(
-    paste(
-      rv$yearc, " new sinks+CCS: ", rv$landneed, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ",  rv$newsinkl, "Gt",
-      sep = "")
+    if (rv$lang =="eng") {
+      
+    paste(   rv$yearc, " land emissions: ", input$sourcestart, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ", rv$sourcel, "Gt", sep = "") } else {
+      
+      paste(   rv$yearc, " maan päästöt: ", input$sourcestart, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ", rv$sourcel, "Gt", sep = "") 
+    }
   )
+  
+  
   output$land5 = renderText(
-    paste(
-      rv$yearc, " land+CCS CO2: ", rv$sourcel, "Gt ", input$sinkstart, "Gt", rv$newsinkl, "Gt = ",  rv$landl, "Gt",
-      sep = "")
+    if (rv$lang =="eng") {
+    paste( rv$yearc, " new sinks+CCS: ", rv$landneed, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ",  rv$newsinkl, "Gt", sep = "") } else {
+      
+      paste( rv$yearc, " uusi maanielu+CCS: ", rv$landneed, "Gt - (", format(input$lulls/100, nsmall=2), "*", rv$landneed, "Gt) = ",  rv$newsinkl, "Gt", sep = "") 
+    }
+  )
+  
+  
+  output$land6 = renderText(
+    if (rv$lang =="eng") {
+      
+    paste(  rv$yearc, " land+CCS CO2: ", rv$sourcel, "Gt ", input$sinkstart, "Gt", rv$newsinkl, "Gt = ",  rv$landl, "Gt",  sep = "") } else {
+      paste(  rv$yearc, " maa+CCS CO2: ", rv$sourcel, "Gt ", input$sinkstart, "Gt", rv$newsinkl, "Gt = ",  rv$landl, "Gt",  sep = "") 
+      
+    }
   )
 
-  output$land6 = renderText(
-    paste(
-      2021, " land emissions: ", input$sourcestart, "Gt",
-      sep = "")
-  )
+
 
   
   observeEvent(rv$lang, {   
@@ -1018,6 +962,8 @@ server <- function(input,output, session) {
       output$shownone = renderText({  c("Show none")  })  
       output$automatic = renderText({  c("Automatic")  })  
       output$redraw = renderText({  c("Redraw")  })  
+      output$redrawprompt = renderText({  c("Press after your changes")  })  
+      
       output$autoredraw = renderText({  c("Auto-Redraw")  })  
       
       output$startlabel = renderText({  c("Start year values")  })  
@@ -1099,14 +1045,16 @@ server <- function(input,output, session) {
         ratepr <- rv$ratepr
         
         # Can also set the label and select items
-        updateRadioButtons(session, "muo","Shape of the fossil emission curve",
+        updateRadioButtons(session, "muo","Shape of the CO2 emission curve",
                            # label = paste("Shape of the emission curve"),
                            choiceNames = list(paste0("Linear (", format(round(rateli,2)), " Gt each year)"),
-                                              paste0("Percentual (", format(round( ratepr,2)), " % each year)")
+                                              paste0("Percentual (", format(round( ratepr,2)), " % each year)"),
+                                              paste0("Exponential")
+                                              
                                               # , c("Double exponentiaul")
                                               
                            ),
-                           choiceValues = list("linear", "percentual" 
+                           choiceValues = list("linear", "percentual", "exponential" 
                                                # , "exponential"
                            ),
                            selected = rv$muosel
@@ -1125,9 +1073,11 @@ server <- function(input,output, session) {
         } else {sig =""}
         updateRadioButtons(session, "muoindi","Shape of user emission curve",
                            choiceNames = list(paste0("Linear (",sig, format(round(ratelii,2)), " t each year)"), 
-                                              paste0("Percentual (",sig, format(round( ratepri,2)), " % each year)")
+                                              paste0("Percentual (",sig, format(round( ratepri,2)), " % each year)"),
+                                              paste0("Exponential")
+                                              
                            ),
-                           choiceValues = list("linear", "percentual"), 
+                           choiceValues = list("linear", "percentual", "exponential"), 
                            
                            selected = rv$muoseli
                            
@@ -1216,7 +1166,9 @@ server <- function(input,output, session) {
       output$showall = renderText({  c("Näytä kaikki")  })  
       output$shownone = renderText({  c("Piilota kaikki")  })  
       output$automatic = renderText({  c("Automattinen")  })  
-      output$redraw = renderText({  c("Uusi piirto")  })  
+      output$redraw = renderText({  c("Piirrä")  })  
+      output$redrawprompt = renderText({  c("Paina tehtyäsi muutokset")  })  
+      
       output$autoredraw = renderText({  c("Autom. piirto")  })  
       
       output$startlabel = renderText({  c("Lähtövuoden arvot")  })  
@@ -1270,12 +1222,14 @@ server <- function(input,output, session) {
         # rateli <- rv$rateli
         # ratepr <- rv$ratepr
         
-        updateRadioButtons(session, "muo","Fossiilipäästöjen käyrän muoto",
+        updateRadioButtons(session, "muo","CO2-päästöjen käyrän muoto",
                            # label = paste("Shape of the emission curve"),
                            choiceNames = list(paste0("Lineaarinen (", format(round(rv$rateli,2)), " Gt per vuosi)"),
-                                              paste0("Prosentuaalinen (", format(round( rv$ratepr,2)), " % per vuosi)")
+                                              paste0("Prosentuaalinen (", format(round( rv$ratepr,2)), " % per vuosi)"),
+                                              paste0("Eksponentiaalinen")
+                                              
                            ),
-                           choiceValues = list("linear", "percentual"),
+                           choiceValues = list("linear", "percentual", "exponential"),
                            selected = rv$muosel
                            
         )
@@ -1290,9 +1244,11 @@ server <- function(input,output, session) {
         } else {sig =""}
         updateRadioButtons(session, "muoindi","Käyttäjäpäästöjen käyrän muoto",
                            choiceNames = list(paste0("Lineaarinen (",sig, format(round(ratelii,2)), " t per vuosi)"), 
-                                              paste0("Prosentuaalinen (",sig, format(round( ratepri,2)), " % per vuosi)")
+                                              paste0("Prosentuaalinen (",sig, format(round( ratepri,2)), " % per vuosi)"),
+                                              paste0("Eksponentiaalinen")
+                                              
                            ),
-                           choiceValues = list("linear", "percentual"), 
+                           choiceValues = list("linear", "percentual", "exponential"), 
                            
                            selected = rv$muoseli
                            
@@ -1710,9 +1666,9 @@ https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES
 IPCC reports have been used for carbon budgets and ballpark for carbon prices and land use emissions / sinks. \n
 <br>
 <br>
-Carbon budgets from tablge 5.8 in page 753 of AR6 WG1 Chapter 5. \n
+Carbon budgets from Forster et al. 2023 (https://doi.org/10.5194/essd-15-2295-2023) \n
 <br>
-IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change[Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, In press, doi:10.1017/9781009157896.
+Their methodological basis from IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change[Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, In press, doi:10.1017/9781009157896.
 \n
 <br>
 <br>
@@ -1730,14 +1686,19 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       info3text = c("Start start year carbon price defines")
       
       rv$infobudgettext = c("Carbon budget defines how much net CO2 emissions can still be emitted to stay under certain temperature target with
-                     a certain probability. Budgets are defined from 2020 onwards. 
+                     a certain probability. Budgets are defined from 2023 onwards. 
                                           The simulation scenarios are built so that the budgets are depleted exactly at the chosen neutrality year. 
                      If emissions stay stable after that or continue to decrease, then the temperature targets are not exceeded.
 
                      2020 and 2021 emissions are known and emissions from 2022 until the year before pricing start year are assumed to equal the 2021 emissions.
 This leaves a remaining budget to be used from the pricing start year until the carbon neutrality year which, together with other simulation choices, 
 defines the annual fossil emissions and land use emissions/sinks.                      
-                     The probability estimates for budgets only concern the Transient climate response (TCRE), or the uncertainty in the expected response of additional warming to additional cumulative CO2, and assumes a normal distribution around the central estimate. Other factors such as the level of non-CO2 induced warming, the precise level of historical warming so far, feedback effects,  bring additional uncertainty. The level of these uncertainties is expressed in the source table for carbon budgets at IPCC AR6 WG1 C5 table 5.8 (p. 753).  
+                     The probability estimates for budgets only concern the Transient climate response (TCRE), 
+or the uncertainty in the expected response of additional warming to additional cumulative CO2, and 
+assumes a normal distribution around the central estimate. Other factors such as the level of non-CO2 
+induced warming, the precise level of historical warming so far, feedback effects,  bring additional uncertainty. 
+The level of these uncertainties is expressed at IPCC AR6 WG1 C5 table 5.8 (p. 753). Carbon budgets used here are updated version of IPCC budgets
+by Forster et al. 2023 (https://doi.org/10.5194/essd-15-2295-2023)
 ")
       
       rv$infobudgettextt = c("Carbon budgets")
@@ -2020,7 +1981,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       info3text = c("Start start year carbon price defines")
       
       rv$infobudgettext = c("Hiilibudjetti määrittää, että kuinka paljno nettohiilidioksidipäästöjä voidaan vielä enintään tuottaa, jotta pysytään tietyn lämpötilatavoitteen alla tietyllä 
-                            todennäköisyydellä. Budjetit on määritetty vuodeesta 2020 eteenpäin. Simulaatiot on rakennettu niin, että budjetit loppuvat valittuna hiilineutraaliusvuonna.
+                            todennäköisyydellä. Budjetit on määritetty vuodeesta 2023 eteenpäin. Simulaatiot on rakennettu niin, että budjetit loppuvat valittuna hiilineutraaliusvuonna.
                             Jos päästöt pysyvät tasaisina sen jälkeen tai pienentyvät, niin lämpötilatavoitteet eivät ylity.
                             Vuosien 2021 ja 2021 päästöt ovat jo tiedossa tilastoista, ja päästöt vuodesta 2022 eteenpäin päästöhinnnoittelun alkuvuoteen
                             saakka oletetaan yhtä suuriksi kuin vuoden 2021 päästöt. 
@@ -2049,23 +2010,17 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
     
     if (rv$lang == "eng") {
       
-      
-      
       output$simpan <- renderUI({
         div(id="resu",
             
-            
-            
-            
-            
-            
-            
+   
      shiny::tabsetPanel(id="nok", 
                                selected = "1. Global emissions",
                                
                                tabPanel("1. Global emissions",
-                                        
-                                        p("Change details to the CO2 emission trajectory corresponding to the chosen carbon budget"),
+                                        fluidRow(
+                                        column(7, 
+                                                id = "luu",  
                                         
                                         
                                         # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
@@ -2075,61 +2030,72 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                         # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen
                                         
                                         
-                                        fluidRow(   class="sox",  
                                                     
-                                                    # column(8, id = "luu",
-                                                           
-                                                           
-                                                           # fluidRow(
-                                                    column(4
-                                                           , 
-                                                           id = "luu",
-                                                           
-                                                           sliderInput("vuo", 
-                                                                       inf("Pricing start year and carbon neutrality year", "infopricing"),
-                                                                       min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE), 
-                                                           
-                                                           # div(
-                                                           #   class="rad",
-                                                           #   radioButtons("bud", 
-                                                           #                
-                                                           #                inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
-                                                           #                
-                                                           #                
-                                                           #                c("400Gt (67% likelihood to stay below 1,5C)" = 400,
-                                                           #                  "500Gt (50% likelihood to stay below 1,5C)" = 500,
-                                                           #                  "1150Gt (67% likelihood to stay below 2,0C)" = 1150,
-                                                           #                  "1350Gt (50% likelihood to stay below 2,0C)" = 1350
-                                                           #                  
-                                                           #                ),selected=1150
-                                                           #   )),
-                                                           # p("Note: Changing the budget will reset many other values")
-                                                           
-                                                    ),
-                                                    column(3, 
-                                                            id = "luu",
-                                                           
-                                                                                                                # hr(),
-                                                           tags$div(id="sla",numericInput("paa", 
-                                                                                          inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink"), 
-                                                                                          min = 0.1, max = 30,step=.1,value=c(6))),
-                                                           hr(),
-                                                           radioButtons("muo", "Shape of the fossil emission curve",
-                                                                        choiceNames=   list(
-                                                                          "Linear" ,
-                                                                          "Percentual"
-                                                                        ),
-                                                                        
-                                                                        choiceValues= list("linear", "percentual"
-                                                                        ),
-                                                                        selected = "percentual"
-                                                                        
-                                                           ) , 
-                                                           
-                                               
-                                                    # ) 
-                                                    # )
-                                                    ),
+                                              
+                                                    
+                                                    div(
+                                                      # id="sla",
+                                                        selectInput(
+                                                          "bud",
+                                                          inf("Carbon budget for net CO2 emissions since start of 2023", "infobudget"), 
+                                                          c(
+                                                            
+                                                            
+                                                            "150Gt (67% likelihood to stay below 1.5°C)" = 150,
+                                                            "250Gt (50% likelihood to stay below 1.5°C)" = 250,
+                                                            "950Gt (67% likelihood to stay below 2.0°C)" = 950,
+                                                            "1150Gt (50% likelihood to stay below 2.0°C)" = 1150
+                                                            
+                                                          ),selected=950,
+                                                          multiple = FALSE,
+                                                          selectize = FALSE,
+                                                          width = NULL,
+                                                          size = NULL
+                                                        )),    
+                                        # p("Change details to the CO2 emission trajectory corresponding to the chosen carbon budget"),
+                                        hr(),
+                                        
+                                        sliderInput("vuo",
+                                                    inf("Pricing start year and carbon neutrality year", "infopricing"),
+                                                    min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE), 
+                                        hr(),
+                                        
+
+                                        fluidRow(
+                                          column(6,
+                                                 id ="luu",
+                                        tags$div(
+                                          id="sla",
+                                          numericInput("paa", 
+                                                                       inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink"), 
+                                                                       min = 0.1, max = 30,step=.1,value=c(6))),
+                                        # hr(),
+                                          ),
+                                        column(6,
+                                        radioButtons("muo", "Shape of the fossil emission curve",
+                                                     choiceNames=   list(
+                                                       "Linear" ,
+                                                       "Percentual",
+                                                       "Exponential"
+                                                       
+                                                     ),
+                                                     
+                                                     choiceValues= list("linear", "percentual", "exponential"
+                                                     ),
+                                                     selected = "percentual"
+                                        )
+                                        ,
+                                        conditionalPanel(condition="input.muo == 'exponential'",
+                                                         
+                                                         sliderInput("exponent",
+                                                                     ("Exponent factor (lower = greater emphasis on CO2 reductions than land+CCS)"), 
+                                                                     min = .1, max = 2, value = .7, step=.1, ticks=FALSE)
+                                                         )
+                                        
+                                        
+                                        )
+                                        )),
+                                     
                                                     
                                                     column(5,  #luu { 
                                                          style=c("margin-right: .5vw;"),
@@ -2155,7 +2121,36 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                  
                                                                )),
                                                            
-
+                                                         hr(),
+                                                         
+                                                         
+                                                         
+                                                         tags$div(id="sla",
+                                                                  checkboxInput("luls", "Advanced & experimental: Include costs from Land+CCS CO2", value = FALSE)),          
+                                                         
+                                                         
+                                                         div(class="rad",
+                                                             conditionalPanel(
+                                                              
+                                                               condition="input.luls == 1",
+                                                               # p("Note: "),
+                                                               textOutput("land1"),
+                                                               textOutput("land2"),
+                                                               textOutput("land3"),
+                                                               
+                                                               sliderInput("lulls",
+                                                                           ("Share of land emission reductions of Land+CCS net reduction, %"), 
+                                                                           min = 0, max = 100, value = 70, step=1, ticks=FALSE),
+                                                               
+                                                               textOutput("land4"),
+                                                               
+                                                               textOutput("land5"),
+                                                               textOutput("land6")
+                                                               
+                                                             )               
+                                                         ),
+                                                         
+                                                         
                                                            hr(),
                                                            
                                                            tags$div(id="sla",
@@ -2168,13 +2163,29 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                  p("Note: Emissions from last observed year (2021) take a linear trajectory to emissions for year before start year."),
                                                                  
                                                                  tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(37.1))),
-                                                                 
-                                                                 tags$div(id="sla",numericInput("lstart", label=p("Land use emissions"),min = -5, max = 10,step=.1,value=c(3.9))),
+                                                                
                                                                  
                                                                  conditionalPanel(
                                                                    condition="input.nonco2 == 1",
                                                                    tags$div(id="sla",numericInput("nonco2start", label=p("Non-CO2 emissions"),min = 0.1, max = 20,step=.1,value=c(12.3)))
-                                                                 ),    
+                                                                 ),   
+                                                                  
+                                                               conditionalPanel(
+                                                                 condition="input.luls == 0",
+                                                                 
+                                                                 tags$div(id="sla",numericInput("lstart", label=p("Land use emissions"),min = -5, max = 10,step=.1,value=c(3.9))),
+                                                                 
+                                                               ),
+                                                               conditionalPanel(
+                                                                 condition="input.luls == 1",
+                                                                 
+                                                                 tags$div(id="sla",style ="visibility: hidden; height: 0px",numericInput("lstart", label=p("Land use emissions"),min = -5, max = 10,step=.1,value=c(3.9))),
+                                                                 
+                                                               ),
+                                                               
+                                                                 
+                                                                 
+                                                    
                                                                  conditionalPanel(
                                                                    condition="input.luls == 1",
                                                                    tags$div(id="sla",numericInput("sourcestart", label=p("Land source"),min = 0, max = 20,step=.1,value=c(13.6))),
@@ -2186,43 +2197,16 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                  
                                                                  ),  
                                                                
-                                                               hr(),
-                                                               
                                           
-                                                               
-                                                               tags$div(id="sla",
-                                                                        checkboxInput("luls", "Advanced & experimental: Include costs from Land+CCS CO2", value = FALSE)),          
-                                                               
-                                                               
-                                                               div(class="rad",
-                                                                   conditionalPanel(
-                                                                     
-                                                                     condition="input.luls == 1",
-                                                                     # p("Note: "),
-                                                                     textOutput("land6"),
-                                                                     textOutput("land3"),
-                                                                     textOutput("land1"),
-                                                                     
-                                                                     sliderInput("lulls",
-                                                                                 ("Share of land emission reductions of Land+CCS net reduction, %"), 
-                                                                                 min = 0, max = 100, value = 70, step=1, ticks=FALSE),
-                                                                     
-                                                                     textOutput("land2"),
-                                                                     
-                                                                     textOutput("land4"),
-                                                                     textOutput("land5")
-                                                                     
-                                                                   )               
-                                                               ),
                                                                
                                                            )   
                                                            
                      
                                                            )
-                                                    
+                                        )
                                         ), 
                                         
-                               ),
+                               # ),
                                
                                
                                tabPanel( "2. Population projection",
@@ -2305,20 +2289,27 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                  hr(),
                                                  tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
                                                  
-                                                 # hr(),
-                                                 
                                           ), 
                                           column(4, id = "luu",
                                                  
                                                  radioButtons("muoindi", "Shape of user emission curve",
                                                               choiceNames=   list(
                                                                 "Linear" ,
-                                                                "Percentual" 
+                                                                "Percentual", 
+                                                                "Exponential"
+                                                              
                                                                 
                                                               ), 
-                                                              choiceValues= list("linear", "percentual"),
+                                                              choiceValues= list("linear", "percentual", "exponential"),
                                                               selected = "percentual"
                                                               
+                                                 )
+                                                 ,
+                                                 conditionalPanel(condition="input.muoindi == 'exponential'",
+                                                                  
+                                                                  sliderInput("exponentindi",
+                                                                              ("Exponent factor (lower = greater emissions reductions)"), 
+                                                                              min = .1, max = 2, value = .6, step=.1, ticks=FALSE)
                                                  )
                                                  
                                           ), 
@@ -2412,114 +2403,181 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                         selected = "1. Globaalit päästöt",
                         
                         tabPanel("1. Globaalit päästöt",
-                                 p("Aseta yksityiskohtia hiilibudjettia vastaavien CO2-päästöjen polulle"),
+                                 # p("Aseta yksityiskohtia hiilibudjettia vastaavien CO2-päästöjen polulle"),
                                  
                                  
-                                 fluidRow(   class="sox",  
-                                             # column(8,  
-                                                    # id = "luu",
-                                                 
-                                                    # fluidRow(  
-                                             column(4
-                                                    , 
-                                                    id = "luu",
-                                                    
-                                                    sliderInput("vuo", 
-                                                                inf("Hinnoittelun aloitusvuosi ja hiilineutraalisuvuosi", "infopricing"),
-                                                                min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE),
-                                                    
-                                                    
-                                                    # div(
-                                                    #   class="rad",
-                                                    #   radioButtons("bud", 
-                                                    #                
-                                                    #                inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
-                                                    #                
-                                                    #                
-                                                    #                c("400Gt (67% todennäköisyys pysyä alle 1,5C)" = 400,
-                                                    #                  "500Gt (50% todennäköisyys pysyä alle 1,5C)" = 500,
-                                                    #                  "1150Gt (67% todennäköisyys pysyä alle 2,0C)" = 1150,
-                                                    #                  "1350Gt (50% todennäköisyys pysyä alle 2,0C)" = 1350
-                                                    #                ),selected=1150
-                                                    #   )),
-                                                    # p("Huom: Budjetin muuttaminen resetoi monia muita valintoja")
-                                                    
-                                             ),
-                                             column(4, 
-                                                    
+                                 fluidRow(
+                                  column(7,  
+                                             
+                                             
+                                         id = "luu",    
+                                             
+                                         div(id="sla",
+                                             selectInput(
+                                               "bud",
+                                               inf("Hiilibudjetti CO2-nettopäästöille vuoden 2023 alusta lähtien", "infobudget"),
+                                               
+                                               
+                                               c("150Gt (67% todennäköisyys pysyä alle 1,5°C)" = 150,
+                                                 "250Gt (50% todennäköisyys pysyä alle 1,5°C)" = 250,
+                                                 "950Gt (67% todennäköisyys pysyä alle 2,0°C)" = 950,
+                                                 "1150Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1150
+                                               ),selected=950,
+                                               multiple = FALSE,
+                                               selectize = FALSE,
+                                               width = NULL,
+                                               size = NULL
+                                             )
+                                         ),
+                                         
+                                         hr(),
+                                         sliderInput("vuo", 
+                                                     inf("Hinnoittelun aloitusvuosi ja hiilineutraalisuvuosi", "infopricing"),
+                                                     min = 2023, max = 2100, value = c(2024, 2080), dragRange=FALSE, ticks = FALSE),
+                                         hr(),
+                                         
+                                         # p("Huom: Budjetin muuttaminen resetoi monia muita valintoja"),
+                                         
+
+                                         fluidRow(
+                                         
+                                             column(6,
                                                     id = "luu",
                                                     # hr(),
                                                     
                                                     tags$div(id="sla",numericInput("paa", 
                                                                                    inf("CO2-päästöt/nielu loppuvuonna", "infoemissionsink"), 
-                                                                                   min = 0.1, max = 30,step=.1,value=c(6))),
-                                                    
-                                                    hr(),
+                                                                                   min = 0.1, max = 30,step=.1,value=c(6))),                                                                                                      
+                                             ),
+                                             column(6, 
                                                     
                                                     radioButtons("muo", "Fossiilipäästöjen käyrän muoto",
                                                                  choiceNames=   list(
                                                                    "Lineaarinen" ,
-                                                                   "Prosentuaalinen"
+                                                                   "Prosentuaalinen",
+                                                                   "Exponential"
                                                                  ),
                                                                  
-                                                                 choiceValues= list("linear", "percentual"
+                                                                 choiceValues= list("linear", "percentual", "exponential"
                                                                  ),
                                                                  selected = "percentual"
+                                                                 
+                                                    )                                                     
+                                                    ,
+                                                    conditionalPanel(condition="input.muo == 'exponential'",
+                                                                     
+                                                                     sliderInput("exponent",
+                                                                                 ("Eksponenttikerroin (matalampi = suuremmat päästövähennykset)"), 
+                                                                                 min = .1, max = 2, value = .7, step=.1, ticks=FALSE)
+                                                                     
+                                                    )
                                                                  
                                                     ) 
                                                     
                                                     
-                                                    
+                                             )      
                                              # )) 
                                              ),
+                                  
+                                  column(5,
+                                         style=c("margin-right: .5vw;"),       
+                                         tags$div(id="sla",
+                                                  checkboxInput("nonco2",  label = "Sisällytä muutkin kasvihuonekaasut kuin CO2 (suositeltua)"
+                                                                , value=TRUE        
+                                                  )
+                                                  
+                                         ),       
+                                         div(class="slug",    
+                                             conditionalPanel(
+                                               
+                                               condition="input.nonco2 == 1",
+                                               tags$div(id="sla", class="slug",  numericInput("nonco2end",
+                                                                                              p(class="slug", style="font-weight: 500 !important;",
+                                                                                                inf("Muut päästöt hiilineutraaliusvuonna", 
+                                                                                                    "infononco2u")),
+                                                                                              
+                                                                                              min = 5, max = 10,step=.1,value=c(7.5)))
+                                               
+                                               
+                                             )),     
+                                         
+                                         hr(),
+                                         
+                                         tags$div(id="sla",
+                                                  checkboxInput("luls", "Kokeellinen: Maankäytön + CCS kustannusten sisällyttäminen", value = FALSE)),          
+                                         
+                                         
+                                         div(class="rad",
+                                             conditionalPanel(
+                                               
+                                               condition="input.luls == 1",
+                                               # p("Note: "),
+                                               textOutput("land1"),
+                                               textOutput("land2"),
+                                               textOutput("land3"),
+                                               
+                                               sliderInput("lulls",
+                                                           ("Maankäytön päästöjen osuus maan+CCS nettovähennykestä, %"), 
+                                                           min = 0, max = 100, value = 75, step=1, ticks=FALSE),
+                                               
+                                               textOutput("land4"),
+                                               
+                                               textOutput("land5"),
+                                               textOutput("land6")
+                                               
+                                             )               
+                                         ),
+                                         
+                                         
+                                         hr(),
+                                         
+                                         tags$div(id="sla",
+                                                  checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta")), 
+                                         
+                                         div(class="rad",
+                                             conditionalPanel(
+                                               
+                                               condition="input.advance == 1",
+                                               p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta (2021) hinnoittelun alkua edeltävään vuoteen. Oletusarvoina on vuoden 2021 arvot."),
+                                               
+                                               tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                               
+
+                                               conditionalPanel(
+                                                 condition="input.nonco2 == 1",
+                                                 tags$div(id="sla",numericInput("nonco2start", label=p("Muut päästöt"),min = 0.1, max = 20,step=.1,value=c(12.3)))
+                                               ),    
+                                               
+                                                  
+                                               conditionalPanel(
+                                                 condition="input.luls == 0",
+                                                 
+                                                 tags$div(id="sla",numericInput("lstart", label=p("Maankäytön päästöt"),min = -5, max = 10,step=.1,value=c(3.9))),
+                                                 
+                                               ),
+                                               conditionalPanel(
+                                                 condition="input.luls == 1",
+                                                 
+                                                 tags$div(id="sla",style ="visibility: hidden; height: 0px",numericInput("lstart", label=p("Maankäytön päästöt"),min = -5, max = 10,step=.1,value=c(3.9))),
+                                                 
+                                               ),
+
+                                               conditionalPanel(
+                                                 condition="input.luls == 1",
+                                                 tags$div(id="sla",numericInput("sourcestart", label=p("Maan päästöt"),min = 0, max = 20,step=.1,value=c(13.6))),
+                                                 tags$div(id="sla",numericInput("sinkstart", label=p("Maanielut + CCS"),min = -20, max = 0,step=.1,value=c(-9.7)))
+                                                 
+                                                 
+                                               )            
+                                               
+                                               
+                                             )    
                                              
+                                         )    ) )
                                              
+    ),
                                              
-                                             column(4,  
-                                                    tags$div(id="sla",
-                                                             checkboxInput("nonco2",  label = "Sisällytä muutkin kasvihuonekaasut kuin CO2 (suositeltua)"
-                                                                   , value=TRUE        
-                                                             )
-                                                             
-                                                    ), 
-                                                    div(class="slug",    
-                                                        conditionalPanel(
-                                                          
-                                                          condition="input.nonco2 == 1",
-                                                          tags$div(id="sla", class="slug",  numericInput("nonco2end",
-                                                                                                         p(class="slug", style="font-weight: 500 !important;",
-                                                                                                           inf("Muut päästöt hiilineutraaliusvuonna", 
-                                                                                                               "infononco2u")),
-                                                                                                         
-                                                                                                         min = 5, max = 10,step=.1,value=c(7.5)))
-                                                          
-                                                          
-                                                        )),
-                                                    
-                                                    hr(),
-                                                    
-                                                    tags$div(id="sla",
-                                                             checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta")), 
-                                                    
-                                                    div(class="rad",
-                                                        conditionalPanel(
-                                                          
-                                                          condition="input.advance == 1",
-                                                          p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta (2021) hinnoittelun alkua edeltävään vuoteen. Oletusarvoina on vuoden 2021 arvot."),
-                                                          
-                                                          tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(37.1))),
-                                                          
-                                                          tags$div(id="sla",numericInput("lstart", label=p("Maankäytön päästöt"),min = -5, max = 10,step=.1,value=c(3.9))),
-                                                          
-                                                          conditionalPanel(
-                                                            condition="input.nonco2 == 1",
-                                                            tags$div(id="sla",numericInput("nonco2start", label=p("Muut päästöt"),min = 0.1, max = 20,step=.1,value=c(12.3)))
-                                                          )    )               
-                                                    )   )
-                                             
-                                 ), 
-                                 
-                        ),
+                         
                         
                         tabPanel(
                           
@@ -2604,12 +2662,21 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                           radioButtons("muoindi", "Käyttäjän päästöjen käyrän muoto",
                                                        choiceNames=   list(
                                                          "Lineaarinen" ,
-                                                         "Prosentuaalinen"
+                                                         "Prosentuaalinen",
+                                                         "Eksponentiaalinen"
+                                                         
                                                          
                                                        ), 
-                                                       choiceValues= list("linear", "percentual"),
+                                                       choiceValues= list("linear", "percentual", "exponential"),
                                                        selected = "percentual"
                                                        
+                                          )
+                                          ,
+                                          conditionalPanel(condition="input.muoindi == 'exponential'",
+                                                           
+                                                           sliderInput("exponentindi",
+                                                                       ("Eksponentti-kerroin (matalampi = suurempi paino päästövähennyksiin kuin nieluihin)"), 
+                                                                       min = .1, max = 2, value = .6, step=.1, ticks=FALSE)
                                           )
                                           
                                    ), 
@@ -2922,17 +2989,17 @@ rv$triggo=0
       
       # observeEvent(input$bud, {
       
-      if (input$bud == 400) {
+      if (input$bud == 150) {
         rv$budinfo = c("1,5°C with 67% chance")
         
-      } else if (input$bud ==500) {
+      } else if (input$bud ==250) {
         
         rv$budinfo = c("1,5°C with 50% chance")
-      } else if (input$bud ==1150) {
+      } else if (input$bud ==950) {
         
         rv$budinfo = c("2°C with 67% chance")
       }
-      else if (input$bud ==1350) {
+      else if (input$bud ==1150) {
         
         rv$budinfo = c("2°C with 50% chance")
       }
@@ -2941,18 +3008,18 @@ rv$triggo=0
     } else if (rv$lang=="fin") {
       
       # observeEvent(input$bud, {
-      if (input$bud == 400) {
+      if (input$bud == 150) {
         
         rv$budinfo = c("1,5°C 67% varmasti")
         
-      } else if (input$bud ==500) {
+      } else if (input$bud ==250) {
         
         rv$budinfo = c("1,5°C 50% varmasti")
-      } else if (input$bud ==1150) {
+      } else if (input$bud ==950) {
         
         rv$budinfo = c("2°C 67% varmasti")
       }
-      else if (input$bud ==1350) {
+      else if (input$bud ==1150) {
         
         rv$budinfo = c("2°C 50% varmasti")
       } 
@@ -3121,12 +3188,14 @@ rv$triggo=0
       updateRadioButtons(session, "muo","Shape of the fossil emission curve",
                          # label = paste("Shape of the emission curve"),
                          choiceNames = list(paste0("Linear (", format(round(rateli,2)), " Gt each year)"),
-                                            paste0("Percentual (", format(round( ratepr,2)), " % each year)")
+                                            paste0("Percentual (", format(round( ratepr,2)), " % each year)"),
+                                            paste0("Exponential")
+                                            
                                             # ,
                                             # c("Double exponentiaul")
                                             
                          ),
-                         choiceValues = list("linear", "percentual"
+                         choiceValues = list("linear", "percentual", "exponential"
                                              # , "exponential"
                          ),
                          selected = rv$muosel)
@@ -3135,12 +3204,14 @@ rv$triggo=0
     {
       updateRadioButtons(session, "muo","Fossiilipäästöjen käyrän muoto",
                          choiceNames = list(paste0("Lineaarinen (", format(round(rv$rateli,2)), " Gt per vuosi)"),
-                                            paste0("Prosentuaalinen (", format(round( rv$ratepr,2)), " % per vuosi)")
+                                            paste0("Prosentuaalinen (", format(round( rv$ratepr,2)), " % per vuosi)"),
+                                            paste0("Exponential")
+                                            
                                             # ,
                                             # c("Double exponentiaul")
                                             
                          ),
-                         choiceValues = list("linear", "percentual"
+                         choiceValues = list("linear", "percentual", "exponential"
                                              # , "exponential"
                          ),
                          selected = rv$muosel
@@ -3162,9 +3233,11 @@ rv$triggo=0
     if (rv$lang=="eng") {
       updateRadioButtons(session, "muoindi","Shape of user emission curve",
                          choiceNames = list(paste0("Linear (",sig, format(round(ratelii,2)), " t each year)"), 
-                                            paste0("Percentual (",sig, format(round( ratepri,2)), " % each year)")
+                                            paste0("Percentual (",sig, format(round( ratepri,2)), " % each year)"), 
+                                            paste0("Exponential")
+                                            
                          ),
-                         choiceValues = list("linear", "percentual"), 
+                         choiceValues = list("linear", "percentual", "exponential"), 
                          
                          selected = rv$muoseli
                          
@@ -3173,9 +3246,11 @@ rv$triggo=0
         
         updateRadioButtons(session, "muoindi","Käyttäjäpäästöjen käyrän muoto",
                            choiceNames = list(paste0("Lineaarinen (",sig, format(round(ratelii,2)), " t per vuosi)"), 
-                                              paste0("Prosentuaalinen (",sig, format(round( ratepri,2)), " % per vuosi)")
+                                              paste0("Prosentuaalinen (",sig, format(round( ratepri,2)), " % per vuosi)"),
+                                              paste0("Eksponentiaalinen")
+                                              
                            ),
-                           choiceValues = list("linear", "percentual"), 
+                           choiceValues = list("linear", "percentual", "exponential"), 
                            
                            selected = rv$muoseli
                            
@@ -3243,9 +3318,11 @@ rv$triggo=0
     } else {sig =""}
     updateRadioButtons(session, "muoindi","Käyttäjäpäästöjen käyrän muoto",
                        choiceNames = list(paste0("Lineaarinen (",sig, format(round(ratelii,2)), " t per vuosi)"), 
-                                          paste0("Prosentuaalinen (",sig, format(round( ratepri,2)), " % per vuosi)")
+                                          paste0("Prosentuaalinen (",sig, format(round( ratepri,2)), " % per vuosi)"),
+                                          paste0("Eksponentiaalinen")
+                                          
                        ),
-                       choiceValues = list("linear", "percentual"), 
+                       choiceValues = list("linear", "percentual", "exponential"), 
                        
                        selected = rv$muoseli
                        
@@ -3475,19 +3552,22 @@ rv$triggo=0
     }
   })
   
-  observeEvent(input$dim[1], {
-    
-    rv$triggo=1
-    # click("go")
-    
-  })
-  observeEvent( input$dim[2], {
-    
-    rv$triggo=1
-    # click("go")
-    
-    
-  })
+  # observeEvent(input$dim[1], {
+  #   
+  #   rv$triggo=1
+  #   # click("go")
+  #   
+  # })
+  # observeEvent( input$dim[2], {
+  #   
+  #   rv$triggo=1
+  #   # click("go")
+  #   
+  #   
+  # })
+  
+  
+  
   
   # input$dim[1], input$dim[2]
   
@@ -3899,17 +3979,17 @@ rv$triggo=0
       
       observeEvent(input$bud, {
         
-        if (input$bud == 400) {
+        if (input$bud == 150) {
           rv$budinfo = c("1,5°C with 67% chance")
           
-        } else if (input$bud ==500) {
+        } else if (input$bud ==250) {
           
           rv$budinfo = c("1,5°C with 50% chance")
-        } else if (input$bud ==1150) {
+        } else if (input$bud ==950) {
           
           rv$budinfo = c("2°C with 67% chance")
         }
-        else if (input$bud ==1350) {
+        else if (input$bud ==1150) {
           
           rv$budinfo = c("2°C with 50% chance")
         }
@@ -3996,18 +4076,18 @@ rv$triggo=0
       
       
       observeEvent(input$bud, {
-        if (input$bud == 400) {
+        if (input$bud == 150) {
           
           rv$budinfo = c("1,5°C 67% varmasti")
           
-        } else if (input$bud ==500) {
+        } else if (input$bud ==250) {
           
           rv$budinfo = c("1,5°C 50% varmasti")
-        } else if (input$bud ==1150) {
+        } else if (input$bud ==950) {
           
           rv$budinfo = c("2°C 67% varmasti")
         }
-        else if (input$bud ==1350) {
+        else if (input$bud ==1150) {
           
           rv$budinfo = c("2°C 50% varmasti")
         } 
@@ -4760,23 +4840,28 @@ rv$triggo=0
     
     fossil = seq(start, as.numeric(input$fstart), length.out= time)
     # [,-1]
+    
+    
     land = seq(lstart, as.numeric(input$lstart),length.out = time)
     
     sink = seq(sinkstart, as.numeric(input$sinkstart),length.out = time)
     source = seq(sourcestart, as.numeric(input$sourcestart),length.out = time)
     
+    userfossil = seq(input$indi1, as.numeric(input$indi1), length.out= time)
     # [,-1]
     # take out the calculation start and end point that will be in the data anyway
     fossil = fossil[-1]
     land = land[-1]
     sink = sink[-1]
     source = source[-1]
+    userfossil = userfossil[-1]
     
     
     fossil = head(fossil,-1)
     land = head(land,-1)  
     sink = head(sink,-1)  
     source = head(source,-1)  
+    userfossil = head(userfossil,-1)
     
     
     # emissions from 2020 to last observed year 
@@ -4784,14 +4869,17 @@ rv$triggo=0
     historyland = ppaa[year %in% budgetyear:lastyear & sec =="land",yy]
     historysink = ppaa[year %in% budgetyear:lastyear & sec =="sink",yy]
     historysource = ppaa[year %in% budgetyear:lastyear & sec =="source",yy]
+    historyuserfossil = ppaa[year %in% budgetyear:lastyear & sec =="fossil",NA]
     
     historyyear = ppaa[year %in% budgetyear:lastyear & sec =="land",year]
+    
     
     # combine historical and intermediate simulated emissions
     fossil = c(historyfossil, fossil)
     land = c(historyland, land)
     sink = c(historysink, sink)
     source = c(historysource, source)
+    userfossil = c(historyuserfossil, userfossil)
     
     yearl2 = c(historyyear, yearl2)
     
@@ -4807,13 +4895,17 @@ rv$triggo=0
     
     #combine data frames to one
     
-    inter = data.frame(yearl2, fossil, land, sink, source)
+    inter = data.frame(yearl2, fossil, land, sink, source, userfossil)
+    
+    if (input$luls==TRUE) {
+      inter$land = inter$sink+inter$source
+    }
     inter$net = inter$fossil + inter$land
+    
     inter=as.data.table(inter)
     
-    
     # net emissions used before the observation year 
-    sumnet = inter[,sum(net)]
+    sumnet = inter[yearl2 %in% c(budgetyear:(rv$fyear-1)),sum(net)]
     rv$sumnet = sumnet
     
     
@@ -4848,14 +4940,16 @@ rv$triggo=0
     
     
     
-    
-    
-    
-    
     # fossil totals: 
     
     start = input$fstart
-    lstart = input$lstart
+    # sunk = inp
+    
+    if (input$luls ==FALSE) {
+    lstart = input$lstart } else if (input$luls ==TRUE) {
+      lstart = input$sourcestart + input$sinkstart
+      
+    }
     
     
     end<- as.numeric(input$paa)
@@ -4899,10 +4993,10 @@ rv$triggo=0
     
     
     
-    if (input$muo != "exponential") {
+    # if (input$muo != "exponential") {
       
       if (input$muo == "percentual")  {
-        f3 = f3 <- function(rate,start,time, end) {
+        f3 <- function(rate,start,time, end) {
           end - start * (1-rate/100)^(time+1)
         }
         
@@ -4911,27 +5005,18 @@ rv$triggo=0
           end - (start - rate*(time+1))
         }
       } 
-      else if  (input$muo=="logarithmic") {
-        f3 <- function(rate,start,time, end) {
-          # end - (start - rate*log(time+1))
-          end - (start - rate^(time+1))
-          
-        }}
-      # else if  (input$muo=="exponential") {
-      #   # need to calculate the area under the curve. For it need to know how much the budget is for emissions and LUC.
-      #   # 
-      #   
-      #   f3 <- function(rate,start,time, end) {
-      #     # end - (start - rate*log(time+1))
-      #     end - (start - rate^(time+1))
-      #     
-      #   }}
-      # 
-      # emission rate solving with given values
+   
+    
+    else if  (input$muo=="exponential") {
+      f3 <- function(rate,start,time, end) {
+        # end - (start - rate*log(time+1))
+        # end - start * exp(((1-rate/100)*(time+1)))
+        end - start * (1-rate/100)^(time+1)^input$exponent
+        
+      }}
+   
       
-      
-      
-      result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+      result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=100)$root
       u = result[1]
       
       
@@ -4949,16 +5034,18 @@ rv$triggo=0
           c(start - rate*(time+1))
         }
       } 
-      else if  (input$muo=="logarithmic") {
-        
+   
+      
+      if (input$muo == "exponential")  {
         g = function(start, rate, time) {
-          # c(start-rate*log(time+1))
-          c(start-rate^(time+1))
+          # c(start*exp((1-rate/100)*(time+1)))
+          c(start*(1-rate/100)^(time+1)^input$exponent)
           
+
         }
-        
-        
-      }
+}
+      
+      
       fossil = g(start, rate, 0:time)
       
       
@@ -4989,7 +5076,16 @@ rv$triggo=0
           # for(i in 1:time) x = x + start - rate*log((i))
           return(x)  }  
         
+      }  else if (input$muo =="exponential") {
+        geomsuma = function(start, rate, time) {
+          x = 0
+          # for(i in 0:time) x = x + start * exp((1-rate/100)*(i+1))
+          for(i in 0:time) x = x + start * (1-rate/100)^(i+1)^input$exponent
+          
+          return(x)  }
+        
       }
+      
       
       # applying function for emission cumulatin
       
@@ -4999,14 +5095,22 @@ rv$triggo=0
       
       
       
+      
+      
+      
+      
+      #nonc02 emisisons
+      
       start = input$nonco2start
       # lstart = input$lstart
       
       
       end<- as.numeric(input$nonco2end)
+      # end<- 7
+      
       # lend = (-1)*end
       if (input$muo == "percentual")  {
-        f3 = f3 <- function(rate,start,time, end) {
+     f3 <- function(rate,start,time, end) {
           end - start * (1-rate/100)^(time+1)
         }
         
@@ -5014,17 +5118,20 @@ rv$triggo=0
         f3 <- function(rate,start,time, end) {
           end - (start - rate*(time+1))
         }
-      } 
-      else if  (input$muo=="logarithmic") {
+      }   else if  (input$muo=="exponential") {
         f3 <- function(rate,start,time, end) {
-          # end - (start - rate*log(time+1))
-          end - (start - rate^(time+1))
+          # end - start * exp((1-rate/100)*(time+1))
+          # end - start * (1-rate/100)^(time+1)^input$exponent
+          end - start * (1-rate/100)^(time+1)^input$exponent
           
-        }}
+          
+        }
+      }
+      
       
       
       # emission rate solving with given values
-      result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+      result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=10)$root
       u = result[1]
       
       rate = u
@@ -5047,208 +5154,26 @@ rv$triggo=0
           c(start-rate^(time+1))
           
         }}
+      else if  (input$muo=="exponential") {
+        g <- function(start,rate,time) {
+          # end - (start - rate*log(time+1))
+          # c(start * exp(((1-rate/100)*(time+1))))
+           c(start*(1-rate/100)^(time+1)^input$exponent)
+          
+          # c(start*(1-rate/100)^(time+1)^input$exponent)
+          
+        }}
       
       #applying yearly emission function to calculate emissions
       nonco2 = g(start, rate, 0:time)
       
       
       rv$trigu = rv$trigu+1
-    }
+    # }
     
     
     
     
-    
-    
-    
-    
-    
-    
-    else if (input$muo == "exponential") {
-      
-      rate = 1
-      times = (lyear - fyear)
-      # fstart= start
-      tim = 0:times
-      end<- as.numeric(input$paa)
-      # SpanFast=(fstart-end)*.30
-      # 
-      # SpanSlow=(fstart-end)*.70
-      
-      # f3 = f3 <- function(rate,start,time, end) {
-      #   end - start*(rate)^((time+1)^(1/1.48))
-      # }    
-      # 
-      # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-      # u = result[1]
-      # rate = u    
-      # g = function(start, rate, time) {
-      #   c(start*(rate)^((time+1)^(1/1.48)))
-      # }
-      # 
-      # fossil = g(start, rate, 0:time)
-      
-      model <- function(theta){
-        # a = function thing
-        a <- theta[1]
-        # b = other function thing
-        b  <- theta[2]
-        
-        c  <- theta[3]
-        
-        # SpanFast=(Y0-Plateau)*PercentFast*.01
-        #
-        # SpanSlow=(Y0-Plateau)*(100-PercentFast)*.01
-        #
-        # Y=Plateau + SpanFast*exp(-KFast*X) + SpanSlow*exp(-KSlow*X)
-        # Y=end + SpanFast*exp(-a*(times+1)) + SpanSlow*exp(-b*(times+1))
-        
-        
-        # F1 = end - Y
-        # F2 = input$ala - sum(end + SpanFast*exp(-a*tim) + SpanSlow*exp(-b*tim))
-        # curve goes from start to finish
-        # F1 = end - start*(rate)^((time+1)^(b))
-        # 
-        # 
-        # F2 =  input$ala - sum(start*(rate)^((tim+1)^(b)))
-        
-        F1 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
-        # F3 = end - start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3
-        
-        F2 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
-        F3 =  input$ala - sum(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
-        
-        # area below curve corresponds to necessary carbon reduction for emissions reductions
-        # F2 = input$ala - sum(a^(b*tim)+ fstart)
-        # curve goes from start to finish
-        # F1 = end - (fstart - b^(b^times))
-        #
-        # # area below curve corresponds to necessary carbon reduction for emissions reductions
-        # F2 = input$ala - sum(a^(b*tim)+ fstart)
-        
-        
-        c(F1=F1,F2=F2, F3=F3)
-      }
-      
-      (ss <- multiroot(f = model, start = c(.0015, -.00005, -.0001)))
-      
-      fff = unlist(ss, use.names=FALSE)
-      a= fff[1]
-      
-      #fb  = speed of emission reduction, second galf
-      b=fff[2]
-      c=fff[3]
-      
-      ga = function(start,a, b,c, time) {
-        
-        # c(end + SpanFast*exp(-a*(times+1)) + SpanSlow*exp(-b*(times+1)))
-        
-        # c( start*(rate)^((time+1)^(b)))
-        c(start + a*(time+1) + b*(time+1)^2 + c*(time+1)^3)
-        
-        # c(start-rate*log(time+1))
-        # c(start-rate^(time+1))
-      }
-      fossil = ga(start,a, b,c, time=(0:time))
-      geomsuma = function(start, a, b, c,time) {
-        x = 0
-        # for(i in 0:time) x = x + start*(rate)^((i+1)^(b))
-        for(i in 0:time) x = x + start + a*(i+1) + b*(i+1)^2 + c*(i+1)^3
-        
-        # for(i in 0:time) x = x + start - rate*(i)
-        # for(i in 1:time) x = x + start - rate*log((i))
-        return(x)  }
-      total = geomsuma(start, a, b,c, time)
-      # total = sum(fossil)
-      # total = 1500
-      
-      
-      
-      # else if (input$muo =="logarithmic") {
-      #   geomsuma = function(start, rate, time) {
-      #     x = 0
-      #     for(i in 0:time) x = x + start - rate*log(i+1)
-      # 
-      #     # for(i in 0:time) x = x + start - rate*(i)
-      #     # for(i in 1:time) x = x + start - rate*log((i))
-      #     return(x)  }
-      # 
-      # }
-      
-      # applying function for emission cumulatin
-      
-      
-      # total = geomsuma(start, rate,time)
-      
-      
-      
-      
-      
-      
-      
-      
-      fstart = input$nonco2start
-      # lstart = input$lstart
-      
-      
-      end<- as.numeric(input$nonco2end)
-      
-      model <- function(theta){
-        
-        # a = function thing
-        a <- theta[1]
-        # b = other function thing
-        b  <- theta[2]
-        
-        # curve goes from start to finish
-        F1 = end - (fstart - a^(b*times))
-        
-        # area below curve corresponds to necessary carbon reduction for emissions reductions
-        F2 = input$ala - sum(a^(b*tim)+ fstart)
-        
-        
-        c(F1=F1,F2=F2)
-      }
-      
-      (ss <- multiroot(f = model, start = c(2, -.3)))
-      
-      fff = unlist(ss, use.names=FALSE)
-      a= fff[1]
-      
-      #fb  = speed of emission reduction, second galf
-      b=fff[2]
-      
-      ga = function(fstart, a, b, times) {
-        
-        c(a^(b*(times+1)) + fstart)
-        # c(start-rate*log(time+1))
-        # c(start-rate^(time+1))
-        
-        
-      }
-      nonco2= ga(fstart,  a, b, times=(0:times))
-    }
-    
-    
-    # fossil  =  ffa^(ffb*time)+ start
-    
-    #  
-    
-    
-    
-    # total = geomsuma(start, ffa, ffb,time)
-    
-    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-    # u = result[1]
-    # } 
-    
-    
-    
-    
-    
-    
-    # end<- as.numeric(input$end)
-    # lend = (-1)*end
     # ## calculating landuse emissions
     # how much needed to absorb  by land based on cumulative emissions over time
     lbudget= budget - total
@@ -5258,7 +5183,7 @@ rv$triggo=0
     #normalize
     
     #time halved
-    r=round(.40*n, 0)
+    r=round(.25*n, 0)
     
     
     #   r
@@ -5317,10 +5242,6 @@ rv$triggo=0
     
     
     
-    
-    
-    
-    
     fff = unlist(ss, use.names=FALSE)
     
     #ffa = speed of emission reduction, first half
@@ -5330,6 +5251,8 @@ rv$triggo=0
     ffb=fff[2]
     
     # sa = emissions, first half
+    
+    # just change the lstart here to be 
     sa = ffa*rr + lstart
     
     # emissions, second third
@@ -5344,71 +5267,7 @@ rv$triggo=0
     land = c( sa,sc,sb)
     
     
-    
-    
-    
-    
-    
-    
-    # nonco2 emissions
-    
-    
-    # fossil totals: 
-    
-    
-    # budget<- as.numeric(input$bud)-sumnet
-    
-    
-    # if (input$muo == "percentual")  {
-    # f3 = f3 <- function(rate,start,time, end) {
-    #   end - start * (1-rate/100)^(time+1)
-    # }
-    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-    # u = result[1]
-    # 
-    # rv$ratepr = -1*u
-    # # } 
-    # # else if (input$muo=="linear") {
-    # f3 <- function(rate,start,time, end) {
-    #   end - (start - rate*(time+1))
-    # }
-    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-    # u = result[1]
-    # 
-    # rv$rateli = -1*u
-    # # } 
-    # # else if  (input$muo=="logarithmic") {
-    # f3 <- function(rate,start,time, end) {
-    #   # end - (start - rate*log(time+1))
-    #   end - (start - rate^(time+1))
-    #   
-    # }
-    # result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
-    # u = result[1]
-    # 
-    # rv$ratelo = u
-    # }
-    
-    
-    # emission rate solving with given values
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     
     muoindi=input$muoindi
@@ -5428,9 +5287,7 @@ rv$triggo=0
       }
       result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
       rv$ratelii = -1*result[1]  
-      
-      
-    }
+          }
     
     if (start < end) {
       f3 = f3 <- function(rateindi,start,time, end) {
@@ -5444,33 +5301,43 @@ rv$triggo=0
       }
       result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
       rv$ratelii = result[1]  
-      
-      
-    }
+          }
     
     
     
     
     if (input$muoindi == "percentual" & start>=end)  {
       f3 = f3 <- function(rateindi,start,time, end) {
-        end - start * (1-rateindi/100)^(time)
+        end - start * (1-rateindi/100)^(time+1)
       } }
     
     else if (input$muoindi == "percentual" & start<end)  {
       f3 = f3 <- function(rateindi,start,time, end) {
-        end - start * (1+rateindi/100)^(time)
+        end - start * (1+rateindi/100)^(time+1)
       } }
     
     else if (input$muoindi =="linear" & start>=end) { 
       f3 <- function(rateindi,start,time, end) {
-        end - (start- rateindi*time)
+        end - (start- rateindi*(time+1))
       }
     }
     else if (input$muoindi =="linear" & start<end) {
       f3 <- function(rateindi,start,time, end) {
-        end - (start + rateindi*time)
+        end - (start + rateindi*(time+1))
       }
     }
+    
+    
+    if (input$muoindi == "exponential" & start>=end)  {
+      f3 = f3 <- function(rateindi,start,time, end) {
+        end - start * (1-rateindi/100)^(time+1)^input$exponentindi
+      } }
+    
+    else if (input$muoindi == "exponential" & start<end)  {
+      f3 = f3 <- function(rateindi,start,time, end) {
+        end - start * (1+rateindi/100)^(time+1)^input$exponentindi
+      } }
+    
     # emission rate solving with given values
     result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
     u = result[1]
@@ -5479,27 +5346,99 @@ rv$triggo=0
     #  yearly emissions function
     if (input$muoindi == "percentual" & start>=end)  {
       g = function(start, rateindi, time) {
-        c(start*(1-rateindi/100)^(time))
+        c(start*(1-rateindi/100)^((time+1)))
       }}
     
     else if (input$muoindi == "percentual" & start<end)  {
       g = function(start, rateindi, time) {
-        c(start*(1+rateindi/100)^(time))
+        c(start*(1+rateindi/100)^(time+1))
       }}
     
     else  if (input$muoindi =="linear" & start>=end) {
       g = function(start, rateindi, time) {
-        c(start - rateindi*time)
+        c(start - rateindi*(time+1))
       }
     }
     else  if (input$muoindi =="linear" & start<end) {
       g = function(start, rateindi, time) {
-        c(start + rateindi*time)
+        c(start + rateindi*(time+1))
       }
     }
+    if (input$muoindi == "exponential" & start>=end)  {
+      g = function(start, rateindi, time) {
+        c(start*(1-rateindi/100)^((time+1))^input$exponentindi)
+      }}
+    
+    else if (input$muoindi == "exponential" & start<end)  {
+      g = function(start, rateindi, time) {
+        c(start*(1+rateindi/100)^(time+1)^input$exponentindi)
+      }}
     
     #applying yearly emission function to calculate emissions
     userfossil = g(start, rateindi, 0:time)
+    
+    
+    
+    
+    
+    
+    
+    # if (input$muo == "percentual")  {
+    #   f3 <- function(rate,start,time, end) {
+    #     end - start * (1-rate/100)^(time+1)
+    #   }
+    #   
+    # } else if (input$muo=="linear") {
+    #   f3 <- function(rate,start,time, end) {
+    #     end - (start - rate*(time+1))
+    #   }
+    # } 
+    # 
+    # 
+    # else if  (input$muo=="exponential") {
+    #   f3 <- function(rate,start,time, end) {
+    #     # end - (start - rate*log(time+1))
+    #     # end - start * exp(((1-rate/100)*(time+1)))
+    #     end - start * (1-rate/100)^(time+1)^input$exponent
+    #     
+    #   }}
+    # 
+    # 
+    # result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=100)$root
+    # u = result[1]
+    # 
+    # 
+    # 
+    # rate = u
+    # # rv$rate = rate
+    # 
+    # #  yearly emissions function
+    # if (input$muo == "percentual")  {
+    #   g = function(start, rate, time) {
+    #     c(start*(1-rate/100)^(time+1))
+    #   }
+    # } else if (input$muo=="linear") {
+    #   g = function(start, rate, time) {
+    #     c(start - rate*(time+1))
+    #   }
+    # } 
+    # 
+    # 
+    # if (input$muo == "exponential")  {
+    #   g = function(start, rate, time) {
+    #     # c(start*exp((1-rate/100)*(time+1)))
+    #     c(start*(1-rate/100)^(time+1)^input$exponent)
+    #     
+    #     
+    #   }
+    # }
+    # 
+    # 
+    # fossil = g(start, rate, 0:time)
+    
+    
+    
+    
     
     
     
@@ -5577,17 +5516,6 @@ rv$triggo=0
     
     
     
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
     pop = populaatio()[year %in% rv$fyear:rv$lyear,pop]/1000000000
     # ghg  = rep(ghg,time+1)
     
@@ -5601,6 +5529,8 @@ rv$triggo=0
     
     
     lend= rep(lend,time+1)
+    
+    # pitäisikö tässä näkyä sink ja source_ 
     
     dats = data.frame(year,  budget, rate, fossil, nonco2,  land,  pop, total, price, userfossil
                       
@@ -5682,9 +5612,11 @@ rv$triggo=0
     dats
     
     
-    
-  })
+      })
   
+      # })
+  
+  # })
   
   
   lux = reactive({
@@ -5798,6 +5730,8 @@ rv$triggo=0
     
     
     
+    
+    
     # create data from last observed year to year before pricing begins
     start=ppaa[year ==lastyear & sec =="fossil", yy]
     nstart=ppaa[year ==lastyear & sec =="nonco2", yy]
@@ -5826,6 +5760,7 @@ rv$triggo=0
     
     sink = seq(sinkstart, as.numeric(input$sinkstart),length.out = time)
     source = seq(sourcestart, as.numeric(input$sourcestart),length.out = time)
+    userfossil = seq(input$indi1, as.numeric(input$indi1),length.out = time)
     
     # [,-1]
     # take out the calculation start and end point that will be in the data anyway
@@ -5834,11 +5769,16 @@ rv$triggo=0
     sink = sink[-1]
     source = source[-1]
     nonco2 = nonco2[-1]
+    userfossil = userfossil[-1]
     
     fossil = head(fossil,-1)
     land = head(land,-1)  
     nonco2=head(nonco2,-1)
     sink = head(sink,-1)  
+    userfossil = head(userfossil,-1)  
+    
+    
+    
     source = head(source,-1)  
     
     
@@ -5867,6 +5807,8 @@ rv$triggo=0
     
     ppax$source = source
     ppax$sink = sink
+    ppax$userfossil = userfossil
+    
     ppax$newsink = NA
     ppax$landcost = NA
     
@@ -5910,10 +5852,14 @@ rv$triggo=0
     
     dats = rbind(ppaa, ppax, dats, fill=TRUE)
     
+    
+    
     # rv$triggo = 1
     
-    
+    # useru = userfossil[1,]
     dats = as.data.table(dats)
+    dats[year==hyear & sec =="userfossil", yy:=input$indi1]
+    
     dats = dats[lux(), col:=i.col ,on=c("sec")]
     dats = dats[lux(), ala:=i.ala ,on=c("sec")]
     dats = dats[lux(), pos:=i.pos ,on=c("sec")]
@@ -6374,15 +6320,15 @@ rv$triggo=0
     dats$country = "t"
     
     
-    withProgress( message="Calculating country trajectories, please wait",{
+    # withProgress( message="Calculating country trajectories, please wait",{
     
     if (input$indi %in% c(ll2)) {
       
       req(pacu())
       pacu = pacu()
       
-      cour  = pacu[country ==input$indi & year %in% rv$fyear:rv$lyear, fossilcountry]
-      dats[year %in% rv$fyear:rv$lyear & sec =="userfossil", yy:=cour ]
+      cour  = pacu[country ==input$indi & year %in% hyear:rv$lyear, fossilcountry]
+      dats[year %in% hyear:rv$lyear & sec =="userfossil", yy:=cour ]
       
       cour1  = pacu[country ==input$indi & year %in% rv$fyear:rv$lyear, countrycost]
       cour2  = pacu[country ==input$indi & year %in% rv$fyear:rv$lyear, countrynetcost]
@@ -6570,12 +6516,14 @@ rv$triggo=0
     dats = rbind(dats, dummy)
     
     # numbers to use in result indicator sector and elsewhere
+    
+    if (rv$lang=="eng") {
     rv$fossill= format(round(dats[sec=="fossil" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$landl = format(round(dats[sec=="land" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$netl = format(round(dats[sec=="net" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$ghgl = format(round(dats[sec=="ghg" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$nonco2l = format(round(dats[sec=="nonco2" & year ==rv$yearc, yy], 1), nsmall=1)
-    rv$popl = format(round(dats[sec=="pop" & year ==rv$yearc, yy], 1), nsmall=1)
+    rv$popl = format(round(dats[sec=="pop" & year ==rv$yearc, yy], 2), nsmall=2)
     rv$avgfossill = format(round(dats[sec=="avgfossil" & year ==rv$yearc, yy], 2), nsmall=2)
     rv$pricel = format(round(dats[sec=="price" & year ==rv$yearc, yy], 0), nsmall=0)
     rv$avgcostl = format(round(dats[sec=="avgcost" & year ==rv$yearc, yy], 0), nsmall=0)
@@ -6590,13 +6538,41 @@ rv$triggo=0
     rv$countrypopl = format(round(dats[sec=="countrypop" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$countrydividendl = format(round(dats[sec=="countrydividend" & year ==rv$yearc, yy], 0), nsmall=0)
     rv$averagedividendl = format(round(dats[sec=="averagedividend" & year ==rv$yearc, yy], 0), nsmall=0)
-    
     rv$sourcel = format(round(dats[sec=="source" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$sinkl = format(round(dats[sec=="sink" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$newsinkl = format(round(dats[sec=="newsink" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$landneed = format(round(input$lstart - dats[sec=="land" & year ==rv$yearc, yy], 1), nsmall=1)
-
     rv$landcostl = format(round(dats[sec=="landcost" & year ==rv$yearc, yy], 0), nsmall=0)
+    }
+    else if (rv$lang=="fin") {
+      rv$fossill= format(round(dats[sec=="fossil" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$landl = format(round(dats[sec=="land" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$netl = format(round(dats[sec=="net" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$ghgl = format(round(dats[sec=="ghg" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$nonco2l = format(round(dats[sec=="nonco2" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$popl = format(round(dats[sec=="pop" & year ==rv$yearc, yy], 2), nsmall=2, decimal.mark=",")
+      rv$avgfossill = format(round(dats[sec=="avgfossil" & year ==rv$yearc, yy], 2), nsmall=2, decimal.mark=",")
+      rv$pricel = format(round(dats[sec=="price" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$avgcostl = format(round(dats[sec=="avgcost" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$dividendl = format(round(dats[sec=="dividend" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$avgnetcostl = format(round(dats[sec=="avgnetcost" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$userfossill = format(round(dats[sec=="userfossil" & year ==rv$yearc, yy], 2), nsmall=2, decimal.mark=",")
+      rv$usercostl = format(round(dats[sec=="usercost" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$netcostl = format(round(dats[sec=="netcost" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$countryfossill = format(round(dats[sec=="countryfossil" & year ==rv$yearc, yy], 2), nsmall=2, decimal.mark=",")
+      rv$countrycostl = format(round(dats[sec=="countrycost" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$countrynetcostl = format(round(dats[sec=="countrynetcost" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$countrypopl = format(round(dats[sec=="countrypop" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$countrydividendl = format(round(dats[sec=="countrydividend" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$averagedividendl = format(round(dats[sec=="averagedividend" & year ==rv$yearc, yy], 0), nsmall=0)
+      rv$sourcel = format(round(dats[sec=="source" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$sinkl = format(round(dats[sec=="sink" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$newsinkl = format(round(dats[sec=="newsink" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$landneed = format(round(input$lstart - dats[sec=="land" & year ==rv$yearc, yy], 1), nsmall=1, decimal.mark=",")
+      rv$landcostl = format(round(dats[sec=="landcost" & year ==rv$yearc, yy], 0), nsmall=0)   
+      
+    }
+    
     
     
     
@@ -6716,7 +6692,9 @@ rv$triggo=0
 
      rv$triggor=2
     
-    })
+    # }
+    
+    # )
     
     dats = as.data.table(dats)
      rv$ruuk = head(dats)
@@ -6918,6 +6896,8 @@ rv$triggo=0
     
     datsc[,yearu := as.numeric(rv$yearc)]
     
+    
+    
     datsc = datsc[year == yearu,]
     # pacuc = pacuc[year == yearu,]
     
@@ -6947,6 +6927,24 @@ rv$triggo=0
     
   })
   
+  datslb = reactive({
+    datslb = datsl()
+    datslb[ !(sec=="dummy"), ala := .9]
+    datslb[year < hyear & !(sec=="dummy"), ala := .1]
+    
+datslb
+})
+  
+  
+  datsfb = reactive({
+    datsfb = as.data.table(datslb())
+    datsfb[,yearu := as.numeric(lastyear)]
+
+    datsfb = datsfb[year == yearu,]
+        datsfb
+    
+  })
+  
   datsff = reactive ({
     datsf= as.data.table(datsl())
     
@@ -6958,13 +6956,13 @@ rv$triggo=0
     
   })
   
-  datsfp = reactive({
-    
-    datsfp=datsff()
-    rv$seku = input$paa
-    datsfp
-    
-  })
+  # datsfp = reactive({
+  #   
+  #   datsfp=datsff()
+  #   rv$seku = input$paa
+  #   datsfp
+  #   
+  # })
   datsf = reactive({
     datsf = datsff()
     # if (rv$lastin %in% llist) {
@@ -7533,13 +7531,13 @@ rv$triggo=0
           
           geom_text(data=da,
                     aes(x=mil+10, y= 131),
-                    label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
+                    label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2023 onwards to keep temperature increase below ",rv$budinfo ),
                     size=si(1.7), color=net, hjust=0, fontface="bold") +
           
           
           geom_text(data=da,
                     aes(x=rv$fyear, y= 127),
-                    label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
+                    label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2023 to ", rv$fyear-1
                     ),
                     size=si(1.7), color=net, hjust=1, fontface="bold") +
           
@@ -7593,13 +7591,13 @@ rv$triggo=0
           
           geom_text(data=da,
                     aes(x=mil+10, y= 131),
-                    label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
+                    label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2023 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
                     size=si(1.7), color=net, hjust=0, fontface="bold") +
           
           
           geom_text(data=da,
                     aes(x=rv$fyear, y= 127),
-                    label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
+                    label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2023 vuoteen ", rv$fyear
                     ),
                     size=si(1.7), color=net, hjust=1, fontface="bold") +
           
@@ -7685,7 +7683,7 @@ rv$triggo=0
           
           plot1 = plot1+
             geom_text(data=datsss[sec %in% c("fossil", "land", "net", "ghg", "nonco2", "newsink", "sink", "source"), .SD[which.max(yy)]],
-                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 1), "Gt"), color=col), 
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 1), " Gt"), color=col), 
                       size=si(2.2), hjust=0, fontface="bold") 
           
         }    
@@ -7693,7 +7691,7 @@ rv$triggo=0
           
           plot1 = plot1+
             geom_text(data=datsss[sec %in% c("pop"),.SD[which.max(yy)] ],
-                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 2), "B"), color=col), 
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 2), " B"), color=col), 
                       size=si(2.2), hjust=0, fontface="bold") 
           
         }    
@@ -7701,7 +7699,7 @@ rv$triggo=0
           
           plot1 = plot1+
             geom_text(data=datsss[sec %in% c("userfossil", "avgfossil"), .SD[which.max(yy)]],
-                      aes(x=mil, y=103-6*prio, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), "t"), color=col),
+                      aes(x=mil, y=103-6*prio, label=paste0(format(round(max(yy, na.rm=TRUE), 2), nsmall=2), " t"), color=col),
                       size=si(2.2), hjust=0, fontface="bold") 
         }
         
@@ -7709,7 +7707,7 @@ rv$triggo=0
           
           plot1 = plot1+
             geom_text(data=datsss[sec %in% c("price"), .SD[which.max(yy)]],
-                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$/t"), color=col),
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), " $/t"), color=col),
                       size=si(2.2), hjust=0, fontface="bold") 
           
         }
@@ -7718,7 +7716,7 @@ rv$triggo=0
           
           plot1 = plot1+
             geom_text(data=datsss[sec %in% c("avgcost", "netcost", "usercost", "dividend", "avgnetcost", "landcost"), .SD[which.max(yy)]],
-                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), "$"), color=col), 
+                      aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), 0), " $"), color=col), 
                       size=si(2.2), hjust=0, fontface="bold") 
         }    
         
@@ -7801,21 +7799,37 @@ rv$triggo=0
   
   sec2 = reactive({ 
 
+    if (input$autodraw==TRUE) {
+      rv$pll = length(unique(datsl()$labbi))
+      rv$plll = length(unique(datsl()$labbi))
+      
+    }
+    
+    else
+    {
+      
+      rv$pll = length(unique(datsl()$labbi))
+      rv$plll = length(unique(datsl()$labbi))
+      
+      # eventReactive(
+      
+      
+    }
+    
     
     # if (input$autodraw==TRUE) {
     #   rv$pll = length(unique(datsl()$labbi))
     #   rv$plll = length(unique(datsl()$labbi))
-    #   
+    # 
     # } else
     # {
     #   eventReactive(input$go==TRUE, {
-    #     
+    # 
     #     rv$pll = length(unique(datsl()$labbi))
     #     rv$plll = length(unique(datsl()$labbi))
     #     # rv$plll = rv$pll
-    #     
+    # 
     #   })
-    #   
     # }
     
 
@@ -7889,7 +7903,15 @@ rv$triggo=0
       ma = 141
       
       mix = rv$ffyear
-      max = 2143
+      # max = 2143
+      max = rv$lyear+33
+      
+      
+      if (rv$lyear > 2070) {
+        max = max+10
+      }
+      
+      
       bgc = rv$bgc
       teksvari = rv$teksvari
       obsvari = rv$obsvari
@@ -7900,12 +7922,13 @@ rv$triggo=0
         
         
         inplot= c("fossil", "land", "net", "dummy", "ghg","nonco2", "source", "sink", "newsink")
-        datsl = datsl()[sec %in% inplot & year >= mil,]
+        # datsl = datsl()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
         datsc =datsc()[sec %in% inplot,]
-        datsf =datsf()[sec %in% inplot,]
+        # datsf =datsf()[sec %in% inplot,]
         
-        
+        datsl = datslb()[sec %in% inplot & year >= mil,]
+        datsf =datsfb()[sec %in% inplot,]
         
         # if (input$is_mobile_device=="TRUE") {
         #
@@ -8057,7 +8080,7 @@ rv$triggo=0
                        aes(x=2021.5, y=100, xend=2021.5, yend=mi), 
                        color= obsvari,linewidth=lsi(.6), linetype="dashed", alpha=.2) +
           
-          geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss)) +
+          geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss), alpha=0) +
           
           # yearc labels
           geom_label_repel(data=datsc,
@@ -8146,14 +8169,14 @@ rv$triggo=0
             
             geom_text(data=da,
                       aes(x=2005, y= 131),
-                      label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
+                      label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2023 onwards to keep temperature increase below ",rv$budinfo ),
                       size=si(1.7), color=net, hjust=0, fontface="bold") +
             
             
             
             geom_text(data=da,
                       aes(x=rv$fyear, y= 127),
-                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used 2020-", rv$fyear-1
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used 2023-", rv$fyear-1
                       ),
                       size=si(1.7), color=net, hjust=0, fontface="bold") +
             
@@ -8204,13 +8227,13 @@ rv$triggo=0
             
             geom_text(data=da,
                       aes(x=2005, y= 131),
-                      label = paste0(rv$budget, " Gt: Nettopäästöjen budjetti 2020 lähtien, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
+                      label = paste0(rv$budget, " Gt: Nettopäästöjen budjetti 2023 lähtien, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
                       size=si(1.7), color=net, hjust=0, fontface="bold") +
             
             
             geom_text(data=da,
                       aes(x=rv$fyear, y= 127),
-                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty 2020-", rv$fyear
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty 2023-", rv$fyear
                       ),
                       size=si(1.7), color=net, hjust=0, fontface="bold") +
             
@@ -8316,12 +8339,13 @@ rv$triggo=0
         
         
         inplot= c("pop", "dummy", "countrypop")
-        datsl = datsl()[sec %in% inplot & year >= mil,]
+        # datsl = datsl()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
         datsc =datsc()[sec %in% inplot,]
-        datsf =datsf()[sec %in% inplot,]
+        # datsf =datsf()[sec %in% inplot,]
         
-        
+        datsl = datslb()[sec %in% inplot & year >= mil,]
+        datsf =datsfb()[sec %in% inplot,]
         
         mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
         # hi = ma - mi
@@ -8657,12 +8681,13 @@ rv$triggo=0
         
         
         inplot= c("userfossil", "avgfossil", "dummy", "countryfossil")
-        datsl = datsl()[sec %in% inplot & year >= mil,]
+        # datsl = datsl()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
         datsc =datsc()[sec %in% inplot,]
-        datsf =datsf()[sec %in% inplot,]
+        # datsf =datsf()[sec %in% inplot,]
         
-        
+        datsl = datslb()[sec %in% inplot & year >= mil,]
+        datsf =datsfb()[sec %in% inplot,]
         
         mi = min(min((datsss[,tyy]), na.rm=T)*1.15,-15)
         # hi = ma - mi
@@ -9954,7 +9979,16 @@ rv$triggo=0
       
       
       mix = mil
-      max = 2135
+      # max = 2135
+      max = rv$lyear+25
+      
+      
+      if (rv$lyear > 2070) {
+        max = max+10
+      }
+      # runt = 
+      # lyear-2065
+      
       
       bgc = rv$bgc
       teksvari = rv$teksvari
@@ -9981,10 +10015,12 @@ rv$triggo=0
         
         inplot= c("fossil", "land", "net", "dummy", "ghg", "nonco2", "source", "sink", "newsink")
         
-        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsl = datslb()[sec %in% inplot & year >= mil,]
+        datsf =datsfb()[sec %in% inplot,]
+        
         datsss = datsss()[sec %in% inplot & year >= mil,]
         datsc =datsc()[sec %in% inplot,]
-        datsf =datsf()[sec %in% inplot,]
+        # datsfb =datsfb()[sec %in% inplot,]
         
         
         
@@ -10093,7 +10129,7 @@ rv$triggo=0
                     col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
           geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    aes(x=mil, y=103-6*prio, label=paste0(round(max(yy, na.rm=TRUE), le), " ",mark), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") +
           # yearc labels
           geom_label_repel(data=datsc,
@@ -10113,7 +10149,7 @@ rv$triggo=0
                            force=.01, force_pull=10,box.padding=.1 ,
                            seed=5) +
           
-            geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss)) +
+            geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss), alpha=0) +
           # geom_text(data=datter2(),aes(x=2020, y=0, label =c(yy))) +
           
           
@@ -10161,13 +10197,13 @@ rv$triggo=0
             
             geom_text(data=da,
                       aes(x=mil, y= 131),
-                      label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2020 onwards to keep temperature increase below ",rv$budinfo ),
+                      label = paste0(rv$budget, " Gt: Net CO2 emission budget from 2023 onwards to keep temperature increase below ",rv$budinfo ),
                       size=si(1.7), color=net, hjust=0, fontface="bold") +
             
             
             geom_text(data=da,
                       aes(x=rv$fyear, y= 127),
-                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2020 to ", rv$fyear-1
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt used from 2023 to ", rv$fyear-1
                       ),
                       size=si(1.7), color=net, hjust=1, fontface="bold") +
             
@@ -10233,13 +10269,13 @@ rv$triggo=0
             
             geom_text(data=da,
                       aes(x=mil, y= 131),
-                      label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2020 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
+                      label = paste0(rv$budget, " Gt: Nettopäästöjen (CO2) budjetti 2023 eteenpäin, jotta lämpötilanousu pysyy alle ",rv$budinfo ),
                       size=si(1.7), color=net, hjust=0, fontface="bold") +
             
             
             geom_text(data=da,
                       aes(x=rv$fyear, y= 127),
-                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2020 vuoteen ", rv$fyear
+                      label = paste0( format(round(rv$sumnet,1), nsmall=1), " Gt käytetty vuodesta 2023 vuoteen ", rv$fyear
                       ),
                       size=si(1.7), color=net, hjust=1, fontface="bold") +
             
@@ -10340,10 +10376,10 @@ rv$triggo=0
         
         inplot= c("pop", "dummy", "countrypop")
         
-        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsl = datslb()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
         datsc =datsc()[sec %in% inplot,]
-        datsf =datsf()[sec %in% inplot,]
+        datsf =datsfb()[sec %in% inplot,]
         
         
         
@@ -10449,7 +10485,7 @@ rv$triggo=0
                     col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
           geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), " ",mark), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") +
           # yearc labels
           # geom_text(data=da,
@@ -10628,10 +10664,10 @@ rv$triggo=0
         
         inplot= c("avgfossil", "userfossil", "dummy", "countryfossil")
         
-        datsl = datsl()[sec %in% inplot & year >= mil,]
+        datsl = datslb()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
         datsc =datsc()[sec %in% inplot,]
-        datsf =datsf()[sec %in% inplot,]
+        datsf =datsfb()[sec %in% inplot,]
         
         
         
@@ -10737,7 +10773,7 @@ rv$triggo=0
                     col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
           geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), " ",mark), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") +
           # yearc labels
           # geom_text(data=da,
@@ -11023,7 +11059,7 @@ rv$triggo=0
                     col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
           geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), " ",mark), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") +
           # yearc labels
           # geom_text(data=da,
@@ -11310,7 +11346,7 @@ rv$triggo=0
                     col=teksvari, fontface="bold" ,  size =si(2.2), hjust =0, vjust=0.5, angle=c(0)) +
           
           geom_text(data=datsss[, .SD[which.max(yy)]],
-                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), "",mark), color=col), 
+                    aes(x=mil, y=103-6*1, label=paste0(round(max(yy, na.rm=TRUE), le), " ",mark), color=col), 
                     size=si(2.2), hjust=0, fontface="bold") +
           # yearc labels
           # geom_text(data=da,
@@ -11376,10 +11412,7 @@ rv$triggo=0
                       aes(x=year+2, y=max(tyy)+.09*hi, label=paste0("Year ",year, " values:")),
                       color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
             
-            geom_text(data = datsss[, .SD[which.max(yy)]], 
-                      aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
-                      label = "(Does not include costs from land use change)",  size = si(2.0), fontface="bold") + 
-            
+                     
             
             geom_text(data=da,
                       aes(x=2020.5, y=.3*mi), label = paste0("Historical\n <=2021"),
@@ -11390,6 +11423,16 @@ rv$triggo=0
                       aes(x=2022.5, y=.3*mi), label = paste0("Simulated\n2022=>"),
                       col= obsvari, fontface="bold" ,  size =si(1.9), hjust =0, vjust=0.5,
                       angle=c(0), alpha=.5, lineheight=.99) 
+          
+          
+          if (input$luls==FALSE) {
+         
+            plot6 = plot6 +
+              
+          geom_text(data = datsss[, .SD[which.max(yy)]], 
+                    aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
+                    label = "(Does not include costs from land use change)",  size = si(2.0), fontface="bold") 
+          }
           
           
         }
@@ -11408,11 +11451,7 @@ rv$triggo=0
                       aes(x=year+2, y=  max(tyy)+.09*hi, label=paste0("Vuoden ",year, " arvot:")),
                       color=teksvari, hjust=0, size=si(2.2), fontface="bold",  family = fam) +
             
-            geom_text(data = datsss[, .SD[which.max(yy)]], 
-                      aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
-                      label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.0), fontface="bold") + 
-            
-            
+    
             geom_text(data=da,
                       aes(x=2020.5, y=-10), label = paste0("Havainnoitu\n <=2021"),
                       col= obsvari, fontface="bold" ,  size =si(1.9), hjust =1, vjust=0.5, angle=c(0),
@@ -11424,6 +11463,14 @@ rv$triggo=0
                       angle=c(0), alpha=.5, lineheight=.99) 
           
           
+          if (input$luls==FALSE) {
+            
+            plot6 = plot6 +
+              
+            
+            geom_text(data = datsss[, .SD[which.max(yy)]], 
+                      aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
+                      label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.0), fontface="bold")          }
           
           
         }
@@ -11866,17 +11913,26 @@ rv$triggo=0
     
     
     if (rv$lang=="fin") {
-     rara = "Raha-arvot v. 2015 dollareissa\nKustannukset eivät sisällä maankäytön muutoksen hinnoittelun kustannuksia"
-      ord = "Järjestys: "
+      
+      if (input$luls==FALSE) {
+     rara = "Raha-arvot v. 2015 dollareissa. Kustannukset eivät sisällä maankäytön muutoksen hinnoittelun kustannuksia"
+      } else {
+        rara = "Raha-arvot v. 2015 dollareissa."
+      }
+     
+      ord = "Vaaka-asteikon järjestys: "
       prom = "Klikkaa kuvaa nähdäksesi tietyn maan arvoja  "
       yea = " vuonna "
       datsfin = dats[country=="Finland",]
     } else if (rv$lang=="eng") {
-      rara = "Monetary values in 2015 US dollars\nCosts don't include costs from land use change pricing"
-      ord = "Ordered by: "
+      if (input$luls==FALSE) {
+        rara = "Monetary values in 2015 US dollars. Costs don't include costs from land use change pricing"
+      } else {
+        rara = "Monetary values in 2015 US dollars."
+      }
       
+      ord = "X-axis ordered by: "
       prom = "Click the image to see details for certain country  "
-      
       yea = " in "
       
     }
@@ -11919,7 +11975,7 @@ rv$triggo=0
         # axis.text.x=element_blank(),
         # plot.margin = margin(-5*input$dim[1]/2990,-5*input$dim[1]/90,-5*input$dim[1]/290,-5*input$dim[1]/200, unit = "pt"),
         panel.border = element_blank(), 
-        panel.grid.major.y = element_line(linetype="dashed"),
+        panel.grid.major.y = element_line(linetype="dashed", linewidth = .2),
         
         panel.grid.major.x = element_blank(),
         panel.grid.minor = element_blank(), 
@@ -12101,7 +12157,7 @@ rv$triggo=0
     
   }, 
   width ="auto", 
-  height=input$dim[2]/1.6
+  height=input$dim[2]/1.45
   # ,hover = "colplot_hover"
   
   
@@ -12168,17 +12224,34 @@ rv$triggo=0
   #   
   # })
   
+  
+  
+  
+  
   observe({
-    if (rv$autodraw == TRUE & input$view==2) {
+     if (rv$autodraw == FALSE & input$view==2) {
       
+    
+    
       output$plotj<-renderPlot({
         
-        sec2()
+        # rv$triss
+        # 
+        # rv$pll = length(unique(datsl()$labbi))
+        # rv$plll = length(unique(datsl()$labbi))
+        
+        # rv$triss
+        # 
+        input$go
+        # rv$pll = length(unique(datsl()$labbi))
+        sece= isolate(sec2())
+        sece
         
         
       }
       , height= 
-        function() {
+        # function()
+          {
           # if (input$autodraw == FALSE)
           # {
           # req(sec2b())}
@@ -12196,38 +12269,66 @@ rv$triggo=0
         }
       
       )
-    }  else if (rv$autodraw == FALSE & input$view==2) {
+    
+      
+      #   output$plotk<- renderPlot({
+      #   # req(rv$plll, cancelOutput = TRUE)
+      #   # sec3b()
+      #   # isolate(rv$pll = length(unique(datsl()$labbi)))
+      #   # rv$plll = isolate(length(unique(datsl()$labbi)))
+      #   input$go
+      #   # isolate(length(unique(datsl()$labbi)))
+      #   # sec3()
+      #   # tarvitaan datan uudelleen trigger;inti' varten viittaus dataan,
+      #   # mutta se rikkoo disable/enablen, koska ei ole isolatessa
+      #   
+      #   
+      #   sece =   isolate(sec3())
+      #   sece
+      # }
+      # 
+      # ,height=
+      #   # function() {
+      #   session$clientData$output_plotk_width*.5*rv$plll
+      # # }
+      # )
       
       
+    }  else if (rv$autodraw == TRUE & input$view==2) {
+
+
       # req(sec2b(), cancelOutput = TRUE)
       # if(!is.null(sec2b())) {
       # rv$plll = length(unique(datsl()$labbi))
-      # eventReactive(input$go, { 
+      # eventReactive(input$go, {
       output$plotj<-renderPlot({
         # if (input$autodraw==TRUE) {
         #   rv$plll = length(unique(datsl()$labbi))
         # } else
         # {
         #   eventReactive(input$go==TRUE, {
-        #     
+        #
         #     rv$plll = length(unique(datsl()$labbi))
-        #     
+        #
         #   })
-        #   
+        #
         # }
         # req(sec2())
-        input$go
-        
-        
-        
-        sece =   isolate(sec2())
-        sece
-        
-        
-        
+        rv$triss
+
+        # input$go
+        #
+        #
+        #
+        # sece =   isolate(sec2())
+        # sece
+
+        sec2()
+
+
         # sec2b()
       }
-      ,height= 
+      ,height=
         function() {
           # if (input$autodraw == FALSE)
           # {
@@ -12247,7 +12348,7 @@ rv$triggo=0
       )
       # }
       # } )
-      
+
     }
     
     # sec2()
@@ -12304,74 +12405,77 @@ rv$triggo=0
     
     # eventReactive(input$go, { 
     
-    if  (rv$autodraw == TRUE & input$view==2)  {
+    # if  (rv$autodraw == TRUE & input$view==2)  {
       output$plotjj <- renderUI({ 
+        # rv$pll = length(unique(datsl()$labbi))
+        # rv$plll = length(unique(datsl()$labbi))
+        # rats = 1.07
         
         {  
-          if (rv$pll ==1) {
-            heeh = "auto"
-            # session$clientData[["output_plotk_width"]]
-          }
-          
-          else if
-          (rv$pll ==2 ){
-            
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih/2) {
-              
-              heeh =   session$clientData$output_plotj_width*hih/2
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-            
-          } else if (rv$pll ==3) {
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
-              
-              heeh =  session$clientData$output_plotj_width*hih
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-            
-          } else if (rv$pll==5) {
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width) {
-              
-              heeh =  session$clientData$output_plotj_width
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-          } else if (rv$pll==1) {
-            
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width*(hih-.15)) {
-              
-              heeh =  session$clientData$output_plotj_width*(hih-.15)
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-          } else if (rv$pll==4) {
-            
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
-              heeh =   session$clientData$output_plotj_width*hih
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-          }
+          # if (rv$pll ==1) {
+          #   heeh = "auto"
+          #   # session$clientData[["output_plotk_width"]]
+          # }
+          # 
+          # else if
+          # (rv$pll ==2 ){
+          #   
+          #   if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih/2) {
+          #     
+          #     heeh =   session$clientData$output_plotj_width*hih/2
+          #     # heeh =  c(session$clientData$output_plotj_height)/.91
+          #   } else  {
+          #     heeh =  input$dim[2]/rats
+          #   }
+          #   
+          #   
+          # } else if (rv$pll ==3) {
+          #   if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
+          #     
+          #     heeh =  session$clientData$output_plotj_width*hih
+          #     # heeh =  c(session$clientData$output_plotj_height)/.91
+          #   } else  {
+          #     heeh =  input$dim[2]/rats
+          #   }
+          #   
+          #   
+          # } else if (rv$pll==5) {
+          #   if (input$dim[2]/rats >  session$clientData$output_plotj_width) {
+          #     
+          #     heeh =  session$clientData$output_plotj_width
+          #     # heeh =  c(session$clientData$output_plotj_height)/.91
+          #   } else  {
+          #     heeh =  input$dim[2]/rats
+          #   }
+          #   
+          # } else if (rv$pll==1) {
+          #   
+          #   if (input$dim[2]/rats >  session$clientData$output_plotj_width*(hih-.15)) {
+          #     
+          #     heeh =  session$clientData$output_plotj_width*(hih-.15)
+          #     # heeh =  c(session$clientData$output_plotj_height)/.91
+          #   } else  {
+          #     heeh =  input$dim[2]/rats
+          #   }
+          #   
+          # } else if (rv$pll==4) {
+          #   
+          #   if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
+          #     heeh =   session$clientData$output_plotj_width*hih
+          #     # heeh =  c(session$clientData$output_plotj_height)/.91
+          #   } else  {
+          #     heeh =  input$dim[2]/rats
+          #   }
+          #   
+          # }
           
           
           div(        
             
             plotOutput("plotj"
                        ,width = "auto"
-                       # ,height = "auto"
-                       ,height=heeh
+                        ,height = "auto"
+                       # ,height=heeh
                        # ,height="100%"
                        
                        # ,hover = "plot_hover"
@@ -12383,95 +12487,95 @@ rv$triggo=0
           
         }
       }) 
-    } 
-    
-    else  if (rv$autodraw == FALSE & input$view==2)  {
-      
-      
-      output$plotjj <- renderUI({ 
-        # if(!is.null(sec2b())) {
-        
-        
-        {  
-          if (rv$plll ==1) {
-            heeh = "auto"
-            # session$clientData[["output_plotk_width"]]
-          }
-          
-          else if
-          (rv$plll ==2 ){
-            
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih/2) {
-              
-              heeh =   session$clientData$output_plotj_width*hih/2
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-            
-          } else if (rv$plll ==3) {
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
-              
-              heeh =  session$clientData$output_plotj_width*hih
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-            
-          } else if (rv$plll==5) {
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width) {
-              
-              heeh =  session$clientData$output_plotj_width
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-            # } else if (rv$plll==1) {
-            #   
-            #   if (input$dim[2]/rats >  session$clientData$output_plotj_width*(hih-.15)) {
-            #     
-            #     heeh =  session$clientData$output_plotj_width*(hih-.15)
-            #     # heeh =  c(session$clientData$output_plotj_height)/.91
-            #   } else  {
-            #     heeh =  input$dim[2]/rats
-            #   }
-            
-          } else if (rv$plll==4) {
-            
-            if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
-              heeh =   session$clientData$output_plotj_width*hih
-              # heeh =  c(session$clientData$output_plotj_height)/.91
-            } else  {
-              heeh =  input$dim[2]/rats
-            }
-            
-          }
-          
-          
-          div(        
-            
-            plotOutput("plotj"
-                       ,width = "auto"
-                       # ,height = "auto"
-                       ,height=heeh
-                       # ,height="100%"
-                       
-                       # ,hover = "plot_hover"
-                       # ,click = "plotj_click"
-                       
-            ) 
-          )
-          
-          
-        }
-        # }
-      }  ) 
-      # }  ) 
-      
-    }
+    # } 
+    # 
+    # else  if (rv$autodraw == FALSE & input$view==2)  {
+    #   
+    #   
+    #   output$plotjj <- renderUI({ 
+    #     # if(!is.null(sec2b())) {
+    #     
+    #     
+    #     {  
+    #       if (rv$plll ==1) {
+    #         heeh = "auto"
+    #         # session$clientData[["output_plotk_width"]]
+    #       }
+    #       
+    #       else if
+    #       (rv$plll ==2 ){
+    #         
+    #         if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih/2) {
+    #           
+    #           heeh =   session$clientData$output_plotj_width*hih/2
+    #           # heeh =  c(session$clientData$output_plotj_height)/.91
+    #         } else  {
+    #           heeh =  input$dim[2]/rats
+    #         }
+    #         
+    #         
+    #       } else if (rv$plll ==3) {
+    #         if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
+    #           
+    #           heeh =  session$clientData$output_plotj_width*hih
+    #           # heeh =  c(session$clientData$output_plotj_height)/.91
+    #         } else  {
+    #           heeh =  input$dim[2]/rats
+    #         }
+    #         
+    #         
+    #       } else if (rv$plll==5) {
+    #         if (input$dim[2]/rats >  session$clientData$output_plotj_width) {
+    #           
+    #           heeh =  session$clientData$output_plotj_width
+    #           # heeh =  c(session$clientData$output_plotj_height)/.91
+    #         } else  {
+    #           heeh =  input$dim[2]/rats
+    #         }
+    #         
+    #         # } else if (rv$plll==1) {
+    #         #   
+    #         #   if (input$dim[2]/rats >  session$clientData$output_plotj_width*(hih-.15)) {
+    #         #     
+    #         #     heeh =  session$clientData$output_plotj_width*(hih-.15)
+    #         #     # heeh =  c(session$clientData$output_plotj_height)/.91
+    #         #   } else  {
+    #         #     heeh =  input$dim[2]/rats
+    #         #   }
+    #         
+    #       } else if (rv$plll==4) {
+    #         
+    #         if (input$dim[2]/rats >  session$clientData$output_plotj_width*hih) {
+    #           heeh =   session$clientData$output_plotj_width*hih
+    #           # heeh =  c(session$clientData$output_plotj_height)/.91
+    #         } else  {
+    #           heeh =  input$dim[2]/rats
+    #         }
+    #         
+    #       }
+    #       
+    #       
+    #       div(        
+    #         
+    #         plotOutput("plotj"
+    #                    ,width = "auto"
+    #                    # ,height = "auto"
+    #                    ,height=heeh
+    #                    # ,height="100%"
+    #                    
+    #                    # ,hover = "plot_hover"
+    #                    # ,click = "plotj_click"
+    #                    
+    #         ) 
+    #       )
+    #       
+    #       
+    #     }
+    #     # }
+    #   }  ) 
+    #   # }  ) 
+    #   
+    # }
     # }  ) 
   }  ) 
   
@@ -12485,47 +12589,10 @@ rv$triggo=0
   # sec3a = reactive({sec3()})
   sec3b = reactive({sec3()})
   
-  
-  # sec3a =  eventReactive(input$go, {
-  #   sec3()
-  # 
-  # })
-  
-  # sec2a =  reactive(sec2())
-  # sec2b =  eventReactive(input$go, {
-  #   # rv$plll = rv$pll
-  #   
-  #   sec2()
-  # })
-  # 
-  
-  
-  #  sec3a =  reactive({
-  #   # req(sec3(), cancelOutput = TRUE)
-  #   
-  #   sec3()})
-  # 
-  # sec3b =  eventReactive(input$go, {
-  #   sec3()
-  # 
-  # })
-  # 
-  # sec4 =  reactive(sec3())
+ 
   
   sec4b =  reactive(sec3())
-  # sec4 =  eventReactive(input$go, {
-  # 
-  #   # req(datsss())
-  #   sec3()
-  # 
-  # 
-  # })
-  # 
-  # sec4a =   reactive( {
-  #   # req(datsss())
-  #   
-  #   sec3()})
-  # 
+
   
   
   
@@ -12533,38 +12600,7 @@ rv$triggo=0
   
   
   
-  
-  #  observeEvent(input$go, {
-  #   
-  #   if (input$view==3) {
-  #   
-  #     output$plotk<- renderPlot({
-  #   req(rv$plll, cancelOutput = TRUE)
-  #   # sec3b()
-  #   # isolate(rv$pll = length(unique(datsl()$labbi)))
-  #   rv$plll = isolate(length(unique(datsl()$labbi)))
-  #   # input$go
-  #   # isolate(length(unique(datsl()$labbi)))
-  #   # sec3()
-  #   # tarvitaan datan uudelleen trigger;inti' varten viittaus dataan,
-  #   # mutta se rikkoo disable/enablen, koska ei ole isolatessa
-  #   
-  #   
-  #   # sece =   isolate(sec3())
-  #   # sece
-  #   sec3()
-  #   
-  # }
-  # 
-  # ,height=
-  #   # function() {
-  #   session$clientData$output_plotk_width*.5*rv$plll
-  # # }
-  #   )
-  #     
-  #   }
-  #     })
-  # 
+ 
   
   
   
@@ -12636,8 +12672,35 @@ rv$triggo=0
   
   
   
+  # observe({
+  #   if (rv$autodraw == TRUE & input$view==3)  {
+  #     
+  #     # eventReactive(input$go, {
+  #     
+  #     # if  (rv$autodraw == TRUE & input$view==3)  {
+  #     
+  #     
+  #     output$plotkk <- renderUI({
+  #       
+  #       # rv$plll = isolate(length(unique(datsl()$labbi)))
+  #       
+  #       
+  #       div(
+  #         plotOutput("plotk"
+  #                    ,width = "auto"
+  #                    # ,height=heeh
+  #                    ,height="auto"
+  #                    
+  #         )
+  #       )
+  #     }
+  #     )
+  #   }
+  # })
+  
+  
   observe({
-    if (rv$autodraw == TRUE & input$view==3)  {
+    # if (rv$autodraw == FALSE & input$view==3)  {
       
       # eventReactive(input$go, {
       
@@ -12659,34 +12722,7 @@ rv$triggo=0
         )
       }
       )
-    }
-  })
-  
-  
-  observe({
-    if (rv$autodraw == FALSE & input$view==3)  {
-      
-      # eventReactive(input$go, {
-      
-      # if  (rv$autodraw == TRUE & input$view==3)  {
-      
-      
-      output$plotkk <- renderUI({
-        
-        # rv$plll = isolate(length(unique(datsl()$labbi)))
-        
-        
-        div(
-          plotOutput("plotk"
-                     ,width = "auto"
-                     # ,height=heeh
-                     ,height="auto"
-                     
-          )
-        )
-      }
-      )
-    }
+    # }
   })
   
   
@@ -12852,113 +12888,55 @@ rv$triggo=0
   #   
   
   
+ 
+  
+  
+  
+  # output$buddd =renderUI({
   #   
+  #   if (rv$lang =="eng") {
   #   
-  #   output$yearcuic = renderUI({
-  #     
-  #     if (input$view ==1) {
-  #       fluidRow(
-  #         style =  "margin-left: 0vw;
-  #               margin-top: 0vw; ",
-  #         sliderTextInput("yearcl", label="Observation year",choices= seq(minyy, maxyy, 1),
-  #                         from_min = rv$ffyear, from_max = rv$lyear
-  #                         ,selected=c(2100),
-  #                         width="100%"
-  #                         , animate=TRUE
-  #                         ,grid=TRUE
-  #         )
-  #       )
-  #     }  else if (input$view ==2) {
-  #       minyy = mminyy
-  #       maxyy = mmaxyy 
-  #       fluidRow(
-  #         style =  "margin-left: 0vw;
-  #               margin-top: -1vw;
-  #                       margin-bottom: -1vw;
-  # ",
-  # 
-  # sliderTextInput("yearcl", label="Observation year", choices= seq(minyy, maxyy, 1),
-  #                 from_min = rv$ffyear, from_max = rv$lyear
-  #                 ,selected=c(2100)
-  #                 ,grid=TRUE
-  #                 
-  #                 ,width="100%"
-  #                 , animate=TRUE
-  #                 
-  # )   )    }
-  #     else if (input$view ==3) {
-  #       fluidRow(
-  #         style =  "margin-left: 0vw;
-  #               margin-top: -1vw;
-  #                       margin-bottom: -1vw;",
-  #         sliderTextInput("yearcl", label="Observation year",choices= seq(mmminyy, mmmaxyy, 1)
-  #                         ,from_min = rv$ffyear, from_max = rv$lyear
-  #                         
-  #                         ,selected=c(2100),
-  #                         width="100%"
-  #                         , animate=TRUE
-  #                         ,grid=TRUE
-  #         )
-  #       )
+  #   div(id="sla",
+  #   selectInput(
+  #     "bud",
+  #     inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
+  #     c("400Gt (67% likelihood to stay below 1.5°C)" = 400,
+  #       "500Gt (50% likelihood to stay below 1.5°C)" = 500,
+  #       "1150Gt (67% likelihood to stay below 2.0°C)" = 1150,
+  #       "1350Gt (50% likelihood to stay below 2.0°C)" = 1350
   #       
-  #     }
-  #     
-  #     
-  #     
-  #   })
-
-  # sliderInput("concc",
-  #             inf("Convergence of countries emissions", "infoconvergence2"), 
-  #             min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
-  
-  
-  
-  
-  output$buddd =renderUI({
-    
-    if (rv$lang =="eng") {
-    
-    div(id="sla",
-    selectInput(
-      "bud",
-      inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
-      c("400Gt (67% likelihood to stay below 1.5°C)" = 400,
-        "500Gt (50% likelihood to stay below 1.5°C)" = 500,
-        "1150Gt (67% likelihood to stay below 2.0°C)" = 1150,
-        "1350Gt (50% likelihood to stay below 2.0°C)" = 1350
-        
-      ),selected=1150,
-      multiple = FALSE,
-      selectize = FALSE,
-      width = NULL,
-      size = NULL
-    ))
-    
-
-    }  else if (rv$lang =="fin") {
-      div(id="sla",
-      selectInput(
-        "bud",
-        inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
-
-
-        c("400Gt (67% todennäköisyys pysyä alle 1,5°C)" = 400,
-          "500Gt (50% todennäköisyys pysyä alle 1,5°C)" = 500,
-          "1150Gt (67% todennäköisyys pysyä alle 2,0°C)" = 1150,
-          "1350Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1350
-        ),selected=1150,
-        multiple = FALSE,
-        selectize = FALSE,
-        width = NULL,
-        size = NULL
-      )
-      )
-
-
-    }
-    
-  } )
-  
+  #     ),selected=1150,
+  #     multiple = FALSE,
+  #     selectize = FALSE,
+  #     width = NULL,
+  #     size = NULL
+  #   ))
+  #   
+  # 
+  #   }  else if (rv$lang =="fin") {
+  #     div(id="sla",
+  #     selectInput(
+  #       "bud",
+  #       inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
+  # 
+  # 
+  #       c("400Gt (67% todennäköisyys pysyä alle 1,5°C)" = 400,
+  #         "500Gt (50% todennäköisyys pysyä alle 1,5°C)" = 500,
+  #         "1150Gt (67% todennäköisyys pysyä alle 2,0°C)" = 1150,
+  #         "1350Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1350
+  #       ),selected=1150,
+  #       multiple = FALSE,
+  #       selectize = FALSE,
+  #       width = NULL,
+  #       size = NULL
+  #     )
+  #     )
+  # 
+  # 
+  #   }
+  #   
+  # } )
+  # 
   
   
   
