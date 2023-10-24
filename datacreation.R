@@ -6,11 +6,20 @@ library(data.table)
 library(countrycode)
 
 library(wbstats)
+library(tidyr)
 
 
+# PIK Data
+# https://zenodo.org/records/7727475/files/Guetschow-et-al-2023a-PRIMAP-hist_v2.4.2_final_no_rounding_09-Mar-2023.csv?download=1
 
 
+tempdl <- tempfile()
+download.file("https://zenodo.org/records/7727475/files/Guetschow-et-al-2023a-PRIMAP-hist_v2.4.2_final_no_rounding_09-Mar-2023.csv?download=1",tempdl, mode="wb") 
 
+tempfile()
+
+mine <- read.csv(tempdl)
+emu = as.data.table(mine)
 
 
 # go to https://www.climatewatchdata.org/data-explorer/
@@ -19,7 +28,21 @@ library(wbstats)
 
 # emu<-read.csv(file="primap2023march.csv", header=T,  sep="," )[,]
 # emu = as.data.table(emu)
+
+em = emu[entity %in% c("CO2","KYOTOGHG (AR4GWP100)" ) & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR",]
+
+em[, c(1,2,5,6)] = NULL
+
+colnames(em)[1] <- "cou"
+colnames(em)[2] <- "gas"
+emo <- gather(em, year, emission, "X1750":"X2021")
+# 
 # emu[area..ISO3.=="FIN" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
+# emu[area..ISO3.=="EARTH" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
+# emu[area..ISO3.=="FIN" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP", X2021]
+# emu[area..ISO3.=="EARTH" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP", X2021]
+# emu[area..ISO3.=="FIN" & entity =="KYOTOGHG (AR4GWP100)" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP", X2021]
+# emu[area..ISO3.=="FIN" & entity =="KYOTOGHG (AR4GWP100)" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
 # 
 # 
 # 
@@ -31,29 +54,29 @@ library(wbstats)
 # 
 # emu[area..ISO3.=="QAT" & entity =="KYOTOGHG (AR4GWP100)"  & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTTP",X2021]
 # 
-
-
-
-em<-read.csv(file="CW_HistoricalEmissions_PIK.csv", header=T,  sep="," )[,]
-
-em = as.data.table(em)
-
-em[, 4] = NULL
-em = em[gas %in%  c("KYOTOGHG", "CO2"), ]
-em = em[sector=="Total excluding LULUCF", ]
-
-
-em[, 2] = NULL
-
-
-colnames(em)[1] <- "cou"
-colnames(em)[2] <- "gas"
+# 
+# 
+# 
+# em<-read.csv(file="CW_HistoricalEmissions_PIK.csv", header=T,  sep="," )[,]
+# 
+# em = as.data.table(em)
+# 
+# em[, 4] = NULL
+# em = em[gas %in%  c("KYOTOGHG", "CO2"), ]
+# em = em[sector=="Total excluding LULUCF", ]
+# 
+# 
+# em[, 2] = NULL
+# 
+# 
+# colnames(em)[1] <- "cou"
+# colnames(em)[2] <- "gas"
 
 
 
 # em = mutate_all(em, as.character)
 
-emo <- gather(em, year, emission, "X1850":"X2021")
+# emo <- gather(em, year, emission, "X1850":"X2021")
 
 
 emo$year= gsub('X', '', emo$year)
@@ -70,42 +93,73 @@ emo$country <- factor(countrycode(sourcevar=emo[, "cou"],
 emo=as.data.table(emo)
 
 
-emo[cou=="EUU", country:="European Union"]
-emo[cou=="WORLD", country:="World"]
+emo[cou=="EU27BX", country:="European Union"]
+emo[cou=="EARTH", country:="World"]
 
 colnames(emo)[1] = "iso3c"
 
-emo[iso3c=="WORLD", iso3c:="WLD"]
+emo[iso3c=="EARTH", iso3c:="WLD"]
 
 
-emo[gas =="KYOTOGHG", gas:="ghg"]
+emo[gas =="KYOTOGHG (AR4GWP100)", gas:="ghg"]
 emo[gas =="CO2", gas :="co2"]
 
 # emo[,  , by=c("year", "country")]
 emo = emo[year > 1979,]
 
-emc = emo[gas=="co2",]
-emt = emo[gas=="ghg"]
-emt = emt[, nonco2:= emission - emc[, emission], on=c("year", "iso3c")]
+emo = na.omit(emo)
 
-emt[emc, nonco2 := emission - i.emission, on=c("year", "iso3c")]
+emo$emission = emo$emission*1000000 
+emi = emo[!(country %in% c( "World")), ]
+
+# emi = emo[!(country %in% c("European Union", "World")), ]
+
+# emi[year==2021 & gas =="ghg", sum(emission)]
+# 
+# emis = emo[(country %in% c("World")), ]
+# emis[year==2021 & gas =="ghg", sum(emission)]
+
+
+emc = emo[gas=="co2",]
+emc$co2 = emc$emission
+
+
+
+emt = emo[gas=="ghg"]
+emt$ghg= emt$emission
+
+
+emo = emo[emc, co2 := i.emission, on=c("year", "iso3c")]
+emo = emo[emt, ghg := i.emission, on=c("year", "iso3c")]
+emo$nonco2 = emo$ghg-emo$co2
+# emt = emt[, nonco2:= emission - emc[, emission], on=c("year", "iso3c")]
+
+# emt[emc, nonco2 := emission - i.emission, on=c("year", "iso3c")]
 
 
 
 # emuk = emo[gas=="total",]
-emt[, emission :=nonco2]
-emt[, gas :="nonco2"]
+# emt[, emission :=nonco2]
+# emt[, gas :="nonco2"]
+# 
+# emt$nonco2=NULL
+# 
+# emo = rbind(emo, emt)
+# 
+# pik = copy(emo)
+# 
+# (unique(pik$iso3c))
 
-emt$nonco2=NULL
 
-emo = rbind(emo, emt)
+paasi2 = copy(emo)
+# paasi2$co2 = paasi2$co2*3.664
 
-pik = copy(emo)
+packo = paasi2[year==2021,]
+packo = packo[!(iso3c %in% NA),]
 
-(unique(pik$iso3c))
+ll = unique(as.character(packo$iso3c))
 
-
-
+ll
 # Emissions from Friedlingstein et al. 2021
 
 #2021
@@ -114,53 +168,53 @@ pik = copy(emo)
 #2022
 #https://data.icos-cp.eu/licence_accept?ids=%5B%22zL1wtJrG7Q5xdvF39Ylg3lUw%22%5D
 
-tempdl <- tempfile()
-download.file("https://data.icos-cp.eu/licence_accept?ids=%5B%22zL1wtJrG7Q5xdvF39Ylg3lUw%22%5D",tempdl, mode="wb") 
-
-tempfile()
-mine <- read_excel(tempdl, sheet = "Territorial Emissions", skip=11)
-
-
-paasi1 = copy(mine)
-setnames(paasi1, 1, "year")
-
-
-
-paasi2 <- gather(paasi1, country, co2, "Afghanistan":"World")
-
-paasi2 = as.data.table(paasi2)
-
-paasi2[(country %in% c("USA")), ':='(country =c("United States"))]
-
-
-
-paasi2$co2= gsub('NaN', 'NA', paasi2$co2)
-paasi2$co2= gsub(',', '.', paasi2$co2)
-
-paasi2$co2 = as.numeric(paasi2$co2)
-
-#convert carbon measure to carbon dioxide
-paasi2$co2 = paasi2$co2*3.664
-paasi2$co2 = paasi2$co2*1000000
-
-paasi2 = as.data.frame(paasi2)
-
-paasi2$iso3c <- factor(countrycode(sourcevar=paasi2[, "country"], 
-                                   origin="country.name", 
-                                   destination="iso3c"))
-
-paasi2=as.data.table(paasi2)
-
-paasi2 = paasi2[year >1949,]
-paasi2[country =="World", iso3c := "WLD"]
-
-
-paasi2 = paasi2[paasi2[country =="Bunkers"], bunkers :=i.co2, on=c("year")]
-
-packo = paasi2[year==2021,]
-packo = packo[!(iso3c %in% NA),]
-
-ll = as.character(packo$iso3c)
+# tempdl <- tempfile()
+# download.file("https://data.icos-cp.eu/licence_accept?ids=%5B%22zL1wtJrG7Q5xdvF39Ylg3lUw%22%5D",tempdl, mode="wb") 
+# 
+# tempfile()
+# mine <- read_excel(tempdl, sheet = "Territorial Emissions", skip=11)
+# 
+# 
+# paasi1 = copy(mine)
+# setnames(paasi1, 1, "year")
+# 
+# 
+# 
+# paasi2 <- gather(paasi1, country, co2, "Afghanistan":"World")
+# 
+# paasi2 = as.data.table(paasi2)
+# 
+# paasi2[(country %in% c("USA")), ':='(country =c("United States"))]
+# 
+# 
+# 
+# paasi2$co2= gsub('NaN', 'NA', paasi2$co2)
+# paasi2$co2= gsub(',', '.', paasi2$co2)
+# 
+# paasi2$co2 = as.numeric(paasi2$co2)
+# 
+# #convert carbon measure to carbon dioxide
+# paasi2$co2 = paasi2$co2*3.664
+# paasi2$co2 = paasi2$co2*1000000
+# 
+# paasi2 = as.data.frame(paasi2)
+# 
+# paasi2$iso3c <- factor(countrycode(sourcevar=paasi2[, "country"], 
+#                                    origin="country.name", 
+#                                    destination="iso3c"))
+# 
+# paasi2=as.data.table(paasi2)
+# 
+# paasi2 = paasi2[year >1949,]
+# paasi2[country =="World", iso3c := "WLD"]
+# 
+# 
+# paasi2 = paasi2[paasi2[country =="Bunkers"], bunkers :=i.co2, on=c("year")]
+# 
+# packo = paasi2[year==2021,]
+# packo = packo[!(iso3c %in% NA),]
+# 
+# ll = as.character(packo$iso3c)
 
 
 
@@ -221,11 +275,17 @@ pops$var = as.numeric(pops$var)
 popsw = pops[country=="World",]
 
 paa = pops[paasi2, co2:=i.co2, on =c("year", "iso3c")]
-paa = paa[paasi2, bunkers:=i.bunkers, on =c("year")]
+
+paa = pops[paasi2, ghg:=i.ghg, on =c("year", "iso3c")]
+paa = pops[paasi2, nonco2:=i.nonco2, on =c("year", "iso3c")]
+
+# paa = paa[paasi2, bunkers:=i.bunkers, on =c("year")]
 
 
 
-paa$co2cap = paa$co2/paa$pop
+paa$co2cap = paa$co2/paa$pop/1000
+paa$ghgcap = paa$ghg/paa$pop/1000
+
 paac=copy(paa)
 
 
@@ -242,37 +302,37 @@ paac[variant=="Upper 80 PI", var:=4]
 paac[variant=="Upper 95 PI", var:=5]
 
 
-paac = paac[pik[gas=="nonco2"], nonco2 := i.emission*1000000 , on=c("year", "iso3c")]
+# paac = paac[pik[gas=="nonco2"], nonco2 := i.emission*1000000 , on=c("year", "iso3c")]
+# 
 
-
-## approximating non-co2 emissions for countries that do not have nonco2 emissions. 
-
-# first find out how big emitter these countries are relative to each other by using co2
-paac[is.na(nonco2) & year < 2022, kel := sum(co2), by=c("year", "var")]
-paac[is.na(nonco2) & year < 2022, sha := co2/kel]
-
-# next calculate how much ghg emissions are accounted for
-paac[!(iso3c=="WLD"), sumt := sum(nonco2, na.rm=T), by=c("year", "var")]
-
-# compare to total ghg emissions
-paac = paac[paac[iso3c =="WLD",], wor:=i.nonco2, on=c("year", "var")]
-
-# distribute the remainer to countries without ghg emissions by using their relative sizes
-paac[is.na(nonco2) & year < 2022, nonco2 := 1]
-
-paac[is.na(nonco2) & year < 2022, nonco2 := (wor-sum)*sha]
-
-paac$ghg = paac$co2 + paac$nonco2
-
-paac$ghgcap = paac$ghg/paac$pop
-
-
-
-paac = paac[, !(c("variant", "kel", "sha", "sumt", "wor"))]
-
-
-
-
+# ## approximating non-co2 emissions for countries that do not have nonco2 emissions. 
+# 
+# # first find out how big emitter these countries are relative to each other by using co2
+# paac[is.na(nonco2) & year < 2022, kel := sum(co2), by=c("year", "var")]
+# paac[is.na(nonco2) & year < 2022, sha := co2/kel]
+# 
+# # next calculate how much ghg emissions are accounted for
+# paac[!(iso3c=="WLD"), sumt := sum(nonco2, na.rm=T), by=c("year", "var")]
+# 
+# # compare to total ghg emissions
+# paac = paac[paac[iso3c =="WLD",], wor:=i.nonco2, on=c("year", "var")]
+# 
+# # distribute the remainer to countries without ghg emissions by using their relative sizes
+# paac[is.na(nonco2) & year < 2022, nonco2 := 1]
+# 
+# paac[is.na(nonco2) & year < 2022, nonco2 := (wor-sum)*sha]
+# 
+# paac$ghg = paac$co2 + paac$nonco2
+# 
+# paac$ghgcap = paac$ghg/paac$pop
+# 
+# 
+# 
+# paac = paac[, !(c("variant", "kel", "sha", "sumt", "wor"))]
+# 
+# 
+# 
+# 
 
 
 gdpdata <- wb(indicator = "NY.GDP.MKTP.KD", startdate = 1959, enddate = 2022)
@@ -337,11 +397,16 @@ paa$net = paa$fossil + paa$lulucf
 
 paa$fossil = paa$fossil*3.664
 paa$lulucf = paa$lulucf*3.664
-paa$net= paa$net*3.664
+# paa$net= paa$net*3.664
 
 
-paa = paa[paacw[var==3], ghg := i.ghg/1000000000 , on="year"]
-paa = paa[paacw[var==3], nonco2 := i.nonco2/1000000000 , on="year"]
+paa = paa[paacw[var==3], fossil := i.co2/1000000000000 , on="year"]
+
+paa = paa[paacw[var==3], ghg := i.ghg/1000000000000 , on="year"]
+paa = paa[paacw[var==3], nonco2 := i.nonco2/1000000000000 , on="year"]
+
+paa$net = paa$fossil + paa$lulucf
+
 # paa = paa[pik, nonco2 := i.nonco2 , on="year"]
 
 
@@ -395,7 +460,7 @@ ppaa$source = paa$source
 # net, avgfossil, avgcost, usercost, netcost, zero
 #  
 
-
+# ppaa$co2=NULL
 ppaa$newsink = NA
 
 ppaa$budget = NA

@@ -316,6 +316,14 @@ div(  id = "bor",
       #   tabPanel("panel 3", "three")
       # ),
       #     
+      
+      fluidRow (
+        
+        
+        column(10, 
+     
+      
+      
       fluidRow(
         
         # column(2, style = " padding: .2vw;",  
@@ -466,392 +474,16 @@ div(  id = "bor",
       
       fluidRow(
         
-        column(2, style = " padding: .2vw;",  
-               # id ="bor",
-               
-               
-               
-               
-               column(12, id = "bor4",
-                      
-                      
-                      # bs4Dash::bs4Table(
-                      #   # "nerf",
-                      #   
-                      #   cardWrap = TRUE,
-                      #   bordered = TRUE,
-                      #   striped = TRUE,
-                      #   
-                      #   list(
-                      #     
-                      #     headTitles = list(
-                      #       cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE),
-                      #       cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE),
-                      #       cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)
-                      # 
-                      #       
-                      #       
-                      #       
-                      #       
-                      #     )
-                      #     
-                      #   )
-                      # ),
-                      
-                      div(
-                        # id = "bor5a",
-                        
-                        div(style='
+        # conditionalPanel(condition="input.isMobile==0",   {
 
-text-align: left !important;
-text-decoration: none;
-margin-bottom: .0rem;
-margin-top: -.2rem;',
-
-tagList(uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center;", "viewtext"))),
-# textOutput("indicatorvisibility"),
-div(style="text-align: right;",textOutput("yearc")),
-
-div(
-  id="tablu",
-  class="noku",
-  # tämä renderUIlla?
-  
-  
-  
-  
-  p(" "),
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = FALSE,
-    list( headTitles = list(
-      cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE)   
-      # ) , list(rv$fossill) )  ), 
-    )  
-    ,   list(uiOutput("fossill") )
-    )), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE) 
-    )  
-    ,   list(uiOutput("landl") )
+          
+          
     
-    )  ), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)   
-    ) 
-    ,   list(uiOutput("netl") )
-    
-    )  )   ),
-
-
-div(
-  #table joka näkyy jos averagedividend tai countrydividend relevantteja
-  id="tablu4",
-  class="noku",
-  # width ="50%",
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(non, textOutput("labelnonco2"),  "infononco2", "shownonco2", NULL, FALSE)
-    )   ,   list(uiOutput("nonco2l") )
-    )  ), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(tot, textOutput("labelghg"),  "infoghg", "showghg", NULL, FALSE)
-    )
-    ,   list(uiOutput("ghgl") )
-    )  )
-
-  
-
-  
-), 
-
-
-div(
-  #table joka näkyy jos averagedividend tai countrydividend relevantteja
-  id="tablu5",
-  class="noku",
-  # width ="50%",
+        # })  
  
-  
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(tot, textOutput("labelnewsink"),  "infonewsink", "shownewsink", NULL, FALSE)
-    )
-    ,   list(uiOutput("newsinkl") )
-    )  )
-  
-), 
 
 
-
-
-p(" "),
-div(
-  id="tablu",
-  class="noku",
-  # tämä renderUIlla?
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(pop,textOutput("labelpop"),  "infopop", "showpop", NULL, FALSE)
-    )    ,   list(uiOutput("popl") ) )  )), 
-
-
-div(
-  id="tablu2",
-  class="noku",
-  # width ="50%",
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrypop, textOutput("labelcountrypop"), "infocountrypop", "showcountrypop", NULL, FALSE)
-    ) 
-    ,   list(uiOutput("countrypopl") )
-    )  )
-  
-),
-
-p(" "),
-
-div(
-  id="tablu",
-  class="noku",
-  # tämä renderUIlla?
-  
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(fpop, textOutput("labelavgfossil"),  "infoavgfossil", "showavgfossil", NULL, TRUE)
-    )
-    ,   list(uiOutput("avgfossill") )
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(cpop,textOutput("labeluserfossil"), "infouserfossil", "showuserfossil", NULL, FALSE)
-    )
-    ,   list(uiOutput("userfossill") )
-    )  )),
-
-
-div(
-  id="tablu2",
-  class="noku",
-  # width ="50%",
-  
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countryfossil,textOutput("labelcountryfossil"), "infocountryfossil", "showcountryfossil", NULL, FALSE)
-    )
-    ,   list(uiOutput("countryfossill") )
-    )  ), 
-  
-  
-  
-),
-
-p(" "),
-div(
-  id="tablu",
-  class="noku",      
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(tax,textOutput("labelprice"),  "infoprice", "showprice", NULL, FALSE)
-    )
-    
-    ,   list(uiOutput("pricel") )
-    )  ), 
-  
-  p(" "),
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE)
-    )
-    ,   list(uiOutput("avgcostl") )
-    )  )),
-
-
-
-div(
-  id="tablu5",
-  class="noku",   
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(netcost,textOutput("labellandcost"),  "infolandcost", "showlandcost", NULL, FALSE)
-    )
-    ,   list(uiOutput("landcostl") )
-    
-    )  )),
-
-
-
-div(
-  id="tablu",
-  class="noku",   
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(dividend, textOutput("labeldividend"),  "infodividend", "showdividend", NULL, FALSE)
-    )
-    ,   list(uiOutput("dividendl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(avgnetcost, textOutput("labelavgnetcost"), "infoavgnetcost", "showavgnetcost", NULL, FALSE)
-    )
-    ,   list(uiOutput("avgnetcostl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(taxfosindi, textOutput("labelusercost"),  "infousercost", "showusercost", NULL, FALSE)
-    )
-    ,   list(uiOutput("usercostl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(netcost,textOutput("labelnetcost"),  "infonetcost", "shownetcost", NULL, FALSE)
-    )
-    ,   list(uiOutput("netcostl") )
-    
-    )  ),
-
-),
-
-
-
-
-
-
-
-
-
-div(
-  id="tablu2",
-  class="noku",
-  # width ="50%",
-
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrycost, textOutput("labelcountrycost"),  "infocountrycost", "showcountrycost", NULL, FALSE)
-    )
-    ,   list(uiOutput("countrycostl") )
-    
-    )  ), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrynetcost, textOutput("labelcountrynetcost"), "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
-    )
-    ,   list(uiOutput("countrynetcostl") )
-    
-    )  ), 
-  
-  
-),
-
-
-
-
-
-
-
-
-
-
-
-
-div(
-  #table joka näkyy jos averagedividend tai countrydividend relevantteja
-  id="tablu3",
-  class="noku",
-  # width ="50%",
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(averagedividend, textOutput("labelaveragedividend"),  "infoaveragedividend", "showaveragedividend", NULL, FALSE)
-    )
-    ,   list(uiOutput("averagedividendl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrydividend, textOutput("labelcountrydividend"),  "infocountrydividend", "showcountrydividend", NULL, FALSE)
-    )
-    ,   list(uiOutput("countrydividendl") )
-    
-    )  ) 
-  
-  
-  
-)
-,
-div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
-div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
-),
-div(style="display:inline-block;",id="sla",
-    checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
-)
-,div(id="sla",
-     checkboxInput("startvalue", label=textOutput("startlabel"), value=TRUE))
-
-# div(id="ress",
-#     actionButton("reset", "Reset"))
-# # )
-#                 ),
-
-
-
-
-
-                      )
-
-
-# div(
-#   
-#   
-#   uiOutput("cou")
-#   # ) )
-# )
-
-
-
-               )
-
-        ),
-
-
-column(10,style = " padding: .2vw;",  
+column(12,style = " padding: .2vw;",  
        #
        column(12, id = "bor5",  
               # fluidRow(style = "justify-content: flex-start;",
@@ -1064,7 +696,7 @@ column(6,
                                       )
                   )
                    )
-,div(style = " background-color:var(--colb)!important; font-size: 1.2vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, IGCC 2023, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2022:"))
+,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, IGCC 2023, Gütschow, J.; Pflüger, M. 2023, Friedlingstein et al. 2022. Funded by Kone Foundation. Developed by Ville Seppälä"))
 
                   
               )
@@ -1164,7 +796,10 @@ div(
        )           
        
        # ,uiOutput("yearcui")
-)
+),
+
+
+
 
 
       )                 ,
@@ -1182,9 +817,401 @@ conditionalPanel(
   )),
   
 )
+),
+
+{
+  column(2, style = " padding: .2vw;",  
+         # id ="bor",
+         
+         
+         
+         
+         column(12, id = "bor4",
+                
+                
+                # bs4Dash::bs4Table(
+                #   # "nerf",
+                #   
+                #   cardWrap = TRUE,
+                #   bordered = TRUE,
+                #   striped = TRUE,
+                #   
+                #   list(
+                #     
+                #     headTitles = list(
+                #       cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE),
+                #       cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE),
+                #       cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)
+                # 
+                #       
+                #       
+                #       
+                #       
+                #     )
+                #     
+                #   )
+                # ),
+                
+                div(
+                  # id = "bor5a",
+                  
+                  div(style='
+
+text-align: left !important;
+text-decoration: none;
+margin-bottom: .0rem;
+margin-top: -.2rem;',
+
+tagList(uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center;", "viewtext"))),
+# textOutput("indicatorvisibility"),
+div(style="text-align: right;",textOutput("yearc")),
+
+div(
+  
+  id="tablu",
+  class="noku",
+  # tämä renderUIlla?
+  
+  
+  
+  
+  p(" "),
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = FALSE,
+    list( headTitles = list(
+      cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE)   
+      # ) , list(rv$fossill) )  ), 
+    )  
+    ,   list(uiOutput("fossill") )
+    )), 
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE) 
+    )  
+    ,   list(uiOutput("landl") )
+    
+    )  ), 
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)   
+    ) 
+    ,   list(uiOutput("netl") )
+    
+    )  )   ),
+
+
+div(
+  #table joka näkyy jos averagedividend tai countrydividend relevantteja
+  id="tablu4",
+  class="noku",
+  # width ="50%",
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(non, textOutput("labelnonco2"),  "infononco2", "shownonco2", NULL, FALSE)
+    )   ,   list(uiOutput("nonco2l") )
+    )  ), 
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(tot, textOutput("labelghg"),  "infoghg", "showghg", NULL, FALSE)
+    )
+    ,   list(uiOutput("ghgl") )
+    )  )
+  
+  
+  
+  
+), 
+
+
+div(
+  #table joka näkyy jos averagedividend tai countrydividend relevantteja
+  id="tablu5",
+  class="noku",
+  # width ="50%",
+  
+  
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(tot, textOutput("labelnewsink"),  "infonewsink", "shownewsink", NULL, FALSE)
+    )
+    ,   list(uiOutput("newsinkl") )
+    )  )
+  
+), 
+
+
+
+
+p(" "),
+div(
+  id="tablu",
+  class="noku",
+  # tämä renderUIlla?
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(pop,textOutput("labelpop"),  "infopop", "showpop", NULL, FALSE)
+    )    ,   list(uiOutput("popl") ) )  )), 
+
+
+div(
+  id="tablu2",
+  class="noku",
+  # width ="50%",
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(countrypop, textOutput("labelcountrypop"), "infocountrypop", "showcountrypop", NULL, FALSE)
+    ) 
+    ,   list(uiOutput("countrypopl") )
+    )  )
+  
+),
+
+p(" "),
+
+div(
+  id="tablu",
+  class="noku",
+  # tämä renderUIlla?
+  
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(fpop, textOutput("labelavgfossil"),  "infoavgfossil", "showavgfossil", NULL, TRUE)
+    )
+    ,   list(uiOutput("avgfossill") )
+    )  ), 
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(cpop,textOutput("labeluserfossil"), "infouserfossil", "showuserfossil", NULL, FALSE)
+    )
+    ,   list(uiOutput("userfossill") )
+    )  )),
+
+
+div(
+  id="tablu2",
+  class="noku",
+  # width ="50%",
+  
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(countryfossil,textOutput("labelcountryfossil"), "infocountryfossil", "showcountryfossil", NULL, FALSE)
+    )
+    ,   list(uiOutput("countryfossill") )
+    )  ), 
+  
+  
+  
+),
+
+p(" "),
+div(
+  id="tablu",
+  class="noku",      
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(tax,textOutput("labelprice"),  "infoprice", "showprice", NULL, FALSE)
+    )
+    
+    ,   list(uiOutput("pricel") )
+    )  ), 
+  
+  p(" "),
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE)
+    )
+    ,   list(uiOutput("avgcostl") )
+    )  )),
+
+
+
+div(
+  id="tablu5",
+  class="noku",   
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(netcost,textOutput("labellandcost"),  "infolandcost", "showlandcost", NULL, FALSE)
+    )
+    ,   list(uiOutput("landcostl") )
+    
+    )  )),
+
+
+
+div(
+  id="tablu",
+  class="noku",   
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(dividend, textOutput("labeldividend"),  "infodividend", "showdividend", NULL, FALSE)
+    )
+    ,   list(uiOutput("dividendl") )
+    
+    )  ), 
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(avgnetcost, textOutput("labelavgnetcost"), "infoavgnetcost", "showavgnetcost", NULL, FALSE)
+    )
+    ,   list(uiOutput("avgnetcostl") )
+    
+    )  ), 
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(taxfosindi, textOutput("labelusercost"),  "infousercost", "showusercost", NULL, FALSE)
+    )
+    ,   list(uiOutput("usercostl") )
+    
+    )  ), 
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(netcost,textOutput("labelnetcost"),  "infonetcost", "shownetcost", NULL, FALSE)
+    )
+    ,   list(uiOutput("netcostl") )
+    
+    )  ),
+  
+),
+
+
+
+
+
+
+
+
+
+div(
+  id="tablu2",
+  class="noku",
+  # width ="50%",
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(countrycost, textOutput("labelcountrycost"),  "infocountrycost", "showcountrycost", NULL, FALSE)
+    )
+    ,   list(uiOutput("countrycostl") )
+    
+    )  ), 
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(countrynetcost, textOutput("labelcountrynetcost"), "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
+    )
+    ,   list(uiOutput("countrynetcostl") )
+    
+    )  ), 
+  
+  
+),
+
+
+
+
+
+
+
+
+
+
+
+
+div(
+  #table joka näkyy jos averagedividend tai countrydividend relevantteja
+  id="tablu3",
+  class="noku",
+  # width ="50%",
+  
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(averagedividend, textOutput("labelaveragedividend"),  "infoaveragedividend", "showaveragedividend", NULL, FALSE)
+    )
+    ,   list(uiOutput("averagedividendl") )
+    
+    )  ), 
+  bs4Dash::bs4Table(
+    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+    list( headTitles = list(
+      cuk2(countrydividend, textOutput("labelcountrydividend"),  "infocountrydividend", "showcountrydividend", NULL, FALSE)
+    )
+    ,   list(uiOutput("countrydividendl") )
+    
+    )  ) 
+  
+  
+  
+)
+,
+div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
+div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
+)
+,
+div(style="display:inline-block; visibility:hidden; height: 0px;",id="sla",
+    checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
+)
+,div(style="visibility:hidden; height: 0px;",id="sla",
+     checkboxInput("startvalue", label=textOutput("startlabel"), value=TRUE))
+
+# div(id="ress",
+#     actionButton("reset", "Reset"))
+# # )
+#                 ),
+
+
+
+
+
+                )
+
+
+# div(
+#   
+#   
+#   uiOutput("cou")
+#   # ) )
+# )
+
+
+
+         )
+
+  )
+        }
+
+
+)
 # ,textOutput("last")
 
- ,textOutput("ruukk")
+ # ,textOutput("ruukk")
 
 ,fluidRow( DT::dataTableOutput("tablz", width="100%", height="10px")
 )

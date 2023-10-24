@@ -7,7 +7,7 @@ server <- function(input,output, session) {
   output$xx= renderText(rv$x)
   output$yy= renderText(rv$y)
    output$cor= renderText(rv$cor)
-   output$ruukk= renderText(rv$triss)
+   output$ruukk= renderText(rv$land)
    
    # output$couexp= renderText(rv$coux)
    
@@ -134,6 +134,8 @@ server <- function(input,output, session) {
   rv <- reactiveValues(disctext =0)
   rv <- reactiveValues(lihh =.99)
   rv <- reactiveValues(lok =NULL)
+  rv <- reactiveValues(comu ="NULL")
+  
   rv <- reactiveValues(landplus =NULL)
   rv <- reactiveValues(view =NULL)
   rv <- reactiveValues(autodraw =FALSE)
@@ -303,6 +305,43 @@ server <- function(input,output, session) {
     
     
   })
+  
+
+  
+  # 
+  # observe({
+  #   if (rv$lang == "eng") {
+  #     if (input$luls==FALSE) {
+  #       if (input$nonco2 ==TRUE) {
+  #         rv$comu ="(Includes costs from non-CO2 emissions. Does not include costs from land+CCS CO2) "
+  #       } else {
+  #         rv$comu ="(Does not include costs from non-CO2 emissions or from land+CCS CO2"
+  #       }}
+  #     else  if (input$nonco2 ==TRUE) {
+  # 
+  #           rv$comu ="(Includes costs from non-CO2 emission and from land+CCS CO2) "
+  #         } else {
+  #           rv$comu ="(Does not include costs from non-CO2 emissions. Includes costs from land+CCS CO2"
+  #         }
+  #       } else if (rv$lang == "fin") {
+  #       if (input$luls==FALSE) {
+  #         if (input$nonco2 ==TRUE) {
+  #           rv$comu ="(Sisältää kustannukset ei-CO2-päästöistä. Ei sisällä maanielun+CCS:n kustannuksia) "
+  #         } else {
+  #           rv$comu ="(Ei sisällä ei-CO2 päästöjen tai maanielun+CCS:n kustannuksia)"
+  #         }} else if (input$nonco2 ==TRUE) {
+  # 
+  #             rv$comu ="(Sisältää ei-CO2-päästöjen ja maanielun+CCS:n kustannukset) "
+  #           } else {
+  #             rv$comu ="(Ei sisällä CO2-päästöjen kustannuksia. Sisältää maanielun+CCS:n kustannukset)"
+  #           }
+  #         }
+  #       })
+
+  
+  
+  
+  
   output$lastButtonCliked=renderText({input$last_btn})
   # observeEvent(rv$lang,{
   #   
@@ -471,24 +510,28 @@ server <- function(input,output, session) {
   output$netl = renderText(
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',net,'\"><b>', rv$netl," Gt", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+      
       '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  rv$landplus, '</b></span>',
       
       '<span style=\"color:',lul,'\"><b>',  rv$landl," Gt", '</b></span>',
-      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-      '<span style=\"color:',net,'\"><b>', rv$netl," Gt", '</b></span>',
       sep = "")
   )
   
   output$ghgl = renderText(
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',tot,'\"><b>', rv$ghgl," Gt", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+      
       '<span style=\"color:',fos, '\"><b>', rv$fossill, " Gt",'</b></span>',
       '<span style=\"color:',rv$teksvari,'\">',  " + ", '</b></span>',
       
       '<span style=\"color:',non,'\"><b>',  rv$nonco2l," Gt", '</b></span>',
-      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-      '<span style=\"color:',tot,'\"><b>', rv$ghgl," Gt", '</b></span>',
       sep = "")
   )
   output$nonco2l = renderText(
@@ -513,11 +556,13 @@ server <- function(input,output, session) {
   output$avgfossill = renderText(
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+      
       '<span style=\"color:',rv$totalcolor, '\"><b>', rv$totall, " Gt",'</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  " / ", '</b></span>',
       '<span style=\"color:',pop,'\"><b>',  rv$popl," B", '</b></span>',
-      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-      '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
       
       sep = "")
   )
@@ -532,12 +577,14 @@ server <- function(input,output, session) {
   output$avgcostl = renderText(
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+      
       '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
       
       '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-      '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
       
       sep = "")
   )
@@ -553,6 +600,9 @@ server <- function(input,output, session) {
       
       paste(
         # rv$yearc,": ",
+        '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+        
+        '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
         
         '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
         '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
@@ -560,12 +610,14 @@ server <- function(input,output, session) {
         '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
         
         
-        '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-        '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
         
         sep = "") } else {
           paste(
             # rv$yearc,": ",
+            '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+            
+            '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+            
             '<span style=\"color:',rv$teksvari,'\"><b>',  "(1-",rv$nationall,  ") * ", '</b></span>',
             
             '<span style=\"color:',fpop,'\"><b>',  rv$avgfossill," t", '</b></span>',
@@ -573,8 +625,6 @@ server <- function(input,output, session) {
             
             '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
             '<span style=\"color:',rv$teksvari,'\"><b>',  "", '</b></span>',
-            '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-            '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
             
             sep = "") 
           
@@ -586,6 +636,9 @@ server <- function(input,output, session) {
         
         paste(
           # rv$yearc,": ",
+          '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
           
           '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
           
@@ -595,12 +648,14 @@ server <- function(input,output, session) {
           '<span style=\"color:',landcost,'\"><b>',  rv$landcostl," $", '</b></span>',
           
           
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-          '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
           
           sep = "") } else {
             paste(
               # rv$yearc,": ",
+              '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+              
+              '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+              
               '<span style=\"color:',rv$teksvari,'\"><b>',  "(1-",rv$nationall,  ") * ", '</b></span>',
               
               
@@ -612,8 +667,6 @@ server <- function(input,output, session) {
               '<span style=\"color:',landcost,'\"><b>',  rv$landcostl," $", '</b></span>',
               
               
-              '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-              '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
               
               
               sep = "") 
@@ -627,14 +680,33 @@ server <- function(input,output, session) {
   )
   
   output$avgnetcostl = renderText(
+    if (input$national == 0) {
+      
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',avgnetcost,'\"><b>',  rv$avgnetcostl," $", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+      
       '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
       '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-      '<span style=\"color:',avgnetcost,'\"><b>',  rv$avgnetcostl," $", '</b></span>',
       sep = "")
+      
+    } else if (input$national != 0) {
+      paste(
+        # rv$yearc,": ",
+        '<span style=\"color:',avgnetcost,'\"><b>',  rv$avgnetcostl," $", '</b></span>',
+        
+        '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+        
+        '<span style=\"color:',avgcost,'\"><b>',  rv$avgcostl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+        '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
+        '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
+        '<span style=\"color:',dividend,'\"><b>',  rv$averagedividendl," $", '</b></span>',
+        sep = "")
+    }      
   )
   
   output$userfossill = renderText(
@@ -647,11 +719,13 @@ server <- function(input,output, session) {
   output$usercostl = renderText(
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+      
       '<span style=\"color:',fosindi,'\"><b>',  rv$userfossill," t", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  " * ", '</b></span>',
       '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-      '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-      '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
       
       sep = "")
   )
@@ -661,11 +735,13 @@ server <- function(input,output, session) {
     if (input$national == 0) {
       paste(
         # rv$yearc,": ",
+        '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
+        
+        '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
+        
         '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
         '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
         '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-        '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</span>',
-        '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
         
         
         sep = "")
@@ -677,13 +753,15 @@ server <- function(input,output, session) {
       if (input$nationalcoun %in% c(ll2)) {
         paste(
           # rv$yearc,": ",
+          '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+          
           '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
           '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
           '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
           '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
           '<span style=\"color:',dividend,'\"><b>',  rv$usernatl," $", '</b></span>',
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-          '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
           
           
           sep = "")
@@ -693,6 +771,10 @@ server <- function(input,output, session) {
       } else {
         paste(
           # rv$yearc,": ",
+          '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
+          
           '<span style=\"color:',taxfosindi,'\"><b>',  rv$usercostl," $", '</b></span>',
           '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
           
@@ -700,8 +782,6 @@ server <- function(input,output, session) {
           '<span style=\"color:',rv$teksvari,'\"><b>',  " - ", '</b></span>',
           '<span style=\"color:',dividend,'\"><b>',  rv$averagedividendl," $", '</b></span>',
           
-          '<span style=\"color:',rv$teksvari,'\"><b>', " = ",'</b></span>',
-          '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
           
           
           sep = "")
@@ -727,12 +807,14 @@ server <- function(input,output, session) {
   output$countrycostl = renderText(
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+      
       '<span style=\"color:',countryfossil,'\"><b>',  rv$countryfossill," t", '</b></span>',
       '<span style=\"color:',rv$teksvari,'\"><b>',  "*", '</b></span>',
       
       '<span style=\"color:',tax,'\"><b>',  rv$pricel," $", '</b></span>',
-      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-      '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
       
       sep = "")
   )
@@ -753,12 +835,14 @@ server <- function(input,output, session) {
       
       paste(
         # rv$yearc,": ",
+        '<span style=\"color:',countrynetcost,'\"><b>',  rv$countrynetcostl," $", '</b></span>',
+        
+        '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+        
         '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
         '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
         
         '<span style=\"color:',dividend,'\"><b>',  rv$dividendl," $", '</b></span>',
-        '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-        '<span style=\"color:',countrynetcost,'\"><b>',  rv$countrynetcostl," $", '</b></span>',
         
         
         sep = "")
@@ -771,6 +855,10 @@ server <- function(input,output, session) {
       # if (input$nationalcoun %in% c(ll2)) {
       paste(
         # rv$yearc,": ",
+        '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
+        
+        '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+        
         '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
         '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
         
@@ -778,8 +866,6 @@ server <- function(input,output, session) {
         '<span style=\"color:',rv$teksvari,'\"><b>',  "-", '</b></span>',
         '<span style=\"color:',dividend,'\"><b>',  rv$countrydividendl," $", '</b></span>',
         
-        '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-        '<span style=\"color:',netcost,'\"><b>',  rv$netcostl," $", '</b></span>',
         
         
         sep = "")
@@ -788,30 +874,52 @@ server <- function(input,output, session) {
     }
     
   )
-  
+    
   
   output$countrydividendl = renderText(
+    if (is.null(input$countr)) {
+      
+    
     paste(
       # rv$yearc,": ",
-      '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
-      '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
-      
+      '<span style=\"color:',countrydividend,'\"><b>',   rv$usernatl," $", '</b></span>',
       
       '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-      '<span style=\"color:',countrydividend,'\"><b>',  rv$countrydividend," $", '</b></span>',
       
-      sep = "")
+      '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
+      '<span style=\"color:',countrycost,'\"><b>',   rv$usernatcostl ," $", '</b></span>',
+      
+      
+      
+      sep = "") } else {
+        
+        paste(
+          # rv$yearc,": ",
+          '<span style=\"color:',countrydividend,'\"><b>',  rv$countrydividendl," $", '</b></span>',
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+          
+          '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
+          '<span style=\"color:',countrycost,'\"><b>',  rv$countrycostl," $", '</b></span>',
+          
+          
+          
+          sep = "") 
+        
+      }
   )
   
   output$averagedividendl = renderText(
     paste(
       # rv$yearc,": ",
+      '<span style=\"color:',averagedividend,'\"><b>',  rv$averagedividendl," $", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+      
       '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
       '<span style=\"color:',dividend,'\"><b>',  rv$avgcostl," $", '</b></span>',
       
       
-      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
-      '<span style=\"color:',averagedividend,'\"><b>',  rv$averagedividend," $", '</b></span>',
       
       sep = "")
   )
@@ -833,6 +941,10 @@ server <- function(input,output, session) {
     paste(
       # rv$yearc,": ",
       # '<span style=\"color:',rv$teksvari,'\"><b>',  rv$nationall,  "*", '</b></span>',
+      '<span style=\"color:',landcost,'\"><b>',  rv$landcostl,"$", '</b></span>',
+      
+      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
+      
       '<span style=\"color:',newsink,'\"><b>',  rv$newsinkl,"Gt", '</b></span>',
       
       
@@ -841,9 +953,7 @@ server <- function(input,output, session) {
       '<span style=\"color:',rv$teksvari,'\"><b>', "/",'</b></span>',
       '<span style=\"color:',pop,'\"><b>',  rv$popl,"B", '</b></span>',
       
-      '<span style=\"color:',rv$teksvari,'\"><b>', "=",'</b></span>',
       
-      '<span style=\"color:',landcost,'\"><b>',  rv$landcostl,"$", '</b></span>',
       
       sep = "")
   )
@@ -1411,7 +1521,7 @@ Please give feedback by clicking the feedback button in the top of the page if y
  
       
   rv$coux =HTML(        "
-        It is assumed that countries' per capita CO2 emissions converge to global average over time from their 2021 historical value.
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
 Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
                           <br>
                         
@@ -1422,7 +1532,7 @@ Convergence factor denotes how much the emissions converge by the carbon neutral
 
       in which:
 <br>
-WOBS = World per capita emissions at observed year
+WOBS = World per capita emissions at carbon neutrality year
       <br>
 CSTART = Country per capita emissions at start year
       <br>
@@ -1443,26 +1553,21 @@ A correction multiplier is applied to the outputs from the calculation to have t
    Country per capita net costs are calculated by deducting the carbon dividend from the carbon costs.
 
      <br>
-      <br>
-
-GDP per capita for 2021 is calculated by dividing GDP in 2015 $ (World Bank) by UN population estimate.   
-
- 
 
 
       
       "
   ) 
     
-      rv$fortext = c("Formula for calculating country specific emissions:")
-      rv$formula= c("COBS = CORR*WOBS*(1-CONV)*((WSTART-CSTART)/WSTART)")
-      
-      rv$cobs = c("COBS = Country per capita emissions at observed year")
-      rv$wobs = c("WOBS = World per capita emissions at observed year")
-      rv$cstart = c("CSTART = Country per capita emissions at start year")
-      rv$wstart = c("WSTART = World per capita emissions at start year")
-      rv$convergence = c("CONV = Convergence factor chose by the user")
-      rv$correction = c("CORR = Correction factor to balance country emissions to global emissions at observed year. Same for all countries.")
+      # rv$fortext = c("Formula for calculating country specific emissions:")
+      # rv$formula= c("COBS = CORR*WOBS*(1-CONV)*((WSTART-CSTART)/WSTART)")
+      # 
+      # rv$cobs = c("COBS = Country per capita emissions at observed year")
+      # rv$wobs = c("WOBS = World per capita emissions at observed year")
+      # rv$cstart = c("CSTART = Country per capita emissions at start year")
+      # rv$wstart = c("WSTART = World per capita emissions at start year")
+      # rv$convergence = c("CONV = Convergence factor chose by the user")
+      # rv$correction = c("CORR = Correction factor to balance country emissions to global emissions at observed year. Same for all countries.")
       # 
       # rv$corr 
       # rv$conv
@@ -1472,29 +1577,26 @@ GDP per capita for 2021 is calculated by dividing GDP in 2015 $ (World Bank) by 
       #   rv$wob
       # rv$cob
       
-      rv$infofossiltext = c("Total fossil CO2 emissions across all countries and individuals. Other greenhouse gases (such as methane) not included. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
+      rv$infofossiltext = c("All fossil and industrial CO2 emissions across all countries and individuals. Source for emissions from 2021 and before: PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475")
       rv$infofossiltextt = c("Fossil CO2 emissions")
       
       rv$infolultext = c("CO2 emissions and sinks from land use change across all countries. In future, also includes technological sinks, such as DACCS and BECCS. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       rv$infolultextt = c("Land use emissions and sinks")
       
       
-      rv$infonettext = c("Net CO2 emissions, as net from fossil and land use across all countries. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
+      rv$infonettext = c("Net CO2 emissions, as net from fossil and land use across all countries.")
       rv$infonettextt = c("Net CO2 emissions")
       
       
-      rv$infoghgtext = c("Total greenhouse gas emissions in CO2-equivalent, calculated as sum of CO2 emissions from Global Carbon Project and non-CO2 emissions from PRIMAP")
+      rv$infoghgtext = c("Total greenhouse gas emissions in CO2-equivalent, sum of CO2 emissions and non-CO2 emissions PRIMAP data.  Does not include land use/sinks")
       rv$infoghgtextt = c("Total emissions")
       
       rv$infononco2text = c("Other greenhouse gas emissions than CO2, such as methane. 
-                           Source PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
-Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016")
+                           Source PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475")
       rv$infononco2textt = c("Non-CO2 emissions")
       
       rv$infononco2utext = c("Other greenhouse gas emissions than CO2, such as methane. 
-                            There is considerable uncertainty on what are realistic values in simulated years. Range limited to 5-10 at CO2 neutrality year which is interpreatation of IPCC estimates in IPCC AR6 WGIII chapter 3 page 339 figure 3.20.
-                              <br> Source for historic emissions PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
-Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016")
+                           Source PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475")
       rv$infononco2utextt = c("Non-CO2 emissions")
       
       
@@ -1514,7 +1616,7 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       rv$infopoputextt = c("World population projection")
       
       
-      rv$infoavgfossiltext =c("Average fossil emissions across all individuals. Result of dividing fossil emissions with world population. Includes non-CO2 emissions if they are selected on at the first phase. Does not include land use/sinks")
+      rv$infoavgfossiltext =c("Average fossil emissions across all individuals. Result of dividing fossil emissions with world population. Includes non-CO2 emissions if they are selected on at the global emissions phase. Does not include land use/sinks")
       rv$infoavgfossiltextt =c("Mean fossil CO2 emissions")
       
       
@@ -1525,30 +1627,31 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       rv$infoavgcosttextt= c("Mean carbon cost")
       
       
-      rv$infodividendtext = c("Carbon dividend given to each world citizen. Equal to the mean carbon cost. Product of average emissions and carbon price.")
+      rv$infodividendtext = c("Carbon dividend given to each world citizen. Equal to the mean carbon cost. Product of average emissions and carbon price. If land+CCS costs applied, they are reduced. National dividend also reduces the global dividend if it is applied.")
       rv$infodividendtextt = c("Carbon dividend")
       
       
-      rv$infoavgnetcosttext = c("Net average income across all individuals. Sum of mean carbon cost and carbon dividend. Zero.")
+      rv$infoavgnetcosttext = c("Net average income across all individuals. Sum of mean carbon cost and carbon dividend.")
       rv$infoavgnetcosttextt = c("Mean net cost")
       
       
-      rv$infouserfossiltext = c("Individual emission path chosen by the user in phase 4. If you chose to include non-CO2 emissions in phase 1, you should also include non-CO2 emissions in user emissions")
+      rv$infouserfossiltext = c("Individual emission path chosen by the user. If you chose to include non-CO2 emissions in phase 1, you should also include non-CO2 emissions in user emissions")
       rv$infouserfossiltextt = c("User emissions")
       
       
-      rv$infousercosttext = c("Carbon price cost for the user. Product of users emissions and carbon price.")
+      rv$infousercosttext = c("Carbon price cost for the user. Product of user emissions and carbon price.")
       rv$infousercosttextt = c("User carbon costs")
       
       
-      rv$infonetcosttext = c("User's net income. Sum of user's carbon costs and carbon dividend.")  
+      rv$infonetcosttext = c("User net income. Sum of user carbon costs and carbon dividend.")  
       rv$infonetcosttextt = c("User net cost")  
       
       rv$infoaveragedividendtext = c("Average dividend across all countries when the chosen percentage of collected carbon price revenue is always distributed as a dividend
-                                 in the country it is collected in instead of full global distribution.")  
+                                 in the country it is collected in, instead of full global distribution.")  
       rv$infoaveragedividendtextt = c("Mean national dividend")  
       
-      rv$infocountrydividendtext = c("Dividend in the specific country")  
+      rv$infocountrydividendtext = c("Dividend in the specific country when the chosen percentage of collected carbon price revenue is always distributed as a dividend
+                                 in the country it is collected in, instead of full global distribution.")  
       rv$infocountrydividendtextt = c("Country dividend")  
       
       rv$infocountryfossiltext = c("Mean emissions across residents in the selected country")  
@@ -1567,12 +1670,13 @@ Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Roch
       # rv$textt = c("")  
       
       
-      rv$infopricingtext = c("First value sets the year in which global carbon pricing system starts. Second year sets the year in which global net CO2 emissions reach zero and the global warming is estimated to stop. 
-                         It is assumed that fossil and land use emissions (and thus net emissions) remain same as they were in the last observed year (2021) before the pricing start year.") 
+      rv$infopricingtext = c("First value sets the year in which global carbon pricing system starts. Second year sets the year in which the carbon budget of the chosen temperature target is depleted. 
+                         It is assumed that global CO2, non-CO2 and land use emissions (and thus net emissions and total emissions) remain same as they were in the last observed year (2021) before the pricing start year.") 
       rv$infopricingtextt = c("Pricing start year and carbon neutrality year")  
       
       rv$infoemissionsinktext = c("At carbon neutrality year, CO2 emissions and sinks must be equal, meaning zero net CO2 emissions, meaning carbon neutrality, for warming to stop.
-                              Set how big the emissions and sinks are. ")  
+                              Set how big the emissions and sinks are. Below you can set an exemption for the land+CCS emissions/sinks to differ from fossil CO2 emissions. 
+                              This might cause the temperature target to overshoort momentarialy.")  
       rv$infoemissionsinktextt = c("Emissions / sink at carbon neutrality year")  
       
       rv$infostartpricetext = c("Sets the carbon price at the first year of carbon pricing in 2015 US dollars. 
@@ -1586,8 +1690,8 @@ the carbon neutrality year carbon price")
       rv$infoendpricetextt = c("Neutrality year carbon price")
       
       
-      rv$infostartusertext = c("Set estimate of your own emissions at the start year. They could be similar or a bit lower than your current emissions. 
-                               You can use various online carbon footprint calculators to estimate your emissions. 
+      rv$infostartusertext = c("Set estimate of your current emissions. 
+                               You can use various online carbon footprint calculators to estimate your emissions or use the average emissions from you country as a reference. 
                                Notice that if in the carbon budget section you left out other gases than CO2, you should leave them out from this estimate as well. 
                                If you have an estimate of your emissions including non-CO2 gases, you can approximate your CO2 emissions by multiplying the estimate with 0.83")
       rv$infostartusertextt = c("User start year emissions")
@@ -1600,51 +1704,162 @@ the carbon neutrality year carbon price")
       
       rv$infonationaldivtext = c("What if some of the carbon price revenue collected by the countries is not put to the common global pool to be distributed as a global dividend but 
                              distributed as a national dividend to the residents of the countries in which the revenue is collected?
-                             This will lower the global redistribution effect of the system. Individual incentives to reduce emissions still remain, but national incentives to reduce emissions are lower.")
+                             This will lower the global redistribution effect of the system. Individual incentives to reduce emissions still remain.")
       rv$infonationaldivtextt = c("National carbon dividend")
       
-      rv$infoconvergencetext = c("It is assumed that countries' per capita emissions converge to global average over time from their 2021 historical value. 
-                             <br/>
-                             Convergence factor denotes how much the emissions converge by the carbon neutrality year.
-                             
-                             
-                             Intermediate emissions between pricing start year and carbon neutrality year are calculated 
-                             as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
-                             A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
-                             equal the annual global CO2 emissions")
+      rv$infoconvergencetext = c( "
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
+                          <br>
+                        
+      Formula for calculating country specific per capita emissions (COBS) at the neutrality year is:
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      in which:
+<br>
+WOBS = World per capita emissions at carbon neutrality year
+      <br>
+CSTART = Country per capita emissions at start year
+      <br>
+WSTART = World per capita emissions at start year
+      <br>
+CONV = Convergence factor chose by the user
+      <br>
+      <br>
+
+Intermediate emissions between pricing start year and carbon neutrality year are calculated as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
+      <br>
+A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals equal the annual global emissions. It is same for all countries in a given year. 
+      <br>
+      <br>
+   Country per capita costs are calculated by multiplying thus received per capita emissions with the carbon price value (chosen by user) of the given year. 
+
+      <br>
+   Country per capita net costs are calculated by deducting the carbon dividend from the carbon costs.
+
+     <br>
+
+
+      
+      ")
       rv$infoconvergencetextt = c("Convergence of countries' emissions")
       
-      rv$infoconvergence1text = c("It is assumed that countries' per capita emissions converge to global average over time from their 2021 historical value. 
-                             <br/>
-                             Convergence factor denotes how much the emissions converge by the carbon neutrality year.
-                             
-                             
-                             Intermediate emissions between pricing start year and carbon neutrality year are calculated 
-                             as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
-                             A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
-                             equal the annual global CO2 emissions")
+      rv$infoconvergence1text = c( "
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
+                          <br>
+                        
+      Formula for calculating country specific per capita emissions (COBS) at the neutrality year is:
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      in which:
+<br>
+WOBS = World per capita emissions at carbon neutrality year
+      <br>
+CSTART = Country per capita emissions at start year
+      <br>
+WSTART = World per capita emissions at start year
+      <br>
+CONV = Convergence factor chose by the user
+      <br>
+      <br>
+
+Intermediate emissions between pricing start year and carbon neutrality year are calculated as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
+      <br>
+A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals equal the annual global emissions. It is same for all countries in a given year. 
+      <br>
+      <br>
+   Country per capita costs are calculated by multiplying thus received per capita emissions with the carbon price value (chosen by user) of the given year. 
+
+      <br>
+   Country per capita net costs are calculated by deducting the carbon dividend from the carbon costs.
+
+     <br>
+
+
+      
+      ")
       rv$infoconvergence1textt = c("Convergence of countries' emissions")
       
-      rv$infoconvergence2text = c("It is assumed that countries' per capita CO2 emissions converge to global average over time from their 2021 historical value. 
-                             <br/>
-                             Convergence factor denotes how much the emissions converge by the carbon neutrality year.
-                             
-                             
-                             Intermediate emissions between pricing start year and carbon neutrality year are calculated 
-                             as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
-                             A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
-                             equal the annual global emissions")
-      rv$infoconvergence2textt = c("Convergence of countries' emissions")
+      rv$infoconvergence2text = c( "
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
+                          <br>
+                        
+      Formula for calculating country specific per capita emissions (COBS) at the neutrality year is:
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      in which:
+<br>
+WOBS = World per capita emissions at carbon neutrality year
+      <br>
+CSTART = Country per capita emissions at start year
+      <br>
+WSTART = World per capita emissions at start year
+      <br>
+CONV = Convergence factor chose by the user
+      <br>
+      <br>
+
+Intermediate emissions between pricing start year and carbon neutrality year are calculated as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
+      <br>
+A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals equal the annual global emissions. It is same for all countries in a given year. 
+      <br>
+      <br>
+   Country per capita costs are calculated by multiplying thus received per capita emissions with the carbon price value (chosen by user) of the given year. 
+
+      <br>
+   Country per capita net costs are calculated by deducting the carbon dividend from the carbon costs.
+
+     <br>
+
+
       
-      rv$infoconvergence3text = c("It is assumed that countries' per capita CO2 emissions converge to global average over time from their 2021 historical value. 
-                             <br/>
-                             Convergence factor denotes how much the emissions converge by the carbon neutrality year.
-                             
-                             
-                             Intermediate emissions between pricing start year and carbon neutrality year are calculated 
-                             as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
-                             A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals
-                             equal the annual global emissions")
+      ")
+      
+      rv$infoconvergence3text = c( "
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
+                          <br>
+                        
+      Formula for calculating country specific per capita emissions (COBS) at the neutrality year is:
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      in which:
+<br>
+WOBS = World per capita emissions at carbon neutrality year
+      <br>
+CSTART = Country per capita emissions at start year
+      <br>
+WSTART = World per capita emissions at start year
+      <br>
+CONV = Convergence factor chose by the user
+      <br>
+      <br>
+
+Intermediate emissions between pricing start year and carbon neutrality year are calculated as a linear or percentual trajectory, depending on the choice of total fossil emission trajectory. 
+      <br>
+A correction multiplier is applied to the outputs from the calculation to have the emission sum across all individuals equal the annual global emissions. It is same for all countries in a given year. 
+      <br>
+      <br>
+   Country per capita costs are calculated by multiplying thus received per capita emissions with the carbon price value (chosen by user) of the given year. 
+
+      <br>
+   Country per capita net costs are calculated by deducting the carbon dividend from the carbon costs.
+
+     <br>
+
+
+      
+      ")
       rv$infoconvergence3textt = c("Convergence of countries' emissions")
       
       
@@ -1653,8 +1868,7 @@ the carbon neutrality year carbon price")
                       https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2022 \n
                       <br> 
                       <br> 
-                      Total emission data: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
-Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016\n
+                      Total emission data: PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475
  <br> 
 Non-CO2 emissions calculated by deducing CO2 emissions from Total emissions. 
 <br>
@@ -1666,7 +1880,7 @@ https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES
 IPCC reports have been used for carbon budgets and ballpark for carbon prices and land use emissions / sinks. \n
 <br>
 <br>
-Carbon budgets from Forster et al. 2023 (https://doi.org/10.5194/essd-15-2295-2023) \n
+Carbon budgets from IGCC: Forster et al. 2023 (https://doi.org/10.5194/essd-15-2295-2023) \n
 <br>
 Their methodological basis from IPCC, 2021: Climate Change 2021: The Physical Science Basis. Contribution of Working Group I to the Sixth Assessment Report of the Intergovernmental Panel on Climate Change[Masson-Delmotte, V., P. Zhai, A. Pirani, S.L. Connors, C. Péan, S. Berger, N. Caud, Y. Chen, L. Goldfarb, M.I. Gomis, M. Huang, K. Leitzell, E. Lonnoy, J.B.R. Matthews, T.K. Maycock, T. Waterfield, O. Yelekçi, R. Yu, and B. Zhou (eds.)]. Cambridge University Press, Cambridge, United Kingdom and New York, NY, USA, In press, doi:10.1017/9781009157896.
 \n
@@ -1688,7 +1902,6 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       rv$infobudgettext = c("Carbon budget defines how much net CO2 emissions can still be emitted to stay under certain temperature target with
                      a certain probability. Budgets are defined from 2023 onwards. 
                                           The simulation scenarios are built so that the budgets are depleted exactly at the chosen neutrality year. 
-                     If emissions stay stable after that or continue to decrease, then the temperature targets are not exceeded.
 
                      2020 and 2021 emissions are known and emissions from 2022 until the year before pricing start year are assumed to equal the 2021 emissions.
 This leaves a remaining budget to be used from the pricing start year until the carbon neutrality year which, together with other simulation choices, 
@@ -1784,175 +1997,329 @@ Annathan palautetta sivun yläreunan feedback-linkistä, mikäli sinulle on ideo
 
 ")
       # rv$labelfossil = "Fossiilipäästöt"
-      rv$infofossiltext = c("Kaikki fossiiliset CO2-päästöt kaikissa maissa. Ei sisällä muita kasvihuonekaasupäästöjä (kuten metaania).
-                        Datalähde päästöille 2021 ja ennen: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
-      rv$infofossiltextt = c("Fossiilipäästöt")
       
-      rv$infolultext = c("Hiilidioksidipäästöt ja -nielut maankäyttösektorilla koko maailmassa. Tulevaisuudessa sisältää
+      rv$coux =HTML(        "
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
+                          <br>
+     Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      jossa:
+<br>
+WOBS = Maailman keskipäästöt hiilineutraaliusvuonna
+      <br>
+CSTART = Maan keskipäästöt alkuvuonna
+      <br>
+WSTART = Maailman keskipäästöt alkuvuonna
+      <br>
+CONV = Käyttäjän valitsema konvergenssikerroin
+      <br>
+      <br>
+Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan kullekin maalle lineaarisen tai prosentuaalisen käyrän mukaan, riippuen käyttäjän valinnasta globaalien päästöjen käyrän muodon suhteen.
+      <br>
+Näin saatuihin tuloksiin sovelletaan sellaista korjauskerrointa, jonka myötä kaikkien maiden yhteenlaskettujen päästöjen summa (maiden väestöillä painotettuna) vastaa globaaleja päästöjä. Kerroin on sama joka maalle mutta vaihtelee vuosittain.
+      <br>
+      <br>
+Maiden keskimääräiset kustannukset lasketaan kertomalla näiden saadut maakohtaiset keskipäästöt kyseisen vuoden hiilen hinnalla. 
+
+      <br>
+Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saaduista kustannuksista hiiliosinko.
+
+     <br>
+
+      ")
+
+
+rv$infofossiltext = c("Kaikki fossiiliset ja teollisuuden CO2-päästöt kaikissa maissa. 
+                        Datalähde päästöille 2021 ja ennen: PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475")
+rv$infofossiltextt = c("Fossiiliset CO2-päästöt")
+
+rv$infolultext = c("Hiilidioksidipäästöt ja -nielut maankäyttösektorilla koko maailmassa. Tulevaisuudessa sisältää
                          myös teknologiset nielut, kuten DACSS ja BECCS. Lähde tiedoille 2021 saakka:   Global Carbon Project 2022 (Friedlingstein et al. 2021)")
-      rv$infolultextt = c("Maankäytön päästöt ja nielut")
-      
-      
-      rv$infonettext = c("Nettohiilidioksidipäästöt, nettona fossilipäästöistä ja maankäyttöpäästöistä ja nieluista. Lähde tiedoille 2021 saakka: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
-      rv$infonettextt = c("Nettohiilidioksidipäästöt") 
-      
-      rv$infoghgtext = c("Laskettu summaamalla yhteen Globan Carbon Projectin hiilidioksidipäästöt ja PRIMAP:in ei-CO2-päästöt")
-      rv$infoghgtextt = c("Kokonaispäästöt")
-      
-      rv$infononco2text = c("Muut kuin hiilidioksidipäästöt, esim metaani. Lähtötiedot PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
-Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016")
-      rv$infononco2textt = c("Ei-CO2-päästöt")
-      
-      rv$infononco2utext = c("Muut kuin hiilidioksidipäästöt, esim metaani. Simuloituja päästöt hiilineutraaliusvuonna vaikea arvioida, tässä rajoitettu 5-10GtCO2-ekvivalentin väliin, jotta vastaa tulkintaa IPCC-arviosta Ei-CO2-päästöistä hiilineutraaliusvuonna IPCC AR6-raportin WGIII:n luku 3:n sivulla 339 (figure 3.20).  
-                             <br> Lähtötiedot historiallisille päästöille PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
-Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016")
-      rv$infononco2utextt = c("Ei-CO2-päästöt")
-      
-      rv$infopoptext = c("Maailman väestö, miljardia. Tilastot ja ennusteet: YK. 
+rv$infolultextt = c("Maankäytön päästöt ja nielut")
+
+
+rv$infonettext = c("Nettohiilidioksidipäästöt, nettona CO2-päästöistä ja maankäyttöpäästöistä ja nieluista.")
+rv$infonettextt = c("Nettohiilidioksidipäästöt") 
+
+rv$infoghgtext = c("Kokonaispäästöt hiilidioksidiekvivalenttina. Summa CO2-päästöistä ja ei-CO2-päästöistä. PRIMAP data. Ei sisällä maan+CCS:n päästöjä")
+rv$infoghgtextt = c("Kokonaispäästöt")
+
+rv$infononco2text = c("Muut kuin hiilidioksidipäästöt, esim metaani. Lähtötiedot PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475")
+rv$infononco2textt = c("Ei-CO2-päästöt")
+
+rv$infononco2utext = c("Muut kuin hiilidioksidipäästöt, esim metaani. Simuloituja päästöt hiilineutraaliusvuonna vaikea arvioida, tässä rajoitettu 5-10GtCO2-ekvivalentin väliin, jotta vastaa tulkintaa IPCC-arviosta Ei-CO2-päästöistä hiilineutraaliusvuonna IPCC AR6-raportin WGIII:n luku 3:n sivulla 339 (figure 3.20).  
+                             <br> Lähtötiedot historiallisille päästöille PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475")
+rv$infononco2utextt = c("Ei-CO2-päästöt")
+
+rv$infopoptext = c("Maailman väestö, miljardia. Tilastot ja ennusteet: YK. 
                          <br>
                         Oletuksena on valittu mediaaniskenaario. On siis 50% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi ja 
                         50% todennäköisyys, että se on skenaarion arvoja pienempi. Valitsemalla esim. 80% ja
                       https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
-      rv$infopoptextt = c("Maailman väestö")
-      
-      # rv$infopoptext = c("World population, billions. Statistics and projections from United Nations. 
-      #                 By default the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance
-      #                 that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10% 
-      #                 chance that the population is smaller than in the chosen projection. And so on.
-      #                 https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
-      # rv$infopoptextt = c("World population")
-      
-      
-      
-      rv$infoavgfossiltext =c("Keskimääräiset fossiilipäästöt kaikkien maailman yksilöiden kesken. Laskettu jakamalla fossiilipäästöt maailman väestöllä. Ei sisällä maankäytön päästöjä tai nieluja")
-      rv$infoavgfossiltextt =c("Keskimääräiset hiilidioksidipäästöt")
-      
-      
-      rv$infopricetext =c("Globaali hiilen hinta, $/t, vuoden 2015 dollareina. Hinta tulee asettaa riittävän korkeaksi, jotta saavutetaan valittu päästövähennyspolku. IPCC AR6 WG III raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille") 
-      rv$infopricetextt =c("Hiilen hinta") 
-      
-      
-      rv$infoavgcosttext = c("Keskimääräiset menot hiilen hinta -maksuista yksilötasolla. Keskipäästöjen ja hiilen hinnan tulo")
-      rv$infoavgcosttextt= c("Keskimääräiset hiilimenot")
-      
-      rv$infodividendtext = c("Kaikille maailman kansalaisille jaettava hiiliosinko. Vastaa keskimääräisiä menoja hiilen hinta -maksuista, sillä maksujen tulot jaetaan kaikille tasan. Keskipäästöjen ja hiilen hinnan tulo.")
-      rv$infodividendtextt = c("Hiiliosinko")   
-      
-      
-      rv$infoavgnetcosttext = c("Keskimääräinen nettomeno. Keskimääräisten hiilimenojen ja hiiliosingon summa. Nolla")
-      rv$infoavgnetcosttextt = c("Keskimääräiset nettomenot")      
-      
-      
-      rv$infouserfossiltext = c("Käyttäjän vaiheessa 4 määrittämä yksilöllinen päästöpolku")
-      rv$infouserfossiltextt = c("Käyttäjän päästöt")
-      
-      rv$infousercosttext = c("Käyttäjän menot hiilen hinta -maksuista. Käyttäjän päästöjen ja hiilen hinnan tulo")
-      rv$infousercosttextt = c("Käyttäjän hiilimenot")
-      
-      
-      
-      rv$infonetcosttext = c("Käyttäjän nettomenot. Käyttäjän hiilimaksujen ja hiiliosingon summa")  
-      rv$infonetcosttextt = c("Käyttäjän nettomenot") 
-      
-      
-      rv$infoaveragedividendtext = c("Keskimääräinen kansallinen hiiliosinko kaikissa maissa, kun valittu osuus kerätyistä hiilen hinta -tuloista on
+rv$infopoptextt = c("Maailman väestö")
+
+rv$infopoputext = c("Maailman väestö, miljardia. Tilastot ja ennusteet: YK. 
+                         <br>
+                        Oletuksena on valittu mediaaniskenaario. On siis 50% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi ja 
+                        50% todennäköisyys, että se on skenaarion arvoja pienempi. Valitsemalla esim. 80% ja
+                      https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
+rv$infopoputextt = c("Maailman väestö")
+
+# rv$infopoptext = c("World population, billions. Statistics and projections from United Nations. 
+#                 By default the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance
+#                 that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10% 
+#                 chance that the population is smaller than in the chosen projection. And so on.
+#                 https://population.un.org/wpp/Graphs/Probabilistic/POP/TOT/900")
+# rv$infopoptextt = c("World population")
+
+
+
+rv$infoavgfossiltext =c("Keskimääräiset fossiilipäästöt kaikkien maailman yksilöiden kesken. Laskettu jakamalla fossiilipäästöt maailman väestöllä. Sisältää ei-CO2-päästöt, jos ne on valittu päälle Globaalit päästöt -osiossa. Ei sisällä maankäytön päästöjä tai nieluja")
+rv$infoavgfossiltextt =c("Keskimääräiset hiilidioksidipäästöt")
+
+
+rv$infopricetext =c("Globaali hiilen hinta, $/t, vuoden 2015 dollareina. Hinta tulee asettaa riittävän korkeaksi, jotta saavutetaan valittu päästövähennyspolku. IPCC AR6 WG III raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille") 
+rv$infopricetextt =c("Hiilen hinta") 
+
+
+rv$infoavgcosttext = c("Keskimääräiset menot hiilen hinta -maksuista yksilötasolla. Keskipäästöjen ja hiilen hinnan tulo")
+rv$infoavgcosttextt= c("Keskimääräiset hiilimenot")
+
+rv$infodividendtext = c("Kaikille maailman kansalaisille jaettava hiiliosinko. Vastaa keskimääräisiä menoja hiilen hinta -maksuista, sillä maksujen tulot jaetaan kaikille tasan. Keskipäästöjen ja hiilen hinnan tulo. Jos maan+CCS:n hinnoittelu mukana, niiden kustannukset vähenentään osingosta. Myös kansallinen osinko pienentää globaalia osinkoa, jos se on valittu päälle")
+rv$infodividendtextt = c("Hiiliosinko")   
+
+
+rv$infoavgnetcosttext = c("Keskimääräinen nettomeno. Keskimääräisten hiilimenojen ja hiiliosingon summa.")
+rv$infoavgnetcosttextt = c("Keskimääräiset nettomenot")      
+
+
+rv$infouserfossiltext = c("Käyttäjän vaiheessa määrittämä yksilöllinen päästöpolku")
+rv$infouserfossiltextt = c("Käyttäjän päästöt")
+
+rv$infousercosttext = c("Käyttäjän menot hiilen hinta -maksuista. Käyttäjän päästöjen ja hiilen hinnan tulo")
+rv$infousercosttextt = c("Käyttäjän hiilimenot")
+
+
+
+rv$infonetcosttext = c("Käyttäjän nettomenot. Käyttäjän hiilimaksujen ja hiiliosingon summa")  
+rv$infonetcosttextt = c("Käyttäjän nettomenot") 
+
+
+rv$infoaveragedividendtext = c("Keskimääräinen kansallinen hiiliosinko kaikissa maissa, kun valittu osuus kerätyistä hiilen hinta -tuloista on
                                      jaettu maassa, jossa kerääminen tapahtuu globaalin jaon sijaan")  
-      rv$infoaveragedividendtextt = c("Keskimääräinen kansallinen hiiliosinko")     
-      
-      
-      rv$infocountrydividendtext = c("Hiiliosinko tietyssä maasa")  
-      rv$infocountrydividendtextt = c("Maan hiiliosinko")  
-      
-      rv$infocountryfossiltext = c("Keskipäästöt valitussa maassa")  
-      rv$infocountryfossiltextt = c("Keskipäästöt valitussa massa")      
-      
-      rv$infocountrypoptext = c("Väestön määrä valitussa maassa")  
-      rv$infocountrypoptextt = c("Väestön määrä valitussa maassa")  
-      
-      rv$infocountrycosttext = c("Keskimääräiset hiilen hinta -maksut valitussa maassa - maan keskipäästöjen ja hiilen hinnan tulo")  
-      rv$infocountrycosttextt = c("Keskimääräiset hiilen hinta -maksut valitussa maassa")  
-      
-      
-      rv$infocountrynetcosttext = c("Keskimääräiset nettomaksut valitussa maassa. Keskimääräisen hiilimaksun ja hiilisosingon summa")  
-      rv$infocountrynetcosttextt = c("Keskimääräiset nettomaksut valitussa maassa")  
-      
-      
-      # rv$text = c("")  
-      # rv$textt = c("")  
-      
-      rv$infopricingtext = c("Ensimmäinen arvo asettaa arvon, jolloin globaali hiilen hinta -systeemi käynnistyy.
+rv$infoaveragedividendtextt = c("Keskimääräinen kansallinen hiiliosinko")     
+
+
+rv$infocountrydividendtext = c("Hiiliosinko tietyssä maassa, kun valittu osuus kerätyistä hiilen hinta -tuloista on
+                                     jaettu maassa, jossa kerääminen tapahtuu globaalin jaon sijaan")  
+rv$infocountrydividendtextt = c("Maan hiiliosinko")  
+
+rv$infocountryfossiltext = c("Keskipäästöt valitussa maassa")  
+rv$infocountryfossiltextt = c("Keskipäästöt valitussa massa")      
+
+rv$infocountrypoptext = c("Väestön määrä valitussa maassa")  
+rv$infocountrypoptextt = c("Väestön määrä valitussa maassa")  
+
+rv$infocountrycosttext = c("Keskimääräiset hiilen hinta -maksut valitussa maassa - maan keskipäästöjen ja hiilen hinnan tulo")  
+rv$infocountrycosttextt = c("Keskimääräiset hiilen hinta -maksut valitussa maassa")  
+
+
+rv$infocountrynetcosttext = c("Keskimääräiset nettomaksut valitussa maassa. Keskimääräisen hiilimaksun ja hiilisosingon summa")  
+rv$infocountrynetcosttextt = c("Keskimääräiset nettomaksut valitussa maassa")  
+
+
+# rv$text = c("")  
+# rv$textt = c("")  
+
+rv$infopricingtext = c("Ensimmäinen arvo asettaa arvon, jolloin globaali hiilen hinta -systeemi käynnistyy.
                              Toinen arvo asettaa vuoden, jolloin globaalit nettohiilidioksidipäästöt saavuttavat nollan ja ilmaston lämpeneminen arvioidusti pysähtyy.
-                             Ennen alkuvuotta oletetaan, että fossiilipäästöt ja maankäytön päästöt ja nielut (ja siten nettopäästöt) pysyvät samana kuin ne olivat viimeisenä havaintovuonna (2021)") 
-      rv$infopricingtextt = c("Hinnoittelun alkuvuosi ja hiilineutraaliusvuosi (loppuvuosi)")  
-      
-      
-      rv$infoemissionsinktext = c("Fossiilipäästöjen ja määnkäytön päästöjen ja nielun tulee olla yhtä suuret, eli nettopäästöjen tulee olla nollassa, loppuvuonna eli hiilineutraalisuvuonna,
-                                  jotta hiilineutraalius saaavutetaan ja lämpeneminen loppuu. Aseta päästöjen ja nielujen määrä samanaikaisesti")  
-      rv$infoemissionsinktextt = c("Päästöt/nielu hiilineutraaliusvuonna")   
-      
-      rv$infostartpricetext = c("Asettaa hiilen hinnan hinnoittelujärjestelmän ensimmäisenä vuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG III -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille")
-      rv$infostartpricetextt = c("Alkuvuoden hiilen hinta")
-      
-      
-      rv$infoendpricetext = c("Asettaa hiilen hinnan hiilineutraaliusvuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG III -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille
+                             Ennen alkuvuotta oletetaan, että CO2-päästöt, ei-CO2-päästöt ja maankäytön päästöt ja nielut (ja siten nettopäästöt ja kokonaispäästöt) pysyvät samana kuin ne olivat viimeisenä havaintovuonna (2021)") 
+rv$infopricingtextt = c("Hinnoittelun alkuvuosi ja hiilineutraaliusvuosi (loppuvuosi)")  
+
+
+rv$infoemissionsinktext = c("Fossiilipäästöjen ja määnkäytön päästöjen ja nielun tulee olla yhtä suuret, eli nettopäästöjen tulee olla nollassa, loppuvuonna eli hiilineutraalisuvuonna,
+                                  jotta hiilineutraalius saaavutetaan ja lämpeneminen loppuu. Aseta päästöjen ja nielujen määrä samanaikaisesti. Alempana 
+                            voit määrittää erillisen nielutason maankäytölle ja CCS:lle. Tällöin on mahdollista, että lämpötilatavoite ylittyy väliaikaisesti")  
+rv$infoemissionsinktextt = c("Päästöt/nielu hiilineutraaliusvuonna")   
+
+rv$infostartpricetext = c("Asettaa hiilen hinnan hinnoittelujärjestelmän ensimmäisenä vuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG III -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille")
+rv$infostartpricetextt = c("Alkuvuoden hiilen hinta")
+
+
+rv$infoendpricetext = c("Asettaa hiilen hinnan hiilineutraaliusvuonna, vuoden 2015 dollareiden arvossa.  IPCC AR6 WG III -raportin luvun 3 kuvaa 3.32 on käytetty löyhänä lähtökohtana eri hiilibudjettien oletushinnoille
                               Mitä aikaisemmin hiilineutraalius saavutetaan tai mitä korkeampi väestön määrä on, sitä korkeammaksi kannattaa asettaa neutraaliusvuoden hiilen hinta.
                               ")
-      rv$infoendpricetextt = c("Neutraaliusvuoden hiilen hinta")      
-      
-      rv$infostartusertext = c("Aseta arvio omista päästöistäsi päästöhinnoittelun alkuvuonna. Päästösi ovat silloin todennäköisesti samansuuntaiset 
+rv$infoendpricetextt = c("Neutraaliusvuoden hiilen hinta")      
+
+rv$infostartusertext = c("Aseta arvio omista päästöistäsi päästöhinnoittelun alkuvuonna. Päästösi ovat silloin todennäköisesti samansuuntaiset 
                                kuin nyt tai hieman pienemmät. Voit käyttää arviointiin esimerkiksi netin hiilijalanjälkilaskureita. 
                                Huomioi, että mikäli olet hiilibudjetti-osiossa jättänyt pois muut kaasut kuin hiilidioksidin, sinun tulee jättää ne pois myös arviossa omista päästöistäsi.
                                Mikäli sinulla on arvio päästöistäsi niin että siinä on hiilidioksidi mukana, voit saada summittaisen arvion hiilidioksidipäästöistäsi kertomalla arviosi luvulla 0,83")
-      rv$infostartusertextt = c("Käyttäjän päästöt vuonna, jolloin hinnoittelujärjestelmä käynnistyy")
-      rv$infoendusertext = c("Aseta arvio omista päästöistä hiilineutraalisvuonna. Tähän vaikuttaa se miten paljon valittu hiilen hinta vaikuttaa päästöihisi.
+rv$infostartusertextt = c("Käyttäjän päästöt vuonna, jolloin hinnoittelujärjestelmä käynnistyy")
+rv$infoendusertext = c("Aseta arvio omista päästöistä hiilineutraalisvuonna. Tähän vaikuttaa se miten paljon valittu hiilen hinta vaikuttaa päästöihisi.
                              Huomioi, että mikäli olet hiilibudjetti-osiossa jättänyt pois muut kaasut kuin hiilidioksidin, sinun tulee jättää ne pois myös arviossa omista päästöistäsi.
                              ")
-      rv$infoendusertextt = c("Käyttäjän päästöt hiilineutraaliusvuonna") 
-      
-      
-      
-      rv$infonationaldivtext = c("Mitä jos osaa hiilen hinnoitteilusta kerätyistä tuotoista ei jaettaisikaan yhteisestä potista kaikille, vaan osuus siitä jaettaisiin
+rv$infoendusertextt = c("Käyttäjän päästöt hiilineutraaliusvuonna") 
+
+
+
+rv$infonationaldivtext = c("Mitä jos osaa hiilen hinnoitteilusta kerätyistä tuotoista ei jaettaisikaan yhteisestä potista kaikille, vaan osuus siitä jaettaisiin
                                  kansallisina hiiliosinkoina, niin että kansallisen osuuden määrä riippuu kansallisesti kerätystä määrästä. Voit valita kuinka iso osa jaettaisiin kansallisesti.
                                  Kansallinen hiiliosinko vähentää järjestelmän globaaleja tulonjakovaikutuksia. Yksilöiden insentiivit vähentää päästöjä pysyvät ennallaan, mutta kansallisten toimijoiden insentiivit vähentää niitä pienenevät")
-      rv$infonationaldivtextt = c("Kansallinen hiiliosinko") 
-      
-      
-      rv$infoconvergencetext = c("Oletetaan, että maiden keskipäästöt yhtenevät ajan yli kohti globaalia keskiarvoa vuosien 2021 historiallisia arvoistaan. 
-                                 Yhtenevyyskerroin kuvaa kuinka paljon maiden päästöt yhtenevät hiilineutraaliusvuoteen mennessä.
-                                 
-                                 Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan lineaarisena tai prosentuaalisena jatkumona, riippuen päästöpolun muodon valinnasta vaiheessa 1. 
-                                 Kansallisiin tuloksiin sovelletaan korjauskerrointa, jotta kansallisten tulosten summa vastaa globaaleja päästöjä")
-      rv$infoconvergencetextt = c("Maiden päästöjen yhteneminen")
-      
-      
-      
-      rv$infoconvergence1text = c("Oletetaan, että maiden keskipäästöt yhtenevät ajan yli kohti globaalia keskiarvoa vuosien 2021 historiallisia arvoistaan. 
-                                 Yhtenevyyskerroin kuvaa kuinka paljon maiden päästöt yhtenevät hiilineutraaliusvuoteen mennessä.
-                                 
-                                 Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan lineaarisena tai prosentuaalisena jatkumona, riippuen päästöpolun muodon valinnasta vaiheessa 1. 
-                                 Kansallisiin tuloksiin sovelletaan korjauskerrointa, jotta kansallisten tulosten summa vastaa globaaleja päästöjä")
-      rv$infoconvergence1textt = c("Maiden päästöjen yhteneminen")
-      
-      rv$infoconvergence2text = c("Oletetaan, että maiden keskipäästöt yhtenevät ajan yli kohti globaalia keskiarvoa vuosien 2021 historiallisia arvoistaan. 
-                                 Yhtenevyyskerroin kuvaa kuinka paljon maiden päästöt yhtenevät hiilineutraaliusvuoteen mennessä.
-                                 
-                                 Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan lineaarisena tai prosentuaalisena jatkumona, riippuen päästöpolun muodon valinnasta vaiheessa 1. 
-                                 Kansallisiin tuloksiin sovelletaan korjauskerrointa, jotta kansallisten tulosten summa vastaa globaaleja päästöjä")
-      rv$infoconvergence2textt = c("Maiden päästöjen yhteneminen")
-      
-      rv$infoconvergence3text = c("Oletetaan, että maiden keskipäästöt yhtenevät ajan yli kohti globaalia keskiarvoa vuosien 2021 historiallisia arvoistaan. 
-                                 Yhtenevyyskerroin kuvaa kuinka paljon maiden päästöt yhtenevät hiilineutraaliusvuoteen mennessä.
-                                 
-                                 Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan lineaarisena tai prosentuaalisena jatkumona, riippuen päästöpolun muodon valinnasta vaiheessa 1. 
-                                 Kansallisiin tuloksiin sovelletaan korjauskerrointa, jotta kansallisten tulosten summa vastaa globaaleja päästöjä")
-      rv$infoconvergence3textt = c("Maiden päästöjen yhteneminen")
-      
-      rv$infodatatext = HTML("CO2-päästöt: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
+rv$infonationaldivtextt = c("Kansallinen hiiliosinko") 
+
+
+rv$infoconvergencetext = c( "
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
+                          <br>
+     Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      jossa:
+<br>
+WOBS = Maailman keskipäästöt hiilineutraaliusvuonna
+      <br>
+CSTART = Maan keskipäästöt alkuvuonna
+      <br>
+WSTART = Maailman keskipäästöt alkuvuonna
+      <br>
+CONV = Käyttäjän valitsema konvergenssikerroin
+      <br>
+      <br>
+Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan kullekin maalle lineaarisen tai prosentuaalisen käyrän mukaan, riippuen käyttäjän valinnasta globaalien päästöjen käyrän muodon suhteen.
+      <br>
+Näin saatuihin tuloksiin sovelletaan sellaista korjauskerrointa, jonka myötä kaikkien maiden yhteenlaskettujen päästöjen summa (maiden väestöillä painotettuna) vastaa globaaleja päästöjä. Kerroin on sama joka maalle mutta vaihtelee vuosittain.
+      <br>
+      <br>
+Maiden keskimääräiset kustannukset lasketaan kertomalla näiden saadut maakohtaiset keskipäästöt kyseisen vuoden hiilen hinnalla. 
+
+      <br>
+Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saaduista kustannuksista hiiliosinko.
+
+     <br>
+
+      ")
+rv$infoconvergencetextt = c("Maiden päästöjen yhteneminen")
+
+
+
+rv$infoconvergence1text = c( "
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
+                          <br>
+     Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      jossa:
+<br>
+WOBS = Maailman keskipäästöt hiilineutraaliusvuonna
+      <br>
+CSTART = Maan keskipäästöt alkuvuonna
+      <br>
+WSTART = Maailman keskipäästöt alkuvuonna
+      <br>
+CONV = Käyttäjän valitsema konvergenssikerroin
+      <br>
+      <br>
+Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan kullekin maalle lineaarisen tai prosentuaalisen käyrän mukaan, riippuen käyttäjän valinnasta globaalien päästöjen käyrän muodon suhteen.
+      <br>
+Näin saatuihin tuloksiin sovelletaan sellaista korjauskerrointa, jonka myötä kaikkien maiden yhteenlaskettujen päästöjen summa (maiden väestöillä painotettuna) vastaa globaaleja päästöjä. Kerroin on sama joka maalle mutta vaihtelee vuosittain.
+      <br>
+      <br>
+Maiden keskimääräiset kustannukset lasketaan kertomalla näiden saadut maakohtaiset keskipäästöt kyseisen vuoden hiilen hinnalla. 
+
+      <br>
+Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saaduista kustannuksista hiiliosinko.
+
+     <br>
+
+      ")
+rv$infoconvergence1textt = c("Maiden päästöjen yhteneminen")
+
+rv$infoconvergence2text = c( "
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
+                          <br>
+     Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      jossa:
+<br>
+WOBS = Maailman keskipäästöt hiilineutraaliusvuonna
+      <br>
+CSTART = Maan keskipäästöt alkuvuonna
+      <br>
+WSTART = Maailman keskipäästöt alkuvuonna
+      <br>
+CONV = Käyttäjän valitsema konvergenssikerroin
+      <br>
+      <br>
+Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan kullekin maalle lineaarisen tai prosentuaalisen käyrän mukaan, riippuen käyttäjän valinnasta globaalien päästöjen käyrän muodon suhteen.
+      <br>
+Näin saatuihin tuloksiin sovelletaan sellaista korjauskerrointa, jonka myötä kaikkien maiden yhteenlaskettujen päästöjen summa (maiden väestöillä painotettuna) vastaa globaaleja päästöjä. Kerroin on sama joka maalle mutta vaihtelee vuosittain.
+      <br>
+      <br>
+Maiden keskimääräiset kustannukset lasketaan kertomalla näiden saadut maakohtaiset keskipäästöt kyseisen vuoden hiilen hinnalla. 
+
+      <br>
+Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saaduista kustannuksista hiiliosinko.
+
+     <br>
+
+      ")
+rv$infoconvergence2textt = c("Maiden päästöjen yhteneminen")
+
+rv$infoconvergence3text = c( "
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
+                          <br>
+     Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
+      <br>
+      COBS = WOBS - (1-CONV)*(WSTART-CSTART)*(WOBS/WSTART),
+      <br>
+
+      jossa:
+<br>
+WOBS = Maailman keskipäästöt hiilineutraaliusvuonna
+      <br>
+CSTART = Maan keskipäästöt alkuvuonna
+      <br>
+WSTART = Maailman keskipäästöt alkuvuonna
+      <br>
+CONV = Käyttäjän valitsema konvergenssikerroin
+      <br>
+      <br>
+Hinnoittelun alkuvuoden ja hiilineutraaliusvuoden väliset päästöt lasketaan kullekin maalle lineaarisen tai prosentuaalisen käyrän mukaan, riippuen käyttäjän valinnasta globaalien päästöjen käyrän muodon suhteen.
+      <br>
+Näin saatuihin tuloksiin sovelletaan sellaista korjauskerrointa, jonka myötä kaikkien maiden yhteenlaskettujen päästöjen summa (maiden väestöillä painotettuna) vastaa globaaleja päästöjä. Kerroin on sama joka maalle mutta vaihtelee vuosittain.
+      <br>
+      <br>
+Maiden keskimääräiset kustannukset lasketaan kertomalla näiden saadut maakohtaiset keskipäästöt kyseisen vuoden hiilen hinnalla. 
+
+      <br>
+Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saaduista kustannuksista hiiliosinko.
+
+     <br>
+
+      ")
+rv$infoconvergence3textt = c("Maiden päästöjen yhteneminen")
+
+rv$infodatatext = HTML("CO2-päästöt: Global Carbon Project 2022 (Friedlingstein et al. 2021): 
                       https://www.icos-cp.eu/science-and-impact/global-carbon-budget/2022 \n
                       <br>
                       <br>
-                       Kokonaispäästödata: PRIMAP: Gütschow, J.; Pflüger, M. (2022): The PRIMAP-hist national historical emissions time series v2.4 (1750-2021). zenodo. doi:10.5281/zenodo.7179775.
-Gütschow, J.; Jeffery, L.; Gieseke, R.; Gebel, R.; Stevens, D.; Krapp, M.; Rocha, M. (2016): The PRIMAP-hist national historical emissions time series, Earth Syst. Sci. Data, 8, 571-603, doi:10.5194/essd-8-571-2016\n
+                       Kokonaispäästödata: PRIMAP: Gütschow, Johannes ; Pflüger, Mika (2023): The PRIMAP-hist national historical emissions time series (1750-2021) v2.4.2. Zenodo. https://doi.org/10.5281/zenodo.7727475
   <br>
 Ei-CO2-päästöt on laskettu vähentämällä kokonaispäästöistä CO2-päästöt. 
 <br><br>
@@ -1973,16 +2340,16 @@ BKT-data vuodelle 2021 Maaimanpankilta, vuoden 2015 dollareissa:
 https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
 
 ")
-      
-      rv$infodatatextt = c("Data-lähteet")      
-      
-      
-      
-      info3text = c("Start start year carbon price defines")
-      
-      rv$infobudgettext = c("Hiilibudjetti määrittää, että kuinka paljno nettohiilidioksidipäästöjä voidaan vielä enintään tuottaa, jotta pysytään tietyn lämpötilatavoitteen alla tietyllä 
+
+rv$infodatatextt = c("Data-lähteet")      
+
+
+
+info3text = c("Start start year carbon price defines")
+
+rv$infobudgettext = c("Hiilibudjetti määrittää, että kuinka paljno nettohiilidioksidipäästöjä voidaan vielä enintään tuottaa, jotta pysytään tietyn lämpötilatavoitteen alla tietyllä 
                             todennäköisyydellä. Budjetit on määritetty vuodeesta 2023 eteenpäin. Simulaatiot on rakennettu niin, että budjetit loppuvat valittuna hiilineutraaliusvuonna.
-                            Jos päästöt pysyvät tasaisina sen jälkeen tai pienentyvät, niin lämpötilatavoitteet eivät ylity.
+           
                             Vuosien 2021 ja 2021 päästöt ovat jo tiedossa tilastoista, ja päästöt vuodesta 2022 eteenpäin päästöhinnnoittelun alkuvuoteen
                             saakka oletetaan yhtä suuriksi kuin vuoden 2021 päästöt. 
                             Jäljelle jäävä hiilibudjetti kulutetaan hinnoittelun alkuvuoden ja hiilineutraaliusvuoden välillä, ja yhdessä muiden simulaatiovalintojen kanssa
@@ -1990,8 +2357,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                             Budjettien todennäköisyysarviot koskevat vain ns. Transient climate responsea (TCRE), eli ottavat huomioon epävarmuuden joka liityy lisäpäästöjen tuomaan lisälämpenemiseen,
                             ja oletuksena on, että todennäköisyysjakauma on normaalisti jakautunut. Muut tekijät, kuten muiden päästöjen kuin hiilidioksidin tuoma lämmitysvaikutus, tarkka toistaiseksi saavutettu lämmitysvaikutus ja takaisinkytkentävaikutukset tuovat 
                             lisäepävarmuutta estimaatteihin. Näiden epävarmuuksien suuruutta on ilmaistu IPCC:n AR6 WG1 -raportin luvun 5 taulukossa 5.8 (s. 753)")
-      
-      rv$infobudgettextt = c("Hiilibudjetit")
+
+rv$infobudgettextt = c("Hiilibudjetit")
       
       
       # lug = luu2()
@@ -2019,7 +2386,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                
                                tabPanel("1. Global emissions",
                                         fluidRow(
-                                        column(7, 
+                                        column(8, 
                                                 id = "luu",  
                                         
                                         
@@ -2069,8 +2436,41 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                           numericInput("paa", 
                                                                        inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink"), 
                                                                        min = 0.1, max = 30,step=.1,value=c(6))),
+                                        
+                                        tags$div(id="sla",
+                                                 checkboxInput("sinkset", 
+                                                               label=("Advanced: Set neutrality year sink different from emissions"), 
+                                                               
+                                                               # inf("Set sink level different from ", "infoemissionsink"), 
+                                                               value=FALSE
+                                                 )),     
                                         # hr(),
+                            
+                                        
+                                        
+                                        conditionalPanel(condition="input.sinkset == 1",
+                                                         
+                                                         tags$div(
+                                                           id="sla",
+                                                           numericInput("sinksize", 
+                                                                        inf("Land+CCS CO2 net sink", "infoemissionsink"), 
+                                                                        min = 0, max = 30,step=.1,value=c(6))), 
+                                                         
+                                                         # selectInput(
+                                                         #   "sinkshape",
+                                                         #   inf("Shake of custom sink", "infobudget"), 
+                                                         #   c(
+                                                         #     "3-step linear" = "3step",
+                                                         #     "Custom expontential" = "exponential"
+                                                         #     
+                                                         #   ),selected="3step"
+                                                         # 
+                                                         # )                           
+                                                         
+                                        )
                                           ),
+                                        
+                                        
                                         column(6,
                                         radioButtons("muo", "Shape of the fossil emission curve",
                                                      choiceNames=   list(
@@ -2089,7 +2489,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                          
                                                          sliderInput("exponent",
                                                                      ("Exponent factor (lower = greater emphasis on CO2 reductions than land+CCS)"), 
-                                                                     min = .1, max = 2, value = .7, step=.1, ticks=FALSE)
+                                                                     min = .01, max = 2, value = .7, step=.01, ticks=FALSE)
                                                          )
                                         
                                         
@@ -2097,14 +2497,13 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                         )),
                                      
                                                     
-                                                    column(5,  #luu { 
+                                                    column(4,  #luu { 
                                                          style=c("margin-right: .5vw;"),
 
                                                            tags$div(id="sla",
                                                                     checkboxInput("nonco2", 
                                                                                   label = "Include other greenhouse gases than just CO2 (recommended)",
                                                                                   value=TRUE
-                                                                                  
                                                                     )
                                                                     
                                                            ), 
@@ -2162,7 +2561,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                  condition="input.advance == 1",
                                                                  p("Note: Emissions from last observed year (2021) take a linear trajectory to emissions for year before start year."),
                                                                  
-                                                                 tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                                                 tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(36.4))),
                                                                 
                                                                  
                                                                  conditionalPanel(
@@ -2225,11 +2624,74 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                          
                                ),
                                
-                               tabPanel("3. Carbon price",
+                        tabPanel("3. User emissions", 
+                                 # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
+                                 
+                                 p("Estimate your emission progression, GIVEN the chosen carbon price"),   
+                                 fluidRow(
+                                   
+                                   column(4, id = "luu",
+                                          tags$div(id="sla",numericInput("indi1", inf("Current user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
+                                          hr(),
+                                          tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
+                                          
+                                   ), 
+                                   column(4, id = "luu",
+                                          
+                                          radioButtons("muoindi", "Shape of user emission curve",
+                                                       choiceNames=   list(
+                                                         "Linear" ,
+                                                         "Percentual", 
+                                                         "Exponential"
+                                                         
+                                                         
+                                                       ), 
+                                                       choiceValues= list("linear", "percentual", "exponential"),
+                                                       selected = "percentual"
+                                                       
+                                          )
+                                          ,
+                                          conditionalPanel(condition="input.muoindi == 'exponential'",
+                                                           
+                                                           sliderInput("exponentindi",
+                                                                       ("Exponent factor (lower = greater emissions reductions)"), 
+                                                                       min = .1, max = 2, value = .6, step=.1, ticks=FALSE)
+                                          )
+                                          
+                                   ), 
+                                   column(4,
+                                          selectInput("indi",
+                                                      inf("ALTERNATIVE: Use country average emission path as your emission path (this will slower the page considerably) ", "infoconvergence"), 
+                                                      
+                                                      choices =c("none", paaco$country), selected="none", selectize=TRUE),
+                                          
+                                          tags$div(id ="countrr",
+                                                   
+                                                   pickerInput(
+                                                     inputId = "countr",
+                                                     label = "Show indicators for specific country/countries (This will slower the page considerably)",
+                                                     choices = c(paaco$country),
+                                                     selected= NULL,
+                                                     options = pickerOptions(
+                                                       `actions-box` = TRUE,container = "body"),
+                                                     multiple = TRUE
+                                                     
+                                                   )),
+                                          conditionalPanel(
+                                            
+                                            condition="input.indi != 'none' || output.lek == 1",
+                                            sliderInput("con",
+                                                        
+                                                        inf("Convergence of countries' emissions", "infoconvergence1"), 
+                                                        min = .01, max = 1, value = .5, step=.01)
+                                          )  ) )
+                        )   ,
+                        
+                               tabPanel("4. Carbon price",
                                         p("Carbon price should be set high enough to achieve the chosen emission targets"),
                                         
                                         fluidRow(
-                                          column(6, id = "luu",
+                                          column(4, id = "luu",
                                                  tags$div(id="sla", class="slug",  numericInput("sprice",
                                                                                                 p(class="slug", style="font-weight: 500 !important;", inf("Start year carbon price, $", 
                                                                                                                                                           "infostartprice")),
@@ -2254,7 +2716,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                  
                                           ),
                                           
-                                          column(6, 
+                                          column(4,  id = "luu",
                                                  radioButtons("pri", "Shape of the price curve",
                                                               choiceNames=list(
                                                                 "Linear",
@@ -2265,75 +2727,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                               choiceValues= list("linear", "percentual", "logarithmic")
                                                               
                                                  )
-                                          )
-                                        )
-                                        
-                               ),
-                               
-                        
-          
-                        # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
-                        # Määritä hiilibudjettia vastaavien CO2-päästöjen polku
-                        # 
-                        # Estimate your emission progression, GIVEN the chosen carbon price
-                        # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
-                               
-                               tabPanel("4. User emissions", 
-                                        # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
-                                        
-                                     p("Estimate your emission progression, GIVEN the chosen carbon price"),   
-                                        fluidRow(
-                                          
-                                          column(4, id = "luu",
-                                                 tags$div(id="sla",numericInput("indi1", inf("Start year user emissions, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
-                                                 hr(),
-                                                 tags$div(id="sla",numericInput("indi2", label=inf("Neutrality year user emissions, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
-                                                 
-                                          ), 
-                                          column(4, id = "luu",
-                                                 
-                                                 radioButtons("muoindi", "Shape of user emission curve",
-                                                              choiceNames=   list(
-                                                                "Linear" ,
-                                                                "Percentual", 
-                                                                "Exponential"
-                                                              
-                                                                
-                                                              ), 
-                                                              choiceValues= list("linear", "percentual", "exponential"),
-                                                              selected = "percentual"
-                                                              
-                                                 )
-                                                 ,
-                                                 conditionalPanel(condition="input.muoindi == 'exponential'",
-                                                                  
-                                                                  sliderInput("exponentindi",
-                                                                              ("Exponent factor (lower = greater emissions reductions)"), 
-                                                                              min = .1, max = 2, value = .6, step=.1, ticks=FALSE)
-                                                 )
-                                                 
-                                          ), 
+                                          ),
                                           column(4,
-                                                 selectInput("indi",
-                                                             inf("ALTERNATIVE: Use country average emission path as your emission path (this will slower the page considerably) ", "infoconvergence"), 
-                                                             
-                                                             choices =c("none", paaco$country), selected="none", selectize=TRUE),
-                                                 conditionalPanel(
-                                                   
-                                                   condition="input.indi != 'none'",
-                                                   sliderInput("con",
-                                                               
-                                                               inf("Convergence of countries emissions", "infoconvergence1"), 
-                                                               min = .01, max = 1, value = .5, step=.01)
-                                                 )  ) )
-                               )   
-                               ,
-                        
-           
-                        
-                               tabPanel("EXTRA: Countries",
-                                        fluidRow(
-                                          column(4, id = "luu",
                                                  sliderInput(
                                                    inputId = "national",
                                                    inf("Allocate a percentage of collected carbon revenue nationally", "infonationaldiv")
@@ -2347,40 +2742,85 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                    
                                                    selectInput("nationalcoun", label = "User country of residence for national dividend (This will slower the page considerably)", choices =c("none", paaco$country), selected="none"),
                                                    
-                                                 )),
-                                          
-                                          
-                                          
-                                          
-                                          column(4,
-                                                 tags$div(id ="countrr",
-                                                          
-                                                          pickerInput(
-                                                            inputId = "countr",
-                                                            label = "Show indicators for specific country/countries (This will slower the page considerably)",
-                                                            choices = c(paaco$country),
-                                                            selected= NULL,
-                                                            options = pickerOptions(
-                                                              `actions-box` = TRUE,container = "body"),
-                                                            multiple = TRUE
-                                                            
-                                                          ))
-                                                 
-                                          ),
-                                          column(4, 
+                                                 ),
                                                  conditionalPanel(
                                                    condition='output.lek == 1',
                                                    # condition="rv$lek == 1",
                                                    hr(),
                                                    
                                                    sliderInput("conb",
-                                                               inf("Convergence of countries emissions", "infoconvergence2"), 
+                                                               inf("Convergence of countries' emissions", "infoconvergence2"), 
                                                                min = .01, max = 1, value = .5, step=.01)
                                                    
                                                  ) 
-                                          )
+                                                 )
                                         )
-                               )
+                                        
+                               ),
+                               
+                        
+          
+                        # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
+                        # Määritä hiilibudjettia vastaavien CO2-päästöjen polku
+                        # 
+                        # Estimate your emission progression, GIVEN the chosen carbon price
+                        # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
+                               
+         
+                               # ,
+                               # 
+                               # 
+                               # 
+                               # tabPanel("EXTRA: Countries",
+                               #          fluidRow(
+                               #            column(4, id = "luu",
+                               #                   sliderInput(
+                               #                     inputId = "national",
+                               #                     inf("Allocate a percentage of collected carbon revenue nationally", "infonationaldiv")
+                               #                     
+                               #                     , min = 0, max = 100, value = 0, step=1, ticks=FALSE
+                               #                   ), 
+                               #                   conditionalPanel(
+                               #                     condition="input.national != 0",
+                               #                     hr(),
+                               #                     
+                               #                     
+                               #                     selectInput("nationalcoun", label = "User country of residence for national dividend (This will slower the page considerably)", choices =c("none", paaco$country), selected="none"),
+                               #                     
+                               #                   )),
+                               #            
+                               #            
+                               #            
+                               #            
+                               #            column(4,
+                               #                   tags$div(id ="countrr",
+                               #                            
+                               #                            pickerInput(
+                               #                              inputId = "countr",
+                               #                              label = "Show indicators for specific country/countries (This will slower the page considerably)",
+                               #                              choices = c(paaco$country),
+                               #                              selected= NULL,
+                               #                              options = pickerOptions(
+                               #                                `actions-box` = TRUE,container = "body"),
+                               #                              multiple = TRUE
+                               #                              
+                               #                            ))
+                               #                   
+                               #            ),
+                               #            column(4, 
+                               #                   conditionalPanel(
+                               #                     condition='output.lek == 1',
+                               #                     # condition="rv$lek == 1",
+                               #                     hr(),
+                               #                     
+                               #                     sliderInput("conb",
+                               #                                 inf("Convergence of countries emissions", "infoconvergence2"), 
+                               #                                 min = .01, max = 1, value = .5, step=.01)
+                               #                     
+                               #                   ) 
+                               #            )
+                               #          )
+                               # )
                                
                                
                                
@@ -2447,7 +2887,45 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                     
                                                     tags$div(id="sla",numericInput("paa", 
                                                                                    inf("CO2-päästöt/nielu loppuvuonna", "infoemissionsink"), 
-                                                                                   min = 0.1, max = 30,step=.1,value=c(6))),                                                                                                      
+                                                                                   min = 0.1, max = 30,step=.1,value=c(6))),   
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    tags$div(id="sla",
+                                                             checkboxInput("sinkset", 
+                                                                           label=("EXTRA: Aseta CO2-nettonielulle eri arvo kuin CO2-päästöille"), 
+                                                                           
+                                                                           # inf("Set sink level different from ", "infoemissionsink"), 
+                                                                           value=FALSE
+                                                             )),     
+                                                    # hr(),
+                                                    
+                                                    
+                                                    
+                                                    conditionalPanel(condition="input.sinkset == 1",
+                                                                     
+                                                                     tags$div(
+                                                                       id="sla",
+                                                                       numericInput("sinksize", 
+                                                                                    inf("Maa+CCS CO2-neetonielu", "infoemissionsink"), 
+                                                                                    min = 0, max = 30,step=.1,value=c(6))), 
+                                                                     
+                                                                     # selectInput(
+                                                                     #   "sinkshape",
+                                                                     #   inf("Shake of custom sink", "infobudget"), 
+                                                                     #   c(
+                                                                     #     "3-step linear" = "3step",
+                                                                     #     "Custom expontential" = "exponential"
+                                                                     #     
+                                                                     #   ),selected="3step"
+                                                                     # 
+                                                                     # )                           
+                                                                     
+                                                    )
+                                                    
+                                                    
                                              ),
                                              column(6, 
                                                     
@@ -2599,46 +3077,10 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                           
                         ),
                         
-                        tabPanel("3. Hiilen hinta",
-                                 
-                                 p("Hiilen hinta tulisi asettaa tarpeeksi korkeaksi, että sen avulla saavutetaan valitut päästötavoitteet"),
-                                 
-                                 
-                                 fluidRow(
-                                   column(6, id = "luu",
-                                          tags$div(id="sla", numericInput("sprice",
-                                                                          inf("Alkuvuoden hiilen hinta, $", "infostartprice"), 
-                                                                          
-                                                                          min = 1, max = 1000000,step=1,value=c(50))),
-                                          hr(),
-                                          
-                                          tags$div(id="sla",numericInput("eprice", 
-                                                                         inf("Loppuvuoden hiilen hinta, $", "infoendprice"), 
-                                                                         
-                                                                         
-                                                                         min = 1, max = 1000000,step=1,value=c(500))),
-                                          
-                                          
-                                   ),
-                                   
-                                   column(6, 
-                                          radioButtons("pri", "Hintakäyrän muoto",
-                                                       choiceNames=list(
-                                                         "Lineaarinen",
-                                                         "Prosentuaalinen"
-                                                         ,
-                                                         "Logaritminen"
-                                                       ), 
-                                                       choiceValues= list("linear", "percentual", "logarithmic")
-                                                       
-                                          )
-                                   )
-                                 )
-                                 
-                        ),
+
                         
                         
-                        tabPanel("4. Käyttäjän päästöt",
+                        tabPanel("3. Käyttäjän päästöt",
                                  
                                  # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
                                  
@@ -2649,7 +3091,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                             
                                    
                                    column(4, id = "luu",
-                                          tags$div(id="sla",numericInput("indi1", label=inf("Alkuvuoden päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
+                                          tags$div(id="sla",numericInput("indi1", label=inf("Nykyiset päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
                                           hr(),
                                           
                                           tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
@@ -2685,48 +3127,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                       inf("VAIHTOEHTO: Käytä tietyn maan keskipäästöjä (tämä hidastaa sivua huomattavasti) ", "infoconvergence"), 
                                                       
                                                       choices =c("none", paaco$country), selected="none"),
-                                          conditionalPanel(
-                                            
-                                            condition="input.indi != 'none'",
-                                            sliderInput("con",
-                                                        
-                                                        inf("Maiden päästöjen yhdentymsien aste", "infoconvergence1"), 
-                                                        min = .01, max = 1, value = .5, step=.01)
-                                          )  ) )
-                        )   
-                        ,
-                        
-                        
-                        
-                        tabPanel("EXTRA: Maat",
-                                 fluidRow(
-                                   column(6, id = "luu",
-                                          sliderInput(
-                                            inputId = "national",
-                                            inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv")
-                                            
-                                            , min = 0, max = 100, value = 0, step=1, ticks = FALSE
-                                          ), 
-                                          conditionalPanel(
-                                            condition="input.national != 0",
-                                            hr(),
-                                            
-                                            
-                                            selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
-                                            
-                                          ),
-                                          conditionalPanel(
-                                            condition='output.lek',
-                                            # condition="rv$lek == 'true'",
-                                            
-                                            hr(),
-                                            
-                                            sliderInput("conb",
-                                                        inf("Maiden päästöjen yhdentymisen aste", "infoconvergence2"), 
-                                                        min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
-                                            
-                                          )),
-                                   column(6,
+                                          
+                                          
                                           tags$div(id ="countrr",
                                                    
                                                    pickerInput(
@@ -2738,14 +3140,127 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                        `actions-box` = TRUE,container = "body"),
                                                      multiple = TRUE
                                                      
-                                                   ))
-                                          
-                                   )
-                                 )
-                        )
+                                                   )),
+                                          conditionalPanel(
+                                            
+                                            condition="input.indi != 'none'",
+                                            sliderInput("con",
+                                                        
+                                                        inf("Maiden päästöjen yhdentymsien aste", "infoconvergence1"), 
+                                                        min = .01, max = 1, value = .5, step=.01)
+                                          )  ) )
+                        )   
+                        ,
+    tabPanel("4. Hiilen hinta",
+             
+             p("Hiilen hinta tulisi asettaa tarpeeksi korkeaksi, että sen avulla saavutetaan valitut päästötavoitteet"),
+             
+             
+             fluidRow(
+               column(4, id = "luu",
+                      tags$div(id="sla", numericInput("sprice",
+                                                      inf("Alkuvuoden hiilen hinta, $", "infostartprice"), 
+                                                      
+                                                      min = 1, max = 1000000,step=1,value=c(50))),
+                      hr(),
+                      
+                      tags$div(id="sla",numericInput("eprice", 
+                                                     inf("Loppuvuoden hiilen hinta, $", "infoendprice"), 
+                                                     
+                                                     
+                                                     min = 1, max = 1000000,step=1,value=c(500))),
+                      
+                      
+               ),
+               
+               column(4, 
+                      radioButtons("pri", "Hintakäyrän muoto",
+                                   choiceNames=list(
+                                     "Lineaarinen",
+                                     "Prosentuaalinen"
+                                     ,
+                                     "Logaritminen"
+                                   ), 
+                                   choiceValues= list("linear", "percentual", "logarithmic")
+                                   
+                      )
+               ), 
+               column(4,
+               
+               sliderInput(
+                 inputId = "national",
+                 inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv")
+                 
+                 , min = 0, max = 100, value = 0, step=1, ticks = FALSE
+               ), 
+               conditionalPanel(
+                 condition="input.national != 0",
+                 hr(),
+                 
+                 
+                 selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
+                 
+               ),
+               conditionalPanel(
+                 condition='output.lek',
+                 # condition="rv$lek == 'true'",
+                 
+                 hr(),
+                 
+                 sliderInput("conb",
+                             inf("Maiden päästöjen yhdentymisen aste", "infoconvergence2"), 
+                             min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
+                 
+               )
+               )
+               
+               
+               ),
+               
+               
+             )
+             
+    )
                         
                         
-            )    )}
+            #             tabPanel("EXTRA: Maat",
+            #                      fluidRow(
+            #                        column(6, id = "luu",
+            #                               sliderInput(
+            #                                 inputId = "national",
+            #                                 inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv")
+            # 
+            #                                 , min = 0, max = 100, value = 0, step=1, ticks = FALSE
+            #                               ),
+            #                               conditionalPanel(
+            #                                 condition="input.national != 0",
+            #                                 hr(),
+            # 
+            # 
+            #                                 selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
+            # 
+            #                               ),
+            #                               conditionalPanel(
+            #                                 condition='output.lek',
+            #                                 # condition="rv$lek == 'true'",
+            # 
+            #                                 hr(),
+            # 
+            #                                 sliderInput("conb",
+            #                                             inf("Maiden päästöjen yhdentymisen aste", "infoconvergence2"),
+            #                                             min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
+            # 
+            #                               )),
+            #                        column(6,
+            # 
+            # 
+            #                        )
+            #                      )
+            #             )
+            #             
+            #             
+        # )
+        )}
       )
       
     }
@@ -3169,7 +3684,7 @@ rv$triggo=0
   
   
   # okk= observeEvent(input$nok, {
-  #   if (input$nok =="4. User emissions"){
+  #   if (input$nok =="3. User emissions"){
   #     showNotification("If the graph feels too crowded, hide some indicators from the RESULT VISIBILIY section at the left of the graph", duration =12)
   #     # rv$alert5 =TRUE
   #     
@@ -4037,11 +4552,11 @@ rv$triggo=0
       
       
       observeEvent(input$next2, {
-        updateTabsetPanel(session, inputId = "nok", selected = "3. Carbon price")
+        updateTabsetPanel(session, inputId = "nok", selected = "4. Carbon price")
       })
       
       observeEvent(input$next3, {
-        updateTabsetPanel(session, inputId = "nok", selected = "4. User emissions")
+        updateTabsetPanel(session, inputId = "nok", selected = "3. User emissions")
       })
       
       observeEvent(input$next4, {
@@ -4064,11 +4579,11 @@ rv$triggo=0
       
       
       observeEvent(input$prev3, {
-        updateTabsetPanel(session, inputId = "nok", selected = "3. Carbon price")
+        updateTabsetPanel(session, inputId = "nok", selected = "4. Carbon price")
       })
       
       observeEvent(input$prev4, {
-        updateTabsetPanel(session, inputId = "nok", selected = "4. User emissions")
+        updateTabsetPanel(session, inputId = "nok", selected = "3. User emissions")
       })
     } else if (rv$lang=="fin") {
       
@@ -4098,11 +4613,11 @@ rv$triggo=0
       
       
       observeEvent(input$next2, {
-        updateTabsetPanel(session, inputId = "nok", selected = "3. Hiilen hinta")
+        updateTabsetPanel(session, inputId = "nok", selected = "4. Hiilen hinta")
       })
       
       observeEvent(input$next3, {
-        updateTabsetPanel(session, inputId = "nok", selected = "4. Käyttäjän päästöt")
+        updateTabsetPanel(session, inputId = "nok", selected = "3. Käyttäjän päästöt")
       })
       
       observeEvent(input$next4, {
@@ -4125,11 +4640,11 @@ rv$triggo=0
       
       
       observeEvent(input$prev3, {
-        updateTabsetPanel(session, inputId = "nok", selected = "3. Hiilen hinta")
+        updateTabsetPanel(session, inputId = "nok", selected = "4. Hiilen hinta")
       })
       
       observeEvent(input$prev4, {
-        updateTabsetPanel(session, inputId = "nok", selected = "4. Käyttäjän päästöt")
+        updateTabsetPanel(session, inputId = "nok", selected = "3. Käyttäjän päästöt")
       })
       
     } 
@@ -4462,6 +4977,7 @@ rv$triggo=0
             inputId = i,
             value = TRUE)
           
+          rv$triss = rv$triss+1
         }
       } )
       
@@ -4478,6 +4994,7 @@ rv$triggo=0
             session=session,
             inputId = i,
             value = FALSE)
+          rv$triss = rv$triss+1
           
         }
       } )
@@ -4514,7 +5031,7 @@ rv$triggo=0
       
     }
     
-    else if (input$nok %in% c("3. Carbon price", "3. Hiilen hinta")) {
+    else if (input$nok %in% c("4. Carbon price", "4. Hiilen hinta")) {
       rv$showprice =TRUE
       rv$showdividend=TRUE
       rv$showavgcost=TRUE
@@ -4524,7 +5041,7 @@ rv$triggo=0
       
     }
     
-    else if (input$nok %in% c("4. User emissions", "Käyttäjän päästöt")) {
+    else if (input$nok %in% c("3. User emissions", "Käyttäjän päästöt")) {
       rv$showusercost =TRUE
       rv$showuserfossil=TRUE
       rv$shownetcost =TRUE
@@ -4749,6 +5266,12 @@ rv$triggo=0
       inputId ="paa",
       value = skenbbs()[sken==input$bud & nams=="paa", vals]
     )
+    updateNumericInput(
+      session = session,
+      inputId ="sinksize",
+      value = skenbbs()[sken==input$bud & nams=="paa", vals]
+    )
+    
     
     updateNumericInput(
       session = session,
@@ -4945,6 +5468,7 @@ rv$triggo=0
     start = input$fstart
     # sunk = inp
     
+  
     if (input$luls ==FALSE) {
     lstart = input$lstart } else if (input$luls ==TRUE) {
       lstart = input$sourcestart + input$sinkstart
@@ -4953,7 +5477,18 @@ rv$triggo=0
     
     
     end<- as.numeric(input$paa)
+    
+if (input$sinkset==FALSE) {
+    
     lend = (-1)*end
+} else if (input$sinkset==TRUE) {
+  lend = (-1)*input$sinksize
+  
+  
+}
+    
+    # rv$lend = lend
+    
     budget<- as.numeric(input$bud)-sumnet
     
     
@@ -5015,8 +5550,11 @@ rv$triggo=0
         
       }}
    
+  # result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=100)$root
+ # result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=40)$root
+   result <- uniroot(f3,start=start,time=time, end=end, lower=.01, upper=99.99)$root
+      # uniroot(f, lower=0, upper=1, extendInt = "yes")$root
       
-      result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=100)$root
       u = result[1]
       
       
@@ -5038,6 +5576,7 @@ rv$triggo=0
       
       if (input$muo == "exponential")  {
         g = function(start, rate, time) {
+          # req(rate, cancelOutput = TRUE )
           # c(start*exp((1-rate/100)*(time+1)))
           c(start*(1-rate/100)^(time+1)^input$exponent)
           
@@ -5050,7 +5589,8 @@ rv$triggo=0
       
       
       
-      
+
+      # uniroot(f, lower=0, upper=1, extendInt = "yes")$root   
       #applying yearly emission function to calculate emissions
       
       
@@ -5096,9 +5636,6 @@ rv$triggo=0
       
       
       
-      
-      
-      
       #nonc02 emisisons
       
       start = input$nonco2start
@@ -5131,7 +5668,7 @@ rv$triggo=0
       
       
       # emission rate solving with given values
-      result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=10)$root
+      result <- uniroot(f3,start=start,time=time, end=end, lower=0.01, upper=99.99)$root
       u = result[1]
       
       rate = u
@@ -5171,15 +5708,16 @@ rv$triggo=0
       rv$trigu = rv$trigu+1
     # }
     
-    
+
     
     
     # ## calculating landuse emissions
     # how much needed to absorb  by land based on cumulative emissions over time
-    lbudget= budget - total
+    # add amount corresponding to year before (that will be later removed) for calculation purposes
+    lbudget= budget - total+input$lstart
     rv$rvlbudget = lbudget
     rv$totals = total
-    n=time
+    n=time+1
     #normalize
     
     #time halved
@@ -5265,6 +5803,50 @@ rv$triggo=0
     
     # vector of all landive emissions
     land = c( sa,sc,sb)
+  land = land[-1]
+    
+    
+    rv$land = land
+   #      if (input$sinkshape == "exponential") {
+   #  
+   #        height= input$lstart - input$sinksize
+   #        
+   #        start = input$lstart
+   #        end = input$sinksize
+   #        
+   #        
+   #        f3 <- function(rate,start,time, end) {
+   # 
+   #          #end - start * (1-rate/100)^(time+1)^input$landexponent
+   #          start * (1-rate/100)^(time+1)^input$landexponent
+   #          
+   #          
+   #        }
+   #      # 
+   #  
+   #  
+   #  # emission rate solving with given values
+   #  result <- uniroot(f3,start=start,time=time, end=end, lower=0.01, upper=99.99)$root
+   #  u = result[1]
+   #  
+   #  rate = u
+   # 
+   #        g <- function(start,rate,time) {
+   #      # end - (start - rate*log(time+1))
+   #      # c(start * exp(((1-rate/100)*(time+1))))
+   #      c(start*(1-rate/100)^(time+1)^input$landexponent)
+   #      
+   #      # c(start*(1-rate/100)^(time+1)^input$exponent)
+   #      
+   #    }}
+   #  
+   #  #applying yearly emission function to calculate emissions
+   #  nonco2 = g(start, rate, 0:time
+   #        
+   #        
+   #  
+   # land =  
+   #  }
     
     
 
@@ -5339,7 +5921,7 @@ rv$triggo=0
       } }
     
     # emission rate solving with given values
-    result <- uniroot(f3,start=start,time=time, end=end, lower=-0, upper=100)$root
+    result <- uniroot(f3,start=start,time=time, end=end, lower=.01, upper=99.99)$root
     u = result[1]
     rateindi = u
     #    rate
@@ -5912,7 +6494,7 @@ rv$triggo=0
     }
     if (input$nationalcoun %in% c(ll2)) {
       lax = 1
-      rv$lek =TRUE
+      # rv$lek =TRUE
       
     }
     
@@ -5957,90 +6539,86 @@ rv$triggo=0
       
       ## bunkers
       
-      cstart = paci[year ==lastyear & country =="Finland", bunkers/1000000000]
-      
-      start = input$fstart
-      ratio = cstart/start
-      cend = ratio*(input$paa)
-      
-      time= rv$time
-      
-      if (input$muo == "percentual" & cstart >=cend)  {
-        f3 = f3 <- function(rate,cstart,time, cend) {
-          cend - cstart * (1-rate/100)^(time+1)
-        } }
-      
-      else if (input$muo == "percentual" & cstart <cend)  {
-        f3 = f3 <- function(rate,cstart,time, cend) {
-          cend - cstart * (1+rate/100)^(time+1)
-        }
-        
-      } else if (input$muo=="linear" & cstart >=cend) {
-        f3 <- function(rate,cstart,time, cend) {
-          cend - (cstart - rate*(time+1))
-        }
-      }
-      else if (input$muo=="linear"& cstart <cend) {
-        f3 <- function(rate,cstart,time, cend) {
-          cend - (cstart + rate*(time+1))
-        }  }
-      
-      else if  (input$muo=="logarithmic" & cstart >=cend) {
-        f3 <- function(rate,cstart,time, cend) {
-          cend - (cstart - rate*log(time+1))
-        }}
-      
-      else if  (input$muo=="logarithmic" & cstart <cend) {
-        f3 <- function(rate,cstart,time, cend) {
-          cend - (cstart + rate*log(time+1))
-          
-        }}
-      # emission rate solving with given values
-      result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=-0, upper=100)$root
-      u = result[1]
-      
-      rate = u
-      
-      #  yearly emissions function
-      if (input$muo == "percentual" & cstart >=cend)  {
-        g = function(cstart, rate, time) {
-          cstart*(1-rate/100)^(time+1)
-        }
-      }
-      else if (input$muo == "percentual" & cstart <cend)  {
-        g = function(cstart, rate, time) {
-          cstart*(1+rate/100)^(time+1)
-        }
-      }
-      
-      else if (input$muo=="linear" & cstart >=cend) {
-        g = function(cstart, rate, time) {
-          c(cstart - rate*(time+1))
-        }
-      }
-      else if (input$muo=="linear" & cstart <cend) {
-        g = function(cstart, rate, time) {
-          c(cstart + rate*(time+1))
-        }
-      }
-      else if  (input$muo=="logarithmic" & cstart >=cend) {
-        g = function(cstart, rate, time) {
-          c(cstart-rate*log(time+1))
-        }}
-      else if  (input$muo=="logarithmic" & cstart <cend) {
-        g = function(cstart, rate, time) {
-          c(cstart+rate*log(time+1))
-        }}
-      
-      #
-      bunkera =  paci[year ==lastyear & country =="Finland", bunkers/1000000000]
-      
-      bunker = g(cstart, rate, 0:time)
-      
-      
+      # cstart = paci[year ==lastyear & country =="Finland", bunkers/1000000000]
+      # 
+      # start = input$fstart
+      # ratio = cstart/start
+      # cend = ratio*(input$paa)
+      # 
+      # time= rv$time
+      # 
+      # if (input$muo == "percentual" & cstart >=cend)  {
+      #   f3 = f3 <- function(rate,cstart,time, cend) {
+      #     cend - cstart * (1-rate/100)^(time+1)
+      #   } }
+      # 
+      # else if (input$muo == "percentual" & cstart <cend)  {
+      #   f3 = f3 <- function(rate,cstart,time, cend) {
+      #     cend - cstart * (1+rate/100)^(time+1)
+      #   }
+      #   
+      # } else if (input$muo=="linear" & cstart >=cend) {
+      #   f3 <- function(rate,cstart,time, cend) {
+      #     cend - (cstart - rate*(time+1))
+      #   }
       # }
-      
-      
+      # else if (input$muo=="linear"& cstart <cend) {
+      #   f3 <- function(rate,cstart,time, cend) {
+      #     cend - (cstart + rate*(time+1))
+      #   }  }
+      # 
+      # else if  (input$muo=="logarithmic" & cstart >=cend) {
+      #   f3 <- function(rate,cstart,time, cend) {
+      #     cend - (cstart - rate*log(time+1))
+      #   }}
+      # 
+      # else if  (input$muo=="logarithmic" & cstart <cend) {
+      #   f3 <- function(rate,cstart,time, cend) {
+      #     cend - (cstart + rate*log(time+1))
+      #     
+      #   }}
+      # # emission rate solving with given values
+      # result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=-0, upper=100)$root
+      # u = result[1]
+      # 
+      # rate = u
+      # 
+      # #  yearly emissions function
+      # if (input$muo == "percentual" & cstart >=cend)  {
+      #   g = function(cstart, rate, time) {
+      #     cstart*(1-rate/100)^(time+1)
+      #   }
+      # }
+      # else if (input$muo == "percentual" & cstart <cend)  {
+      #   g = function(cstart, rate, time) {
+      #     cstart*(1+rate/100)^(time+1)
+      #   }
+      # }
+      # 
+      # else if (input$muo=="linear" & cstart >=cend) {
+      #   g = function(cstart, rate, time) {
+      #     c(cstart - rate*(time+1))
+      #   }
+      # }
+      # else if (input$muo=="linear" & cstart <cend) {
+      #   g = function(cstart, rate, time) {
+      #     c(cstart + rate*(time+1))
+      #   }
+      # }
+      # else if  (input$muo=="logarithmic" & cstart >=cend) {
+      #   g = function(cstart, rate, time) {
+      #     c(cstart-rate*log(time+1))
+      #   }}
+      # else if  (input$muo=="logarithmic" & cstart <cend) {
+      #   g = function(cstart, rate, time) {
+      #     c(cstart+rate*log(time+1))
+      #   }}
+      # 
+      # 
+      # bunkera =  paci[year ==lastyear & country =="Finland", bunkers/1000000000]
+      # 
+      # bunker = g(cstart, rate, 0:time)
+
       
       
       
@@ -6067,24 +6645,22 @@ rv$triggo=0
           
           time= rv$fyear-lastyear
           
-          # start, end, convergence, coustart
           cstart = pacu[country == mm & year == lastyear, yy]
           start =datso[sec =="avgfossil" & year == lastyear, yy]
-          # end =datso[sec =="avgfossil" & year == lastyear, yy]
-          
+
           end = datso[sec =="avgfossil" & year == rv$fyear, yy]
-          # convergence =.01
+       
           # have milder convergence for the period before the last year lyear is included
           convergence =input$con*((rv$fyear-lastyear)/(rv$lyear-rv$fyear))
 
           cend = arg(start, end, convergence, cstart )
           
-          if (input$muo == "percentual" & cstart >=cend)  {
+          if (input$muo %in% c("percentual", "exponential") & cstart >=cend)  {
             f3 = f3 <- function(rate,cstart,time, cend) {
               cend - cstart * (1-rate/100)^(time+1)
             } }
           
-          else if (input$muo == "percentual" & cstart <cend)  {
+          else if (input$muo  %in% c("percentual", "exponential") & cstart <cend)  {
             f3 = f3 <- function(rate,cstart,time, cend) {
               cend - cstart * (1+rate/100)^(time+1)
             }
@@ -6099,31 +6675,70 @@ rv$triggo=0
             f3 <- function(rate,cstart,time, cend) {
               cend - (cstart + rate*(time+1))
             }
-          }
+          } 
+          # else if (input$muo == "exponential" & cstart >=cend)  {
+          #   f3 = f3 <- function(rate,cstart,time, cend) {
+          #     cend - cstart * (1-rate/100)^(time+1)^input$exponent
+          #   } }
+          # 
+          # else if (input$muo == "exponential" & cstart <cend)  {
+          #   f3 = f3 <- function(rate,cstart,time, cend) {
+          #     cend - cstart * (1-rate/100)^(time+1)^input$exponent
+          #   }
+          #   
+          # }
+          
+         
+          result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=.002, upper=99.999)$root
+          u = result[1]
+          
+          
+          
+          
+          
+          
+          
+          
           
           # 
-          # else if  (input$muo=="logarithmic" & cstart >=cend) {
-          #   f3 <- function(rate,cstart,time, cend) {
-          #     cend - (cstart - rate*log(time+1))
+          # else if  (input$muo=="exponential") {
+          #   f3 <- function(rate,start,time, end) {
+          #     # end - (start - rate*log(time+1))
+          #     # end - start * exp(((1-rate/100)*(time+1)))
+          #     end - start * (1-rate/100)^(time+1)^input$exponent
           #     
           #   }}
           # 
-          # else if  (input$muo=="logarithmic" & cstart <cend) {
-          #   f3 <- function(rate,cstart,time, cend) {
-          #     cend - (cstart + rate*log(time+1))
+          # # result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=100)$root
+          # # result <- uniroot(f3,start=start,time=time, end=end, lower=0, upper=40)$root
+          # result <- uniroot(f3,start=start,time=time, end=end, lower=.01, upper=99.99)$root
+          # if (input$muo == "exponential")  {
+          #   g = function(start, rate, time) {
+          #     # req(rate, cancelOutput = TRUE )
+          #     # c(start*exp((1-rate/100)*(time+1)))
+          #     c(start*(1-rate/100)^(time+1)^input$exponent)
           #     
-          #   }}
-          result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=-0, upper=100)$root
-          u = result[1]
+          #     
+          #   } 
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
           
           rate = u
           
-          if (input$muo == "percentual" & cstart >=cend)  {
+          if (input$muo  %in% c("percentual", "exponential") & cstart >=cend)  {
             g = function(cstart, rate, time) {
               cstart*(1-rate/100)^(time+1)
             }
           }
-          else if (input$muo == "percentual" & cstart <cend)  {
+          else if (input$muo  %in% c("percentual", "exponential") & cstart <cend)  {
             g = function(cstart, rate, time) {
               cstart*(1+rate/100)^(time+1)
             }
@@ -6139,14 +6754,16 @@ rv$triggo=0
               c(cstart + rate*(time+1))
             }
           }
-          # else if  (input$muo=="logarithmic" & cstart >=cend) {
+          # else if (input$muo == "exponential" & cstart >=cend)  {
+          #    g = function(cstart, rate, time) {
+          #     c(cstart - rate*(time+1)^input$exponent)
+          #   }
+          # }
+          # else if (input$muo=="exponential" & cstart <cend) {
           #   g = function(cstart, rate, time) {
-          #     c(cstart-rate*log(time+1))
-          #   }}
-          # else if  (input$muo=="logarithmic" & cstart <cend) {
-          #   g = function(cstart, rate, time) {
-          #     c(cstart+rate*log(time+1))
-          #   }}
+          #     c(cstart + rate*(time-1)^input$exponent)
+          #   }
+          # }
           
           
           ffossil = g(cstart, rate, 1:time)
@@ -6166,12 +6783,12 @@ rv$triggo=0
           
           
           
-          if (input$muo == "percentual" & cstart >=cend)  {
+          if (input$muo %in% c("percentual", "exponential") & cstart >=cend)  {
             f3 = f3 <- function(rate,cstart,time, cend) {
               cend - cstart * (1-rate/100)^(time+1)
             } }
           
-          else if (input$muo == "percentual" & cstart <cend)  {
+          else if (input$muo  %in% c("percentual", "exponential") & cstart <cend)  {
             f3 = f3 <- function(rate,cstart,time, cend) {
               cend - cstart * (1+rate/100)^(time+1)
             }
@@ -6185,32 +6802,32 @@ rv$triggo=0
             f3 <- function(rate,cstart,time, cend) {
               cend - (cstart + rate*(time+1))
             }
-          }
-          
-          # else if  (input$muo=="logarithmic" & cstart >=cend) {
-          #   f3 <- function(rate,cstart,time, cend) {
-          #     cend - (cstart - rate*log(time+1))
-          #     
-          #   }}
+          } 
+          # else if (input$muo == "exponential" & cstart >=cend)  {
+          #   f3 = f3 <- function(rate,cstart,time, cend) {
+          #     cend - cstart * (1-rate/100)^(time+1)^input$exponent
+          #   } }
           # 
-          # else if  (input$muo=="logarithmic" & cstart <cend) {
-          #   f3 <- function(rate,cstart,time, cend) {
-          #     cend - (cstart + rate*log(time+1))
-          #     
-          #   }}
-          # emission rate solving with given values
+          # else if (input$muo == "exponential" & cstart <cend)  {
+          #   f3 = f3 <- function(rate,cstart,time, cend) {
+          #     cend - cstart * (1-rate/100)^(time+1)^input$exponent
+          #   }
+          #   
+          # }
+          
+         
         
-            result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=-0, upper=100)$root
+            result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=.01, upper=99.99)$root
           u = result[1]
           
           rate = u
           
-          if (input$muo == "percentual" & cstart >=cend)  {
+          if (input$muo %in% c("percentual", "exponential") & cstart >=cend)  {
             g = function(cstart, rate, time) {
               cstart*(1-rate/100)^(time+1)
             }
           }
-          else if (input$muo == "percentual" & cstart <cend)  {
+          else if (input$muo  %in% c("percentual", "exponential") & cstart <cend)  {
             g = function(cstart, rate, time) {
               cstart*(1+rate/100)^(time+1)
             }
@@ -6226,31 +6843,26 @@ rv$triggo=0
               c(cstart + rate*(time+1))
             }
           }
-          
-          # else if  (input$muo=="logarithmic" & cstart >=cend) {
+          # else if (input$muo == "exponential" & cstart >=cend)  {
           #   g = function(cstart, rate, time) {
-          #     c(cstart-rate*log(time+1))
-          #   }}
-          # else if  (input$muo=="logarithmic" & cstart <cend) {
+          #     c(cstart - rate*(time-1)^input$exponent)
+          #   }
+          # }
+          # else if (input$muo=="exponential" & cstart <cend) {
           #   g = function(cstart, rate, time) {
-          #     c(cstart+rate*log(time+1))
-          #   }}
+          #     c(cstart + rate*(time-1)^input$exponent)
+          #   }
+          # }
           
+       
           ffossil = g(cstart, rate, 1:time)
           
           pacu[country ==mm & year %in% c((rv$fyear+1):rv$lyear), countryfossil := ffossil]
           
           
-          # if (input$nonco2=="0") { 
-          pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers := bunkera]
-          
-          pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := bunker]
-          # } else if (input$nonco2 =="1"){
-          #   pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers :=0]
-          #   
-          #   pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := 0]
-          #   
-          # }
+          pacu[country ==mm &year %in% c(lastyear:rv$fyear), bunkers :=0]
+
+          pacu[country ==mm &year %in% c(rv$fyear:rv$lyear), bunkers := 0]
           
           incProgress(1/length(aat))     
           
@@ -6287,12 +6899,12 @@ rv$triggo=0
       pacu[datso[sec=="price"], price :=i.yy, on=c("year")]
       pacu[datso[sec=="landcost"], landcost :=i.yy, on=c("year")]
       
-      pacu[,countrycost:=fossilcountry*price+landcost ]
+      pacu[,countrycost:=fossilcountry*price]
       pacu[, dividend:=(1-input$national/100)*dividend]
       pacu[, countrydividend:=input$national/100*countrycost]
       pacu[, averagedividend:=(input$national/100)*dividend]
       
-      pacu[,countrynetcost:=countrycost-dividend-countrydividend+landcost]
+      pacu[,countrynetcost:=countrycost-dividend-countrydividend]
       
       updateNumericInput(session, "dummy", value = 1)
       
@@ -6379,7 +6991,12 @@ rv$triggo=0
       # cour1  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, countrycost]
       # cour2  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, c(dividend+nationaldividend)]
       cour2  = pacu[country ==input$nationalcoun & year %in% rv$fyear:rv$lyear, c(dividend+countrydividend)]
-      rv$usernatl  = pacu[country ==input$nationalcoun & year %in% rv$yearc, c(countrydividend)]
+      # rv$usernatl  = pacu[country ==input$nationalcoun & year %in% rv$yearc, c(countrydividend)]
+      rv$usernatl  =    format(round(pacu[country ==input$nationalcoun & year %in% rv$yearc, c(countrydividend)], 0), nsmall=0)
+      
+      rv$usernatcostl  =    format(round(pacu[country ==input$nationalcoun & year %in% rv$yearc, c(countrycost)], 0), nsmall=0)
+      
+      # rv$countrydividendl  =    format(round(pacu[country ==input$nationalcoun & year %in% rv$yearc, c(countrydividend)], 0), nsmall=0)
       
       usercost =  dats[year %in% rv$fyear:rv$lyear & sec =="usercost",yy]
       # dats[year %in% rv$fyear:rv$lyear & sec =="usercost", yy:=cour1 ]
@@ -6536,7 +7153,11 @@ rv$triggo=0
     rv$countrycostl = format(round(dats[sec=="countrycost" & year ==rv$yearc, yy], 0), nsmall=0)
     rv$countrynetcostl = format(round(dats[sec=="countrynetcost" & year ==rv$yearc, yy], 0), nsmall=0)
     rv$countrypopl = format(round(dats[sec=="countrypop" & year ==rv$yearc, yy], 1), nsmall=1)
-    rv$countrydividendl = format(round(dats[sec=="countrydividend" & year ==rv$yearc, yy], 0), nsmall=0)
+    
+    # if (!(is.null(input$countr)) {
+      rv$countrydividendl = format(round(dats[sec=="countrydividend" & year ==rv$yearc, yy], 0), nsmall=0)
+     # }
+    
     rv$averagedividendl = format(round(dats[sec=="averagedividend" & year ==rv$yearc, yy], 0), nsmall=0)
     rv$sourcel = format(round(dats[sec=="source" & year ==rv$yearc, yy], 1), nsmall=1)
     rv$sinkl = format(round(dats[sec=="sink" & year ==rv$yearc, yy], 1), nsmall=1)
@@ -7299,13 +7920,6 @@ datslb
   
   
   
-  
-  
-  
-  
-  
-  
-  
   sec = reactive({ 
     withProgress( message="Drawing graph, please wait",{
       
@@ -7784,9 +8398,7 @@ datslb
   
   
   
-  
-  
-  
+
   
   
   
@@ -7799,6 +8411,34 @@ datslb
   
   sec2 = reactive({ 
 
+    
+    if (rv$lang == "eng") {
+      if (input$luls==FALSE) {
+        if (input$nonco2 ==TRUE) {
+          rv$comu ="(Includes costs from non-CO2 emissions. Does not include costs from land+CCS CO2) "
+        } else {
+          rv$comu ="(Does not include costs from non-CO2 emissions or from land+CCS CO2"
+        }}
+      else  if (input$nonco2 ==TRUE) {
+        
+        rv$comu ="(Includes costs from non-CO2 emission and from land+CCS CO2) "
+      } else {
+        rv$comu ="(Does not include costs from non-CO2 emissions. Includes costs from land+CCS CO2"
+      }
+    } else if (rv$lang == "fin") {
+      if (input$luls==FALSE) {
+        if (input$nonco2 ==TRUE) {
+          rv$comu ="(Sisältää kustannukset ei-CO2-päästöistä. Ei sisällä maanielun+CCS:n kustannuksia) "
+        } else {
+          rv$comu ="(Ei sisällä ei-CO2 päästöjen tai maanielun+CCS:n kustannuksia)"
+        }} else if (input$nonco2 ==TRUE) {
+          
+          rv$comu ="(Sisältää ei-CO2-päästöjen ja maanielun+CCS:n kustannukset) "
+        } else {
+          rv$comu ="(Ei sisällä CO2-päästöjen kustannuksia. Sisältää maanielun+CCS:n kustannukset)"
+        }
+    }
+    
     if (input$autodraw==TRUE) {
       rv$pll = length(unique(datsl()$labbi))
       rv$plll = length(unique(datsl()$labbi))
@@ -9506,6 +10146,9 @@ datslb
                            force=.01, force_pull=10,box.padding=.1 ,
                            seed=5) +
           
+          geom_text(data = datsss[, .SD[which.max(yy)]],
+                    aes(x=mix+(max-mix)*.05, y=128), color=teksvari,
+                    label = rv$comu,  size = si(2.0), fontface="bold", hjust=0) +
           
           
           scale_color_identity() + 
@@ -9831,7 +10474,32 @@ datslb
   sec3 = reactive({
     
   
-    
+    if (rv$lang == "eng") {
+      if (input$luls==FALSE) {
+        if (input$nonco2 ==TRUE) {
+          rv$comu ="(Includes costs from non-CO2 emissions. Does not include costs from land+CCS CO2) "
+        } else {
+          rv$comu ="(Does not include costs from non-CO2 emissions or from land+CCS CO2"
+        }}
+      else  if (input$nonco2 ==TRUE) {
+        
+        rv$comu ="(Includes costs from non-CO2 emission and from land+CCS CO2) "
+      } else {
+        rv$comu ="(Does not include costs from non-CO2 emissions. Includes costs from land+CCS CO2"
+      }
+    } else if (rv$lang == "fin") {
+      if (input$luls==FALSE) {
+        if (input$nonco2 ==TRUE) {
+          rv$comu ="(Sisältää kustannukset ei-CO2-päästöistä. Ei sisällä maanielun+CCS:n kustannuksia) "
+        } else {
+          rv$comu ="(Ei sisällä ei-CO2 päästöjen tai maanielun+CCS:n kustannuksia)"
+        }} else if (input$nonco2 ==TRUE) {
+          
+          rv$comu ="(Sisältää ei-CO2-päästöjen ja maanielun+CCS:n kustannukset) "
+        } else {
+          rv$comu ="(Ei sisällä CO2-päästöjen kustannuksia. Sisältää maanielun+CCS:n kustannukset)"
+        }
+    }
     # observeEvent(input$autodraw, {
     #   
     #   # if (input$autodraw==TRUE) {
@@ -10374,7 +11042,7 @@ datslb
       if (rv$plot3 == "plot3")
       {
         
-        inplot= c("pop", "dummy", "countrypop")
+        inplot= c("pop",  "countrypop")
         
         datsl = datslb()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
@@ -10662,7 +11330,7 @@ datslb
       if (rv$plot4 == "plot4")
       {
         
-        inplot= c("avgfossil", "userfossil", "dummy", "countryfossil")
+        inplot= c("avgfossil", "userfossil", "countryfossil")
         
         datsl = datslb()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
@@ -11276,6 +11944,8 @@ datslb
           
           
           
+          
+          
           geom_segment(data=datsc[sec=="dummy",],
                        aes(x=mil, xend=rv$lyear, y=0, yend=0), 
                        color=teksvari, linetype ="dashed",linewidth=lsi(seg)*1.5, alpha=.3) +
@@ -11369,7 +12039,9 @@ datslb
                            force=.01, force_pull=10,box.padding=.1 ,
                            seed=5) +
           
-          
+            geom_text(data = datsss[, .SD[which.max(yy)]],
+                      aes(x=mix+(max-mix)*.5, y=128), color=teksvari,
+                      label = rv$comu,  size = si(2.0), fontface="bold") +
           
           scale_color_identity() + 
           scale_alpha_identity() + 
@@ -11425,18 +12097,21 @@ datslb
                       angle=c(0), alpha=.5, lineheight=.99) 
           
           
-          if (input$luls==FALSE) {
-         
-            plot6 = plot6 +
-              
-          geom_text(data = datsss[, .SD[which.max(yy)]], 
-                    aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
-                    label = "(Does not include costs from land use change)",  size = si(2.0), fontface="bold") 
-          }
+          # if (input$luls==FALSE) {
+          # 
+          #   plot6 = plot6 +
+          #     
+          # geom_text(data = datsss[, .SD[which.max(yy)]], 
+          #           aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
+          #           label = "(Does not include costs from land use change)",  size = si(2.0), fontface="bold") 
+          # }
           
           
         }
         
+
+
+            
         if (rv$lang == "fin") {
           
           plot6 = plot6 +
@@ -11463,15 +12138,15 @@ datslb
                       angle=c(0), alpha=.5, lineheight=.99) 
           
           
-          if (input$luls==FALSE) {
-            
-            plot6 = plot6 +
-              
-            
-            geom_text(data = datsss[, .SD[which.max(yy)]], 
-                      aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
-                      label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.0), fontface="bold")          }
-          
+          # if (input$luls==FALSE) {
+          #   
+          #   plot6 = plot6 +
+          #     
+          #   
+          #   geom_text(data = datsss[, .SD[which.max(yy)]], 
+          #             aes(x=mix+(max-mix)*.5, y=128), color=teksvari, 
+          #             label = "(Ei sisällä kuluja maankäytön muutoksesta)",  size = si(2.0), fontface="bold")          }
+          # 
           
         }
         
@@ -12791,9 +13466,11 @@ datslb
         # sec4b()
       }
       ,width=
-        # function() {
-          session$clientData$output_plotl_height*1.8*rv$plll
-        # }
+         function() {
+           input$go
+          suc = isolate(session$clientData$output_plotl_height*1.8*rv$plll)
+          suc
+        }
       )
     }
   })
@@ -12809,8 +13486,9 @@ datslb
       # rv$pll = length(unique(datsl()$labbi))
       rv$plll = length(unique(datsl()$labbi))
       # 
+      input$go
       
-       heeh  = min(input$dim[1], input$dim[2])*.6*rv$pll
+       heeh  = isolate(min(input$dim[1], input$dim[2])*.6*rv$pll)
 
       div(        
         plotOutput("plotl"
@@ -12947,7 +13625,7 @@ datslb
     req(rv$lyear)
     if (rv$lang=="eng") {
       
-      word ="Convergence of countries emissions:" } else {
+      word ="Convergence of countries' emissions:" } else {
         word="Päästöjen yhdentymisen aste:"
       }
     

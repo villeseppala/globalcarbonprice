@@ -106,24 +106,24 @@ border-block: .2vw solid #AD7AFF !important;
 }
 
 
-.tabbable > .nav > li > a[data-value='3. Carbon price'] { color:#33C70E !important }
-.tabbable > .nav > li > a.active[data-value='3. Carbon price'] {  border-top: .2vw solid #33C70E !important;
+.tabbable > .nav > li > a[data-value='4. Carbon price'] { color:#33C70E !important }
+.tabbable > .nav > li > a.active[data-value='4. Carbon price'] {  border-top: .2vw solid #33C70E !important;
                              border-inline: .2vw solid #33C70E !important;
       border-bottom: .1vw solid var(--colbtable) !important;
 
 }
-                             .tab-pane.active[data-value='3. Carbon price'] {
+                             .tab-pane.active[data-value='4. Carbon price'] {
 border-block: .2vw solid #33C70E!important;
                              border-inline: .2vw solid #33C70E !important;
 }
                              
-                             .tabbable > .nav > li > a[data-value='4. User emissions'] { color:#24B0FF !important }
-.tabbable > .nav > li > a.active[data-value='4. User emissions'] {  border-top: .2vw solid #24B0FF !important;
+                             .tabbable > .nav > li > a[data-value='3. User emissions'] { color:#24B0FF !important }
+.tabbable > .nav > li > a.active[data-value='3. User emissions'] {  border-top: .2vw solid #24B0FF !important;
                              border-inline: .2vw solid #24B0FF !important;
       border-bottom: .1vw solid var(--colbtable) !important;
 
 }
-                             .tab-pane.active[data-value='4. User emissions'] {
+                             .tab-pane.active[data-value='3. User emissions'] {
 border-block: .2vw solid #24B0FF !important;
                              border-inline: .2vw solid #24B0FF !important;
                                  border-bottom: .1vw solid var(--colbtable) !important;
@@ -167,20 +167,20 @@ border-block: .2vw solid #AD7AFF !important;
 }
 
 
-.tabbable > .nav > li > a[data-value='3. Hiilen hinta'] { color:#33C70E !important }
-.tabbable > .nav > li > a.active[data-value='3. Hiilen hinta'] {  border-top: .2vw solid #33C70E !important;
+.tabbable > .nav > li > a[data-value='4. Hiilen hinta'] { color:#33C70E !important }
+.tabbable > .nav > li > a.active[data-value='4. Hiilen hinta'] {  border-top: .2vw solid #33C70E !important;
                              border-inline: .2vw solid #33C70E !important;}
-                             .tab-pane.active[data-value='3. Hiilen hinta'] {
+                             .tab-pane.active[data-value='4. Hiilen hinta'] {
 border-block: .2vw solid #33C70E!important;
                              border-inline: .2vw solid #33C70E !important;
                                  border-bottom: .1vw solid var(--colbtable) !important;
 
 }
                              
-                             .tabbable > .nav > li > a[data-value='4. Käyttäjän päästöt'] { color:#24B0FF !important }
-.tabbable > .nav > li > a.active[data-value='4. Käyttäjän päästöt'] {  border-top: .2vw solid #24B0FF !important;
+                             .tabbable > .nav > li > a[data-value='3. Käyttäjän päästöt'] { color:#24B0FF !important }
+.tabbable > .nav > li > a.active[data-value='3. Käyttäjän päästöt'] {  border-top: .2vw solid #24B0FF !important;
                              border-inline: .2vw solid #24B0FF !important;}
-                             .tab-pane.active[data-value='4. Käyttäjän päästöt'] {
+                             .tab-pane.active[data-value='3. Käyttäjän päästöt'] {
 border-block: .2vw solid #24B0FF !important;
                              border-inline: .2vw solid #24B0FF !important;
                                  border-bottom: .1vw solid var(--colbtable) !important;
@@ -210,8 +210,8 @@ border-block: .2vw solid yellow !important;
 .nav-tabs > li > .nav-link.active {
    border-color: green !important;
 }
-.tabbable > .nav > li > a[data-value='3. Carbon price'] { color:lightgreen !important}
-.tabbable > .nav > li > a[data-value='4. User emissions'] { color:pink !important}
+.tabbable > .nav > li > a[data-value='4. Carbon price'] { color:lightgreen !important}
+.tabbable > .nav > li > a[data-value='3. User emissions'] { color:pink !important}
 .tabbable > .nav > li > a[data-value='EXTRA: Countries'] { color:yellow !important}
 --colinfo: #5ABAE0;
 
@@ -569,11 +569,12 @@ font-family: trebuchet MS  !important;
 font-size: calc(.7vw + .23rem) !important;
 margin-left: -.4vw; 
 margin-right: -.4vw;
+text-align: left !important;
 line-height: 1.1;
-margin -.4vw -.4vw -.4vw -.4vw; padding: -.4vw  -.4vw -.4vw -.4vw;
+margin -.4vw -.4vw -.4vw -.4vw; 
+padding: -.4vw  -.4vw -.4vw -.4vw;
 border-collapse: collapse;
 overflow: auto;
-
 
 
 }
@@ -585,7 +586,8 @@ font-size: calc(.7vw + .23rem) !important;
 text-decoration: none !important;
 margin-bottom: .2rem !important;
 margin-top: .1rem !important;
-
+text-align: left !important;
+margin-right:auto;margin-left:0px
 line-height: 1.1;
 }
 
@@ -702,7 +704,7 @@ overflow: scroll;
     background-color:var(--colb)!important;
 border-color: var(--collinea) !important;
  border: 0px solid white;
-text-align: right;
+text-align: left;
 
                }
 

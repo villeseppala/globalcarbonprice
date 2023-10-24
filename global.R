@@ -67,16 +67,16 @@ vv = .8
 
 
 fos = hsv(0.08,0.93,0.89)
-lul = hsv(	0.13,1,0.78)
+lul = hsv(	0.16,1,0.78)
 
-sink = hsv(	0.13,1,0.78)
-source = hsv(	0.13,1,0.78)
-newsink = hsv(	0.13,1,0.78)
+sink = hsv(	0.18,1,0.78)
+source = hsv(	0.11,1,0.78)
+newsink = hsv(	0.20,1,0.78)
 
 
-net = hsv(0.10,0.88,0.85)
-tot = hsv(0.08,0.8,0.78)
-non = hsv(0.11,0.93,0.71)
+net = hsv(0.11,0.88,0.85)
+tot = hsv(0.04,0.7,0.78)
+non = hsv(0.05,0.58,0.71)
 
 pop =hsv(0.7,0.47,1)
 
@@ -84,19 +84,20 @@ pop =hsv(0.7,0.47,1)
 tax = hsv(0.3,0.93,0.78)
 
 
-fpop = hsv(0.56,0.86,1)
-fosindi =hsv(0.52,0.72,0.81)  
+fpop = hsv(0.58,0.86,1)
+fosindi =hsv(0.5,0.72,0.81)  
 cpop = fosindi
 # cpop = fosindi
 countryfossil = hsv(0.54,0.78,0.88)  
 
 # avgcost = hsv(0.57,.7,.9)
-avgcost = hsv(0.94,0.63,0.89)
-dividend =  hsv(0.87,0.639,0.89)
-avgnetcost =hsv(0.9,0.6,0.89)
-taxfosindi =hsv(0.95,0.59,0.8)
-netcost = hsv(	0.91,0.58,0.83)
-landcost = hsv(	0.82,0.58,0.83)
+avgcost = hsv(0.96,0.63,0.79)
+dividend =  hsv(0.85,0.639,0.79)
+avgnetcost =hsv(0.9,0.54,0.76)
+
+taxfosindi =hsv(0.96,0.59,0.91)
+netcost = hsv(	0.89,0.58,0.94)
+landcost = hsv(	0.82,0.58,0.96)
 
 averagedividend =hsv(0.86,0.63,0.79)
 countrydividend = hsv(0.88,0.73,0.81)
@@ -310,7 +311,7 @@ lu[sec == "avgnetcost", mark:="$"]
 lu[sec == "countrycost", mark:="$"]
 lu[sec == "countrynetcost", mark:="$"]
 lu[sec == "countryfossil", mark:="t"]
-lu[sec == "countrypop", mark:="M"]
+lu[sec == "countrypop", mark:="B"]
 lu[sec == "countrydividend", mark:="$"]
 lu[sec == "averagedividend", mark:="$"]
 lu[sec == "source", mark:="Gt"]
@@ -720,15 +721,15 @@ cuk = function(col, label, info, show, lab, value) {
 
 
 cuk2 = function(col, label, info, show, lab, value) {
-  div(div(style="display:inline-block", div(style=paste0("color:",col,";","font-weight:1000; "),
+  div(div(style="display:inline-block; text-align: left !important;", div(style=paste0("color:",col,";","font-weight:1000; "),
                                               label
   )),
-  div(style="display:inline-block",HTML( "<font size='2'>",
+  div(style="display:inline-block; text-align: left !important;",HTML( "<font size='2'>",
                                          as.character(actionLink(inputId = info,
                                                                  label = "  ",
                                                                  icon = icon("fas fa-info-circle"))), "</font>") ),
   # div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
-  div(style="display:inline-block; ",checkboxInput(show, label=lab,  value=FALSE)))
+  div(style="display:inline-block; text-align: right !important;; ",checkboxInput(show, label=lab,  value=FALSE)))
 
 }
 
