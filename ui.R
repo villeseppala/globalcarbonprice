@@ -25,6 +25,11 @@ div(id="but",
                  styleclass = "primary", size = "small", block = F,style="line-height: 1.1")
 ),
 
+
+
+
+
+
 div(id="but",
     actionButton(inputId="infodata", label="Data sources",
                  styleclass = "primary", size = "small", block = F,style="line-height: 1.1"))   
@@ -56,6 +61,9 @@ tagList(a
         # , title=""
         # , class="dropdown"
 )
+,
+uiOutput("linku")
+
 # %>% 
 # )
 
@@ -564,9 +572,37 @@ column(3,
        fluidRow(textOutput("redrawprompt") )
 ),       
 
+
+
+column(3,
+       id = "luu",  
+       # style=" border: solid 1px white;", 
+       
+       tags$div(
+         # id="sla",
+         
+         
+         # fluidRow(
+         selectInput(
+           "view",
+           label = "Graph separation",
+           c("One graph for all scales" = 1,
+             "Side by side graphs, two in row" = 2,
+             "Back to back graphs" = 3,
+             "Side by side graphs, all in one row" = 4
+             
+           ),selected=4,
+           multiple = FALSE,
+           selectize = FALSE,
+           width = NULL,
+           size = NULL
+         ))
+       # fluidRow(style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
+       
+),
 # 
 column(6,
-       id = "luu",    
+         
        
        # style=" border: solid 1px white;", 
        div(
@@ -593,35 +629,7 @@ column(6,
        )    
        
 )
-,
 
-
-                       column(3,
-                              
-                              # style=" border: solid 1px white;", 
-                              
-                              tags$div(
-                                # id="sla",
-                              
-                              
-                              # fluidRow(
-                              selectInput(
-                                "view",
-                                label = "Graph separation",
-                                c("One graph for all scales" = 1,
-                                  "Side by side graphs, two in row" = 2,
-                                  "Back to back graphs" = 3,
-                                  "Side by side graphs, all in one row" = 4
-                                  
-                                ),selected=4,
-                                multiple = FALSE,
-                                selectize = FALSE,
-                                width = NULL,
-                                size = NULL
-                              ))
-                              # fluidRow(style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
-
-                       )
 
 
               ),
@@ -715,7 +723,7 @@ div(
                                                ,click = "colplot_click"
                                                # ,click = "colplot_click"
                                   )
-                                ,div(style = " background-color:var(--colb)!important; font-size: 1.2vw", p("www.globalcarbonprice.com _____  Data: UN, World Bank, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2022:"))
+                                ,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, World Bank, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2023.  Funded by Kone Foundation. Developed by Ville Seppälä"))
                                   ,
                                   
                                   fluidRow(
@@ -864,7 +872,7 @@ margin-top: -.2rem;',
 
 tagList(uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center;", "viewtext"))),
 # textOutput("indicatorvisibility"),
-div(style="text-align: right;",textOutput("yearc")),
+div(style="text-align: left; font-size:  calc(.4rem + .7vw);",textOutput("yearc")),
 
 div(
   
@@ -882,7 +890,7 @@ div(
       cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE)   
       # ) , list(rv$fossill) )  ), 
     )  
-    ,   list(uiOutput("fossill") )
+    ,   list(uiOutput(style = "margin-left: -5px;","fossill") )
     )), 
   
   bs4Dash::bs4Table(
@@ -890,7 +898,7 @@ div(
     list( headTitles = list(
       cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE) 
     )  
-    ,   list(uiOutput("landl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","landl") )
     
     )  ), 
   
@@ -899,7 +907,7 @@ div(
     list( headTitles = list(
       cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)   
     ) 
-    ,   list(uiOutput("netl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","netl") )
     
     )  )   ),
 
@@ -914,7 +922,7 @@ div(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
       cuk2(non, textOutput("labelnonco2"),  "infononco2", "shownonco2", NULL, FALSE)
-    )   ,   list(uiOutput("nonco2l") )
+    )   ,   list(uiOutput(style = "margin-left: -5px;","nonco2l") )
     )  ), 
   
   bs4Dash::bs4Table(
@@ -922,7 +930,7 @@ div(
     list( headTitles = list(
       cuk2(tot, textOutput("labelghg"),  "infoghg", "showghg", NULL, FALSE)
     )
-    ,   list(uiOutput("ghgl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","ghgl") )
     )  )
   
   
@@ -942,9 +950,9 @@ div(
   bs4Dash::bs4Table(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
-      cuk2(tot, textOutput("labelnewsink"),  "infonewsink", "shownewsink", NULL, FALSE)
+      cuk2(newsink, textOutput("labelnewsink"),  "infonewsink", "shownewsink", NULL, FALSE)
     )
-    ,   list(uiOutput("newsinkl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","newsinkl") )
     )  )
   
 ), 
@@ -962,7 +970,7 @@ div(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
       cuk2(pop,textOutput("labelpop"),  "infopop", "showpop", NULL, FALSE)
-    )    ,   list(uiOutput("popl") ) )  )), 
+    )    ,   list(uiOutput(style = "margin-left: -5px;","popl") ) )  )), 
 
 
 div(
@@ -975,7 +983,7 @@ div(
     list( headTitles = list(
       cuk2(countrypop, textOutput("labelcountrypop"), "infocountrypop", "showcountrypop", NULL, FALSE)
     ) 
-    ,   list(uiOutput("countrypopl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","countrypopl") )
     )  )
   
 ),
@@ -993,14 +1001,14 @@ div(
     list( headTitles = list(
       cuk2(fpop, textOutput("labelavgfossil"),  "infoavgfossil", "showavgfossil", NULL, TRUE)
     )
-    ,   list(uiOutput("avgfossill") )
+    ,   list(uiOutput(style = "margin-left: -5px;","avgfossill") )
     )  ), 
   bs4Dash::bs4Table(
     cardWrap = TRUE, bordered = TRUE,striped = TRUE,
     list( headTitles = list(
       cuk2(cpop,textOutput("labeluserfossil"), "infouserfossil", "showuserfossil", NULL, FALSE)
     )
-    ,   list(uiOutput("userfossill") )
+    ,   list(uiOutput(style = "margin-left: -5px;","userfossill") )
     )  )),
 
 
@@ -1015,7 +1023,7 @@ div(
     list( headTitles = list(
       cuk2(countryfossil,textOutput("labelcountryfossil"), "infocountryfossil", "showcountryfossil", NULL, FALSE)
     )
-    ,   list(uiOutput("countryfossill") )
+    ,   list(uiOutput(style = "margin-left: -5px;","countryfossill") )
     )  ), 
   
   
@@ -1032,7 +1040,7 @@ div(
       cuk2(tax,textOutput("labelprice"),  "infoprice", "showprice", NULL, FALSE)
     )
     
-    ,   list(uiOutput("pricel") )
+    ,   list(uiOutput(style = "margin-left: -5px;","pricel") )
     )  ), 
   
   p(" "),
@@ -1042,7 +1050,7 @@ div(
     list( headTitles = list(
       cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE)
     )
-    ,   list(uiOutput("avgcostl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","avgcostl") )
     )  )),
 
 
@@ -1055,7 +1063,7 @@ div(
     list( headTitles = list(
       cuk2(netcost,textOutput("labellandcost"),  "infolandcost", "showlandcost", NULL, FALSE)
     )
-    ,   list(uiOutput("landcostl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","landcostl") )
     
     )  )),
 
@@ -1069,7 +1077,7 @@ div(
     list( headTitles = list(
       cuk2(dividend, textOutput("labeldividend"),  "infodividend", "showdividend", NULL, FALSE)
     )
-    ,   list(uiOutput("dividendl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","dividendl") )
     
     )  ), 
   bs4Dash::bs4Table(
@@ -1077,7 +1085,7 @@ div(
     list( headTitles = list(
       cuk2(avgnetcost, textOutput("labelavgnetcost"), "infoavgnetcost", "showavgnetcost", NULL, FALSE)
     )
-    ,   list(uiOutput("avgnetcostl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","avgnetcostl") )
     
     )  ), 
   bs4Dash::bs4Table(
@@ -1085,7 +1093,7 @@ div(
     list( headTitles = list(
       cuk2(taxfosindi, textOutput("labelusercost"),  "infousercost", "showusercost", NULL, FALSE)
     )
-    ,   list(uiOutput("usercostl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","usercostl") )
     
     )  ), 
   bs4Dash::bs4Table(
@@ -1093,7 +1101,7 @@ div(
     list( headTitles = list(
       cuk2(netcost,textOutput("labelnetcost"),  "infonetcost", "shownetcost", NULL, FALSE)
     )
-    ,   list(uiOutput("netcostl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","netcostl") )
     
     )  ),
   
@@ -1117,7 +1125,7 @@ div(
     list( headTitles = list(
       cuk2(countrycost, textOutput("labelcountrycost"),  "infocountrycost", "showcountrycost", NULL, FALSE)
     )
-    ,   list(uiOutput("countrycostl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","countrycostl") )
     
     )  ), 
   
@@ -1126,7 +1134,7 @@ div(
     list( headTitles = list(
       cuk2(countrynetcost, textOutput("labelcountrynetcost"), "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
     )
-    ,   list(uiOutput("countrynetcostl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","countrynetcostl") )
     
     )  ), 
   
@@ -1155,7 +1163,7 @@ div(
     list( headTitles = list(
       cuk2(averagedividend, textOutput("labelaveragedividend"),  "infoaveragedividend", "showaveragedividend", NULL, FALSE)
     )
-    ,   list(uiOutput("averagedividendl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","averagedividendl") )
     
     )  ), 
   bs4Dash::bs4Table(
@@ -1163,7 +1171,7 @@ div(
     list( headTitles = list(
       cuk2(countrydividend, textOutput("labelcountrydividend"),  "infocountrydividend", "showcountrydividend", NULL, FALSE)
     )
-    ,   list(uiOutput("countrydividendl") )
+    ,   list(uiOutput(style = "margin-left: -5px;","countrydividendl") )
     
     )  ) 
   

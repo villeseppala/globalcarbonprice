@@ -437,6 +437,8 @@ server <- function(input,output, session) {
     
   })
   
+
+  
   observeEvent(input$view, { 
     
     
@@ -1076,16 +1078,29 @@ server <- function(input,output, session) {
       
       output$autoredraw = renderText({  c("Auto-Redraw")  })  
       
+      
+      output$videot = renderText({  c("Video tutorial")  })  
+      
+      
       output$startlabel = renderText({  c("Start year values")  })  
       
       output$obsyear = renderText({  c("Observe year:")  })  
+      # output$linku = renderUI({  c("https://google.com/")  })  
       
       # output$simuset = renderText({  c("SIMULATION INPUTS")  })  
       
       
       # rv$labelfossil = lu[sec=="fossil", label]
       
-      
+      output$linku = renderUI(tagList(a
+              (div(style="font-size: 15px !important; margin: 5px; color: var(--colink);","Video tutorial")
+                , 
+                # href="https://google.com/"
+                
+                href="https://google.com/"
+                
+              )
+      ))
       # rv$infofossiltext = c("Total fossil CO2 emissions across all countries and individuals. Other greenhouse gases (such as methane) not included. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       # rv$infofossiltextt = c("Fossil CO2 emissions")
       # output$viewtext = renderText("  VIEWING SETTINGS")
@@ -1109,7 +1124,7 @@ server <- function(input,output, session) {
       
       
       
-      updateSelectInput("view", label = "Graph separation",
+      updateSelectInput("view", label = "Graph layout",
                          c("One graph for all scales" = 1,
                            "Side by side graphs, two in row" = 2,
                            "Back to back graphs" = 3,
@@ -1277,6 +1292,18 @@ server <- function(input,output, session) {
       output$shownone = renderText({  c("Piilota kaikki")  })  
       output$automatic = renderText({  c("Automattinen")  })  
       output$redraw = renderText({  c("Piirrä")  })  
+      # output$videot = renderText({  c("Videotutoriaali")  })  
+      
+      output$linku = renderUI(tagList(a
+                                      (div(style="font-size: 15px !important; margin: 5px; color: var(--colink);","Videotutoriaali")
+                                        , 
+                                        # href="https://google.com/"
+                                        
+                                        href="https://yle.fi/"
+                                        
+                                      )
+      ))
+      
       output$redrawprompt = renderText({  c("Paina tehtyäsi muutokset")  })  
       
       output$autoredraw = renderText({  c("Autom. piirto")  })  
@@ -1435,6 +1462,8 @@ server <- function(input,output, session) {
       rv$tutotextt = c("Tutorial")
       
       rv$tutotext = HTML("
+
+
        <b>What is this page?</b> 
        <br>
 Global carbon price would be an efficient tool for stopping global warming. If the revenue from carbon pricing was distributed evenly as a global carbon dividend, it would also reduce global income inequality significantly. 
@@ -1445,16 +1474,16 @@ On this page, you can simulate emission and emission price pathways for reaching
 
 <b>Page structure</b>
 <br>
-RESULTS are shown at the graph section in the bottom right of the page. In addition to main result graph, you can compare country averages in a separate graph. You can also choose to show the results in a table. 
+RESULTS are shown at the graph section in the bottom left of the page. In addition to main result graph, you can compare country averages in a separate graph. You can also choose to show the results in a table. 
 <br>
 
- RESULT INDICATORS section at the left side show the yearly results and control what variables are shown in the main results graph. 
+ RESULT INDICATORS section at the right side show the yearly results and control what variables are shown in the main results graph. 
 
 <br>
 INPUTS section is at the top of the page and its choices determine the results outcomes. 
-Simulation inputs are divided to 4 thematic phases + an extra phase for country specific inputs. All inputs have predetermined sensible default values related to the chosen carbon budget so that you can focus on changing the inputs you are most interested in.
+Simulation inputs are divided to 4 thematic phases. All inputs have predetermined sensible default values related to the chosen carbon budget so that you can focus on changing the inputs you are most interested in.
 <br>
-First input choice is the carbon budget. With this choice, you define the ambition level of the simulation. Carbon budget is a special type of input, which also changes some of the other inputs to their carbon budget specific defaults in phases 1 and 3. 
+First input choice is the carbon budget. With this choice, you define the ambition level of the simulation. Carbon budget is a special type of input, which also changes some of the other inputs to their carbon budget specific defaults in phases 1 and 4. 
 <br>
 
 <br>
@@ -1472,12 +1501,6 @@ You can also choose to include non-CO2 emissions to the system so that they are 
 Population projection choice defines how the world population will evolve. Mean emissions are the results of dividing the emission by the population. 
 <br>
 By default, the median projection is chosen, meaning that there is a 50% chance for both smaller and greater population in the upcoming years. Choice of 95% range upper limit projection means that there is a 2.5% chance that the future population will be greater than the projected value. Choosing a 80% range lower limit projection means that there is a 10%  chance that the population is smaller than in the chosen projection. And so on.
-<br><br>
-<b>Carbon price</b>
-<br>
-It is very difficult to estimate what level of carbon pricing is adequate for reaching specific emission targets. It is therefore recommended for the user to explore major changes in carbon pricing to see their effects on carbon costs. 
-<br>
-In reality, if a specific global carbon pricing trajectory is adopted, it will be readjusted down or up depending on whether the emissions evolve better or worse than in the estimated trajectory. Readjusting the pricing will then readjust the emissions. 
 
 <br>
 <br>
@@ -1490,14 +1513,19 @@ If you are using an online carbon footprint calculator to estimate your current 
 if they consider all greenhouse gas emissions, including non-CO2. If they do, you should also have them set on in the global emissions phase. 
 <br
 By choosing the country level emissions from the ALTERNATIVE selection you can use the predicted per capita emission path of a specific country as your own emissions. 
+<br>
+Also, you can explore the mean emission and carbon cost trajectories across different countries, assuming that the mean emissions between the countries converge according to a predetermined model. The convergence model is highly speculative. 
 
 
 <br><br>
-<b>EXTRA: Countries</b>
+<b>Carbon price</b>
 <br>
-In this section, you can explore the effect of a global carbon price system in which some of the carbon price revenue is not divided equally across the world, but a chosen percentage is given as a dividend for the citizens of the country in which that specific revenue is collected in. 
+It is very difficult to estimate what level of carbon pricing is adequate for reaching specific emission targets. It is therefore recommended for the user to explore major changes in carbon pricing to see their effects on carbon costs. 
+<br>
+In reality, if a specific global carbon pricing trajectory is adopted, it will be readjusted down or up depending on whether the emissions evolve better or worse than in the estimated trajectory. Readjusting the pricing will then readjust the emissions. 
+<br>
+You can also explore the effect of a global carbon price system in which some of the carbon price revenue is not divided equally across the world, but a chosen percentage is given as a dividend for the citizens of the country in which that specific revenue is collected in. 
 
-Also, you can explore the mean emission and carbon cost trajectories across different countries, assuming that the mean emissions between the countries converge according to a predetermined model. The convergence model is highly speculative. 
 
 <br>
 <br>
@@ -1506,15 +1534,6 @@ Also, you can explore the mean emission and carbon cost trajectories across diff
 <br>
 Click the info buttons across the UI to receive more information on various input choices and resulting indicators. 
 
-
-<br>
-<br>
-
-<b>Caveats / What is not included?</b>
-<br>
-Achieving the necessary carbon sinks will also cause costs, which, however, are not modeled in the simulation. Sinks can be achieved through the carbon price as well.
-<br
-Please give feedback by clicking the feedback button in the top of the page if you have ideas on how to involve sinks in the model. 
 
 
 ")
@@ -1654,7 +1673,7 @@ A correction multiplier is applied to the outputs from the calculation to have t
                                  in the country it is collected in, instead of full global distribution.")  
       rv$infocountrydividendtextt = c("Country dividend")  
       
-      rv$infocountryfossiltext = c("Mean emissions across residents in the selected country")  
+      rv$infocountryfossiltext = c("Mean emissions across residents in the selected country. Notice that the emissions are production emissions and not consumption emissions, the statistics of which are not as available or trustworthy. On the comparison of production and consumption emissions: https://ourworldindata.org/grapher/production-vs-consumption-co2-emissions")  
       rv$infocountryfossiltextt = c("Mean emissions in selected country")  
       
       rv$infocountrypoptext = c("Population in selected country")  
@@ -1937,15 +1956,15 @@ Globaali hiilen hinta olisi tehokas tapa ilmastonmuutoksen pysäyttämiseen. Mik
 
 <b>Rakenne</b>
 <br>
-TULOKSET näkyvät graafiosiossa oikeassa alakulmassa. Päätulosten lisäksi voit myös vertailla maakohtaisia päätuloksia tai näyttää päätulokset myös taulukkomuodossa. 
+TULOKSET näkyvät graafiosiossa vasemmassa alakulmassa. Päätulosten lisäksi voit myös vertailla maakohtaisia päätuloksia tai näyttää päätulokset myös taulukkomuodossa. 
 <br>
 
- TULOSMUUTTUJAT -asetuksissa vasemmassa reunassa näet tuloksia tiivistetysti ja voit säätää minkä muuttujien tuloksia haluat näyttää päätulosten graafeissa. 
+ TULOSMUUTTUJAT -asetuksissa oikeassa reunassa näet tuloksia tiivistetysti ja voit säätää minkä muuttujien tuloksia haluat näyttää päätulosten graafeissa. 
 <br>
 
-Tulokset riippuvat  valinnoistasi VALINNAT-osiossa graafiosion yläpuolella. Simulaatiovalinnoissa on budjettivalinnan lisäksi neljä vaihetta + lisävaihe maakohtaisille valinnoille. Kaikissa valinnoissa on esitäytetyt oletusarvot, joten voit myös keskittyä muuttamaan tai kokeilemaan vain niitä valintoja, joista olet eniten kiinnostunut. 
+Tulokset riippuvat  valinnoistasi VALINNAT-osiossa graafiosion yläpuolella. Simulaatiovalinnoissa on  neljä vaihetta . Kaikissa valinnoissa on esitäytetyt oletusarvot, joten voit myös keskittyä muuttamaan tai kokeilemaan vain niitä valintoja, joista olet eniten kiinnostunut. 
 <br>
-Ensin valitaan hiilibudjetti. Tämä määrittää simulaation lämpötilatavoitteen eli kunnianhimon tason. Budjettivalinta on siitä erityinen, että että se muuttaa joitain muita valintoja niiden budjettikohtaisiin oletusarvoihiin vaiheissa 1 ja 3.  
+Ensin valitaan hiilibudjetti. Tämä määrittää simulaation lämpötilatavoitteen eli kunnianhimon tason. Budjettivalinta on siitä erityinen, että että se muuttaa joitain muita valintoja niiden budjettikohtaisiin oletusarvoihiin vaiheissa 1 ja 4.  
 <br>
 
 <br>
@@ -1962,23 +1981,25 @@ Maailman väestö -valinnassa valitset jonkun YK:N väestön määrä -projektio
 <br>
 Oletuksena on valittu mediaaniskenaario. On siis 50% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi ja 50% todennäköisyys, että se on skenaarion arvoja pienempi. 
 Valitsemalla projektion “jakauman ylin 20%” on 20% todennäköisyys, että väestömäärä on skenaarion arvoja suurempi. Valitsemalla “jakauman alin 5%” on 5% todennäköisyys, että väestömäärä on projektion arvoja suurempi. Jne. 
-<br><br>
-<b>Hiilen hinta</b>
-<br>
-On hyvin vaikea arvioida, että mikä hiilen hinnan taso on riittävä saavuttamaan tietyn lämpötilatavoitteen. Kannattaakin tutkailla erilaisia hiilen hintoja ja niiden vaikutusta päästömenoihin. Mikäli globaali hiilen hinta otettaisiin käyttöön, niin sitä säädettäisiin aiottua polkua tiukemmaksi tai löysemmäksi riippuen siitä, miten päästöt kehittyvät odotettuun nähden. 
+
 <br>
 <br>
 <b>Käyttäjän päästöt</b>
 <br>
 Tässä osiossa pääset asettamaan itsellesi henkilökohtaisia päästövähennyspolkuja ja tutkailemaan millaisia vuosittaisia päästökustannuksia niistä sinulle syntyisi. 
-
-Valitsemalla maakohtaiset päästöt VAIHTOEHTO-kohdasta voit käyttää jonkin maan kansalaisten keskimääräistä estimoitua päästövähennyspolkua omana päästövähennyspolkunasi. Voit käyttää päästöjen arvioinnissa hyödyksi myös netin hiilijalanjälkilaskureita. Tällöin on tärkeä huomioida, että sisältääkö laskuri kaikki kasvihuonekaasupäästöt vai pelkän hiilidioksidin. Mikäli olet laskenut Globaalit päästöt osiossa mukaan muut päästöt, niin sinun tulee laskea ne mukaan tässäkin.
-<br><br>
-<b>EXTRA: Maat</b>
 <br>
-Tässä osiossa voit halutessasi havainnoida sellaista globaalia hiilen hinnoittelujärjestelmää, jossa kaikkea hinnoittelun tuottoa ei jaeta tasan kaikkien maailman kansalaisten kesken, vaan valitsemasi prosenttiosuus siitä annetaankin hiiliosinkona aina vain sen maan kansalaisille, jossa se on kerätty.
-
+Valitsemalla maakohtaiset päästöt VAIHTOEHTO-kohdasta voit käyttää jonkin maan kansalaisten keskimääräistä estimoitua päästövähennyspolkua omana päästövähennyspolkunasi. Voit käyttää päästöjen arvioinnissa hyödyksi myös netin hiilijalanjälkilaskureita. Tällöin on tärkeä huomioida, että sisältääkö laskuri kaikki kasvihuonekaasupäästöt vai pelkän hiilidioksidin. Mikäli olet laskenut Globaalit päästöt osiossa mukaan muut päästöt, niin sinun tulee laskea ne mukaan tässäkin.
+<br>
 Voit myös tutkia keskipäästöjen ja -kustannusten polkuja eri maissa, olettaen että maiden keskipäästöt yhtenevät ennalta määrätyn mallin mukaisesti. 
+
+<br><br>
+<b>Hiilen hinta</b>
+<br>
+On hyvin vaikea arvioida, että mikä hiilen hinnan taso on riittävä saavuttamaan tietyn lämpötilatavoitteen. Kannattaakin tutkailla erilaisia hiilen hintoja ja niiden vaikutusta päästömenoihin. Mikäli globaali hiilen hinta otettaisiin käyttöön, niin sitä säädettäisiin aiottua polkua tiukemmaksi tai löysemmäksi riippuen siitä, miten päästöt kehittyvät odotettuun nähden. 
+<br>
+Tässä osiossa voit myös halutessasi havainnoida sellaista globaalia hiilen hinnoittelujärjestelmää, jossa kaikkea hinnoittelun tuottoa ei jaeta tasan kaikkien maailman kansalaisten kesken, vaan valitsemasi prosenttiosuus siitä annetaankin hiiliosinkona aina vain sen maan kansalaisille, jossa se on kerätty.
+
+
 <br>
 <br>
 
@@ -1986,14 +2007,7 @@ Voit myös tutkia keskipäästöjen ja -kustannusten polkuja eri maissa, olettae
 <br>
 Klikkaamalla käyttöliittymän infonäppäimiä saat lisätietoa eri indikaattoreista ja simulaatiovalinnoista. 
 
-<br>
-<br>
 
-<b>Puutteet / Mitä ei ole huomioitu</b>
-<br>
-Hiilineutraaliuuteen riittävien hiilinielujen saavuttamisesta koituu myös kustannuksia, joita ei kuitenkaan ole simulaatiossa mallinnettu. Nieluihin voidaan myös kannustaa hiilen hinnoittelun kautta, niin että sillä voimistetaan olemassa olevaa metsittymiskehitystä ja vähennetään metsäkatoa.
-<br>
-Annathan palautetta sivun yläreunan feedback-linkistä, mikäli sinulle on ideoita, että miten sisällyttää maankäytön muutoksen päästöt ja nielut malliin
 
 ")
       # rv$labelfossil = "Fossiilipäästöt"
@@ -2118,7 +2132,7 @@ rv$infocountrydividendtext = c("Hiiliosinko tietyssä maassa, kun valittu osuus 
                                      jaettu maassa, jossa kerääminen tapahtuu globaalin jaon sijaan")  
 rv$infocountrydividendtextt = c("Maan hiiliosinko")  
 
-rv$infocountryfossiltext = c("Keskipäästöt valitussa maassa")  
+rv$infocountryfossiltext = c("Keskipäästöt valitussa maassa. Huomioi, että keskipäästöt on laskettu tuotannon päästöistä eikä kulutuksen päästöistä. Kulutuksen päästöistä on hankalampi löytää dataa kaikille maille ja niiden estimaatit eivät ole yhtä tarkkoja. Tuotannon ja kulutuksen päästöjen vertailusta: https://ourworldindata.org/grapher/production-vs-consumption-co2-emissions")  
 rv$infocountryfossiltextt = c("Keskipäästöt valitussa massa")      
 
 rv$infocountrypoptext = c("Väestön määrä valitussa maassa")  
@@ -2379,7 +2393,27 @@ rv$infobudgettextt = c("Hiilibudjetit")
       
       output$simpan <- renderUI({
         div(id="resu",
-            
+            # div(
+            #    id="sla",
+            #   selectInput(
+            #     "bud",
+            #     inf("Carbon budget for net CO2 emissions since start of 2023", "infobudget"), 
+            #     c(
+            #       
+            #       
+            #       "150Gt (67% likelihood to stay below 1.5°C)" = 150,
+            #       "250Gt (50% likelihood to stay below 1.5°C)" = 250,
+            #       "500Gt (50% likelihood to stay below 1.7°C)" = 500,
+            #       "600Gt (50% likelihood to stay below 1.7°C)" = 600,
+            #       "950Gt (67% likelihood to stay below 2.0°C)" = 950,
+            #       "1150Gt (50% likelihood to stay below 2.0°C)" = 1150
+            #       
+            #     ),selected=950,
+            #     multiple = FALSE,
+            #     selectize = FALSE,
+            #     width = NULL,
+            #     size = NULL
+            #   )),   
    
      shiny::tabsetPanel(id="nok", 
                                selected = "1. Global emissions",
@@ -2404,21 +2438,23 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                       # id="sla",
                                                         selectInput(
                                                           "bud",
-                                                          inf("Carbon budget for net CO2 emissions since start of 2023", "infobudget"), 
+                                                          inf("Carbon budget for net CO2 emissions since start of 2023", "infobudget"),
                                                           c(
-                                                            
-                                                            
+
+
                                                             "150Gt (67% likelihood to stay below 1.5°C)" = 150,
                                                             "250Gt (50% likelihood to stay below 1.5°C)" = 250,
+                                                            "500Gt (50% likelihood to stay below 1.7°C)" = 500,
+                                                            "600Gt (50% likelihood to stay below 1.7°C)" = 600,
                                                             "950Gt (67% likelihood to stay below 2.0°C)" = 950,
                                                             "1150Gt (50% likelihood to stay below 2.0°C)" = 1150
-                                                            
+
                                                           ),selected=950,
                                                           multiple = FALSE,
                                                           selectize = FALSE,
                                                           width = NULL,
                                                           size = NULL
-                                                        )),    
+                                                        )),
                                         # p("Change details to the CO2 emission trajectory corresponding to the chosen carbon budget"),
                                         hr(),
                                         
@@ -2449,8 +2485,11 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                         
                                         
                                         conditionalPanel(condition="input.sinkset == 1",
+                                                         # style="margin-left: .2vw;",
                                                          
                                                          tags$div(
+                                                           style="padding-left: 1vw;",
+                                                           
                                                            id="sla",
                                                            numericInput("sinksize", 
                                                                         inf("Land+CCS CO2 net sink", "infoemissionsink"), 
@@ -2511,7 +2550,10 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                                conditionalPanel(
                                                                  
                                                                  condition="input.nonco2 == 1",
-                                                                 tags$div(id="sla", class="slug",  numericInput("nonco2end",
+                                                                 tags$div(id="sla", 
+                                                                          style="padding-left: 1vw;",
+                                                                          
+                                                                          class="slug",  numericInput("nonco2end",
                                                                                     p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year", 
                                                                                                                         "infononco2u")),
                                                                                                                 
@@ -2532,6 +2574,9 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                              conditionalPanel(
                                                               
                                                                condition="input.luls == 1",
+                                                               div(
+                                                                 style="padding-left: 1vw;",
+                                                                 
                                                                # p("Note: "),
                                                                textOutput("land1"),
                                                                textOutput("land2"),
@@ -2545,6 +2590,7 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                                
                                                                textOutput("land5"),
                                                                textOutput("land6")
+                                                               )
                                                                
                                                              )               
                                                          ),
@@ -2556,6 +2602,8 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                                     checkboxInput("advance", "Advanced: Set emission for year before start year")), 
                                                            
                                                            div(class="rad",
+                                                               style="padding-left: 1vw;",
+                                                               
                                                                conditionalPanel(
                                                                  
                                                                  condition="input.advance == 1",
@@ -2860,6 +2908,9 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                
                                                c("150Gt (67% todennäköisyys pysyä alle 1,5°C)" = 150,
                                                  "250Gt (50% todennäköisyys pysyä alle 1,5°C)" = 250,
+                                                 "500Gt (67% todennäköisyys pysyä alle 1,7°C)" = 500,
+                                                 "600Gt (50% todennäköisyys pysyä alle 1,7°C)" = 600,
+                                                 
                                                  "950Gt (67% todennäköisyys pysyä alle 2,0°C)" = 950,
                                                  "1150Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1150
                                                ),selected=950,
@@ -2908,8 +2959,10 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                                      
                                                                      tags$div(
                                                                        id="sla",
+                                                                       style="padding-left: 1vw;",
+                                                                       
                                                                        numericInput("sinksize", 
-                                                                                    inf("Maa+CCS CO2-neetonielu", "infoemissionsink"), 
+                                                                                    inf("Maa+CCS CO2-nettonielu", "infoemissionsink"), 
                                                                                     min = 0, max = 30,step=.1,value=c(6))), 
                                                                      
                                                                      # selectInput(
@@ -2957,6 +3010,9 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                              # )) 
                                              ),
                                   
+                                  
+                                  
+                                  
                                   column(5,
                                          style=c("margin-right: .5vw;"),       
                                          tags$div(id="sla",
@@ -2966,10 +3022,14 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                   
                                          ),       
                                          div(class="slug",    
+                                             
                                              conditionalPanel(
                                                
                                                condition="input.nonco2 == 1",
-                                               tags$div(id="sla", class="slug",  numericInput("nonco2end",
+                                               tags$div(id="sla",
+                                                        style="padding-left: 1vw;",
+                                                        
+                                                        class="slug",  numericInput("nonco2end",
                                                                                               p(class="slug", style="font-weight: 500 !important;",
                                                                                                 inf("Muut päästöt hiilineutraaliusvuonna", 
                                                                                                     "infononco2u")),
@@ -2986,6 +3046,8 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                          
                                          
                                          div(class="rad",
+                                             style="padding-left: 1vw;",
+                                             
                                              conditionalPanel(
                                                
                                                condition="input.luls == 1",
@@ -3013,6 +3075,8 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                   checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta")), 
                                          
                                          div(class="rad",
+                                             style="padding-left: 1vw;",
+                                             
                                              conditionalPanel(
                                                
                                                condition="input.advance == 1",
@@ -3143,10 +3207,12 @@ rv$infobudgettextt = c("Hiilibudjetit")
                                                    )),
                                           conditionalPanel(
                                             
-                                            condition="input.indi != 'none'",
+                                            # condition="input.indi != 'none'",
+                                            condition="input.indi != 'none' || output.lek == 1",
+                                            
                                             sliderInput("con",
                                                         
-                                                        inf("Maiden päästöjen yhdentymsien aste", "infoconvergence1"), 
+                                                        inf("Maiden päästöjen yhdentymisen aste", "infoconvergence1"), 
                                                         min = .01, max = 1, value = .5, step=.01)
                                           )  ) )
                         )   
@@ -3494,8 +3560,11 @@ rv$triggo=0
   
   observeEvent(input$bud,{
     
-    rv$budget = input$bud
     
+    updateSliderInput(inputId ="exponent", value =.7)
+    
+    
+    rv$budget = input$bud
     
     if (rv$lang=="eng") {
       
@@ -3505,16 +3574,22 @@ rv$triggo=0
       # observeEvent(input$bud, {
       
       if (input$bud == 150) {
-        rv$budinfo = c("1,5°C with 67% chance")
+        rv$budinfo = c("1.5°C with 67% chance")
         
       } else if (input$bud ==250) {
         
-        rv$budinfo = c("1,5°C with 50% chance")
+        rv$budinfo = c("1.5°C with 50% chance")
+        
+      } else if (input$bud ==500) {
+        
+        rv$budinfo = c("1.7°C with 67% chance")
+      } else if (input$bud ==600) {
+        
+        rv$budinfo = c("1.7°C with 50% chance")
       } else if (input$bud ==950) {
         
         rv$budinfo = c("2°C with 67% chance")
-      }
-      else if (input$bud ==1150) {
+      }  else if (input$bud ==1150) {
         
         rv$budinfo = c("2°C with 50% chance")
       }
@@ -3530,6 +3605,12 @@ rv$triggo=0
       } else if (input$bud ==250) {
         
         rv$budinfo = c("1,5°C 50% varmasti")
+      } else if (input$bud ==500) {
+        
+        rv$budinfo = c("1,7°C 67% varmasti")
+      } else if (input$bud ==600) {
+        
+        rv$budinfo = c("1,7°C 50% varmasti")
       } else if (input$bud ==950) {
         
         rv$budinfo = c("2°C 67% varmasti")
@@ -3660,27 +3741,27 @@ rv$triggo=0
   
   
   
-  okku= observeEvent(rv$warn, {
-    
-    # req(input$budget, cancelOutput = FALSE)
-    # freezeReactiveValue(input, "budget")
-    
-    if (rv$warn >=0){
-      
-      # 2.1515 3.0287 1.1981 1.8475
-      # if (input$last_btn =="1350") {
-      
-      if ((rv$warn > 2.1515 & rv$warn < 2.1516 ) | (rv$warn > 3.0287 & rv$warn < 3.0288 ) | (rv$warn > 1.198 & rv$warn < 1.199 ) | (rv$warn > 1.8475 & rv$warn < 1.8476 ) | (rv$warn > 0.1625 & rv$warn < 0.1626 )) {
-        
-      } else {
-        showNotification("Increasing land use emissions may be unrealistic. Consider setting later carbon neutrality year or increasing emissions/sink at the carbon neutrality year", duration =17)
-        # rv$alert5 =TRUE
-        
-        okku$destroy()
-      }
-    }
-    
-  })
+  # okku= observeEvent(rv$warn, {
+  #   
+  #   # req(input$budget, cancelOutput = FALSE)
+  #   # freezeReactiveValue(input, "budget")
+  #   
+  #   if (rv$warn >=0){
+  #     
+  #     # 2.1515 3.0287 1.1981 1.8475
+  #     # if (input$last_btn =="1350") {
+  #     
+  #     if ((rv$warn > 2.1515 & rv$warn < 2.1516 ) | (rv$warn > 3.0287 & rv$warn < 3.0288 ) | (rv$warn > 1.198 & rv$warn < 1.199 ) | (rv$warn > 1.8475 & rv$warn < 1.8476 ) | (rv$warn > 0.1625 & rv$warn < 0.1626 )) {
+  #       
+  #     } else {
+  #       showNotification("Increasing land use emissions may be unrealistic. Consider setting later carbon neutrality year or increasing emissions/sink at the carbon neutrality year", duration =17)
+  #       # rv$alert5 =TRUE
+  #       
+  #       okku$destroy()
+  #     }
+  #   }
+  #   
+  # })
   
   
   # okk= observeEvent(input$nok, {
@@ -3970,30 +4051,47 @@ rv$triggo=0
     }
   })
   
-  # observeEvent(input$autodraw, {
-  #   if (input$autodraw == TRUE) {
-  #     shinyjs::disable("go")
-  # 
-  #   }
-  #   else if (input$autodraw ==FALSE){
-  # 
-  # 
-  #   }
-  # })
+  observeEvent(rv$autodraw, {
+  rv$triss = rv$triss+1
+    
+  })
 
   
+  
+  
   observeEvent(input$autodraw, {
+    
+    # rv$pll = length(unique(datsl()$labbi))
+    # rv$plll =length(unique(datsl()$labbi))
+    
     
      if (input$autodraw == TRUE) {
       shinyjs::disable("go")
 
     }
     else if (input$autodraw ==FALSE){
+   # input$paa = input$paa+1      
 
-      shinyjs::enable("go")
+      # rv$yearc=rv$yearc+1
+      # rv$pll = length(unique(datsl()$labbi))+1
+      # rv$plll =length(unique(datsl()$labbi))+1
+      # rv$pll = length(unique(datsl()$labbi))-1
+      # rv$plll =length(unique(datsl()$labbi))-1
+       shinyjs::enable("go")
+      
+      # rv$pll = isolate(length(unique(datsl()$labbi)))
+      # rv$plll = isolate(length(unique(datsl()$labbi)))
+      
       
     }
   })
+  
+  
+  
+  
+  
+ 
+  
   
   # observeEvent(input$view, {
   #   # if (input$autodraw == TRUE) {
@@ -4185,7 +4283,6 @@ rv$triggo=0
   })
   
 
-  
   
   
   observeEvent(input$nonco2end, {
@@ -4500,6 +4597,14 @@ rv$triggo=0
         } else if (input$bud ==250) {
           
           rv$budinfo = c("1,5°C with 50% chance")
+        } else if (input$bud ==500) {
+          
+          rv$budinfo = c("1,7°C with 67% chance")
+          
+        } else if (input$bud ==600) {
+          
+          rv$budinfo = c("1,7°C with 50% chance")
+          
         } else if (input$bud ==950) {
           
           rv$budinfo = c("2°C with 67% chance")
@@ -4598,6 +4703,15 @@ rv$triggo=0
         } else if (input$bud ==250) {
           
           rv$budinfo = c("1,5°C 50% varmasti")
+          
+        } else if (input$bud ==500) {
+          
+          rv$budinfo = c("1,7°C 67% varmasti")
+          
+        } else if (input$bud ==600) {
+          
+          rv$budinfo = c("1,7°C 67% varmasti")
+          
         } else if (input$bud ==950) {
           
           rv$budinfo = c("2°C 67% varmasti")
@@ -5062,9 +5176,68 @@ rv$triggo=0
   })
   
   
+   
+  # plut = c("plot2", "plot3", "plot4", "plot5", "plot6")
   # 
+  #
+  lapply(
+    X = c("plot2", "plot3", "plot4", "plot5", "plot6"),
+    FUN = function(i){
+
+      observeEvent(rv[[paste0(i)]], {
+
+        if (rv$autodraw==FALSE) {
+
+             rv$pll = isolate(length(unique(datsl()$labbi)))
+             rv$plll = isolate(length(unique(datsl()$labbi)))
+
+             
+             if (rv$view %in% c(2,3)) {
+               rv$triggo  = 0
+             }           
+        }
+      } )
+
+    })
   
   
+  
+  
+  # observeEvent(rv$plot2, {
+  #   # rv$pll = isolate(length(unique(datsl()$labbi)))
+  #   rv$plll = isolate(length(unique(datsl()$labbi)))
+  #   
+  #    rv$triggo  = 0
+  # })
+  # 
+  # observeEvent(rv$plot3, {
+  #   # rv$pll = isolate(length(unique(datsl()$labbi)))
+  #   rv$triggo  = 0
+  #   
+  #   rv$plll = isolate(length(unique(datsl()$labbi)))
+  #   
+  # })
+  # 
+  # observeEvent(rv$plot4, {
+  #   # rv$pll = isolate(length(unique(datsl()$labbi)))
+  #   rv$plll = isolate(length(unique(datsl()$labbi)))
+  #   
+  #    rv$triggo  = 0
+  # })
+  # 
+  # observeEvent(rv$plot5, {
+  #   # rv$pll = isolate(length(unique(datsl()$labbi)))
+  #   rv$plll = isolate(length(unique(datsl()$labbi)))
+  #   
+  #    rv$triggo  = 0
+  # })
+  # 
+  # observeEvent(rv$plot6, {
+  #   # rv$pll = isolate(length(unique(datsl()$labbi)))
+  #   rv$plll = isolate(length(unique(datsl()$labbi)))
+  #   
+  #    rv$triggo  = 0
+  # })
   
   
   lapply(
@@ -5082,19 +5255,53 @@ rv$triggo=0
     } )
   
   
+
+
+  
+  
   lapply(
     X = c("showpop", "showcountrypop"),
     FUN = function(i){
       
       observeEvent(input[[paste0(i)]], {
+        # rv$triss = rv$triss+1
+        
         
         if (input$showpop== TRUE || input$showpop ==TRUE) {
           rv$plot3 = "plot3"}
         else {
           rv$plot3 = ""}
+        # rv$triggo = 1
         
       } )
     } )
+  
+  
+  
+  # lapply(
+  #   X = c("showpop", "showcountrypop"),
+  #   FUN = function(i){
+  #     
+  #     observeEvent(input[[paste0(i)]], {
+  #       
+  #       
+  #       updateSliderTextInput(
+  #         session = session,
+  #         inputId = "yearc",
+  #         selected = input$yearc-1
+  #         
+  #       )
+  #       updateSliderTextInput(
+  #         session = session,
+  #         inputId = "yearc",
+  #         selected = input$yearc+1
+  #         
+  #       )
+  #        priority = 9
+  #       
+  #     } )
+  #   } )
+
   # 
   
   lapply(
@@ -5638,6 +5845,7 @@ if (input$sinkset==FALSE) {
       
       #nonc02 emisisons
       
+      
       start = input$nonco2start
       # lstart = input$lstart
       
@@ -5721,7 +5929,7 @@ if (input$sinkset==FALSE) {
     #normalize
     
     #time halved
-    r=round(.25*n, 0)
+    r=round(.33*n, 0)
     
     
     #   r
@@ -5921,7 +6129,7 @@ if (input$sinkset==FALSE) {
       } }
     
     # emission rate solving with given values
-    result <- uniroot(f3,start=start,time=time, end=end, lower=.01, upper=99.99)$root
+    result <- uniroot(f3,start=start,time=time, end=end, lower=.00001, upper=99.99999)$root
     u = result[1]
     rateindi = u
     #    rate
@@ -6270,6 +6478,8 @@ if (input$sinkset==FALSE) {
   # creating intermediate data and combining data from different periods, need it for national stuff
   
   datss = reactive({
+    
+    # req(dats())
     budd = rv$budd
     # ppaaa = ppaaa()
     ppaa = as.data.table(ppaa)
@@ -6400,7 +6610,9 @@ if (input$sinkset==FALSE) {
     
     if (input$nonco2 ==0) {
       ppax$avgfossil = ppax$fossil/ppax$pop
+      
     } else {
+      
       ppax$avgfossil = ppax$ghg/ppax$pop
     }
     
@@ -6423,6 +6635,7 @@ if (input$sinkset==FALSE) {
     
     if (input$nonco2 ==0) {
       # W   ppaa[sec =="avgghg", yy:=NULL]
+      
     } else {
       
       put = ppaa[sec=="avgghg",]
@@ -6439,6 +6652,7 @@ if (input$sinkset==FALSE) {
     # rv$triggo = 1
     
     # useru = userfossil[1,]
+    
     dats = as.data.table(dats)
     dats[year==hyear & sec =="userfossil", yy:=input$indi1]
     
@@ -6523,10 +6737,12 @@ if (input$sinkset==FALSE) {
       
       
       if (input$nonco2 ==0) {
-        paci = paci[, yy:=co2cap]
+         paci = paci[, yy:=co2cap]
+        # paci = paci[, yy:=ghgcap]
+        
         pacu = copy(paci)
         
-      } else {
+      } else if (input$nonco2 ==1){
         paci = paci[, yy:=ghgcap]
         pacu = copy(paci)
         
@@ -6620,7 +6836,7 @@ if (input$sinkset==FALSE) {
       # bunker = g(cstart, rate, 0:time)
 
       
-      
+    
       
       
       arg = function(start, end, convergence, cstart) {
@@ -6689,7 +6905,7 @@ if (input$sinkset==FALSE) {
           # }
           
          
-          result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=.002, upper=99.999)$root
+          result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=.0000001, upper=99.999999)$root
           u = result[1]
           
           
@@ -6817,7 +7033,7 @@ if (input$sinkset==FALSE) {
           
          
         
-            result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=.01, upper=99.99)$root
+            result <- uniroot(f3,cstart=cstart,time=time, cend=cend, lower=.000001, upper=99.999999, extendInt =c("yes"))$root
           u = result[1]
           
           rate = u
@@ -7281,7 +7497,6 @@ if (input$sinkset==FALSE) {
     }
     pink =1
     
-    rv$triggo = 1
     
     
     # ogger <- observe({
@@ -7310,7 +7525,8 @@ if (input$sinkset==FALSE) {
     # }
     # )
     
-
+    rv$triggo = 1
+    
      rv$triggor=2
     
     # }
@@ -11042,7 +11258,7 @@ datslb
       if (rv$plot3 == "plot3")
       {
         
-        inplot= c("pop",  "countrypop")
+        inplot= c("pop",  "countrypop", "dummy")
         
         datsl = datslb()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
@@ -11159,6 +11375,7 @@ datslb
           # geom_text(data=da,
           #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
           #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+          geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss), alpha=0) +
           
           geom_label_repel(data=datsc,
                            aes(x=year+3, y=tyy,
@@ -11330,7 +11547,7 @@ datslb
       if (rv$plot4 == "plot4")
       {
         
-        inplot= c("avgfossil", "userfossil", "countryfossil")
+        inplot= c("avgfossil", "userfossil", "countryfossil", "dummy")
         
         datsl = datslb()[sec %in% inplot & year >= mil,]
         datsss = datsss()[sec %in% inplot & year >= mil,]
@@ -11447,6 +11664,7 @@ datslb
           # geom_text(data=da,
           #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
           #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+          geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss), alpha=0) +
           
           geom_label_repel(data=datsc,
                            aes(x=year+3, y=tyy,
@@ -11733,6 +11951,7 @@ datslb
           # geom_text(data=da,
           #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
           #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+          geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss), alpha=0) +
           
           geom_label_repel(data=datsc,
                            aes(x=year+3, y=tyy,
@@ -12022,6 +12241,7 @@ datslb
           # geom_text(data=da,
           #           aes(x=mil-5, y=-10), label = paste0("www.globalcarbonprice.com \nData: UN, IPCC, Friedlingstein et al. 2022"),
           #           col=teksvari, fontface="bold" ,  size =si(1.2), hjust =0, vjust=0.5, angle=c(0), alpha=.5)+
+          geom_text(data=da,aes(x=2020, y=0), label =paste0(rv$triss), alpha=0) +
           
           geom_label_repel(data=datsc,
                            aes(x=year+3, y=tyy,
@@ -12402,9 +12622,9 @@ datslb
     # xcen = input$xcen
     
     if (input$xvar == "gdpcap") {
-    xcen = 197
+    xcen = 190
     } else {
-    xcen = 218
+    xcen = 205
     }
     
     
@@ -12495,7 +12715,6 @@ datslb
       minx+wide*we/100
     }
     
-  
     
     # dats = dats[lux(), label:=i.label ,on=c("sec")]
 
@@ -12546,9 +12765,14 @@ datslb
       rox = 0
       if (rv$lang =="fin") {
         xlab = "BKT henkeä kohden"
+        big = "Suurempi BKT henkeä kohden"
+        sma = "Pienempi BKT henkeä kohden"
+        
       }
       if (rv$lang =="eng") {
         xlab = "GDP per capita"
+        big = "Greater GDP per capita"
+        sma = "Lower GDP per capita"
       }
     }
     
@@ -12560,9 +12784,13 @@ datslb
       
       if (rv$lang =="fin") {
         xlab = "Päästöt henkeä kohden"
+        big = "Pienemmät päästöt henkeä kohden"
+        sma = "Suuremmat päästöt henkeä kohden"
       }
       if (rv$lang =="eng") {
         xlab = "Emissions per capita"
+        big = "Greater emissions per capita"
+        sma = "Lower emissions per capita"
       }
     }
     
@@ -12627,9 +12855,22 @@ datslb
       
       
       geom_hline(aes(yintercept=0), color=teksvari) + 
+
+      annotate("rect",xmin=wi(.4), xmax=wi(99.6), ymin=hi(-7.5),ymax=hi(-2.5), alpha=0.6, fill=bgc)  +
       
       geom_text(data=datspla,
-                aes(x=wi(98), y=hi(-1), 
+                aes(x=wi(1), y=hi(-3), 
+                    label = sma),
+                hjust=0, size=si(3), color=teksvari) +
+      
+      geom_text(data=datspla,
+                aes(x=wi(99), y=hi(-3), 
+                    label = big),
+                hjust=1, size=si(3), color=teksvari) +
+      
+      
+      geom_text(data=datspla,
+                aes(x=wi(99), y=hi(-7), 
                     label = rara),
                 hjust=1, size=si(3), color=teksvari) +
       
@@ -12673,7 +12914,6 @@ datslb
         geom_vline(data=datspla, aes(xintercept=place),
                    color=gencol, linewidth = lsi(1), alpha=.6) +
         
-         annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68),ymax=hi(97), alpha=0.6, fill=bgc)  +
         
         annotate("rect",xmin=wi(1), xmax=wi(45), ymin=hi(68),ymax=hi(86), alpha=0.5,color=gencol, fill=bgc)  +
         
@@ -12832,7 +13072,7 @@ datslb
     
   }, 
   width ="auto", 
-  height=input$dim[2]/1.45
+  height=input$dim[2]/1.5
   # ,hover = "colplot_hover"
   
   
@@ -13033,6 +13273,164 @@ datslb
     # sec2()
     # }
     #  )
+  })
+  
+  
+  
+  
+  
+  output$concc = renderUI({
+    req(rv$fyear)
+    req(rv$lyear)
+    if (rv$lang=="eng") {
+      
+      word ="Convergence of countries' emissions:" } else {
+        word="Päästöjen yhdentymisen aste:"
+      }
+    
+    # if (input$view ==1) {
+    # fluidRow(
+    
+    sliderInput("conc",
+                inf(word, "infoconvergence3"), 
+                min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
+    
+    # )
+    
+    
+    
+    
+    
+    
+  })
+  
+  
+  
+  output$xxyear = renderUI({
+    req(rv$fyear)
+    req(rv$lyear)
+    if (rv$lang=="eng") {
+      
+      word ="Show year:" } else {
+        word="Näytä tiedot vuodelle:"
+      }
+    
+    # if (input$view ==1) {
+    fluidRow(
+      style =  "margin-left: 0vw;
+              margin-top: -1vw;
+                      margin-bottom: -1vw; ",
+      sliderTextInput("xyear", label=word,choices= seq(rv$fyear, rv$lyear, 1),
+                      
+                      # sliderTextInput("yearc", label=NULL,choices= seq(minyy, maxyy, 1),
+                      # from_min = rv$ffyear, from_max = rv$lyear
+                      
+                      selected=c(2040),
+                      width="100%"
+                      , animate=TRUE
+                      ,grid=FALSE
+                      # ticks=FALSE
+      )
+    )
+    
+    
+    
+    
+    
+    
+  })
+  
+  
+  
+  # 
+  # output$xxcen = renderUI({
+  #   # if (input$view ==1) {
+  #   fluidRow(
+  #     style =  "margin-left: 0vw;
+  #             margin-top: -1vw;
+  #                     margin-bottom: -1vw; ",
+  #     
+  #      sliderInput("xcen",
+  #                   inf("Number of segments", "infopricing"),
+  #                   min = 2, max = 218, value = c(218),
+  #                  dragRange=FALSE, ticks = FALSE)
+  #   )
+  # })
+  # 
+  
+  
+  
+  
+  
+  
+  output$yearcui = renderUI({
+    req(rv$ffyear)
+    req(rv$lyear)
+    if (input$view ==1) {
+      fluidRow(
+        style =  "margin-left: 0vw;
+              margin-top: -1vw;
+                      margin-bottom: -1vw; ",
+        sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1),
+                        
+                        # sliderTextInput("yearc", label=NULL,choices= seq(minyy, maxyy, 1),
+                        from_min = rv$ffyear, from_max = rv$lyear
+                        
+                        ,selected=c(rv$lyear),
+                        width="100%"
+                        , animate=FALSE
+                        #
+                        ,grid=FALSE
+                        # ,ticks=FALSE
+                        
+        )
+      )
+    }  else if (input$view ==2) {
+      minyy = mminyy
+      maxyy = mmaxyy 
+      
+      fluidRow(
+        
+        style =  "margin-left: 0vw;
+              margin-top: -1vw;
+                      margin-bottom: -1vw;
+",
+sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1),
+                
+                # sliderTextInput("yearc", label=NULL, choices= seq(minyy, maxyy, 1),
+                from_min = rv$ffyear, from_max = rv$lyear
+                # ,step=1
+                ,selected=c(rv$lyear)
+                ,grid=FALSE
+                # ,ticks=FALSE
+                ,width="100%"
+                , animate=FALSE
+                
+)
+
+      )
+      
+    }
+    else if (input$view %in% c(3,4)) {
+      fluidRow(
+        style =  "margin-left: 0vw;
+              margin-top: -1vw;
+                      margin-bottom: -1vw;",
+        sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1)
+                        ,from_min = rv$ffyear, from_max = rv$lyear
+                        
+                        ,selected=c(rv$lyear),
+                        width="100%"
+                        , animate=FALSE
+                        ,grid=FALSE
+                        # ticks=FALSE
+        )
+      )
+      
+    }
+    
+    
+    
   })
   
 #   observe({
@@ -13311,21 +13709,41 @@ datslb
 
 
         output$plotk<- renderPlot({
+          # rv$triss
+
           # req(rv$plll, cancelOutput = TRUE)
           # sec3b()
           # isolate(rv$pll = length(unique(datsl()$labbi)))
            # rv$plll = isolate(length(unique(datsl()$labbi)))
            input$go
           # isolate(length(unique(datsl()$labbi)))
-          # sec3()
+          # sec3() 
           # tarvitaan datan uudelleen trigger;inti' varten viittaus dataan,
           # mutta se rikkoo disable/enablen, koska ei ole isolatessa
 
-
+          # rv$pll =  isolate(length(unique(datsl()$labbi)))
+          # 
+          # rv$pll
+#           suk = isolate(rv$triss)
+# suk          
+#           
+          
+           rv$plll = isolate(length(unique(datsl()$labbi)))
+          
+          # riss = isolate(rv$triss)
+          
+          
+          # riss
+          # rv$pll
+          
           sece =   isolate(sec3())
            sece
         }
 
+        
+        # rv$pll = isolate(length(unique(datsl()$labbi)))
+        
+        
         ,height=
           # function() {
           session$clientData$output_plotk_width*.5*rv$plll
@@ -13405,33 +13823,7 @@ datslb
   
   
   
-  # observe({
-  #       if (input$view==3)  {
-  # 
-  #   # eventReactive(input$go, {
-  # 
-  #   # if  (rv$autodraw == TRUE & input$view==3)  {
-  # 
-  # 
-  #   output$plotkk <- renderUI({
-  #     
-  #    rv$plll = isolate(length(unique(datsl()$labbi)))
-  #     
-  # 
-  #     div(
-  #       plotOutput("plotk"
-  #                  ,width = "auto"
-  #                  # ,height=heeh
-  #                  ,height="auto"
-  # 
-  #       )
-  #     )
-  #   }
-  #   )
-  #   }
-  # })
-  
-  
+ 
   
   observe({
   
@@ -13488,12 +13880,13 @@ datslb
       # 
       input$go
       
-       heeh  = isolate(min(input$dim[1], input$dim[2])*.6*rv$pll)
+       heeh  = isolate(min(input$dim[1], input$dim[2])*.6*rv$plll)
+       huuh = isolate(max(min(input$dim[2], (input$dim[1])*.8)*.48, 400))
 
       div(        
         plotOutput("plotl"
                     ,width = heeh
-                    ,height= min(input$dim[2], (input$dim[1])*.8)*.60
+                    ,height= huuh
     
         ) 
       )
@@ -13503,283 +13896,6 @@ datslb
     }
   })
   
-  # 
-  # observe({
-  #   if (rv$autodraw == TRUE) {
-  #     
-  #     output$plotl<-renderPlot({
-  #       sec4()
-  #     }
-  #     ,height= "1000"
-  #     ,width= "1000"
-  #     
-  #     # function() {
-  #     #   session$clientData$output_plotl_width*.5
-  #     # }
-  #     )
-  #   } 
-  #   else 
-  #   {
-  #     output$plotl<-renderPlot({
-  #       sec4b()
-  #     }
-  #     ,height= "1000"
-  #     ,width= "1000"
-  #       # function() {
-  #       #   session$clientData$output_plotl_width*.5
-  #       # }
-  #     )
-  #   }
-  # })
-  # 
-  # output$plotll <- renderUI({
-  #   rats = 1.25
-  #   # if (rv$pll ==1) {
-  #   #   heeh = "auto"
-  #   #   
-  #   # }   else    {
-  #   #   
-  #   #   if (input$dim[2]/rats >  session$clientData$output_plotl_width*.5) {
-  #   #     
-  #   #     heeh =   session$clientData$output_plotl_width*.5
-  #   #     # heeh =  c(session$clientData$output_plotj_height)/.91
-  #   #   } else  {
-  #   #     heeh =  input$dim[2]/rats
-  #   #   }
-  #   # }
-  #   div(        
-  #     plotOutput("plotl "
-  #                ,width = "1000"
-  #                ,height="1000"
-  #                
-  #                # ,height=heeh
-  #                
-  #                ,hover = "plot_hover"
-  #                ,click = "plotl_click"
-  #     ) 
-  #   )
-  # }  
-  # )
   
-  # 
-  
-  #   
-  
-  
- 
-  
-  
-  
-  # output$buddd =renderUI({
-  #   
-  #   if (rv$lang =="eng") {
-  #   
-  #   div(id="sla",
-  #   selectInput(
-  #     "bud",
-  #     inf("Carbon budget for net CO2 emissions since start of 2020", "infobudget"), 
-  #     c("400Gt (67% likelihood to stay below 1.5°C)" = 400,
-  #       "500Gt (50% likelihood to stay below 1.5°C)" = 500,
-  #       "1150Gt (67% likelihood to stay below 2.0°C)" = 1150,
-  #       "1350Gt (50% likelihood to stay below 2.0°C)" = 1350
-  #       
-  #     ),selected=1150,
-  #     multiple = FALSE,
-  #     selectize = FALSE,
-  #     width = NULL,
-  #     size = NULL
-  #   ))
-  #   
-  # 
-  #   }  else if (rv$lang =="fin") {
-  #     div(id="sla",
-  #     selectInput(
-  #       "bud",
-  #       inf("Hiilibudjetti CO2-nettopäästöille vuoden 2020 alusta lähtien", "infobudget"),
-  # 
-  # 
-  #       c("400Gt (67% todennäköisyys pysyä alle 1,5°C)" = 400,
-  #         "500Gt (50% todennäköisyys pysyä alle 1,5°C)" = 500,
-  #         "1150Gt (67% todennäköisyys pysyä alle 2,0°C)" = 1150,
-  #         "1350Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1350
-  #       ),selected=1150,
-  #       multiple = FALSE,
-  #       selectize = FALSE,
-  #       width = NULL,
-  #       size = NULL
-  #     )
-  #     )
-  # 
-  # 
-  #   }
-  #   
-  # } )
-  # 
-  
-  
-  
-  
-  
-  output$concc = renderUI({
-    req(rv$fyear)
-    req(rv$lyear)
-    if (rv$lang=="eng") {
-      
-      word ="Convergence of countries' emissions:" } else {
-        word="Päästöjen yhdentymisen aste:"
-      }
-    
-    # if (input$view ==1) {
-    # fluidRow(
-
-      sliderInput("conc",
-                  inf(word, "infoconvergence3"), 
-                  min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
-      
-    # )
-    
-    
-    
-    
-    
-    
-  })
-  
-  
-  
-  output$xxyear = renderUI({
-    req(rv$fyear)
-    req(rv$lyear)
-    if (rv$lang=="eng") {
-      
-      word ="Show year:" } else {
-        word="Näytä tiedot vuodelle:"
-      }
-
-    # if (input$view ==1) {
-    fluidRow(
-      style =  "margin-left: 0vw;
-              margin-top: -1vw;
-                      margin-bottom: -1vw; ",
-      sliderTextInput("xyear", label=word,choices= seq(rv$fyear, rv$lyear, 1),
-                      
-                      # sliderTextInput("yearc", label=NULL,choices= seq(minyy, maxyy, 1),
-                      # from_min = rv$ffyear, from_max = rv$lyear
-                      
-                      selected=c(2040),
-                      width="100%"
-                      , animate=TRUE
-                      ,grid=FALSE
-                      # ticks=FALSE
-                      )
-    )
-    
-
-      
-      
-   
-      
-  })
-  
-  
-  
-  # 
-  # output$xxcen = renderUI({
-  #   # if (input$view ==1) {
-  #   fluidRow(
-  #     style =  "margin-left: 0vw;
-  #             margin-top: -1vw;
-  #                     margin-bottom: -1vw; ",
-  #     
-  #      sliderInput("xcen",
-  #                   inf("Number of segments", "infopricing"),
-  #                   min = 2, max = 218, value = c(218),
-  #                  dragRange=FALSE, ticks = FALSE)
-  #   )
-  # })
-  # 
-  
-  
-  
-  
-  
-  
-  output$yearcui = renderUI({
-    req(rv$ffyear)
-    req(rv$lyear)
-    if (input$view ==1) {
-      fluidRow(
-        style =  "margin-left: 0vw;
-              margin-top: -1vw;
-                      margin-bottom: -1vw; ",
-        sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1),
-                        
-                        # sliderTextInput("yearc", label=NULL,choices= seq(minyy, maxyy, 1),
-                        from_min = rv$ffyear, from_max = rv$lyear
-                        
-                        ,selected=c(rv$lyear),
-                        width="100%"
-                        , animate=FALSE
-                        #
-                        ,grid=FALSE
-                        # ,ticks=FALSE
-                        
-        )
-      )
-    }  else if (input$view ==2) {
-      minyy = mminyy
-      maxyy = mmaxyy 
-      
-      fluidRow(
-        
-        style =  "margin-left: 0vw;
-              margin-top: -1vw;
-                      margin-bottom: -1vw;
-",
-sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1),
-                
-                # sliderTextInput("yearc", label=NULL, choices= seq(minyy, maxyy, 1),
-                from_min = rv$ffyear, from_max = rv$lyear
-                # ,step=1
-                ,selected=c(rv$lyear)
-                 ,grid=FALSE
-                # ,ticks=FALSE
-                ,width="100%"
-                , animate=FALSE
-                
-)
-
-      )
-      
-    }
-    else if (input$view %in% c(3,4)) {
-      fluidRow(
-        style =  "margin-left: 0vw;
-              margin-top: -1vw;
-                      margin-bottom: -1vw;",
-        sliderTextInput("yearc", label=NULL,choices= seq(rv$ffyear, rv$lyear, 1)
-                        ,from_min = rv$ffyear, from_max = rv$lyear
-                        
-                        ,selected=c(rv$lyear),
-                        width="100%"
-                        , animate=FALSE
-                         ,grid=FALSE
-                        # ticks=FALSE
-        )
-      )
-      
-    }
-    
-    
-    
-  })
-  
-  # plotOutput("plot3"
-  #            # ,height=paste0(huhu)
-  #            # ht()
-  #            ,height=session$clientData[["output_plot3_width"]]
-  # 
-  #            ,hover = "plot_hover"
-  # ) }  )
   
 }

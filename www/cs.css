@@ -34,7 +34,7 @@
 --colink: #54cae3;
 --colink: #4ba180;
 
---colbut:  #4ba180;
+--colbut:  #c2e6ff;
 --colslide:#67CEC4;
 --colcheck: #5ABAE0;
 
@@ -50,6 +50,7 @@
 --colb: #35473F;
 --colb: #484B4D;
 --colb: #2f3c44;
+
 
 --colbcard: #2E2E2E;
 --colbcard: #2f4238;
@@ -76,6 +77,7 @@
 --collinea: #2f3a3b;
 
 --collineb: #0a5550;
+--collineb: #015054;
   
 --backs: #0202025e;  
   
@@ -544,6 +546,11 @@ line-height: 1;
 
 }
 
+.fa, .fa-brands, .fa-classic, .fa-regular, .fa-sharp, .fa-solid, .fab, .far, .fas {
+padding-top: 0.1vw;
+}
+
+
 .input[type=checkbox] {
     transform: scale(.7);
 }
@@ -705,6 +712,7 @@ overflow: scroll;
 border-color: var(--collinea) !important;
  border: 0px solid white;
 text-align: left;
+
 
                }
 
@@ -1536,7 +1544,7 @@ font-weight: 900;
 
 
 #tuto .card {
-border-color: var(--colo);
+border-color: var(--colb);
 border-width: 2px;
 margin-bottom: .2rem;
 margin-top: .2em;

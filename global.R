@@ -67,11 +67,11 @@ vv = .8
 
 
 fos = hsv(0.08,0.93,0.89)
-lul = hsv(	0.16,1,0.78)
+lul = hsv(	0.16,1,0.58)
 
-sink = hsv(	0.18,1,0.78)
+sink = hsv(	0.18,1,0.58)
 source = hsv(	0.11,1,0.78)
-newsink = hsv(	0.20,1,0.78)
+newsink = hsv(	0.20,1,0.58)
 
 
 net = hsv(0.11,0.88,0.85)
@@ -84,11 +84,11 @@ pop =hsv(0.7,0.47,1)
 tax = hsv(0.3,0.93,0.78)
 
 
-fpop = hsv(0.58,0.86,1)
-fosindi =hsv(0.5,0.72,0.81)  
+fpop = hsv(0.54,0.86,1)
+fosindi =hsv(0.48,0.72,0.81)  
 cpop = fosindi
 # cpop = fosindi
-countryfossil = hsv(0.54,0.78,0.88)  
+countryfossil = hsv(0.57,0.68,0.88)  
 
 # avgcost = hsv(0.57,.7,.9)
 avgcost = hsv(0.96,0.63,0.79)
@@ -545,7 +545,6 @@ arg = function(start, end, convergence, coustart) {
   pri = "logarithmic"
   sprice = 200
   eprice = 1400
-  
   sken= rep(150,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
@@ -558,11 +557,35 @@ arg = function(start, end, convergence, coustart) {
   pri = "linear"
   sprice = 150
   eprice = 1200
-  
   sken= rep(250,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb2 = copy(skenb)
+  
+  
+  vuo = c(2024, 2065)
+  yearc = 2065
+  paa = 5
+  muo = "percentual"
+  pri = "linear"
+  sprice = 80
+  eprice = 800
+  sken= rep(500,8)
+  vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
+  skenb = data.frame(nams, sken, vals)
+  skenb3 = copy(skenb)
+  
+  vuo = c(2024, 2070)
+  yearc = 2070
+  paa = 5
+  muo = "percentual"
+  pri = "linear"
+  sprice = 70
+  eprice = 700
+  sken= rep(600,8)
+  vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
+  skenb = data.frame(nams, sken, vals)
+  skenb4 = copy(skenb)
   
   vuo = c(2024, 2080)
   yearc = 2080
@@ -571,11 +594,10 @@ arg = function(start, end, convergence, coustart) {
   pri = "linear"
   sprice = 50
   eprice = 500
-  
   sken= rep(950,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
-  skenb3 = copy(skenb)
+  skenb5 = copy(skenb)
   
   vuo = c(2024, 2100)
   yearc = 2100
@@ -584,14 +606,13 @@ arg = function(start, end, convergence, coustart) {
   pri = "linear"
   sprice = 40
   eprice = 400
-  
   sken= rep(1150,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
-  skenb4 = copy(skenb)
+  skenb6 = copy(skenb)
   
   
-  skenbs = rbind(skenb1, skenb2, skenb3, skenb4)
+  skenbs = rbind(skenb1, skenb2, skenb3, skenb4, skenb5, skenb6)
   
   skenbs = as.data.table(skenbs)
   # 13
@@ -610,7 +631,11 @@ da = data.frame(l,r)
 # population projections
 paac = as.data.table(paac)
 
+#remove Tokelau because it does not have non-co2 information
+paac = paac[!(country=="Tokelau"),]
 paac[country =="China, Taiwan Province of China", country:="Taiwan"]
+
+# pay = paac[year==2021 & var==3,]
 
 pack = copy(paac)
 # pack = paac[year >=pastyear, ]
@@ -721,15 +746,15 @@ cuk = function(col, label, info, show, lab, value) {
 
 
 cuk2 = function(col, label, info, show, lab, value) {
-  div(div(style="display:inline-block; text-align: left !important;", div(style=paste0("color:",col,";","font-weight:1000; "),
+  div(div(style="display:inline-block; text-align: left !important; margin-left: -5px; ", div(style=paste0("color:",col,";","font-weight:1000; "),
                                               label
   )),
-  div(style="display:inline-block; text-align: left !important;",HTML( "<font size='2'>",
+  div(style="display:inline-block; text-align: left !important;  ",HTML( "<font size='2'>",
                                          as.character(actionLink(inputId = info,
                                                                  label = "  ",
                                                                  icon = icon("fas fa-info-circle"))), "</font>") ),
   # div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
-  div(style="display:inline-block; text-align: right !important;; ",checkboxInput(show, label=lab,  value=FALSE)))
+  div(style="display:inline-block; text-align: right !important;  ",checkboxInput(show, label=lab,  value=FALSE)))
 
 }
 
