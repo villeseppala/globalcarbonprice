@@ -1097,7 +1097,7 @@ server <- function(input,output, session) {
                 , 
                 # href="https://google.com/"
                 
-                href="https://google.com/"
+                href="https://youtu.be/WQVkYVcIdao"
                 
               )
       ))
@@ -1299,7 +1299,7 @@ server <- function(input,output, session) {
                                         , 
                                         # href="https://google.com/"
                                         
-                                        href="https://yle.fi/"
+                                        href="https://youtu.be/Xx9OnqQQSKU"
                                         
                                       )
       ))
