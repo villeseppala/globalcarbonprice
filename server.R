@@ -2525,18 +2525,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                           
                                                           
                                                           
-                                                          conditionalPanel(condition="input.sinkset == 1",
-                                                                           # style="margin-left: .2vw;",
-                                                                           
-                                                                           tags$div(
-                                                                             style="padding-left: 1vw;",
-                                                                             
-                                                                             id="sla",
-                                                                             numericInput("sinksize", 
-                                                                                          inf("Land+CCS CO2 net sink", "infoemissionsink"), 
-                                                                                          min = 0, max = 30,step=.1,value=c(6))), 
-                                                                      
-                                                          )
+                                               
                                                    ),
                                                    
                                                    
@@ -2580,6 +2569,18 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                                         # inf("Set sink level different from ", "infoemissionsink"), 
                                                                         value=FALSE
                                                           )), 
+                                                 conditionalPanel(condition="input.sinkset == 1",
+                                                                  # style="margin-left: .2vw;",
+                                                                  
+                                                                  tags$div(
+                                                                    style="padding-left: 1vw;",
+                                                                    
+                                                                    id="sla",
+                                                                    numericInput("sinksize", 
+                                                                                 inf("Land+CCS CO2 net sink", "infoemissionsink"), 
+                                                                                 min = 0, max = 30,step=.1,value=c(6))), 
+                                                                  
+                                                 ),
                                                  
                                                         tags$div(id="sla",
                                                                  checkboxInput("nonco2", 
@@ -2620,7 +2621,8 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                         
                                                         
                                                         tags$div(id="sla",
-                                                                 checkboxInput("luls", "Include costs from Land+CCS CO2", value = FALSE)),          
+                                                                 checkboxInput("luls", "Include costs from Land+CCS CO2", value = FALSE)),  
+                                                 
                                                         
                                                         
                                                         div(class="rad",
@@ -2721,7 +2723,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                          accordionItem(
                            title = "Individual emissions",
                            status = "lightblue",
-                           collapsed = FALSE,
+                           collapsed = TRUE,
                                
                                # ),
                                
@@ -2830,7 +2832,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                        accordionItem(
                          title = "Carbon price",
                          status = "success",
-                         collapsed = FALSE,
+                         collapsed = TRUE,
                          
                                
                                # tabPanel("4. Carbon price",
@@ -2930,202 +2932,224 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
             
         )
        } )
-    }  else if (rv$lang == "fin") {
+    }  
+    
+    else if (rv$lang == "fin") {
       
       output$simpan <- renderUI({
         
         div(id="resu",
             
-            
-            tabsetPanel(id="nok",
-                        
-                        
-                        
-                        
-                        
-                        
-                        selected = "1. Globaalit päästöt",
-                        
-                        tabPanel("1. Globaalit päästöt",
-                                 # p("Aseta yksityiskohtia hiilibudjettia vastaavien CO2-päästöjen polulle"),
+            {
+              div(class = "accordion",
+                  
+                  
+                  accordion( id = "accordion1",
+                             #   style = "color: white !important;",
+                             
+                             # style ="color: white;",
+                             accordionItem(
+                               class="acco",
+                               style = "color: white;",
+                               title = "Globaalit päästöt",
+                               # solidHeader = FALSE,
+                               color = "white",
+                               status = "orange",
+                               collapsed = FALSE,
+                               fluidRow(
                                  
-                                 
-                                 fluidRow(
-                                   column(7,  
-                                          
-                                          
-                                          id = "luu",    
-                                          
-                                          div(id="sla",
-                                              selectInput(
-                                                "bud",
-                                                inf("Hiilibudjetti CO2-nettopäästöille vuoden 2023 alusta lähtien", "infobudget"),
-                                                
-                                                
-                                                c("80Gt (67% todennäköisyys pysyä alle 1,5°C)" = 80,
-                                                  "130Gt (50% todennäköisyys pysyä alle 1,5°C)" = 130,
-                                                  "390Gt (67% todennäköisyys pysyä alle 1,7°C)" = 390,
-                                                  "490Gt (50% todennäköisyys pysyä alle 1,7°C)" = 490,
-                                                  
-                                                  "870Gt (67% todennäköisyys pysyä alle 2,0°C)" = 870,
-                                                  "1050Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1050
-                                                ),selected=870,
-                                                multiple = FALSE,
-                                                selectize = FALSE,
-                                                width = NULL,
-                                                size = NULL
-                                              )
+                                 column(12, 
+                                        id = "luu",  
+                                        
+                                        
+                                        # Specify the CO2 emission trajectory corresponding to the chosen carbon budget
+                                        # Määritä hiilibudjettia vastaavien CO2-päästöjen polku
+                                        # 
+                                        # Estimate your emission progression, GIVEN the chosen carbon price
+                                        # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        div(
+                                          # id="sla",
+                                          selectInput(
+                                            "bud",
+                                            inf("Hiilibudjetti CO2-nettopäästöille vuoden 2023 alusta lähtien", "infobudget"),
+                                            c("80Gt (67% todennäköisyys pysyä alle 1,5°C)" = 80,
+                                              "130Gt (50% todennäköisyys pysyä alle 1,5°C)" = 130,
+                                              "390Gt (67% todennäköisyys pysyä alle 1,7°C)" = 390,
+                                              "490Gt (50% todennäköisyys pysyä alle 1,7°C)" = 490,
+                                              
+                                              "870Gt (67% todennäköisyys pysyä alle 2,0°C)" = 870,
+                                              "1050Gt (50% todennäköisyys pysyä alle 2,0°C)" = 1050
+                                              
+                                            ),selected=870,
+                                            multiple = FALSE,
+                                            selectize = FALSE,
+                                            width = NULL,
+                                            size = NULL
+                                          )),
+                                        
+                                        # p("Change details to the CO2 emission trajectory corresponding to the chosen carbon budget"),
+                                        hr(),
+                                        
+                                        sliderInput("vuo",
+                                                    inf("Hinnoittelun aloitusvuosi ja hiilineutraalisuvuosi", "infopricing"),
+                                                    min = 2025, max = 2100, value = c(2026, 2080), dragRange=FALSE, ticks = FALSE), 
+                                        hr(),
+                                        
+                                        
+                                        fluidRow(
+                                          column(6,
+                                                 # id ="luu",
+                                                 # tags$div(
+                                                 #   id="sla",
+                                                 #   numericInput("paa", 
+                                                 #                inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink"), 
+                                                 #                min = 0.1, max = 30,step=.1,value=c(6))),
+                                                 
+                                                 tags$div(
+                                                   # id="sla",class="slug",
+                                                   sliderInput("paa", 
+                                                               p(class="slug",style="font-weight: 500 !important;", 
+                                                                 inf("CO2-päästöt/nielu loppuvuonna", "infoemissionsink")), 
+                                                                 min = 0.1, max = 30,step=.1,value=c(6), ticks = FALSE)),
+                                                   
+                                                   
+                                                   # hr(),
+                                                   
+                                                   
+                                                   
+                                                   
+                                                 ),
+                                                 
+                                                 
+                                                 column(6,
+                                                        radioButtons("muo", "Fossiilipäästöjen käyrän muoto",
+                                                                     choiceNames=   list(
+                                                                       "Lineaarinen" ,
+                                                                       "Prosentuaalinen",
+                                                                       "Exponential"
+                                                                     ),
+                                                                     
+                                                                     choiceValues= list("linear", "percentual", "exponential"
+                                                                     ),
+                                                                     selected = "percentual"
+                                                                     
+                                                        ) 
+                                                        ,
+                                                        conditionalPanel(condition="input.muo == 'exponential'",
+                                                                         
+                                                                         sliderInput("exponent",
+                                                                                     ("Eksponenttikerroin (matalampi = suuremmat päästövähennykset)"), 
+                                                                                     min = .1, max = 2, value = .7, step=.1, ticks=FALSE)
+                                                        )
+                                                        
+                                                        
+                                                 )
                                           ),
                                           
                                           hr(),
-                                          sliderInput("vuo", 
-                                                      inf("Hinnoittelun aloitusvuosi ja hiilineutraalisuvuosi", "infopricing"),
-                                                      min = 2025, max = 2100, value = c(2026, 2080), dragRange=FALSE, ticks = FALSE),
-                                          hr(),
                                           
-                                          # p("Huom: Budjetin muuttaminen resetoi monia muita valintoja"),
+                                          p("Syventävät valikot globaaleille päästöille:"),   
                                           
                                           
-                                          fluidRow(
-                                            
-                                            column(6,
-                                                   id = "luu",
-                                                   # hr(),
-                                                   
-                                                   tags$div(id="sla",numericInput("paa", 
-                                                                                  inf("CO2-päästöt/nielu loppuvuonna", "infoemissionsink"), 
-                                                                                  min = 0.1, max = 30,step=.1,value=c(6))),   
-                                                   
-                                                   
-                                                   
-                                                   
-                                                   
-                                                   tags$div(id="sla",
-                                                            checkboxInput("sinkset", 
-                                                                          label=("EXTRA: Aseta CO2-nettonielulle eri arvo kuin CO2-päästöille"), 
-                                                                          
-                                                                          # inf("Set sink level different from ", "infoemissionsink"), 
-                                                                          value=FALSE
-                                                            )),     
-                                                   # hr(),
-                                                   
-                                                   
-                                                   
-                                                   conditionalPanel(condition="input.sinkset == 1",
-                                                                    
-                                                                    tags$div(
-                                                                      id="sla",
-                                                                      style="padding-left: 1vw;",
-                                                                      
-                                                                      numericInput("sinksize", 
-                                                                                   inf("Maa+CCS CO2-nettonielu", "infoemissionsink"), 
-                                                                                   min = 0, max = 30,step=.1,value=c(6))), 
-                                                                    
-                                                                    # selectInput(
-                                                                    #   "sinkshape",
-                                                                    #   inf("Shake of custom sink", "infobudget"), 
-                                                                    #   c(
-                                                                    #     "3-step linear" = "3step",
-                                                                    #     "Custom expontential" = "exponential"
-                                                                    #     
-                                                                    #   ),selected="3step"
-                                                                    # 
-                                                                    # )                           
-                                                                    
-                                                   )
-                                                   
-                                                   
-                                            ),
-                                            column(6, 
-                                                   
-                                                   radioButtons("muo", "Fossiilipäästöjen käyrän muoto",
-                                                                choiceNames=   list(
-                                                                  "Lineaarinen" ,
-                                                                  "Prosentuaalinen",
-                                                                  "Exponential"
-                                                                ),
-                                                                
-                                                                choiceValues= list("linear", "percentual", "exponential"
-                                                                ),
-                                                                selected = "percentual"
-                                                                
-                                                   )                                                     
-                                                   ,
-                                                   conditionalPanel(condition="input.muo == 'exponential'",
-                                                                    
-                                                                    sliderInput("exponent",
-                                                                                ("Eksponenttikerroin (matalampi = suuremmat päästövähennykset)"), 
-                                                                                min = .1, max = 2, value = .7, step=.1, ticks=FALSE)
-                                                                    
-                                                   )
-                                                   
-                                            ) 
-                                            
-                                            
-                                          )      
-                                          # )) 
-                                   ),
-                                   
-                                   
-                                   
-                                   
-                                   column(5,
-                                          style=c("margin-right: .5vw;"),       
+                                          # column(12,  #luu { 
+                                          style=c("margin-right: .5vw;"),
+                                          
                                           tags$div(id="sla",
-                                                   checkboxInput("nonco2",  label = "Sisällytä muutkin kasvihuonekaasut kuin CO2 (suositeltua)"
-                                                                 , value=FALSE        
+                                                   checkboxInput("sinkset", 
+                                                                 label=("Aseta CO2-nettonielulle eri arvo kuin CO2-päästöille"), 
+                                                                 
+                                                                 # inf("Set sink level different from ", "infoemissionsink"), 
+                                                                 value=FALSE
+                                                   )),
+                                          conditionalPanel(condition="input.sinkset == 1",
+                                                           # style="margin-left: .2vw;",
+                                                           
+                                                           tags$div(
+                                                             style="padding-left: 1vw;",
+                                                             
+                                                             id="sla",
+                                                             numericInput("sinksize", 
+                                                                          inf("Maa+CCS CO2-nettonielu", "infoemissionsink"), 
+                                                                          min = 0, max = 30,step=.1,value=c(6))), 
+                                                           
+                                          ),
+                                          
+                                          tags$div(id="sla",
+                                                   checkboxInput("nonco2", 
+                                                                 label = "Sisällytä muutkin kasvihuonekaasut kuin CO2 (suositeltua)",
+                                                                 value=FALSE
                                                    )
                                                    
-                                          ),       
+                                          ), 
                                           div(class="slug",    
-                                              
                                               conditionalPanel(
                                                 
                                                 condition="input.nonco2 == 1",
-                                                tags$div(id="sla",
-                                                         style="padding-left: 1vw;",
+                                                tags$div(id="sla", 
+                                                         style="padding-left: 1vw; display:inline-block;",
                                                          
                                                          class="slug",  numericInput("nonco2end",
-                                                                                     p(class="slug", style="font-weight: 500 !important;",
-                                                                                       inf("Muut päästöt hiilineutraaliusvuonna", 
-                                                                                           "infononco2u")),
+                                                                                     p(class="slug", style="font-weight: 500 !important;", inf("Muut päästöt hiilineutraaliusvuonna", 
+                                                                                                                                               "infononco2u")),
                                                                                      
                                                                                      min = 5, max = 10,step=.1,value=c(7.5)))
                                                 
                                                 
-                                              )),     
+                                              )),
                                           
-                                          hr(),
+                                          # hr(),
+                                          
+                                          # tags$div(
+                                          #   id="sla",class="slug",
+                                          #   numericInput("paa", 
+                                          #                p(class="slug",style="font-weight: 500 !important;", inf("CO2 emissions/sink at the carbon neutrality year", "infoemissionsink")), 
+                                          #                min = 0.1, max = 30,step=.1,value=c(6))),
+                                          # class="slug",  numericInput("nonco2end",
+                                          #                             p(class="slug", style="font-weight: 500 !important;", inf("Non-CO2 emissions at CO2 neutrality year", 
+                                          #                                                                                       "infononco2u")),
+                                          #                             
+                                          #                             min = 5, max = 10,step=.1,value=c(7.5)))
+                                          
+                                          
                                           
                                           tags$div(id="sla",
-                                                   checkboxInput("luls", "Kokeellinen: Maankäytön + CCS kustannusten sisällyttäminen", value = FALSE)),          
+                                                   checkboxInput("luls", "Maankäytön + CCS kustannusten sisällyttäminen", value = FALSE)),          
                                           
                                           
                                           div(class="rad",
-                                              style="padding-left: 1vw;",
-                                              
                                               conditionalPanel(
                                                 
                                                 condition="input.luls == 1",
-                                                # p("Note: "),
-                                                textOutput("land1"),
-                                                textOutput("land2"),
-                                                textOutput("land3"),
-                                                
-                                                sliderInput("lulls",
-                                                            ("Maankäytön päästöjen osuus maan+CCS nettovähennykestä, %"), 
-                                                            min = 0, max = 100, value = 75, step=1, ticks=FALSE),
-                                                
-                                                textOutput("land4"),
-                                                
-                                                textOutput("land5"),
-                                                textOutput("land6")
+                                                div(
+                                                  style="padding-left: 1vw;",
+                                                  
+                                                  # p("Note: "),
+                                                  textOutput("land1"),
+                                                  textOutput("land2"),
+                                                  textOutput("land3"),
+                                                  
+                                                  sliderInput("lulls",
+                                                              ("Maankäytön päästöjen osuus maan+CCS nettovähennykestä, &"), 
+                                                              min = 0, max = 100, value = 70, step=1, ticks=FALSE),
+                                                  
+                                                  textOutput("land4"),
+                                                  
+                                                  textOutput("land5"),
+                                                  textOutput("land6")
+                                                )
                                                 
                                               )               
                                           ),
                                           
                                           
-                                          hr(),
+                                          # hr(),
                                           
                                           tags$div(id="sla",
                                                    checkboxInput("advance", "Aseta päästöt vuodelle ennen alkuvuotta")), 
@@ -3138,14 +3162,13 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                 condition="input.advance == 1",
                                                 p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta (2021) hinnoittelun alkua edeltävään vuoteen. Oletusarvoina on vuoden 2021 arvot."),
                                                 
-                                                tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(37.1))),
+                                                tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(36.4))),
                                                 
                                                 
                                                 conditionalPanel(
                                                   condition="input.nonco2 == 1",
                                                   tags$div(id="sla",numericInput("nonco2start", label=p("Muut päästöt"),min = 0.1, max = 20,step=.1,value=c(12.3)))
-                                                ),    
-                                                
+                                                ),   
                                                 
                                                 conditionalPanel(
                                                   condition="input.luls == 0",
@@ -3160,190 +3183,232 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                   
                                                 ),
                                                 
+                                                
+                                                
+                                                
                                                 conditionalPanel(
                                                   condition="input.luls == 1",
                                                   tags$div(id="sla",numericInput("sourcestart", label=p("Maan päästöt"),min = 0, max = 20,step=.1,value=c(13.6))),
-                                                  tags$div(id="sla",numericInput("sinkstart", label=p("Maanielut + CCS"),min = -20, max = 0,step=.1,value=c(-9.7)))
+                                                  tags$div(id="sla",numericInput("sinkstart", label=p("Maanielut+CCS"),min = -20, max = 0,step=.1,value=c(-9.7)))
                                                   
                                                   
                                                 )            
                                                 
                                                 
-                                              )    
+                                              ) 
                                               
-                                          )    ) )
+                                              
+                                          ))
+                                 )
+                               ))) 
+                  
+             
+            }
+            ,                           
+            
+            
+            
+            
+            
+            
+            
+            
+            {
+              
+              div(class = "accordion",
+                  
+                  accordion( id = "accordion2",
+                             accordionItem(
+                               title = "Yksilöpäästöt",
+                               status = "lightblue",
+                               collapsed = TRUE,
+                               
+                               # ),
+                               
+                               
+                               # tabPanel( "2. Population projection",
+                               
+                               radioButtons("popc", 
+                                            inf("Valitse YK:n väestöprojektio", "infopopu"), 
+                                            
+                                            c(
+                                              "95% jakauman yläraja (11.44 miljardia vuonna 2100)" = 5,
+                                              "80% jakauman yläraja (11.03 miljardia vuonna 2100)" = 4,
+                                              "Mediaani-projektio (10.18 miljardia vuonna 2100)" = 3,
+                                              "80% jakauman alaraja (9.41 miljardia vuonna  2100)" = 2,
+                                              "95% jakauman alaraja (9.05 miljardia vuonna 2100)" = 1
+                                            ),selected=3
+                               )
+                               
+                               
+                               # )
+                               ,
+                               hr(),
+                               
+                               # tabPanel("3. User emissions", 
+                               # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
+                               
+                               
+                               
+                               p("Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen"),   
+                               fluidRow(
                                  
-                        ),
-                        
-                        
-                        
-                        tabPanel(
-                          
-                          "2. Maailman väestö",
-                          
-                          
-                          
-                          radioButtons("popc", 
-                                       inf("Valitse YK:n väestöprojektio", "infopopu"), 
-                                       
-                                       c(
-                                         "95% jakauman yläraja (11.44 miljardia vuonna 2100)" = 5,
-                                         "80% jakauman yläraja (11.03 miljardia vuonna 2100)" = 4,
-                                         "Mediaani-projektio (10.18 miljardia vuonna 2100)" = 3,
-                                         "80% jakauman alaraja (9.41 miljardia vuonna  2100)" = 2,
-                                         "95% jakauman alaraja (9.05 miljardia vuonna 2100)" = 1
-                                       ),selected=3
-                          )
-                          
-                        ),
-                        
-                        
-                        
-                        
-                        tabPanel("3. Käyttäjän päästöt",
-                                 
-                                 # Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen               
-                                 
-                                 p("Arvioi oma päästökehityksesi, olettaen valitun hiilen hinnan kehityksen"),   
-                                 
-                                 fluidRow(
-                                   
-                                   
-                                   
-                                   column(4, id = "luu",
-                                          tags$div(id="sla",numericInput("indi1", label=inf("Nykyiset päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
-                                          hr(),
-                                          
-                                          tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
-                                          
-                                          # hr(),
-                                          
-                                   ), 
-                                   column(4, id = "luu",
-                                          
-                                          radioButtons("muoindi", "Käyttäjän päästöjen käyrän muoto",
-                                                       choiceNames=   list(
-                                                         "Lineaarinen" ,
-                                                         "Prosentuaalinen",
-                                                         "Eksponentiaalinen"
-                                                         
-                                                         
-                                                       ), 
-                                                       choiceValues= list("linear", "percentual", "exponential"),
-                                                       selected = "percentual"
+                                 column(7, 
+                                        id = "luu",
+                                        tags$div(id="sla",numericInput("indi1", label=inf("Nykyiset päästöt käyttäjälle, t", "infostartuser"),min = .01, max = 40,step=.01,value=c(8.88))),
+                                        hr(),
+                                        
+                                        tags$div(id="sla",numericInput("indi2", label=inf("Loppuvuoden päästöt käyttäjälle, t","infoenduser" ),min = .01, max = 40,step=.01,value=c(1.5)))
+                                        
+                                 ), 
+                                 column(5, id = "luu",
+                                        
+                                        radioButtons("muoindi", "Käyttäjän päästöjen käyrän muoto",
+                                                     choiceNames=   list(
+                                                       "Lineaarinen" ,
+                                                       "Prosentuaalinen",
+                                                       "Eksponentiaalinen"
                                                        
-                                          )
-                                          ,
-                                          conditionalPanel(condition="input.muoindi == 'exponential'",
-                                                           
-                                                           sliderInput("exponentindi",
-                                                                       ("Eksponentti-kerroin (matalampi = suurempi paino päästövähennyksiin kuin nieluihin)"), 
-                                                                       min = .1, max = 2, value = .6, step=.1, ticks=FALSE)
-                                          )
-                                          
-                                   ), 
-                                   column(4,
-                                          selectInput("indi",
-                                                      inf("VAIHTOEHTO: Käytä tietyn maan keskipäästöjä (tämä hidastaa sivua huomattavasti) ", "infoconvergence"), 
-                                                      
-                                                      choices =c("none", paaco$country), selected="none"),
-                                          
-                                          
-                                          tags$div(id ="countrr",
-                                                   
-                                                   pickerInput(
-                                                     inputId = "countr",
-                                                     label = "Näytä indikaattorit tietylle maalle/maille (tämä hidastaa sivua huomattavasti)",
-                                                     choices = c(paaco$country),
-                                                     selected= NULL,
-                                                     options = pickerOptions(
-                                                       `actions-box` = TRUE,container = "body"),
-                                                     multiple = TRUE
+                                                       
+                                                     ), 
+                                                     choiceValues= list("linear", "percentual", "exponential"),
+                                                     selected = "percentual"
                                                      
-                                                   )),
-                                          conditionalPanel(
-                                            
-                                            # condition="input.indi != 'none'",
-                                            condition="input.indi != 'none' || output.lek == 1",
-                                            
-                                            sliderInput("con",
-                                                        
-                                                        inf("Maiden päästöjen yhdentymisen aste", "infoconvergence1"), 
-                                                        min = .01, max = 1, value = .5, step=.01)
-                                          )  ) )
-                        )   
-                        ,
-                        tabPanel("4. Hiilen hinta",
-                                 
-                                 p("Hiilen hinta tulisi asettaa tarpeeksi korkeaksi, että sen avulla saavutetaan valitut päästötavoitteet"),
-                                 
-                                 
-                                 fluidRow(
-                                   column(4, id = "luu",
-                                          tags$div(id="sla", numericInput("sprice",
-                                                                          inf("Alkuvuoden hiilen hinta, $", "infostartprice"), 
-                                                                          
-                                                                          min = 1, max = 1000000,step=1,value=c(50))),
-                                          hr(),
+                                        )
+                                        ,
+                                        conditionalPanel(condition="input.muoindi == 'exponential'",
+                                                         
+                                                         sliderInput("exponentindi",
+                                                                     ("Eksponentti-kerroin (matalampi = suurempi paino päästövähennyksiin kuin nieluihin)"), 
+                                                                     min = .1, max = 2, value = .6, step=.1, ticks=FALSE)
+                                        )
+                                        
+                                 )),
+                               hr(),
+                               
+                               p("Syventävät valikot yksilöpäästöille:"),   
+                               
+                               fluidRow(
+                                 column(12,
+                                        selectInput("indi",
+                                                    inf("VAIHTOEHTO: Käytä tietyn maan keskipäästöjä (tämä hidastaa sivua huomattavasti) ", "infoconvergence"), 
+                                                    
+                                                    choices =c("none", paaco$country), selected="none", selectize=TRUE))),
+                               
+                               fluidRow(
+                                 column(12,                                                
+                                        tags$div(id ="countrr",
+                                                 
+                                                 pickerInput(
+                                                   inputId = "countr",
+                                                   label = "Näytä indikaattorit tietylle maalle/maille (tämä hidastaa sivua huomattavasti)",
+                                                   choices = c(paaco$country),
+                                                   selected= NULL,
+                                                   options = pickerOptions(
+                                                     `actions-box` = TRUE,container = "body"),
+                                                   multiple = TRUE
+                                                   
+                                                 )),
+                                        conditionalPanel(
                                           
-                                          tags$div(id="sla",numericInput("eprice", 
-                                                                         inf("Loppuvuoden hiilen hinta, $", "infoendprice"), 
-                                                                         
-                                                                         
-                                                                         min = 1, max = 1000000,step=1,value=c(500))),
-                                          
-                                          
-                                   ),
-                                   
-                                   column(4, 
-                                          radioButtons("pri", "Hintakäyrän muoto",
-                                                       choiceNames=list(
-                                                         "Lineaarinen",
-                                                         "Prosentuaalinen"
-                                                         ,
-                                                         "Logaritminen"
-                                                       ), 
-                                                       choiceValues= list("linear", "percentual", "logarithmic")
-                                                       
-                                          )
-                                   ), 
-                                   column(4,
-                                          
-                                          sliderInput(
-                                            inputId = "national",
-                                            inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv")
-                                            
-                                            , min = 0, max = 100, value = 0, step=1, ticks = FALSE
-                                          ), 
-                                          conditionalPanel(
-                                            condition="input.national != 0",
-                                            hr(),
-                                            
-                                            
-                                            selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
-                                            
-                                          ),
-                                          conditionalPanel(
-                                            condition='output.lek',
-                                            # condition="rv$lek == 'true'",
-                                            
-                                            hr(),
-                                            
-                                            sliderInput("conb",
-                                                        inf("Maiden päästöjen yhdentymisen aste", "infoconvergence2"), 
-                                                        min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
-                                            
-                                          )
-                                   )
-                                   
-                                   
+                                          condition="input.indi != 'none' || output.lek == 1",
+                                          sliderInput("con",
+                                                      
+                                                      inf("Maiden päästöjen yhdentymisen aste", "infoconvergence1"), 
+                                                      min = .01, max = 1, value = .5, step=.01)
+                                        ) )) 
+                             ))
+              )
+            }
+            # )  
+            ,
+            
+            {
+              
+              div(class = "accordion",
+                  
+                  accordion( id = "accordion3",
+                             accordionItem(
+                               title = "Päästöjen hinta",
+                               status = "success",
+                               collapsed = TRUE,
+                               
+                               
+                               # tabPanel("4. Carbon price",
+                               #          p("Carbon price should be set high enough to achieve the chosen emission targets"),
+                               
+                               fluidRow(
+                                 column(7, id = "luu",
+                                        tags$div(id="sla", class="slug",  numericInput("sprice",
+                                                                                       p(class="slug", style="font-weight: 500 !important;", inf("Alkuvuoden hiilen hinta, $", 
+                                                                                                                                                 "infostartprice")),
+                                                                                       
+                                                                                       
+                                                                                       min = 1, max = 1000000,step=1,value=c(50))),
+                                        hr(),
+                                        # 
+                                        # tags$div(id="sla", numericInput("sprice",
+                                        #                                 inf("Alkuvuoden hiilen hinta, $", "infostartprice"),
+                                        #                                 inf("Muut päästöt hiilineutraaliusvuonna",
+                                        #                                     tags$div(id="sla",numericInput("eprice",
+                                        
+                                        
+                                        
+                                        tags$div(id="sla",numericInput("eprice", 
+                                                                       inf("Loppuvuoden hiilen hinta, $", "infoendprice"), 
+                                                                       
+                                                                       
+                                                                       min = 1, max = 1000000,step=1,value=c(500))),
+                                        
+                                        
                                  ),
                                  
+                                 column(5,  id = "luu",
+                                        radioButtons("pri", "Hintakäyrän muoto",
+                                                     choiceNames=list(
+                                                       "Lineaarinen",
+                                                       "Prosentuaalinen"
+                                                       ,
+                                                       "Logaritminen"
+                                                     ), 
+                                                     choiceValues= list("linear", "percentual", "logarithmic")
+                                                     
+                                        )
+                                 ) ),
+                               fluidRow(
+                                 column(12,
+                                        sliderInput(
+                                          inputId = "national",
+                                          inf("Jaa osuus kerätyistä hiilen hinnoittelutuloista kansallisesti", "infonationaldiv"),
+                                          min = 0, max = 100, value = 0, step=1, ticks=FALSE
+                                        ), 
+                                        conditionalPanel(
+                                          condition="input.national != 0",
+                                          hr(),
+                                          
+                                          
+                                          selectInput("nationalcoun", label = "Käyttäjän asuinmaa kansallista osinkoa varten (tämä hidastaa sivua huomattavasti)", choices =c("none", paaco$country), selected="none"),
+                                          
+                                        ),
+                                        conditionalPanel(
+                                          condition='output.lek == 1',
+                                          # condition="rv$lek == 1",
+                                          hr(),
+                                          
+                                          sliderInput("conb",
+                                                      inf("Maiden päästöjen yhdentymisen aste", "infoconvergence2"), 
+                                                      min = .01, max = 1, value = .5, step=.01)
+                                          
+                                        ) 
+                                 )
                                  
-                        )
-                        
-            )
-            
+                                 
+                               )
+                               
+                             ))
+              )
+              
+            }
             
             #             tabPanel("EXTRA: Maat",
             #                      fluidRow(
@@ -3382,6 +3447,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
             #             
             #             
             # )
+             
         )}
       )
       

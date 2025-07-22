@@ -433,12 +433,12 @@ margin-top: -.8rem;',
                                  
                                  # style=" border: solid 1px white;", 
                                  div(
-                                          div(
-
-                                            # p(style = 'text-align: right',"Observe specific year:")
-                                            tagList(uiOutput(style = 'padding-top: 0.6vw; font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: left; line-height: .85 !important;', "obsyear")
-                                            )
-                                          ),
+                                          # div(
+                                          # 
+                                          #   # p(style = 'text-align: right',"Observe specific year:")
+                                          #   tagList(uiOutput(style = 'padding-top: 0.6vw; font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: left; line-height: .85 !important;', "obsyear")
+                                          #   )
+                                          # ),
                                    # )
                                    
                                    fluidRow(
