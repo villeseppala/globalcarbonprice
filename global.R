@@ -107,7 +107,11 @@ countrycost = hsv(0.94,0.63,0.79)
 countrynetcost = hsv(0.9,0.63,0.69)
 
 countrypop = hsv(0.75,0.52,.8)
-hyear = 2021
+hyear = 2023
+budgetyear = 2025
+
+inyear = 2026
+
 # dividend = avgcost
 # avgnetcost = avgcost
 # taxfosindi = avgcost
@@ -127,14 +131,14 @@ hih =.63
 prinet = 120
 
  maxyy=2138
- minyy=1979
+ minyy=1980
  
  mmaxyy = 2147
  mminyy = 1997
  
  
  mmmaxyy=2145
- mmminyy=1974
+ mmminyy=1994
  
  mmin = 
 # font_add_google("Lato", "lato")
@@ -436,24 +440,24 @@ lu[sec == "ghg", labbi:="Global emissions"]
 lu[sec == "nonco2", labbi:="Global emissions"]
 
 lu[sec == "price", labbi:="Carbon price"]
-lu[sec == "avgcost", labbi:="Emissions costs and benefits"]
+lu[sec == "avgcost", labbi:="Income effects"]
 lu[sec == "avgfossil", labbi:="Individual emissions"]
 lu[sec == "userfossil", labbi:="Individual emissions"]
-lu[sec == "netcost", labbi:="Emissions costs and benefits"]
-lu[sec == "usercost", labbi:="Emissions costs and benefits"]
+lu[sec == "netcost", labbi:="Income effects"]
+lu[sec == "usercost", labbi:="Income effects"]
 lu[sec == "pop", labbi:="Population projection"]
-lu[sec == "dividend",labbi:="Emissions costs and benefits"]
-lu[sec == "avgnetcost", labbi:="Emissions costs and benefits"]
-lu[sec == "countrycost", labbi:="Emissions costs and benefits"]
-lu[sec == "countrynetcost",labbi:="Emissions costs and benefits"]
+lu[sec == "dividend",labbi:="Income effects"]
+lu[sec == "avgnetcost", labbi:="Income effects"]
+lu[sec == "countrycost", labbi:="Income effects"]
+lu[sec == "countrynetcost",labbi:="Income effects"]
 lu[sec == "countryfossil", labbi:="Individual emissions"]
 lu[sec == "countrypop", labbi:="Population projection"]
-lu[sec == "countrydividend", labbi:="Emissions costs and benefits"]
-lu[sec == "averagedividend", labbi:="Emissions costs and benefits"]
+lu[sec == "countrydividend", labbi:="Income effects"]
+lu[sec == "averagedividend", labbi:="Income effects"]
 lu[sec == "source", labbi:="Global emissions"]
 lu[sec == "sink", labbi:="Global emissions"]
 lu[sec == "newsink", labbi:="Global emissions"]
-lu[sec == "landcost", labbi:="Emissions costs and benefits"]
+lu[sec == "landcost", labbi:="Income effects"]
 
 
 # lalist = c("Fossil emissions", "Land emissions / sinks", "Net emissions","World population",
@@ -470,24 +474,24 @@ lu2[sec == "ghg", labbi:="Globaalit päästöt"]
 lu2[sec == "nonco2", labbi:="Globaalit päästöt"]
 
 lu2[sec == "price", labbi:="Päästöjen hinta"]
-lu2[sec == "avgcost", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "avgcost", labbi:="Tulovaikutukset"]
 lu2[sec == "avgfossil", labbi:="Yksilökohtaiset päästöt"]
 lu2[sec == "userfossil", labbi:="Yksilökohtaiset päästöt"]
-lu2[sec == "netcost", labbi:="Menot ja tulot päästöistä"]
-lu2[sec == "usercost", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "netcost", labbi:="Tulovaikutukset"]
+lu2[sec == "usercost", labbi:="Tulovaikutukset"]
 lu2[sec == "pop", labbi:="Väestökehitys"]
-lu2[sec == "dividend",labbi:="Menot ja tulot päästöistä"]
-lu2[sec == "avgnetcost", labbi:="Menot ja tulot päästöistä"]
-lu2[sec == "countrycost", labbi:="Menot ja tulot päästöistä"]
-lu2[sec == "countrynetcost", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "dividend",labbi:="Tulovaikutukset"]
+lu2[sec == "avgnetcost", labbi:="Tulovaikutukset"]
+lu2[sec == "countrycost", labbi:="Tulovaikutukset"]
+lu2[sec == "countrynetcost", labbi:="Tulovaikutukset"]
 lu2[sec == "countryfossil", labbi:="Yksilökohtaiset päästöt"]
 lu2[sec == "countrypop", labbi:="Väestökehitys"]
-lu2[sec == "countrydividend", labbi:="Menot ja tulot päästöistä"]
-lu2[sec == "averagedividend", labbi:="Menot ja tulot päästöistä"]
+lu2[sec == "countrydividend", labbi:="Tulovaikutukset"]
+lu2[sec == "averagedividend", labbi:="Tulovaikutukset"]
 lu2[sec == "source", labbi:="Globaalit päästöt"]
 lu2[sec == "sink", labbi:="Globaalit päästöt"]
 lu2[sec == "newsink",labbi:= "Globaalit päästöt"]
-lu2[sec == "landcost",labbi:= "Menot ja tulot päästöistä"]
+lu2[sec == "landcost",labbi:= "Tulovaikutukset"]
 
 
 
@@ -538,75 +542,75 @@ arg = function(start, end, convergence, coustart) {
   
   nams = c("vuo", "vuo", "yearc", "paa", "muo", "pri", "sprice", "eprice")
   
-  vuo = c(2024, 2037)
+  vuo = c(2026, 2037)
   yearc = 2037
   paa = 5
   muo = "exponential"
   pri = "logarithmic"
   sprice = 200
   eprice = 1400
-  sken= rep(150,8)
+  sken= rep(80,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb1 = copy(skenb)
   
-  vuo = c(2024, 2050)
-  yearc= 2050
+  vuo = c(2026, 2045)
+  yearc= 2045
   paa = 4
   muo = "exponential"
   pri = "linear"
-  sprice = 150
+  sprice = 80
   eprice = 1200
-  sken= rep(250,8)
+  sken= rep(130,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb2 = copy(skenb)
   
   
-  vuo = c(2024, 2065)
+  vuo = c(2026, 2065)
   yearc = 2065
   paa = 5
   muo = "percentual"
   pri = "linear"
   sprice = 80
   eprice = 800
-  sken= rep(500,8)
+  sken= rep(390,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb3 = copy(skenb)
   
-  vuo = c(2024, 2070)
+  vuo = c(2026, 2070)
   yearc = 2070
   paa = 5
   muo = "percentual"
   pri = "linear"
   sprice = 70
   eprice = 700
-  sken= rep(600,8)
+  sken= rep(490,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb4 = copy(skenb)
   
-  vuo = c(2024, 2080)
+  vuo = c(2026, 2080)
   yearc = 2080
   paa = 6
   muo = "percentual"
   pri = "linear"
   sprice = 50
   eprice = 500
-  sken= rep(950,8)
+  sken= rep(870,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb5 = copy(skenb)
   
-  vuo = c(2024, 2100)
+  vuo = c(2026, 2100)
   yearc = 2100
   paa = 5
   muo = "percentual"
   pri = "linear"
   sprice = 40
   eprice = 400
-  sken= rep(1150,8)
+  sken= rep(10500,8)
   vals = c(vuo, yearc, paa, muo, pri, sprice, eprice)
   skenb = data.frame(nams, sken, vals)
   skenb6 = copy(skenb)
@@ -642,7 +646,7 @@ pack = copy(paac)
 
 
 
-paaco = paac[year==2021 & var ==3,]
+paaco = paac[year==hyear & var ==3,]
 paaco = paaco[order(country)]
 # paaco = paaco[order(gdpcap)]
 
@@ -673,7 +677,6 @@ ppaa = as.data.table(ppaa)
 
 lastyear = as.numeric(ppaa[, max(year)])
 
-budgetyear = 2023
 # 
 
 # 
@@ -745,19 +748,43 @@ cuk = function(col, label, info, show, lab, value) {
 
 
 
+# cuk2 = function(col, label, info, show, lab, value) {
+#   div(
+#     div(style="display:inline-block; text-align: left !important; margin-left: -5px; ", div(style=paste0("color:",col,";","font-weight:1000; "),
+#                                               label
+#   )),
+#   div(style="display:inline-block; text-align: left !important;  ",HTML( "<font size='2'>",
+#                                          as.character(actionLink(inputId = info,
+#                                                                  label = "  ",
+#                                                                  icon = icon("fas fa-info-circle"))), "</font>") ),
+#   # div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
+#   div(style="display:inline-block; text-align: right !important;  ",checkboxInput(show, label=lab,  value=FALSE))
+#   )
+# 
+# }
+
+
 cuk2 = function(col, label, info, show, lab, value) {
-  div(div(style="display:inline-block; text-align: left !important; margin-left: -5px; ", div(style=paste0("color:",col,";","font-weight:1000; "),
-                                              label
-  )),
-  div(style="display:inline-block; text-align: left !important;  ",HTML( "<font size='2'>",
-                                         as.character(actionLink(inputId = info,
-                                                                 label = "  ",
-                                                                 icon = icon("fas fa-info-circle"))), "</font>") ),
-  # div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
-  div(style="display:inline-block; text-align: right !important;  ",checkboxInput(show, label=lab,  value=FALSE)))
+  div(style = "display: flex;
+    justify-content: space-between;
+      margin-bottom: -.2rem;
+      "
 
+      ,
+      div(style="display:inline-block;",
+    div(style="display:inline-block;text-align: left !important; margin-left: -5px; ",checkboxInput(show, label=lab,  value=FALSE)),
+    div(style="display:inline-block; text-align: left !important;",HTML( "<font size='2'>",
+                                                                           as.character(actionLink(inputId = info,
+                                                                                                   label = "  ",
+                                                                                                   icon = icon("fas fa-info-circle"))), "</font>") )),
+    div(div(style="display:inline-block; margin-right: 5px; margin-bottom: -.2rem;text-align: right !important;", div(style=paste0("color:",col,";","font-weight:1000; "),
+                                                                                            label
+    ))),
+
+    # div(style="display:inline-block; ",awesomeCheckbox(show, label=lab,  value=FALSE)))
+  )
+  
 }
-
 
 
 cuk3 = function(col, label, info, show, lab, value) {

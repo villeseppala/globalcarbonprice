@@ -13,14 +13,19 @@ library(tidyr)
 # https://zenodo.org/records/7727475/files/Guetschow-et-al-2023a-PRIMAP-hist_v2.4.2_final_no_rounding_09-Mar-2023.csv?download=1
 
 
+# data set: https://zenodo.org/records/15016289
+
+# https://zenodo.org/records/15016289/files/Guetschow_et_al_2025-PRIMAP-hist_v2.6.1_final_no_rounding_13-Mar-2025.csv?download=1
+#Gütschow, J.; Busch, D.; Pflüger, M. (2024): The PRIMAP-hist national historical emissions time series v2.6.1 (1750-2023). zenodo. doi:10.5281/zenodo.15016289.
 tempdl <- tempfile()
-download.file("https://zenodo.org/records/7727475/files/Guetschow-et-al-2023a-PRIMAP-hist_v2.4.2_final_no_rounding_09-Mar-2023.csv?download=1",tempdl, mode="wb") 
+download.file("https://zenodo.org/records/15016289/files/Guetschow_et_al_2025-PRIMAP-hist_v2.6.1_final_no_rounding_13-Mar-2025.csv?download=1",tempdl, mode="wb") 
 
 tempfile()
 
 mine <- read.csv(tempdl)
 emu = as.data.table(mine)
 
+# emu2 = as.data.table(mine)
 
 # go to https://www.climatewatchdata.org/data-explorer/
 # click Download bulk data from top right corner and choose ghg emissions
@@ -31,11 +36,11 @@ emu = as.data.table(mine)
 
 em = emu[entity %in% c("CO2","KYOTOGHG (AR4GWP100)" ) & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR",]
 
-em[, c(1,2,5,6)] = NULL
+em[, c(1,2,3,6,7)] = NULL
 
 colnames(em)[1] <- "cou"
 colnames(em)[2] <- "gas"
-emo <- gather(em, year, emission, "X1750":"X2021")
+emo <- gather(em, year, emission, "X1750":"X2023")
 # 
 # emu[area..ISO3.=="FIN" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
 # emu[area..ISO3.=="EARTH" & entity =="CO2" & category..IPCC2006_PRIMAP.=="M.0.EL" & scenario..PRIMAP.hist. == "HISTCR", X2021]
@@ -154,7 +159,7 @@ emo$nonco2 = emo$ghg-emo$co2
 paasi2 = copy(emo)
 # paasi2$co2 = paasi2$co2*3.664
 
-packo = paasi2[year==2021,]
+packo = paasi2[year==2023,]
 packo = packo[!(iso3c %in% NA),]
 
 ll = unique(as.character(packo$iso3c))
@@ -218,31 +223,82 @@ ll
 
 
 
+# https://population.un.org/wpp/downloads?folder=Probabilistic%20Projections&group=Population
+#https://population.un.org/wpp/assets/Excel%20Files/2_Indicators%20(Probabilistic)/EXCEL_FILES/2_Population/UN_PPP2024_Output_PopTot.xlsx
 
+
+
+
+
+
+
+
+# https://population.un.org/wpp/assets/Excel%20Files/2_Indicators%20(Probabilistic)/EXCEL_FILES/2_Population/UN_PPP2024_Output_PopTot.xlsx
 
 tempdl <- tempfile()
-download.file("https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_TotalPopulationBySex.zip",tempdl, mode="wb") 
-unzip(tempdl, "WPP2022_TotalPopulationBySex.csv") 
+download.file("https://population.un.org/wpp/assets/Excel%20Files/2_Indicators%20(Probabilistic)/EXCEL_FILES/2_Population/UN_PPP2024_Output_PopTot.xlsx",tempdl, mode="wb") 
+# unzip(tempdl, "WPP2022_TotalPopulationBySex.csv") 
 # data <- read.table("WPP2022_TotalPopulationBySex.csv", sep=",")
-data <- read.csv("WPP2022_TotalPopulationBySex.csv", sep=",")
+#data <- read.csv("WPP2022_TotalPopulationBySex.csv", sep=",")
+data1 = read_excel(tempdl, sheet="Median", skip=16)
+data2 = read_excel(tempdl, sheet="Lower 80", skip=16)
+data3 = read_excel(tempdl, sheet="Lower 95", skip=16)
+data4 = read_excel(tempdl, sheet="Upper 95", skip=16)
+data5 = read_excel(tempdl, sheet="Upper 80", skip=16)
 
+data = rbind(data1,data2, data3, data4,data5)
 
 popred = as.data.table(data)
-popred$year = as.numeric(popred$Time)
+# popred$year = as.numeric(popred$Time)
 popred$country = as.factor(popred$Location)
-popred$iso3c = as.character(popred$ISO3_code)
+# popred$iso3c = as.character(popred$ISO3_code)
+
+
+# popred = gather(popred)
+
+popred = gather(popred, year, PopTotal, "2024":"2100")
+
+variantlist=c("Upper 80 PI", "Lower 80 PI", "Upper 95 PI", "Lower 95 PI","Median PI")
+popred = as.data.table(popred)
+#popred$iso3c = popred[,6]
+popred$iso3c = popred$`ISO3 Alpha-code`
+
+colnames(popred)[3] = "country"
+
 popred[country =="World", iso3c := "WLD"]
 
 
-variantlist=c("Upper 80 PI", "Lower 80 PI", "Upper 95 PI", "Lower 95 PI","Medium")
-
-
-populaatio= popred[iso3c %in% ll & Variant %in% variantlist &year %in% 1950:2100, c("PopTotal", "year", "Variant","iso3c", "country")]
+populaatio= popred[iso3c %in% ll & Variant %in% variantlist & year %in% 1950:2100, c("PopTotal", "year", "Variant","iso3c", "country")]
 
 populaatio$PopTotal = as.numeric(populaatio$PopTotal)*1000
 
+populaatio[Variant=="Median PI", Variant :="Medium"]
 
-popb= populaatio[year %in% c(1950:2021),]
+
+tempdl <- tempfile()
+download.file("https://population.un.org/wpp/assets/Excel%20Files/1_Indicator%20(Standard)/EXCEL_FILES/1_General/WPP2024_GEN_F01_DEMOGRAPHIC_INDICATORS_COMPACT.xlsx",tempdl, mode="wb") 
+# unzip(tempdl, "WPP2022_TotalPopulationBySex.csv") 
+# data <- read.table("WPP2022_TotalPopulationBySex.csv", sep=",")
+#data <- read.csv("WPP2022_TotalPopulationBySex.csv", sep=",")
+pophis = read_excel(tempdl, skip=16, guess_max = 100000)
+pophis$iso3c = pophis$`ISO3 Alpha-code`
+pophis$year = as.numeric(pophis$Year)
+colnames(pophis)[3] = "country"
+pophis = as.data.table(pophis)
+
+pophis[country =="World", iso3c := "WLD"]
+
+colnames(pophis)[13] = "PopTotal"
+# pophis$
+popb= pophis[iso3c %in% ll, c("PopTotal", "year", "Variant","iso3c", "country")]
+
+popb$PopTotal = as.numeric(popb$PopTotal)
+popb$PopTotal = popb$PopTotal*1000
+# pophis =
+
+# popb= populaatio[year %in% c(1950:2021),]
+
+# popb = copy(pophis)
 
 popu80=copy(popb)
 popu95=copy(popb)
@@ -253,10 +309,64 @@ popu80 = popu80[,Variant :="Upper 80 PI"]
 popl80 = popl80[,Variant :="Lower 80 PI"]
 popu95 = popu95[,Variant :="Upper 95 PI"]
 popl95 = popl95[,Variant :="Lower 95 PI"]
+popb = popb[,Variant :="Medium"]
 
 
-pops = rbind(populaatio, popu80, popl80, popu95, popl95)
+pops = rbind(popb, popu80, popl80, popu95, popl95)
 
+
+
+
+
+
+
+
+
+# 
+# 
+# 
+# tempdl <- tempfile()
+# download.file("https://population.un.org/wpp/Download/Files/1_Indicators%20(Standard)/CSV_FILES/WPP2022_TotalPopulationBySex.zip",tempdl, mode="wb") 
+# unzip(tempdl, "WPP2022_TotalPopulationBySex.csv") 
+# # data <- read.table("WPP2022_TotalPopulationBySex.csv", sep=",")
+# data <- read.csv("WPP2022_TotalPopulationBySex.csv", sep=",")
+# 
+# 
+# popred = as.data.table(data)
+# popred$year = as.numeric(popred$Time)
+# popred$country = as.factor(popred$Location)
+# popred$iso3c = as.character(popred$ISO3_code)
+# popred[country =="World", iso3c := "WLD"]
+# 
+# 
+# variantlist=c("Upper 80 PI", "Lower 80 PI", "Upper 95 PI", "Lower 95 PI","Medium")
+# 
+# 
+# populaatio= popred[iso3c %in% ll & Variant %in% variantlist &year %in% 1950:2100, c("PopTotal", "year", "Variant","iso3c", "country")]
+# 
+# populaatio$PopTotal = as.numeric(populaatio$PopTotal)*1000
+# 
+# 
+# 
+# 
+# 
+# popb= populaatio[year %in% c(1950:2021),]
+# 
+# popu80=copy(popb)
+# popu95=copy(popb)
+# popl80=copy(popb)
+# popl95=copy(popb)
+# 
+# popu80 = popu80[,Variant :="Upper 80 PI"]
+# popl80 = popl80[,Variant :="Lower 80 PI"]
+# popu95 = popu95[,Variant :="Upper 95 PI"]
+# popl95 = popl95[,Variant :="Lower 95 PI"]
+# 
+# 
+# pops = rbind(populaatio, popu80, popl80, popu95, popl95)
+
+
+pops = rbind(pops, populaatio)
 pops$pop = pops$PopTotal
 
 pops$variant = pops$Variant
@@ -271,8 +381,13 @@ pops[variant=="Upper 80 PI", var:=4]
 pops[variant=="Upper 95 PI", var:=5]
 pops$var = as.numeric(pops$var)
 
-
+pops$year = as.numeric(pops$year)
+pops$pop= as.numeric(pops$pop)
 popsw = pops[country=="World",]
+
+popsw$co2=NULL
+popsw$ghg=NULL
+popsw$nonco2=NULL
 
 paa = pops[paasi2, co2:=i.co2, on =c("year", "iso3c")]
 
@@ -281,7 +396,12 @@ paa = pops[paasi2, nonco2:=i.nonco2, on =c("year", "iso3c")]
 
 # paa = paa[paasi2, bunkers:=i.bunkers, on =c("year")]
 
-
+paa = paa[year > 1979,]
+paa$pop= as.numeric(paa$pop)
+# paa[pop==0, pop:=1]
+# paa = as.data.frame(paa)
+# paa[is.na(co2)] <- 0
+# paa[is.na(co2)] <- 0
 
 paa$co2cap = paa$co2/paa$pop/1000
 paa$ghgcap = paa$ghg/paa$pop/1000
@@ -335,7 +455,7 @@ paac[variant=="Upper 95 PI", var:=5]
 # 
 
 
-gdpdata <- wb(indicator = "NY.GDP.MKTP.KD", startdate = 1959, enddate = 2022)
+gdpdata <- wb(indicator = "NY.GDP.MKTP.KD", startdate = 1959, enddate = 2023)
 
 gdpdata=as.data.table(gdpdata)
 gdpdata = gdpdata[indicator =="GDP (constant 2015 US$)",]
@@ -347,6 +467,7 @@ gdpdata$year = as.numeric(gdpdata$date)
 paac = paac[gdpdata, gdp :=i.value, on=c("year", "iso3c")]
 paac$gdpcap = paac$gdp/paac$pop
 
+paac = arrange(paac, var, country, year)
 
 
 paacw = paac[iso3c =="WLD",]
@@ -375,11 +496,13 @@ paacw = paac[iso3c =="WLD",]
 # https://data.icos-cp.eu/licence_accept?ids=%5B%221umMtgeUlhS2Y1YW_Qp94bu3%22%5D
 
 
+# data> https://globalcarbonbudgetdata.org/latest-data.html
+
 tempdl <- tempfile()
-download.file("https://data.icos-cp.eu/licence_accept?ids=%5B%221umMtgeUlhS2Y1YW_Qp94bu3%22%5D",tempdl, mode="wb") 
+download.file("https://globalcarbonbudgetdata.org/downloads/jGJH0-data/Global_Carbon_Budget_2024_v1.0.xlsx",tempdl, mode="wb") 
 
 tempfile()
-min <- read_excel(tempdl, sheet = "Global Carbon Budget", skip=20)
+min <- read_excel(tempdl, sheet = "Global Carbon Budget", skip=21)
 
 paasi1 = copy(min)
 setnames(paasi1, 1, "year")
@@ -426,10 +549,10 @@ ppaa$avgghg= ppaa$ghg/ppaa$pop
 
 
 tempdl <- tempfile()
-download.file("https://data.icos-cp.eu/licence_accept?ids=%5B%221umMtgeUlhS2Y1YW_Qp94bu3%22%5D",tempdl, mode="wb") 
+download.file("https://globalcarbonbudgetdata.org/downloads/jGJH0-data/Global_Carbon_Budget_2024_v1.0.xlsx",tempdl, mode="wb") 
 
 tempfile()
-min <- read_excel(tempdl, sheet = "Land-Use Change Emissions", skip=29)
+min <- read_excel(tempdl, sheet = "Land-Use Change Emissions", skip=38)
 
 paasi1 = copy(min)
 setnames(paasi1, 1, "year")

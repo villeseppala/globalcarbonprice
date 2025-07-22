@@ -325,107 +325,491 @@ div(  id = "bor",
       # ),
       #     
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       fluidRow (
         
         
-        column(10, 
+          
+          {
+            column(4,
+   
+          
+          fluidRow(
+                   column(12,style = " padding: .2vw;",  
+                          # height: calc(7.6vw + 9.8rem);
+                   column(12,id = "bor5",
+                          # style = "overflow-y: scroll;",
+                                              fluidRow(
+                            
+                            tagList( uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center; padding-left: 2vw;", "simuset")
+                            ),
+                            
+                            div(id="ress",
+                                actionButton("reset", "Reset")
+                                
+                            )
+                            # )
+                          ),
+                          
+                          fluidRow(
+                            
+                            uiOutput("simpan")
+                            
+                          )  ))
+                      ),
+          
+          
+          
+          
+          )
+          },
+          
+          {
+          column(2, style = " padding: .2vw;",  
+                 # id ="bor",
+                 
+                 
+                 
+                 
+                 column(12, id = "bor4",
+                        
+                        
+                        # bs4Dash::bs4Table(
+                        #   # "nerf",
+                        #   
+                        #   cardWrap = TRUE,
+                        #   bordered = TRUE,
+                        #   striped = TRUE,
+                        #   
+                        #   list(
+                        #     
+                        #     headTitles = list(
+                        #       cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE),
+                        #       cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE),
+                        #       cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)
+                        # 
+                        #       
+                        #       
+                        #       
+                        #       
+                        #     )
+                        #     
+                        #   )
+                        # ),
+                        
+                        div(
+                          # id = "bor5a",
+                          
+                          div(style='
+
+text-align: left !important;
+text-decoration: none;
+margin-bottom: .0rem;
+padding: 0rem;
+margin-top: -.8rem;',
+                              
+                              tagList(uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center; margin: .0vw; padding: 0rem;", "viewtext"))),
+                          # textOutput("indicatorvisibility"),
+                           # div(style="text-align: left; font-size:  calc(.4rem + .7vw);",textOutput("yearc")),
+                          
+                          # column(6,
+                                 
+                                 
+                                 # style=" border: solid 1px white;", 
+                                 div(
+                                          div(
+
+                                            # p(style = 'text-align: right',"Observe specific year:")
+                                            tagList(uiOutput(style = 'padding-top: 0.6vw; font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: left; line-height: .85 !important;', "obsyear")
+                                            )
+                                          ),
+                                   # )
+                                   
+                                   fluidRow(
+                                     # column(3,
+                  
+                                     # ,
+                                     column(12,
+                                            
+                                            div(
+                                              style="padding-top: .8rem; padding-right: 0.4vw; margin-bottom: 0.4rem;",
+                                              uiOutput("yearcui", width="auto")),
+                                            
+                                     )
+                                   )
+                                   # ),
+                                 )  ,  
+                                 
+                          # )
+                          
+                          
+                          div(
+                            
+                            id="tablu",
+                            class="noku",
+                            # tämä renderUIlla?
+                            
+                            
+                            
+                            
+                            p(" "),
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = FALSE,
+                              list( headTitles = list(
+                                cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE)   
+                                # ) , list(rv$fossill) )  ), 
+                              )  
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right; font-weight:100 !important;","fossill") )
+                              )), 
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE) 
+                              )  
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","landl") )
+                              
+                              )  ), 
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)   
+                              ) 
+                              ,   list(uiOutput(style =  "margin-right: 5px; text-align: right;","netl") )
+                              
+                              )  )   ),
+                          
+                          
+                          div(
+                            #table joka näkyy jos averagedividend tai countrydividend relevantteja
+                            id="tablu4",
+                            class="noku",
+                            # width ="50%",
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(non, textOutput("labelnonco2"),  "infononco2", "shownonco2", NULL, FALSE)
+                              )   ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","nonco2l") )
+                              )  ), 
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(tot, textOutput("labelghg"),  "infoghg", "showghg", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style ="margin-right: 5px; text-align: right;","ghgl") )
+                              )  )
+                            
+                            
+                            
+                            
+                          ), 
+                          
+                          
+                          div(
+                            #table joka näkyy jos averagedividend tai countrydividend relevantteja
+                            id="tablu5",
+                            class="noku",
+                            # width ="50%",
+                            
+                            
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(newsink, textOutput("labelnewsink"),  "infonewsink", "shownewsink", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","newsinkl") )
+                              )  )
+                            
+                          ), 
+                          
+                          
+                          
+                          
+                          p(" "),
+                          div(
+                            id="tablu",
+                            class="noku",
+                            # tämä renderUIlla?
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(pop,textOutput("labelpop"),  "infopop", "showpop", NULL, FALSE)
+                              )    ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","popl") ) )  )), 
+                          
+                          
+                          div(
+                            id="tablu2",
+                            class="noku",
+                            # width ="50%",
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(countrypop, textOutput("labelcountrypop"), "infocountrypop", "showcountrypop", NULL, FALSE)
+                              ) 
+                              ,   list(uiOutput(style ="margin-right: 5px; text-align: right;","countrypopl") )
+                              )  )
+                            
+                          ),
+                          
+                          p(" "),
+                          
+                          div(
+                            id="tablu",
+                            class="noku",
+                            # tämä renderUIlla?
+                            
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(fpop, textOutput("labelavgfossil"),  "infoavgfossil", "showavgfossil", NULL, TRUE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","avgfossill") )
+                              )  ), 
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(cpop,textOutput("labeluserfossil"), "infouserfossil", "showuserfossil", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","userfossill") )
+                              )  )),
+                          
+                          
+                          div(
+                            id="tablu2",
+                            class="noku",
+                            # width ="50%",
+                            
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(countryfossil,textOutput("labelcountryfossil"), "infocountryfossil", "showcountryfossil", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","countryfossill") )
+                              )  ), 
+                            
+                            
+                            
+                          ),
+                          
+                          p(" "),
+                          div(
+                            id="tablu",
+                            class="noku",      
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(tax,textOutput("labelprice"),  "infoprice", "showprice", NULL, FALSE)
+                              )
+                              
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","pricel") )
+                              )  ), 
+                            
+                            p(" "),
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style ="margin-right: 5px; text-align: right;","avgcostl") )
+                              )  )),
+                          
+                          
+                          
+                          div(
+                            id="tablu5",
+                            class="noku",   
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(netcost,textOutput("labellandcost"),  "infolandcost", "showlandcost", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","landcostl") )
+                              
+                              )  )),
+                          
+                          
+                          
+                          div(
+                            id="tablu",
+                            class="noku",   
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(dividend, textOutput("labeldividend"),  "infodividend", "showdividend", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style ="margin-right: 5px; text-align: right;","dividendl") )
+                              
+                              )  ), 
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(avgnetcost, textOutput("labelavgnetcost"), "infoavgnetcost", "showavgnetcost", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style ="margin-right: 5px; text-align: right;","avgnetcostl") )
+                              
+                              )  ), 
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(taxfosindi, textOutput("labelusercost"),  "infousercost", "showusercost", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","usercostl") )
+                              
+                              )  ), 
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(netcost,textOutput("labelnetcost"),  "infonetcost", "shownetcost", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","netcostl") )
+                              
+                              )  ),
+                            
+                          ),
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          div(
+                            id="tablu2",
+                            class="noku",
+                            # width ="50%",
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(countrycost, textOutput("labelcountrycost"),  "infocountrycost", "showcountrycost", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","countrycostl") )
+                              
+                              )  ), 
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(countrynetcost, textOutput("labelcountrynetcost"), "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","countrynetcostl") )
+                              
+                              )  ), 
+                            
+                            
+                          ),
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          
+                          div(
+                            #table joka näkyy jos averagedividend tai countrydividend relevantteja
+                            id="tablu3",
+                            class="noku",
+                            # width ="50%",
+                            
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(averagedividend, textOutput("labelaveragedividend"),  "infoaveragedividend", "showaveragedividend", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","averagedividendl") )
+                              
+                              )  ), 
+                            bs4Dash::bs4Table(
+                              cardWrap = TRUE, bordered = TRUE,striped = TRUE,
+                              list( headTitles = list(
+                                cuk2(countrydividend, textOutput("labelcountrydividend"),  "infocountrydividend", "showcountrydividend", NULL, FALSE)
+                              )
+                              ,   list(uiOutput(style = "margin-right: 5px; text-align: right;","countrydividendl") )
+                              
+                              )  ) 
+                            
+                            
+                            
+                          )
+                          ,
+                          div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
+                          div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
+                          )
+                          ,
+                          div(style="display:inline-block; visibility:hidden; height: 0px;",id="sla",
+                              checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
+                          )
+                          ,div(style="visibility:hidden; height: 0px;",id="sla",
+                               checkboxInput("startvalue", label=textOutput("startlabel"), value=TRUE))
+                          
+                          # div(id="ress",
+                          #     actionButton("reset", "Reset"))
+                          # # )
+                          #                 ),
+                          
+                          
+                          
+                          
+                          
+                        )
+                        
+                        
+                        # div(
+                        #   
+                        #   
+                        #   uiOutput("cou")
+                        #   # ) )
+                        # )
+                        
+                        
+                        
+                 )
+                 
+          )
+          }
+        ,
+          {
+          column(6, 
      
       
-      
-      fluidRow(
-        
-        # column(2, style = " padding: .2vw;",  
-        #        # div(
-        #        column(12,id = "bor5",
-        #               
-        #               tagList( uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center;","graview")
-        #               ),
-        #               div(style="background-color: var(--colbtable); padding: .5vw;",
-        #                   
-        #                   
-        #                   # radioButtons("view", label = "Graph separation",
-        #                   #              c("One graph for all scales" = 1,
-        #                   #                "Side by side graphs, two in row" = 2,
-        #                   #                "Back to back graphs" = 3,
-        #                   #                "Side by side graphs, all in one row" = 4
-        #                   #                
-        #                   #              ),selected=4, inline=TRUE)
-                          
-    
-                          
-
-        column(12,style = " padding: .2vw;",  
-               
-               column(12,id = "bor5",
-                      
-                      # "</font>",
-                      # tagList(uiOutput("selitys2")),  
-                      # "<i class='material-icons'>&#xe925;</i>", as.character(icon("pan_tool")),
-                      # accordion(
-                      #   id = "accordion5",
-                      #   accordionItem(
-                      #     # <i class="material-icons">visibility</i>
-                      #     title = tagList(uiOutput("viewtext")),       
-                      
-                      # title = HTML("<font size='4'>",
-                      #              as.character(icon("far fa-eye")), 
-                      #              
-                      #         "  VIEWING SETTINGS  ",  
-                      #        as.character( icon("fas fa-caret-square-down")),"</font>"),
-                      # collapsed =FALSE,
-                      fluidRow(
-                        # column(12,
-                        # column()
-                        # style = "align:center; "    ,
-                        # tagList(uiOutput(style = 'text-align: center', "viewtext"))
-                        tagList( uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center; padding-left: 2vw;", "simuset")
-                        ),
-                        
-                        
-                        
-                        
-                        div(id="ress",
-                            actionButton("reset", "Reset")
-                            # , bookmarkButton(label="Share")
-                            
-                            
-                        )
-                        # )
-                      ),
-                      
-                      
-#                       fluidRow(
-#                         # div(
-#                         # id ="buddo",
-#                         # style = 'margin-left: .6vw;  background-color:var(--colb)!important;',
-#                         uiOutput(  style = 'margin: .6vw; padding: .3vw;  background-color:var(--colbcard)!important;',
-# "buddd"),
-#                         # )
-#                       ),
-                      
-                      fluidRow(
-                        
-                        
-                        
-                        uiOutput("simpan"),
-                        
-                        
-                        
-                        
-                        #    ) 
-                        # )
-                      )
-               ))
-        
-        
-        
-        
-      ),
-      # (div(style="overflow-y: scroll; overflow-x: hidden;",
+                
+      # (div(
       
       div(id="tuto",
           box(
-            style = 'overflow-y: scroll',
+            # style = 'overflow-y: scroll;',
             # style = 'overflow-y: scroll',
             
             id = "tutobox",
@@ -481,19 +865,52 @@ div(  id = "bor",
       
       
       fluidRow(
-        
-        # conditionalPanel(condition="input.isMobile==0",   {
 
-          
-          
+        
+        
+        
     
         # })  
  
 
 
-column(12,style = " padding: .2vw;",  
+column(12,style = " padding: .1vw; ",  
+       
        #
-       column(12, id = "bor5",  
+       # conditionalPanel(condition="input.isMobile==0",   {height: 1000px;
+      
+       # style = '',
+       div( 
+         # style="overflow-y: scroll;  margin-bottom:1350px; ",
+         #   style="height: 2000px; ",
+         # 
+        # style = paste0('',"height: ", 
+        #                  # "350.8",
+        #                # '',
+        #                 textOutput("dihi"),
+        #                # '',
+        #                "px;",''),
+        # style = paste0(textOutput("dihi2")),
+         #  style = textOutput("dihi2"),
+         #  
+         # style = paste0("height: ",
+         #               # "350.8",
+         #               # '',
+         #               # '"',
+         #               uiOutput("dihi"),
+         #               # '"',
+         #               "px;"
+         #               # ,''
+         #               ),
+
+          # uiOutput("dihi3"),
+         
+        # style = 'overflow-y: scroll',
+       column(12,
+              id = "bor5",  
+              div(             
+                # style="margin-bottom:1650px; ",
+                
               # fluidRow(style = "justify-content: flex-start;",
               #          column(3,
               #                 p(uiOutput(style = "margin-left: 2vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: center;", "simuresults")
@@ -526,14 +943,35 @@ column(12,style = " padding: .2vw;",
               # )
               # ),
               div(
+                
                 # style="display:inline-block;",
               fluidRow(
-                  
-                  column(3,   p(uiOutput(style = "margin-left: 2vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: left;", "simuresults")
+                
+                  column(4,   p(uiOutput(style = "margin-left: 1vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: left;", "simuresults")
                   )) 
                 
                   ,
-                  column(9,fluidRow(
+                  
+                  column(3,
+                         # style=" border: solid 1px white;", 
+                         id = "luu",
+                         fluidRow(
+                           div(style="display:inline-block;",
+                               div(style="margin-left: 0vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
+                                   actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
+                               # ),
+                               # column(1,
+                               div(style="margin-top: .5vw; margin-left: 1.03vw; display:inline-block;",
+                                   checkboxInput("autodraw",  
+                                                 # label=textOutput(style="display:inline-block;","autoredraw"), 
+                                                 label="Auto", 
+                                                 
+                                                 value=FALSE)
+                               ))
+                         ), 
+                         fluidRow(textOutput("redrawprompt") )
+                  ),       
+                  column(5,fluidRow(
                     div(
                       # style="flex-wrap:wrap;",
                         id="sla",
@@ -546,35 +984,42 @@ column(12,style = " padding: .2vw;",
                 
               )
                   ),
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              div(
+                style="overflow-y: scroll;   ",
+                style="height: 2600px; ",
+              
+              div(
+             
+                style=" margin-bottom:1950px; ",
+                
+                
+              
               div(style = "margin-bottom: .5vw;",
+                  
+                
               conditionalPanel(condition="input.showmainplot ==1",
                                
               fluidRow(                                    id = "panes",
 style = "justify-content: flex-start;",
 
-column(3,
-       # style=" border: solid 1px white;", 
-       id = "luu",
-       fluidRow(
-       div(style="display:inline-block;",
-           div(style="margin-left: 3vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
-               actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
-           # ),
-           # column(1,
-           div(style="margin-top: .5vw; margin-left: .23vw; display:inline-block;",
-               checkboxInput("autodraw",  
-                             # label=textOutput(style="display:inline-block;","autoredraw"), 
-                             label="Auto", 
-                             
-                             value=FALSE)
-           ))
-       ), 
-       fluidRow(textOutput("redrawprompt") )
-),       
 
 
 
-column(3,
+
+column(12,
        id = "luu",  
        # style=" border: solid 1px white;", 
        
@@ -591,7 +1036,7 @@ column(3,
              "Back to back graphs" = 3,
              "Side by side graphs, all in one row" = 4
              
-           ),selected=4,
+           ),selected=3,
            multiple = FALSE,
            selectize = FALSE,
            width = NULL,
@@ -601,40 +1046,16 @@ column(3,
        
 ),
 # 
-column(6,
-         
-       
-       # style=" border: solid 1px white;", 
-       div(
- 
-         fluidRow(
-           column(3,
-                  div(
-                    
-                    # p(style = 'text-align: right',"Observe specific year:")
-                    tagList(uiOutput(style = 'padding-top: 0.6vw; font-weight: 1000 !important; font-size: calc(.6vw + .54rem); text-align: right; line-height: .85 !important;', "obsyear")
-                    )  
-                  )
-           )
-           ,
-           column(9,
-                  
-                  div(
-                    style="padding-top: 0.8vw; padding-right: 0.4vw; margin-bottom: 0.4rem;",
-                    uiOutput("yearcui", width="auto")),
-                  
-           )
-         )
-         # ),
-       )    
-       
-)
 
 
 
               ),
               
-              div(id = "rota", class = "rota",
+              div(
+                # height="300px",
+                
+                id = "rota", class = "rota",
+                  
                   # div(
                   #  uiOutput("yearcui", width="auto")),
                   
@@ -653,7 +1074,9 @@ column(6,
                   # )
                   
                   , conditionalPanel(condition="input.view ==2",
-                                     div( style = 'overflow-y: auto',
+                                     div( 
+                                       # style = 'overflow-y: auto',
+                                          style = 'overflow-y: scroll',
                                           # uiOutput("yearcui2", width="auto")
                                           # ,
                                           uiOutput("plotjj", width="auto"
@@ -670,14 +1093,20 @@ column(6,
                   #                    )
                   # )
                   
+                  # column(12,id = "bor5",style = "height: calc(10.1vw + 9.1rem); overflow-y: scroll;",
+                         
+                  
                   ,  conditionalPanel(condition="input.view ==3",
-                                      div( style = 'overflow-y: scroll',
+                                      div(
+                                        # style = 'overflow-y: scroll',
                                            # uiOutput("yearcui2", width="auto"),
                                            # uiOutput("ssplot2", width="auto"
                                             uiOutput("plotkk"
                                                     # plotOutput("plotk"
                                                     , width="auto"
-                                                     ,height="auto"
+                                                    
+                                                      ,height="auto"
+                                                     # ,height="300px"
                                                     
                                                     # ,hover = "plot_hover"
                                                     # ,click = "plotk_click"
@@ -704,7 +1133,7 @@ column(6,
                                       )
                   )
                    )
-,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, IGCC 2023, Gütschow, J.; Pflüger, M. 2023, Friedlingstein et al. 2022. Funded by Kone Foundation. Developed by Ville Seppälä"))
+,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, IGCC 2023, Gütschow, J.; Pflüger, M. 2024, Friedlingstein et al. 2024. Funded by Kone Foundation. Developed by Ville Seppälä"))
 
                   
               )
@@ -723,7 +1152,7 @@ div(
                                                ,click = "colplot_click"
                                                # ,click = "colplot_click"
                                   )
-                                ,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, World Bank, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2023.  Funded by Kone Foundation. Developed by Ville Seppälä"))
+                                ,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, World Bank, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2024.  Funded by Kone Foundation. Developed by Ville Seppälä"))
                                   ,
                                   
                                   fluidRow(
@@ -762,7 +1191,7 @@ div(
                                                   "Emissions per capita" = "countryfossil",
                                                   
                                                   "GDP per capita" = "gdpcap"
-                                                ),selected="countryfossil"
+                                                ),selected="gdpcap"
                                   )),
                                   
             
@@ -796,18 +1225,31 @@ div(
               )
 )
               # 
-              
-              
+,div(id="sla"
+     ,checkboxInput("showtab", "Show the simulation results also in table below")
+) ,          
+conditionalPanel(
+  
+  condition="input.showtab == 1",
+  fluidRow(column(width =12, align = "center",   DT::dataTableOutput("tably", width="100%")
+                  # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
+  )),
+  
+)        
+              )   
+
+#here 
+
+
+     
        )
-       ,div(id="sla"
-            ,checkboxInput("showtab", "Show the simulation results also in table below")
-       )           
-       
+)
+)
        # ,uiOutput("yearcui")
 ),
 
 
-
+)
 
 
       )                 ,
@@ -817,403 +1259,10 @@ div(
 
 # textOutput("pul"),
 
-conditionalPanel(
-  
-  condition="input.showtab == 1",
-  fluidRow(column(width =12, align = "center",   DT::dataTableOutput("tably", width="100%")
-                  # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
-  )),
-  
-)
-),
 
-{
-  column(2, style = " padding: .2vw;",  
-         # id ="bor",
-         
-         
-         
-         
-         column(12, id = "bor4",
-                
-                
-                # bs4Dash::bs4Table(
-                #   # "nerf",
-                #   
-                #   cardWrap = TRUE,
-                #   bordered = TRUE,
-                #   striped = TRUE,
-                #   
-                #   list(
-                #     
-                #     headTitles = list(
-                #       cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE),
-                #       cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE),
-                #       cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)
-                # 
-                #       
-                #       
-                #       
-                #       
-                #     )
-                #     
-                #   )
-                # ),
-                
-                div(
-                  # id = "bor5a",
-                  
-                  div(style='
-
-text-align: left !important;
-text-decoration: none;
-margin-bottom: .0rem;
-margin-top: -.2rem;',
-
-tagList(uiOutput(style = "font-size:  calc(.6rem + .9vw); font-weight: 600; text-align: center;", "viewtext"))),
-# textOutput("indicatorvisibility"),
-div(style="text-align: left; font-size:  calc(.4rem + .7vw);",textOutput("yearc")),
-
-div(
-  
-  id="tablu",
-  class="noku",
-  # tämä renderUIlla?
-  
-  
-  
-  
-  p(" "),
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = FALSE,
-    list( headTitles = list(
-      cuk2(fos, textOutput("labelfossil"), "infofossil", "showfossil", NULL, TRUE)   
-      # ) , list(rv$fossill) )  ), 
-    )  
-    ,   list(uiOutput(style = "margin-left: -5px;","fossill") )
-    )), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(lul, textOutput("labelland"),  "infolul", "showland", NULL, TRUE) 
-    )  
-    ,   list(uiOutput(style = "margin-left: -5px;","landl") )
-    
-    )  ), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(net,  textOutput("labelnet"), "infonet", "shownet", NULL, TRUE)   
-    ) 
-    ,   list(uiOutput(style = "margin-left: -5px;","netl") )
-    
-    )  )   ),
+)}
 
 
-div(
-  #table joka näkyy jos averagedividend tai countrydividend relevantteja
-  id="tablu4",
-  class="noku",
-  # width ="50%",
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(non, textOutput("labelnonco2"),  "infononco2", "shownonco2", NULL, FALSE)
-    )   ,   list(uiOutput(style = "margin-left: -5px;","nonco2l") )
-    )  ), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(tot, textOutput("labelghg"),  "infoghg", "showghg", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","ghgl") )
-    )  )
-  
-  
-  
-  
-), 
-
-
-div(
-  #table joka näkyy jos averagedividend tai countrydividend relevantteja
-  id="tablu5",
-  class="noku",
-  # width ="50%",
-  
-  
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(newsink, textOutput("labelnewsink"),  "infonewsink", "shownewsink", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","newsinkl") )
-    )  )
-  
-), 
-
-
-
-
-p(" "),
-div(
-  id="tablu",
-  class="noku",
-  # tämä renderUIlla?
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(pop,textOutput("labelpop"),  "infopop", "showpop", NULL, FALSE)
-    )    ,   list(uiOutput(style = "margin-left: -5px;","popl") ) )  )), 
-
-
-div(
-  id="tablu2",
-  class="noku",
-  # width ="50%",
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrypop, textOutput("labelcountrypop"), "infocountrypop", "showcountrypop", NULL, FALSE)
-    ) 
-    ,   list(uiOutput(style = "margin-left: -5px;","countrypopl") )
-    )  )
-  
-),
-
-p(" "),
-
-div(
-  id="tablu",
-  class="noku",
-  # tämä renderUIlla?
-  
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(fpop, textOutput("labelavgfossil"),  "infoavgfossil", "showavgfossil", NULL, TRUE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","avgfossill") )
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(cpop,textOutput("labeluserfossil"), "infouserfossil", "showuserfossil", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","userfossill") )
-    )  )),
-
-
-div(
-  id="tablu2",
-  class="noku",
-  # width ="50%",
-  
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countryfossil,textOutput("labelcountryfossil"), "infocountryfossil", "showcountryfossil", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","countryfossill") )
-    )  ), 
-  
-  
-  
-),
-
-p(" "),
-div(
-  id="tablu",
-  class="noku",      
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(tax,textOutput("labelprice"),  "infoprice", "showprice", NULL, FALSE)
-    )
-    
-    ,   list(uiOutput(style = "margin-left: -5px;","pricel") )
-    )  ), 
-  
-  p(" "),
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(avgcost, textOutput("labelavgcost"), "infoavgcost", "showavgcost", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","avgcostl") )
-    )  )),
-
-
-
-div(
-  id="tablu5",
-  class="noku",   
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(netcost,textOutput("labellandcost"),  "infolandcost", "showlandcost", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","landcostl") )
-    
-    )  )),
-
-
-
-div(
-  id="tablu",
-  class="noku",   
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(dividend, textOutput("labeldividend"),  "infodividend", "showdividend", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","dividendl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(avgnetcost, textOutput("labelavgnetcost"), "infoavgnetcost", "showavgnetcost", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","avgnetcostl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(taxfosindi, textOutput("labelusercost"),  "infousercost", "showusercost", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","usercostl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(netcost,textOutput("labelnetcost"),  "infonetcost", "shownetcost", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","netcostl") )
-    
-    )  ),
-  
-),
-
-
-
-
-
-
-
-
-
-div(
-  id="tablu2",
-  class="noku",
-  # width ="50%",
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrycost, textOutput("labelcountrycost"),  "infocountrycost", "showcountrycost", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","countrycostl") )
-    
-    )  ), 
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrynetcost, textOutput("labelcountrynetcost"), "infocountrynetcost", "showcountrynetcost", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","countrynetcostl") )
-    
-    )  ), 
-  
-  
-),
-
-
-
-
-
-
-
-
-
-
-
-
-div(
-  #table joka näkyy jos averagedividend tai countrydividend relevantteja
-  id="tablu3",
-  class="noku",
-  # width ="50%",
-  
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(averagedividend, textOutput("labelaveragedividend"),  "infoaveragedividend", "showaveragedividend", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","averagedividendl") )
-    
-    )  ), 
-  bs4Dash::bs4Table(
-    cardWrap = TRUE, bordered = TRUE,striped = TRUE,
-    list( headTitles = list(
-      cuk2(countrydividend, textOutput("labelcountrydividend"),  "infocountrydividend", "showcountrydividend", NULL, FALSE)
-    )
-    ,   list(uiOutput(style = "margin-left: -5px;","countrydividendl") )
-    
-    )  ) 
-  
-  
-  
-)
-,
-div(style="display:inline-block;",id="ress",actionButton(inputId ="showall", label = textOutput("showall") )),
-div(style="display:inline-block;",id="ress",actionButton(inputId ="shownone", label = textOutput("shownone"))
-)
-,
-div(style="display:inline-block; visibility:hidden; height: 0px;",id="sla",
-    checkboxInput("visib",  label=textOutput("automatic"), value=TRUE)
-)
-,div(style="visibility:hidden; height: 0px;",id="sla",
-     checkboxInput("startvalue", label=textOutput("startlabel"), value=TRUE))
-
-# div(id="ress",
-#     actionButton("reset", "Reset"))
-# # )
-#                 ),
-
-
-
-
-
-                )
-
-
-# div(
-#   
-#   
-#   uiOutput("cou")
-#   # ) )
-# )
-
-
-
-         )
-
-  )
-        }
 
 
 )
