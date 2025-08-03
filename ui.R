@@ -947,196 +947,342 @@ column(12,style = " padding: .1vw; ",
                 # style="display:inline-block;",
               fluidRow(
                 
-                  column(4,   p(uiOutput(style = "margin-left: 1vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: left;", "simuresults")
+                  column(12,   p(uiOutput(style = "margin-left: 1vw; font-size: calc(.6rem + .9vw); font-weight: 600; text-align: left;", "simuresults")
                   )) 
                 
                   ,
                   
-                  column(3,
-                         # style=" border: solid 1px white;", 
-                         id = "luu",
-                         fluidRow(
-                           div(style="display:inline-block;",
-                               div(style="margin-left: 0vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
-                                   actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
-                               # ),
-                               # column(1,
-                               div(style="margin-top: .5vw; margin-left: 1.03vw; display:inline-block;",
-                                   checkboxInput("autodraw",  
-                                                 # label=textOutput(style="display:inline-block;","autoredraw"), 
-                                                 label="Auto", 
-                                                 
-                                                 value=FALSE)
-                               ))
-                         ), 
-                         fluidRow(textOutput("redrawprompt") )
-                  ),       
-                  column(5,fluidRow(
-                    div(
-                      # style="flex-wrap:wrap;",
-                        id="sla",
-                    checkboxInput("showmainplot", "Main results", value =TRUE)
-                    ,checkboxInput("showcolplot", "Compare countries (slows page)", value =FALSE)
-                    # )
-                  ) 
-                  )
-                  ),
+                  # column(3,
+                  #        # style=" border: solid 1px white;", 
+                  #        id = "luu",
+                  #        fluidRow(
+                  #          div(style="display:inline-block;",
+                  #              div(style="margin-left: 0vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
+                  #                  actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
+                  #              # ),
+                  #              # column(1,
+                  #              div(style="margin-top: .5vw; margin-left: 1.03vw; display:inline-block;",
+                  #                  checkboxInput("autodraw",  
+                  #                                # label=textOutput(style="display:inline-block;","autoredraw"), 
+                  #                                label="Auto", 
+                  #                                
+                  #                                value=FALSE)
+                  #              ))
+                  #        ), 
+                  #        fluidRow(textOutput("redrawprompt") )
+                  # ),       
+                  # column(1,fluidRow(
+                  #   div(
+                  #     # style="flex-wrap:wrap;",
+                  #       id="sla",
+                  #   checkboxInput("showmainplot", "Main results", value =TRUE)
+                  #   ,checkboxInput("showcolplot", "Compare countries (slows page)", value =FALSE)
+                  #   # )
+                  # )
+                  # )
+                  # ),
                 
-              )
-                  ),
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              div(
-                style="overflow-y: scroll;   ",
-                style="height: 2600px; ",
-              
-              div(
-             
-                style=" margin-bottom:1950px; ",
-                
-                
-              
-              div(style = "margin-bottom: .5vw;",
-                  
-                
-              conditionalPanel(condition="input.showmainplot ==1",
-                               
-              fluidRow(                                    id = "panes",
-style = "justify-content: flex-start;",
-
-
-
-
-
-column(12,
-       id = "luu",  
-       # style=" border: solid 1px white;", 
-       
-       tags$div(
-         # id="sla",
-         
-         
-         # fluidRow(
-         selectInput(
-           "view",
-           label = "Graph separation",
-           c("One graph for all scales" = 1,
-             "Side by side graphs, two in row" = 2,
-             "Back to back graphs" = 3,
-             "Side by side graphs, all in one row" = 4
-             
-           ),selected=3,
-           multiple = FALSE,
-           selectize = FALSE,
-           width = NULL,
-           size = NULL
-         ))
-       # fluidRow(style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
-       
-),
-# 
-
-
-
               ),
               
-              div(
-                # height="300px",
-                
-                id = "rota", class = "rota",
+  
                   
-                  # div(
-                  #  uiOutput("yearcui", width="auto")),
                   
-                                   
-                  conditionalPanel(condition="input.view ==1",
-                                   # div( style = 'overflow-y: scroll',
-                                   
-                                   uiOutput("splot", width="auto"
-                                   )
-                                   # )
-                  )
-                  # , conditionalPanel(condition="input.view ==2",
-                  #                    # div( style = 'overflow-y: scroll',
-                  #                    uiOutput("yearcui2", width="auto")
-                  #                    # )
-                  # )
                   
-                  , conditionalPanel(condition="input.view ==2",
-                                     div( 
-                                       # style = 'overflow-y: auto',
-                                          style = 'overflow-y: scroll',
-                                          # uiOutput("yearcui2", width="auto")
-                                          # ,
-                                          uiOutput("plotjj", width="auto"
+                  div(style = "margin-bottom: .5vw;",
+                      
+              tabsetPanel(id="tabb",
+                # tabPanel("Main results", id="tabb1",
+                         tabPanel(uiOutput("taab1"), id="tabb1",
+                                  
+                              
+                         # conditionalPanel(condition="input.showmainplot ==1",
+                                          
+                                          fluidRow( id = "panes",
+                                                                                       style = "justify-content: flex-start;",
+                                                                                       
+                                                                                       
+                                                    column(5,
+                                                           # style=" border: solid 1px white;", 
+                                                           id = "luu",
+                                                           fluidRow(
+                                                             div(style="display:inline-block;",
+                                                                 div(style="margin-left: 0vw; display:inline-block; margin-top: -10.6vw !important;",id="ress2", 
+                                                                     actionButton(style="margin-top: -.6vw !important;","go", textOutput("redraw"))),
+                                                                 # ),
+                                                                 # column(1,
+                                                                 div(style="margin-top: .5vw; margin-left: 1.03vw; display:inline-block;",
+                                                                     checkboxInput("autodraw",  
+                                                                                   # label=textOutput(style="display:inline-block;","autoredraw"), 
+                                                                                   label="Auto", 
+                                                                                   
+                                                                                   value=FALSE)
+                                                                 ))
+                                                           ), 
+                                                           fluidRow(textOutput("redrawprompt") )
+                                                    ),
+                                                                                       
+                                                                                       
+                                                                                       column(7,
+                                                                                              id = "luu",  
+                                                                                              # style=" border: solid 1px white;", 
+                                                                                              
+                                                                                              tags$div(
+                                                                                                # id="sla",
+                                                                                                
+                                                                                                
+                                                                                                # fluidRow(
+                                                                                                selectInput(
+                                                                                                  "view",
+                                                                                                  label = "Graph separation",
+                                                                                                  c("One graph for all scales" = 1,
+                                                                                                    "Side by side graphs, two in row" = 2,
+                                                                                                    "Back to back graphs" = 3,
+                                                                                                    "Side by side graphs, all in one row" = 4
+                                                                                                    
+                                                                                                  ),selected=3,
+                                                                                                  multiple = FALSE,
+                                                                                                  selectize = FALSE,
+                                                                                                  width = NULL,
+                                                                                                  size = NULL
+                                                                                                ))
+                                                                                              # fluidRow(style = 'padding-top: .5vw !important; padding-bottom: .3vw !important;', 
+                                                                                              
+                                                                                       ),
+                                                                                       # 
+                                                                                       
+                                                                                       
+                                                                                       
+                                          ),
+                                          
+                                          div(
+                                            # height="300px",
+                                            div(
+                                              style="overflow-y: scroll;   ",
+                                              style="height: 2600px; ",
+                                              
+                                              div(
+                                                
+                                                style=" margin-bottom:1950px; ",
+                                            id = "rota", class = "rota",
+                                            
+                                            # div(
+                                            #  uiOutput("yearcui", width="auto")),
+                                            
+                                            
+                                            conditionalPanel(condition="input.view ==1",
+                                                             # div( style = 'overflow-y: scroll',
+                                                             
+                                                             uiOutput("splot", width="auto"
+                                                             )
+                                                             # )
+                                            )
+                                            # , conditionalPanel(condition="input.view ==2",
+                                            #                    # div( style = 'overflow-y: scroll',
+                                            #                    uiOutput("yearcui2", width="auto")
+                                            #                    # )
+                                            # )
+                                            
+                                            , conditionalPanel(condition="input.view ==2",
+                                                               div( 
+                                                                 # style = 'overflow-y: auto',
+                                                                 style = 'overflow-y: scroll',
+                                                                 # uiOutput("yearcui2", width="auto")
+                                                                 # ,
+                                                                 uiOutput("plotjj", width="auto"
+                                                                 )
+                                                               )
+                                            )
+                                            
+                                            # , conditionalPanel(condition="input.view ==2",
+                                            #                    div( style = 'overflow-y: auto',
+                                            #                         # uiOutput("yearcui2", width="auto")
+                                            #                         # ,
+                                            #                         plotOutput("plotj", width="auto"
+                                            #                         )
+                                            #                    )
+                                            # )
+                                            
+                                            # column(12,id = "bor5",style = "height: calc(10.1vw + 9.1rem); overflow-y: scroll;",
+                                            
+                                            
+                                            ,  conditionalPanel(condition="input.view ==3",
+                                                                div(
+                                                                  # style = 'overflow-y: scroll',
+                                                                  # uiOutput("yearcui2", width="auto"),
+                                                                  # uiOutput("ssplot2", width="auto"
+                                                                  uiOutput("plotkk"
+                                                                           # plotOutput("plotk"
+                                                                           , width="auto"
+                                                                           
+                                                                           ,height="auto"
+                                                                           # ,height="300px"
+                                                                           
+                                                                           # ,hover = "plot_hover"
+                                                                           # ,click = "plotk_click"
+                                                                  )
+                                                                )
+                                            )
+                                            
+                                            
+                                            ,  conditionalPanel(condition="input.view ==4",
+                                                                div( 
+                                                                  style = 'overflow-x: scroll',
+                                                                  # uiOutput("yearcui2", width="auto"),
+                                                                  # uiOutput("ssplot2", width="auto",
+                                                                  
+                                                                  uiOutput("plotll"
+                                                                           
+                                                                           # , width="100%"
+                                                                           , height="auto"
+                                                                           # ,
+                                                                           # height =="auto"
+                                                                           
+                                                                  )
+                                                                  
+                                                                )
+                                                                
+                                            )
+                                            ,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, IGCC 2023, Gütschow, J.; Pflüger, M. 2024, Friedlingstein et al. 2024. Funded by Kone Foundation. Developed by Ville Seppälä"))
+                                            ,div(id="sla"
+                                                 ,checkboxInput("showtab", "Show the simulation results also in table below")
+                                            ) ,          
+                                            conditionalPanel(
+                                              
+                                              condition="input.showtab == 1",
+                                              fluidRow(column(width =12, align = "center",   DT::dataTableOutput("tably", width="100%")
+                                                              # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
+                                              ))
+                                              
+                                              
+                                              #here 
+                                              
+                                              
+                                              
+                                            )
                                           )
-                                     )
-                  )
-                  
-                  # , conditionalPanel(condition="input.view ==2",
-                  #                    div( style = 'overflow-y: auto',
-                  #                         # uiOutput("yearcui2", width="auto")
-                  #                         # ,
-                  #                         plotOutput("plotj", width="auto"
-                  #                         )
-                  #                    )
-                  # )
-                  
-                  # column(12,id = "bor5",style = "height: calc(10.1vw + 9.1rem); overflow-y: scroll;",
+                                          
+                                          
+                         # )
                          
+                         )        
+              )   
+                         ),
+                tabPanel(
+                  # "Plot2", id="tabb2",
+                         
+                  uiOutput("taab2"), id="tabb2",
                   
-                  ,  conditionalPanel(condition="input.view ==3",
-                                      div(
-                                        # style = 'overflow-y: scroll',
-                                           # uiOutput("yearcui2", width="auto"),
-                                           # uiOutput("ssplot2", width="auto"
-                                            uiOutput("plotkk"
-                                                    # plotOutput("plotk"
-                                                    , width="auto"
-                                                    
-                                                      ,height="auto"
-                                                     # ,height="300px"
-                                                    
-                                                    # ,hover = "plot_hover"
-                                                    # ,click = "plotk_click"
-                                           )
-                                      )
-                  )
-                  
-                  
-                  ,  conditionalPanel(condition="input.view ==4",
-                                      div( 
-                                        style = 'overflow-x: scroll',
-                                        # uiOutput("yearcui2", width="auto"),
-                                        # uiOutput("ssplot2", width="auto",
-                                        
-                                        uiOutput("plotll"
-                                                 
-                                                  # , width="100%"
-                                                 , height="auto"
-                                                 # ,
-                                                 # height =="auto"
-                                                 
-                                        )
-                                        
-                                      )
-                  )
-                   )
-,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, IPCC 2021, IPCC 2022, IGCC 2023, Gütschow, J.; Pflüger, M. 2024, Friedlingstein et al. 2024. Funded by Kone Foundation. Developed by Ville Seppälä"))
+                         
+                         # conditionalPanel(condition="input.showcolplot ==1"
+                                          # , uiOutput("colsplot", height="800px"
+                                          #             # ,hover = "colplot_hover"
+                                          #            )
+                                          # ,
+                         plotOutput("colplot", height="auto"
+                                                       ,click = "colplot_click"
+                                                       # ,click = "colplot_click"
+                                          )
+                                          ,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, World Bank, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2024.  Funded by Kone Foundation. Developed by Ville Seppälä"))
+                                          ,
+                                          
+                                          fluidRow(
+                                            id = "panes",
+                                            column(6, id = "luu", 
+                                                   uiOutput(style="margin-top: .5vw;","xxyear"),
+                                                   
+                                                   div( style="margin-top: .5vw;",
+                                                        hr(),
+                                                        
+                                                        uiOutput("concc"),
+                                                        # sliderInput("concc",
+                                                        #             inf("Convergence of countries emissions", "infoconvergence2"), 
+                                                        #             min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
+                                                        # ,uiOutput("xxcen")
+                                                        
+                                                   )),
+                                            column(3,id = "luu",
+                                                   
+                                                   radioButtons("yvar", 
+                                                                "Show country averages for", 
+                                                                c(
+                                                                  # "GDP per capita" = "gdpcap",
+                                                                  "Net costs per capita"= "countrynetcost",
+                                                                  "Carbon costs per capita"="countrycost",
+                                                                  
+                                                                  "Emissions per capita" = "countryfossil"
+                                                                  
+                                                                ),selected="countrynetcost"
+                                                   )
+                                                   ,
+                                                   
+                                                   radioButtons("xvar", 
+                                                                "Arrange x-axis by 2021 value of:", 
+                                                                c(
+                                                                  "Emissions per capita" = "countryfossil",
+                                                                  
+                                                                  "GDP per capita" = "gdpcap"
+                                                                ),selected="gdpcap"
+                                                   )),
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            column(3, 
+                                                   # id = "luu",
+                                                   
+                                                   
+                                                   selectInput("comcou",
+                                                               "Details for country",
+                                                               
+                                                               choices =c("none", paaco$country), selected="none", selectize=TRUE),
+                                                   
+                                                   div(id="sla"
+                                                       ,checkboxInput("showexp", "Show how country outcomes are calculated")
+                                                   )
+                                                   # ,
+                                                   
+                                            )),
+                                          
+                                          conditionalPanel(condition="input.showexp ==1", 
+                                                           uiOutput("couexp")             
+                                                           
+                                          )
+                                          # ,sliderInput("xcen",
+                                          #              inf("Number of segments", "infopricing"),
+                                          #              min = 2, max = 218, value = c(218),
+                                          #              dragRange=FALSE, ticks = FALSE)
+                         # )                         
+                         
+                         
+                         )
+                
+                
+                ),
+                
+              # navset_tab( 
+              #   nav_panel("A", "Page A content"), 
+              #   nav_panel("B", "Page B content"), 
+              #   
+              # )
+              
+              
+               ),
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+ 
+                
 
-                  
-              )
               
                # ,textOutput("cor") its
                # ,textOutput("xx")
@@ -1144,115 +1290,20 @@ column(12,
               # ,div(id="sla",
               ),
 div(
-               conditionalPanel(condition="input.showcolplot ==1"
-                                  # , uiOutput("colsplot", height="800px"
-                                  #             # ,hover = "colplot_hover"
-                                  #            )
-                                  , plotOutput("colplot", height="auto"
-                                               ,click = "colplot_click"
-                                               # ,click = "colplot_click"
-                                  )
-                                ,div(style = " background-color:var(--colb)!important; font-size: .9vw", p("www.globalcarbonprice.com _____  Data: UN, World Bank, Friedlingstein et al. 2022, Gütschow, J.; Pflüger, M. 2024.  Funded by Kone Foundation. Developed by Ville Seppälä"))
-                                  ,
-                                  
-                                  fluidRow(
-                                    id = "panes",
-                                    column(6, id = "luu", 
-                                  uiOutput(style="margin-top: .5vw;","xxyear"),
-                                  
-                                  div( style="margin-top: .5vw;",
-                                       hr(),
-                                       
-                                       uiOutput("concc"),
-                                  # sliderInput("concc",
-                                  #             inf("Convergence of countries emissions", "infoconvergence2"), 
-                                  #             min = .01, max = 1, value = .5, step=.01, ticks=FALSE)
-                                  # ,uiOutput("xxcen")
-                               
-                                  )),
-                                  column(3,id = "luu",
-                                         
-                                         radioButtons("yvar", 
-                                                      "Show country averages for", 
-                                                      c(
-                                                        # "GDP per capita" = "gdpcap",
-                                                        "Net costs per capita"= "countrynetcost",
-                                                        "Carbon costs per capita"="countrycost",
-                                                        
-                                                        "Emissions per capita" = "countryfossil"
-                                                        
-                                                      ),selected="countrynetcost"
-                                         )
-                                         ,
-                                  
-                                  radioButtons("xvar", 
-                                                "Arrange x-axis by 2021 value of:", 
-                                                c(
-                                                  "Emissions per capita" = "countryfossil",
-                                                  
-                                                  "GDP per capita" = "gdpcap"
-                                                ),selected="gdpcap"
-                                  )),
-                                  
-            
-                                  
-                                  
-                                  
-                                  column(3, 
-                                         # id = "luu",
-                                       
-                                         
-                                  selectInput("comcou",
-                                              "Details for country",
 
-                                              choices =c("none", paaco$country), selected="none", selectize=TRUE),
-                                  
-                                  div(id="sla"
-                                      ,checkboxInput("showexp", "Show how country outcomes are calculated")
-                                  )
-                                  # ,
-                                  
-                                  )),
-                                
-                                conditionalPanel(condition="input.showexp ==1", 
-                                    uiOutput("couexp")             
-                                                 
-                                                 )
-                                  # ,sliderInput("xcen",
-                                  #              inf("Number of segments", "infopricing"),
-                                  #              min = 2, max = 218, value = c(218),
-                                  #              dragRange=FALSE, ticks = FALSE)
-              )
 )
               # 
-,div(id="sla"
-     ,checkboxInput("showtab", "Show the simulation results also in table below")
-) ,          
-conditionalPanel(
-  
-  condition="input.showtab == 1",
-  fluidRow(column(width =12, align = "center",   DT::dataTableOutput("tably", width="100%")
-                  # ,style = "height:500px; overflow-y: scroll;overflow-x: scroll;"
-  )),
-  
-)        
-              )   
 
-#here 
-
-
-     
-       )
 )
 )
        # ,uiOutput("yearcui")
-),
+)
 
 
 )
 
 
-      )                 ,
+      )                 
 
 
 

@@ -1129,20 +1129,29 @@ padding-right: .8vw;
 }
 
 
-
-   a.active {
+   
+#tabb  a.active {
 color: var(--colt);
-margin-top: .0vw;
+margin-bottom: s.5rem;
     padding-top: 0.2vw !important;
+    padding-bottom: 0.9rem !important;
 
-    padding-bottom: 0.2vw !important;
 display: inline;
 margin-left: -.1vw;
     background-color: var(--colbtable) !important;
     display:block !important;
     } 
     
+#tabb  a {
+color: var(--colt);
+margin-bottom: .5rem;
+    padding-top: 0.2vw !important;
+    padding-bottom: 0.9rem !important;
 
+display: inline;
+margin-left: -.1vw;
+    display:block !important;
+    } 
     
 
 // nav extend left selection field backgrounds to whole lenght
@@ -1271,7 +1280,7 @@ font-weight: 500 !important;
 }
 
 
-
+ /*
 .tab-pane.active{
   
     background-color: var(--colbtable);
@@ -1289,6 +1298,7 @@ font-weight: 100 !important;
 
 
 }
+ */
 
 #panes {
   

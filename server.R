@@ -444,6 +444,12 @@ server <- function(input,output, session) {
     
   })
   
+  output$taab1 = renderText({
+    switch(rv$lang, "eng"="Main results", "fin"="Päätulokset") 
+  })
+  output$taab2 = renderText({
+    switch(rv$lang, "eng"="Country results (slows page)", "fin"="Maatulokset (hidastaa sivua)") 
+  })
   
   
   observeEvent(input$view, { 
@@ -1065,6 +1071,8 @@ server <- function(input,output, session) {
       
       updateCheckboxInput("showmainplot", "Main results", session=session)
       updateCheckboxInput("showcolplot", "Country comparison (slows page)", session=session)
+      # updateTaB("showcolplot", "Country comparison (slows page)", session=session)
+      # updateTabsetPanel(session,  "tabb", selected = "Main results")
       
       
       # updateSliderTextInput("xyear", label="Näytä tiedot vuodelle", session=session)
@@ -6840,10 +6848,17 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
       
     }
     
-    if (input$showcolplot ==TRUE) {
+    # if (input$showcolplot ==TRUE) {
+    #   lax=1
+    # }
+    # 
+    # if (input$tabb %in% c("Country results (slows page)","")) {
+    #   lax=1
+    # }
+    # 
+    if (input$tabb %in% c(uiOutput("taab2"),'<div id="taab2" class="shiny-html-output"></div>')) {
       lax=1
     }
-    
     
     
     if (input$nationalcoun %in% c("none") & lek==0)  {
