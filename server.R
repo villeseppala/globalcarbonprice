@@ -985,9 +985,9 @@ server <- function(input,output, session) {
   output$land1 = renderText(
     
     if (rv$lang =="eng") {
-      paste(  2021, " Land+CCS: ", input$lstart,"Gt (land emissions: ",input$sourcestart, "Gt + old sinks+CCS: ", input$sinkstart, "Gt)",  sep = "")
+      paste(  2023, " Land+CCS: ", input$lstart,"Gt (land emissions: ",input$sourcestart, "Gt + old sinks+CCS: ", input$sinkstart, "Gt)",  sep = "")
     } else {
-      paste(   2021, " Maankäyttö+CCS: ", input$lstart,"Gt (maan päästöt: ",  input$sourcestart, "Gt + vanhat nielut+CCS: ", input$sinkstart, "Gt)",  sep = "")     
+      paste(   2023, " Maankäyttö+CCS: ", input$lstart,"Gt (maan päästöt: ",  input$sourcestart, "Gt + vanhat nielut+CCS: ", input$sinkstart, "Gt)",  sep = "")     
     }
   )
   
@@ -1085,14 +1085,14 @@ server <- function(input,output, session) {
         "Emissions per capita" = "countryfossil"
         
       ),  session=session)
-      updateRadioButtons("xvar", label="Arrange x-axis by 2021 value of:",       
+      updateRadioButtons("xvar", label="Arrange x-axis by 2023 value of:",       
                          c(
                            # "GDP per capita" = "gdpcap",
                            "Emissions per capita" = "countryfossil",
                            
                            "GDP per capita" = "gdpcap"
                            
-                         ),  session=session)
+                         ),  session=session,selected="gdpcap")
       updateSelectInput("comcou", label = "Details for country", session=session)
       updateCheckboxInput("showexp", label = "Show how country outcomes are calculated", session=session)
       
@@ -1141,7 +1141,7 @@ server <- function(input,output, session) {
       # rv$infofossiltextt = c("Fossil CO2 emissions")
       # output$viewtext = renderText("  VIEWING SETTINGS")
       
-      output$titletext = renderText(" Global carbon price simulator (BETA)")
+      output$titletext = renderText(" Global carbon price simulator")
       # updateactionBttn("infodata", label="Data sources")
       updateActionButton("infodata", label="Data sources", session=session)
       updateActionButton("tutorial", label="Tutorial", session=session)
@@ -1304,14 +1304,14 @@ server <- function(input,output, session) {
         "Päästöt henkeä kohden" = "countryfossil"
         
       ),  session=session)
-      updateRadioButtons("xvar", label="Järjestä maat vaaka-asteikolle 2021-arvon perusteella:",        
+      updateRadioButtons("xvar", label="Järjestä maat vaaka-asteikolle 2023-arvon perusteella:",        
                          c(
                            # "GDP per capita" = "gdpcap",
                            "Päästöt henkeä kohden" = "countryfossil",
                            
                            "BKT henkeä kohden" = "gdpcap"
                            
-                         ),  session=session)
+                         ),  session=session,selected="gdpcap")
       updateSelectInput("comcou", label = "Yksityiskohdat maalle", session=session)
       updateCheckboxInput("showexp", label = "Näytä miten maiden arvot on laskettu", session=session)
       
@@ -1350,7 +1350,7 @@ server <- function(input,output, session) {
       
       
       
-      output$titletext = renderText(" Globaali hiilen hinta -simulaattori (BETA)")
+      output$titletext = renderText(" Globaali hiilen hinta -simulaattori")
       updateActionButton("infodata", label="Data-lähteet", session=session)
       updateActionButton("tutorial", label="Tutoriaali", session=session)
       # updateBox("mobilebox",   title = "Jos käytät sivua puhelimella, suosittelemme vaakanäkymää")
@@ -1578,7 +1578,7 @@ Click the info buttons across the UI to receive more information on various inpu
       
       
       rv$coux =HTML(        "
-        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2023 historical values.
 Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
                           <br>
                         
@@ -1634,12 +1634,12 @@ A correction multiplier is applied to the outputs from the calculation to have t
       #   rv$wob
       # rv$cob
       
-      rv$infofossiltext = c("All fossil and industrial CO2 emissions across all countries and individuals. Source for emissions from 2021 and before: PRIMAP: Gütschow, J.;
+      rv$infofossiltext = c("All fossil and industrial CO2 emissions across all countries and individuals. Source for emissions from 2023 and before: PRIMAP: Gütschow, J.;
                             Busch, D.; Pflüger, M. (2024): The PRIMAP-hist national historical emissions time series v2.6.1 (1750-2023).
                             zenodo. doi:10.5281/zenodo.15016289.")
       rv$infofossiltextt = c("Fossil CO2 emissions")
       
-      rv$infolultext = c("CO2 emissions and sinks from land use change across all countries. In future, also includes technological sinks, such as DACCS and BECCS. Source for emissions from 2021 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
+      rv$infolultext = c("CO2 emissions and sinks from land use change across all countries. In future, also includes technological sinks, such as DACCS and BECCS. Source for emissions from 2023 and before: Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       rv$infolultextt = c("Land use emissions and sinks")
       
       
@@ -1736,7 +1736,7 @@ A correction multiplier is applied to the outputs from the calculation to have t
       
       
       rv$infopricingtext = c("First value sets the year in which global carbon pricing system starts. Second year sets the year in which the carbon budget of the chosen temperature target is depleted. 
-                         It is assumed that global CO2, non-CO2 and land use emissions (and thus net emissions and total emissions) remain same as they were in the last observed year (2021) before the pricing start year.") 
+                         It is assumed that global CO2, non-CO2 and land use emissions (and thus net emissions and total emissions) remain same as they were in the last observed year (2023) before the pricing start year.") 
       rv$infopricingtextt = c("Pricing start year and carbon neutrality year")  
       
       rv$infoemissionsinktext = c("At carbon neutrality year, CO2 emissions and sinks must be equal, meaning zero net CO2 emissions, meaning carbon neutrality, for warming to stop.
@@ -1773,7 +1773,7 @@ the carbon neutrality year carbon price")
       rv$infonationaldivtextt = c("National carbon dividend")
       
       rv$infoconvergencetext = c( "
-        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2023 historical values.
 Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
                           <br>
                         
@@ -1812,7 +1812,7 @@ A correction multiplier is applied to the outputs from the calculation to have t
       rv$infoconvergencetextt = c("Convergence of countries' emissions")
       
       rv$infoconvergence1text = c( "
-        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2023 historical values.
 Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
                           <br>
                         
@@ -1851,7 +1851,7 @@ A correction multiplier is applied to the outputs from the calculation to have t
       rv$infoconvergence1textt = c("Convergence of countries' emissions")
       
       rv$infoconvergence2text = c( "
-        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2023 historical values.
 Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
                           <br>
                         
@@ -1889,7 +1889,7 @@ A correction multiplier is applied to the outputs from the calculation to have t
       ")
       
       rv$infoconvergence3text = c( "
-        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2021 historical values.
+        It is assumed that cMaountries' per capita emissions converge to global average over time from their 2023 historical values.
 Convergence factor denotes how much the emissions converge by the carbon neutrality year.                
                           <br>
                         
@@ -2059,7 +2059,7 @@ Klikkaamalla käyttöliittymän infonäppäimiä saat lisätietoa eri indikaatto
       # rv$labelfossil = "Fossiilipäästöt"
       
       rv$coux =HTML(        "
-   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2023 historiallisista arvoista alkaen. 
    Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
                           <br>
      Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
@@ -2094,11 +2094,11 @@ Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saad
       
       
       rv$infofossiltext = c("Kaikki fossiiliset ja teollisuuden CO2-päästöt kaikissa maissa. 
-                        Datalähde päästöille 2021 ja ennen: PRIMAP: Gütschow, J.; Busch, D.; Pflüger, M. (2024): The PRIMAP-hist national historical emissions time series v2.6.1 (1750-2023). zenodo. doi:10.5281/zenodo.15016289.Gütschow, J.; Busch, D.; Pflüger, M. (2024): The PRIMAP-hist national historical emissions time series v2.6.1 (1750-2023). zenodo. doi:10.5281/zenodo.15016289.")
+                        Datalähde päästöille 2023 ja ennen: PRIMAP: Gütschow, J.; Busch, D.; Pflüger, M. (2024): The PRIMAP-hist national historical emissions time series v2.6.1 (1750-2023). zenodo. doi:10.5281/zenodo.15016289.Gütschow, J.; Busch, D.; Pflüger, M. (2024): The PRIMAP-hist national historical emissions time series v2.6.1 (1750-2023). zenodo. doi:10.5281/zenodo.15016289.")
       rv$infofossiltextt = c("Fossiiliset CO2-päästöt")
       
       rv$infolultext = c("Hiilidioksidipäästöt ja -nielut maankäyttösektorilla koko maailmassa. Tulevaisuudessa sisältää
-                         myös teknologiset nielut, kuten DACSS ja BECCS. Lähde tiedoille 2021 saakka:   Global Carbon Project 2022 (Friedlingstein et al. 2021)")
+                         myös teknologiset nielut, kuten DACSS ja BECCS. Lähde tiedoille 2023 saakka:   Global Carbon Project 2022 (Friedlingstein et al. 2021)")
       rv$infolultextt = c("Maankäytön päästöt ja nielut")
       
       
@@ -2197,7 +2197,7 @@ Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saad
       
       rv$infopricingtext = c("Ensimmäinen arvo asettaa arvon, jolloin globaali hiilen hinta -systeemi käynnistyy.
                              Toinen arvo asettaa vuoden, jolloin globaalit nettohiilidioksidipäästöt saavuttavat nollan ja ilmaston lämpeneminen arvioidusti pysähtyy.
-                             Ennen alkuvuotta oletetaan, että CO2-päästöt, ei-CO2-päästöt ja maankäytön päästöt ja nielut (ja siten nettopäästöt ja kokonaispäästöt) pysyvät samana kuin ne olivat viimeisenä havaintovuonna (2021)") 
+                             Ennen alkuvuotta oletetaan, että CO2-päästöt, ei-CO2-päästöt ja maankäytön päästöt ja nielut (ja siten nettopäästöt ja kokonaispäästöt) pysyvät samana kuin ne olivat viimeisenä havaintovuonna (2023)") 
       rv$infopricingtextt = c("Hinnoittelun alkuvuosi ja hiilineutraaliusvuosi (loppuvuosi)")  
       
       
@@ -2234,7 +2234,7 @@ Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saad
       
       
       rv$infoconvergencetext = c( "
-   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2023 historiallisista arvoista alkaen. 
    Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
                           <br>
      Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
@@ -2271,7 +2271,7 @@ Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saad
       
       
       rv$infoconvergence1text = c( "
-   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2023 historiallisista arvoista alkaen. 
    Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
                           <br>
      Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
@@ -2306,7 +2306,7 @@ Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saad
       rv$infoconvergence1textt = c("Maiden päästöjen yhteneminen")
       
       rv$infoconvergence2text = c( "
-   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2023 historiallisista arvoista alkaen. 
    Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
                           <br>
      Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
@@ -2341,7 +2341,7 @@ Maiden keskimääräiset nettokustannukset lasketaan vähentämällä näin saad
       rv$infoconvergence2textt = c("Maiden päästöjen yhteneminen")
       
       rv$infoconvergence3text = c( "
-   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2021 historiallisista arvoista alkaen. 
+   Mallissa oletetaan, että valtioiden henkeä kohden lasketut päästöt konvergoituvat kohti globaalia keskiarvoa niiden vuoden 2023 historiallisista arvoista alkaen. 
    Konvergenssikerroin määrittää, että kuinka paljon päästöt konvergoituvat hiilineutraaliusvuoteen mennessä. 
                           <br>
      Kaava maakohtaisten keskipäästöjen (COBS) laskemiseen on hiilineutraaliusvuonna on:                 
@@ -2670,7 +2670,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                                             conditionalPanel(
                                                               
                                                               condition="input.advance == 1",
-                                                              p("Note: Emissions from last observed year (2021) take a linear trajectory to emissions for year before start year."),
+                                                              p("Note: Emissions from last observed year (2023) take a linear trajectory to emissions for year before start year."),
                                                               
                                                               tags$div(id="sla",numericInput("fstart", label=p("CO2 emissions"),min = 0.1, max = 50,step=.1,value=c(36.4))),
                                                               
@@ -3168,7 +3168,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
                                               conditionalPanel(
                                                 
                                                 condition="input.advance == 1",
-                                                p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta (2021) hinnoittelun alkua edeltävään vuoteen. Oletusarvoina on vuoden 2021 arvot."),
+                                                p("Huom: Päästöt etenevät lineaarisesti viimeisestä havaintovuodesta (2023) hinnoittelun alkua edeltävään vuoteen. Oletusarvoina on vuoden 2023 arvot."),
                                                 
                                                 tags$div(id="sla",numericInput("fstart", label=p("CO2-päästöt"),min = 0.1, max = 50,step=.1,value=c(36.4))),
                                                 
@@ -13068,7 +13068,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
           
           geom_text(data=dats[country=="Finland",],
                     aes(x=wi(10), y=hi(90), 
-                        label = paste0(ord, xlab, yea, " 2021")),
+                        label = paste0(ord, xlab, yea, " 2023")),
                     hjust=0, size=si(3.3), color=teksvari) +
           
           
@@ -13110,7 +13110,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
           
           geom_text(data=datspla,
                     aes(x=wi(30), y=hi(71), 
-                        label = paste0(xlab,yea,"2021:")),
+                        label = paste0(xlab,yea,"2023:")),
                     hjust=1, size=si(sis), color=teksvari) +
           
           geom_text(data=datspla,
@@ -13133,7 +13133,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
           
           geom_text(data=dats[country=="Finland",],
                     aes(x=wi(10), y=hi(90), 
-                        label = paste0(ord, xlab, yea, " 2021")),
+                        label = paste0(ord, xlab, yea, " 2023")),
                     hjust=0, size=si(4), color=teksvari) +
           
           
@@ -13192,7 +13192,7 @@ https://data.worldbank.org/indicator/NY.GDP.MKTP.KD
           
           geom_text(data=datsfin,
                     aes(x=wi(30), y=hi(71-sep), 
-                        label = paste0(xlab,yea,"2021:")),
+                        label = paste0(xlab,yea,"2023:")),
                     hjust=1, size=si(sis), color=teksvari) +
           
           geom_text(data=datsfin,
